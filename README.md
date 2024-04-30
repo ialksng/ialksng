@@ -15,7 +15,7 @@ Here are some ideas to get you started:
 
 
 
-<h1 align="center">Hi 👋, I'm ALok Singh</h1>
+<h1 align="center">Hi 👋, I'm Alok Singh</h1>
 <h3 align="center">A passionate Software Developer and BTech student from India</h3>
 
 <img align="right" alt="coding" width="390" src="https://media1.giphy.com/media/qgQUggAC3Pfv687qPC/giphy.gif">
@@ -34,6 +34,9 @@ Here are some ideas to get you started:
 <p align="left">
 <a href="www.linkedin.com/in/ialksng" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="Profile Image" height="30" width="40" /></a>
 <a href="https://instagram.com/ialksng" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/instagram.svg" alt="_phoenix_dev" height="30" width="40" /></a>
+<a href="https://twitter.com/ialksng" target="_blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/twitter.svg" alt="Twitter Profile" height="30" width="40" /></a>
+<a href="https://facebook.com/ialksng" target="_blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/facebook.svg" alt="Facebook Profile" height="30" width="40" /></a>
+
 </p>
 
 <h3 align="left">Languages and Tools:</h3>
