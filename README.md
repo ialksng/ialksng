@@ -27,7 +27,7 @@ Here are some ideas to get you started:
 
 - ⚡ Fun fact **I love exploring new programming languages and experimenting with different coding challenges.** 
 
-
+![logo](https://github.com/ialksng/ialksng/blob/main/Banner.png)
 
 
 
