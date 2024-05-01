@@ -15,8 +15,8 @@ Here are some ideas to get you started:
 
 
 
-<h1 align="center">👋 Hi there! I'm Alok Singh, a passionate Computer Science Engineering student with a knack for coding and problem-solving. 🚀</h1>
-<h3 align="center">A passionate Software Developer and BTech student from India</h3>
+<h1 align="center">👋 Hi there! I'm Alok Singh</h1>
+<h3 align="center">A passionate Software Developer, with a knack for coding and problem-solving.</h3>
 
 <img align="right" alt="coding" width="390" src="https://media1.giphy.com/media/qgQUggAC3Pfv687qPC/giphy.gif">
 
