@@ -12,6 +12,7 @@ Here are some ideas to get you started:
 - 😄 Pronouns: ...
 - ⚡ Fun fact: ...
 -->
+![logo](https://github.com/ialksng/ialksng/blob/main/Banner.png)
 
 <h1 align="center">👋 Hi there! I'm Alok Singh</h1>
 <h3 align="center">A passionate Software Developer, with a knack for coding and problem-solving.</h3>
@@ -25,10 +26,6 @@ Here are some ideas to get you started:
 - 📫 How to reach me **ialksng@gmail.com**
 
 - ⚡ Fun fact **I love exploring new programming languages and experimenting with different coding challenges.** 
-
-![logo](https://github.com/ialksng/ialksng/blob/main/Banner.png)
-
-
 
 <h3 align="left">Connect with me:</h3>
 <p align="left">
