@@ -12,7 +12,7 @@ Here are some ideas to get you started:
 - 😄 Pronouns: ...
 - ⚡ Fun fact: ...
 -->
-![logo](https://github.com/ialksng/ialksng/blob/main/Banner.png)
+![logo](https://github.com/ialksng/ialksng/blob/main/Ba.png)
 
 <h1 align="center">👋 Hi there! I'm Alok Singh</h1>
 <h3 align="center">A passionate Software Developer, with a knack for coding and problem-solving.</h3>
