@@ -70,5 +70,3 @@
 <p align="center">
   <img src="https://komarev.com/ghpvc/?username=ialksng&label=Profile+Views&color=58A6FF&style=flat-square" alt="Profile Views" />
 </p>
-
-fix this
