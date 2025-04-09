@@ -7,7 +7,7 @@
 <h3 align="center" style="font-family: 'Arial', sans-serif; color: #58a6ff;">🚀 Software Developer | 💻 Tech Enthusiast | 💡 Problem Solver</h3>
 
 <p align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=500&pause=1000&color=58A6FF&center=true&vCenter=true&width=550&lines=CS+Undergrad+%7C+Java+%7C+C%2B%2B+%7C+SQL;Code.+Create.+Collaborate.;Building+Tech+One+Line+at+a+Time" alt="Typing animation" />
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=500&pause=1000&color=58A6FF&center=true&vCenter=true&width=550&lines=CS+Undergrad+%7C+Java+%7C+Python+%7C+Web+Dev;Code.+Create.+Collaborate.;Building+Tech+One+Line+at+a+Time" alt="Typing animation" />
 </p>
 
 ---
@@ -20,11 +20,11 @@
 
 - 🎓 **CSE Undergrad** | **Data Science Specialization**
 - 🔭 Currently focused on **Programming & Algorithms**
-- 💻 Exploring **Java**, **C++**, **Python**, **SQL**, and **System Design**
+- 💻 Exploring **Java**, **Python**, **MERN Stack**, **AI**, and **System Design**
 - 🧠 Passionate about **building impactful solutions** to real-world problems
-- ✨ Enjoy **tech content creation**, **entrepreneurship**, and **side projects**
-- 📫 Reach me at: **ialksng@gmail.com**
-- ⚡ Fun Fact: *I experiment with new programming languages for fun!*
+- ✨ I enjoy **creating tech content**, **entrepreneurship**, and **side projects**
+- 📫 Feel free to reach me at: **ialksng@gmail.com**
+- ⚡ Fun Fact: *I love experimenting with new programming languages just for fun!*
 
 ---
 
@@ -43,7 +43,7 @@
 ## 🛠️ Tech Stack
 
 <div align="center">
-  <img src="https://skillicons.dev/icons?i=java,cpp,python,sql,javascript,nodejs,mysql,git,linux,vscode" />
+  <img src="https://skillicons.dev/icons?i=java,python,cpp,cs,js,php,bootstrap,mysql,nodejs,git,vscode,linux" />
 </div>
 
 ---
@@ -56,7 +56,7 @@
 </p>
 
 <p align="center">
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=ialksng&layout=compact&theme=react&hide_border=true&langs_count=6&card_width=400&hide=html,css,jupyter%20notebook" width="50%" />
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=ialksng&layout=compact&theme=react&hide_border=true&langs_count=5&card_width=400" width="50%" />
 </p>
 
 ---
@@ -70,3 +70,5 @@
 <p align="center">
   <img src="https://komarev.com/ghpvc/?username=ialksng&label=Profile+Views&color=58A6FF&style=flat-square" alt="Profile Views" />
 </p>
+
+fix this
