@@ -52,7 +52,7 @@
 
 <p align="center">
   <img src="https://github-readme-stats.vercel.app/api?username=ialksng&show_icons=true&theme=react&hide_border=true&count_private=true&include_all_commits=true" width="48%" />
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=ialksng&theme=react&hide_border=true" width="48%" />
+  <img src="https://github-readme-streak-stats.herokuapp.com/?user=ialksng&theme=react&hide_border=true&date_format=j%20M%5B%20Y%5D" width="48%" />
 </p>
 
 <p align="center">
@@ -70,4 +70,3 @@
 <p align="center">
   <img src="https://komarev.com/ghpvc/?username=ialksng&label=Profile+Views&color=58A6FF&style=flat-square" alt="Profile Views" />
 </p>
-
