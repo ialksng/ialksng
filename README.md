@@ -43,7 +43,7 @@
 ## 🛠️ Tech Stack
 
 <div align="center">
-  <img src="https://skillicons.dev/icons?i=java,python,cpp,cs,html,css,js,php,bootstrap,mysql,nodejs,git,vscode,linux" />
+  <img src="https://skillicons.dev/icons?i=java,python,cpp,cs,js,php,bootstrap,mysql,nodejs,git,vscode,linux" />
 </div>
 
 ---
@@ -56,7 +56,7 @@
 </p>
 
 <p align="center">
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=ialksng&layout=compact&theme=react&hide_border=true" width="50%" />
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=ialksng&layout=compact&theme=react&hide_border=true&langs_count=5&card_width=400" width="50%" />
 </p>
 
 ---
