@@ -31,11 +31,11 @@
 ## 🌐 Connect With Me
 
 <div align="center">
-  <a href="https://linkedin.com/in/ialksng"><img src="https://img.shields.io/badge/LinkedIn-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white" /></a>
-  <a href="https://twitter.com/ialksng"><img src="https://img.shields.io/badge/Twitter-%231DA1F2.svg?&style=for-the-badge&logo=twitter&logoColor=white" /></a>
-  <a href="https://instagram.com/ialksng"><img src="https://img.shields.io/badge/Instagram-%23E4405F.svg?&style=for-the-badge&logo=instagram&logoColor=white" /></a>
-  <a href="https://facebook.com/ialksng"><img src="https://img.shields.io/badge/Facebook-%231877F2.svg?&style=for-the-badge&logo=facebook&logoColor=white" /></a>
-  <a href="mailto:ialksng@gmail.com"><img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" /></a>
+  <a href="https://linkedin.com/in/ialksng"><img src="https://img.shields.io/badge/LinkedIn-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"/></a>
+  <a href="https://twitter.com/ialksng"><img src="https://img.shields.io/badge/Twitter-%231DA1F2.svg?&style=for-the-badge&logo=twitter&logoColor=white" alt="Twitter"/></a>
+  <a href="https://instagram.com/ialksng"><img src="https://img.shields.io/badge/Instagram-%23E4405F.svg?&style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram"/></a>
+  <a href="https://facebook.com/ialksng"><img src="https://img.shields.io/badge/Facebook-%231877F2.svg?&style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook"/></a>
+  <a href="mailto:ialksng@gmail.com"><img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Gmail"/></a>
 </div>
 
 ---
@@ -43,20 +43,28 @@
 ## 🛠️ Tech Stack
 
 <div align="center">
-  <img src="https://skillicons.dev/icons?i=java,python,cpp,cs,js,php,bootstrap,mysql,nodejs,git,vscode,linux" />
+  <img src="https://skillicons.dev/icons?i=java,python,cpp,cs,js,ts,html,css,react,nodejs,mongodb,mysql,git,github,vscode,linux" alt="Tech Stack" />
 </div>
 
 ---
 
-## 📈 GitHub Stats
+## 📈 Accurate GitHub Stats
 
 <p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=ialksng&show_icons=true&theme=react&hide_border=true&count_private=true&include_all_commits=true" width="48%" alt="GitHub Stats" />
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=ialksng&theme=react&hide_border=true&date_format=M%20j%5B%2C%20Y%5D" width="48%" alt="GitHub Streak" />
+  <img src="https://github-readme-stats.vercel.app/api?username=ialksng&show_icons=true&theme=react&hide_border=true&count_private=true&include_all_commits=true&hide=issues,prs" width="48%" alt="GitHub Stats" />
+  <img src="https://streak-stats.demolab.com?user=ialksng&theme=react&hide_border=true&mode=weekly" width="48%" alt="GitHub Streak" />
 </p>
 
 <p align="center">
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=ialksng&layout=compact&theme=react&hide_border=true&langs_count=6&exclude_repo=ialksng.github.io,repo-name-2&card_width=400" width="50%" alt="Top Languages" />
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=ialksng&layout=compact&theme=react&hide_border=true&langs_count=8&hide=html,css,scss,less&exclude_repo=ialksng.github.io" width="50%" alt="Top Languages" />
+</p>
+
+---
+
+## 🏆 GitHub Trophies
+
+<p align="center">
+  <img src="https://github-profile-trophy.vercel.app/?username=ialksng&theme=react&no-frame=true&no-bg=true&margin-w=4&row=2&column=3" alt="GitHub Trophies" />
 </p>
 
 ---
@@ -64,7 +72,7 @@
 ## 🐍 Contribution Snake
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/Platane/snk/output/github-contribution-grid-snake.svg" alt="Snake animation" />
+  <img src="https://raw.githubusercontent.com/ialksng/ialksng/output/github-contribution-grid-snake.svg" alt="Snake animation" />
 </div>
 
 <p align="center">
