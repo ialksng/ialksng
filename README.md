@@ -23,12 +23,12 @@
 - 💻 Exploring **Java**, **Python**, **MERN Stack**, **AI**, and **System Design**
 - 🧠 Passionate about **building impactful solutions** to real-world problems
 - ✨ I enjoy **creating tech content**, **entrepreneurship**, and **side projects**
-- 📫 Feel free to reach me at: **ialksng@gmail.com**
-- ⚡ Fun Fact: *I love experimenting with new programming languages just for fun!*
+- 📫 Reach me at: **ialksng@gmail.com**
+- ⚡ Fun Fact: I love experimenting with new programming languages just for fun!
 
 ---
 
-### 🌐 Connect with Me
+## 🌐 Connect With Me
 
 <div align="center">
   <a href="https://linkedin.com/in/ialksng"><img src="https://img.shields.io/badge/LinkedIn-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white" /></a>
@@ -61,7 +61,7 @@
 
 ---
 
-## 🐍 Fun Touch
+## 🐍 Contribution Snake
 
 <div align="center">
   <img src="https://raw.githubusercontent.com/Platane/snk/output/github-contribution-grid-snake.svg" alt="Snake animation" />
