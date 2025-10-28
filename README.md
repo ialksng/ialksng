@@ -8,7 +8,7 @@
   <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=120&section=header" width="100%"/>
 </p>
 
-<div align="center"> <img src="https://media1.giphy.com/media/qgQUggAC3Pfv687qPC/giphy.gif" width="500" alt="Coding gif" /> </div>
+<div align="center"> <img src="https://media1.giphy.com/media/qgQUggAC3Pfv687qPC/giphy.gif" width="400" alt="Coding gif" /> </div>
 
 <!-- Typing Animation -->
 <h3 align="center">
