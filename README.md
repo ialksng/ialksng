@@ -3,70 +3,89 @@
   <img src="https://github.com/ialksng/ialksng/blob/main/Banner.png" alt="Alok Singh Banner" width="100%" />
 </p>
 
-<h1 align="center" style="font-family: 'Arial', sans-serif; color: #00c6ff;">Hey there! 👋 I'm <span style="color:#ff8c00">Alok Singh</span></h1>
-<h3 align="center" style="font-family: 'Arial', sans-serif; color: #58a6ff;">🚀 Software Developer | 💻 Tech Enthusiast | 💡 Problem Solver</h3>
-
+<!-- Header Wave -->
 <p align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=500&pause=1000&color=58A6FF&center=true&vCenter=true&width=550&lines=CS+Undergrad+%7C+Java+%7C+Python+%7C+Web+Dev;Code.+Create.+Collaborate.;Building+Tech+One+Line+at+a+Time" alt="Typing animation" />
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=120&section=header" width="100%"/>
 </p>
 
----
+<div align="center"> <img src="https://media1.giphy.com/media/qgQUggAC3Pfv687qPC/giphy.gif" width="500" alt="Coding gif" /> </div>
 
-<div align="center">
-  <img src="https://media1.giphy.com/media/qgQUggAC3Pfv687qPC/giphy.gif" width="300" alt="Coding gif" />
-</div>
+<!-- Typing Animation -->
+<h3 align="center">
+  <img src="https://readme-typing-svg.herokuapp.com/?font=Fira+Code&size=38&pause=900&color=00C6FF&center=true&vCenter=true&width=1000&height=80&lines=Hey+there!+👋;I'm+Alok+Singh+🤓;Data+Science+%7C+Java+%7C+Python+%7C+MERN+Stack;I+Build,+Learn,+and+Innovate+🚀" />
+</h3>
 
-## 🚀 About Me
+## 👨‍💻 About Me
 
-- 🎓 **CSE Undergrad** | **Data Science Specialization**
-- 🔭 Currently focused on **Programming & Algorithms**
-- 💻 Exploring **Java**, **Python**, **MERN Stack**, **AI**, and **System Design**
-- 🧠 Passionate about **building impactful solutions** to real-world problems
-- ✨ I enjoy **creating tech content**, **entrepreneurship**, and **side projects**
-- 📫 Feel free to reach me at: **ialksng@gmail.com**
-- ⚡ Fun Fact: *I love experimenting with new programming languages just for fun!*
+- 🎓 **CSE Undergrad** specializing in **Data Science**  
+- 💻 Passionate about **Full-Stack Development**, **Artificial Intelligence**, and **System Design**  
+- 🧠 Love solving real-world problems through **data-driven solutions** and **innovative tech**  
+- 🚀 Actively working on projects that blend **creativity**, **analytics**, and **automation**   
+- ✨ Outside tech, I enjoy **content creation**, **building startups**, and **experimenting with ideas**  
+- ⚡ Always exploring new tech & languages for fun!  
 
----
+<img src="https://www.animatedimages.org/data/media/562/animated-line-image-0184.gif" width="1920" />
 
-### 🌐 Connect with Me
-
-<div align="center">
-  <a href="https://linkedin.com/in/ialksng"><img src="https://img.shields.io/badge/LinkedIn-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white" /></a>
-  <a href="https://twitter.com/ialksng"><img src="https://img.shields.io/badge/Twitter-%231DA1F2.svg?&style=for-the-badge&logo=twitter&logoColor=white" /></a>
-  <a href="https://instagram.com/ialksng"><img src="https://img.shields.io/badge/Instagram-%23E4405F.svg?&style=for-the-badge&logo=instagram&logoColor=white" /></a>
-  <a href="https://facebook.com/ialksng"><img src="https://img.shields.io/badge/Facebook-%231877F2.svg?&style=for-the-badge&logo=facebook&logoColor=white" /></a>
-  <a href="mailto:ialksng@gmail.com"><img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" /></a>
-</div>
-
----
-
-## 🛠️ Tech Stack
-
-<div align="center">
-  <img src="https://skillicons.dev/icons?i=java,python,cpp,cs,js,php,bootstrap,mysql,nodejs,git,vscode,linux" />
-</div>
-
----
-
-## 📈 GitHub Stats
+<h2 align="center">🌍 Connect with Me 🌍</h2>
 
 <p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=ialksng&show_icons=true&theme=react&hide_border=true&count_private=true&include_all_commits=true" width="48%" />
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=ialksng&theme=react&hide_border=true&date_format=j%20M%5B%20Y%5D" width="48%" />
+  <a href="https://linktr.ee/ialksng" target="_blank">
+    <img src="https://img.shields.io/badge/Linktree-39E09B?style=for-the-badge&logo=linktree&logoColor=white" alt="Linktree" />
+  </a>
 </p>
+
+<img src="https://www.animatedimages.org/data/media/562/animated-line-image-0184.gif" width="1920" />
+
+<h2 align="center">
+  <img src="https://media2.giphy.com/media/QssGEmpkyEOhBCb7e1/giphy.gif?cid=ecf05e47a0n3gi1bfqntqmob8g9aid1oyj2wr3ds3mg700bl&rid=giphy.gif" width="32px"> 
+  Tech Stack & Tools
+  <img src="https://media2.giphy.com/media/QssGEmpkyEOhBCb7e1/giphy.gif?cid=ecf05e47a0n3gi1bfqntqmob8g9aid1oyj2wr3ds3mg700bl&rid=giphy.gif" width="32px">
+</h2>
 
 <p align="center">
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=ialksng&layout=compact&theme=react&hide_border=true&langs_count=5&card_width=400" width="50%" />
+  <img src="https://skillicons.dev/icons?i=c,java,python" /><br>
+  <img src="https://skillicons.dev/icons?i=mongodb,express,react,nodejs" /><br>
+  <img src="https://skillicons.dev/icons?i=mysql,postgresql" /><br>
+  <img src="https://img.shields.io/badge/Power%20BI-F2C811?style=for-the-badge&logo=powerbi&logoColor=black" />
+  <img src="https://img.shields.io/badge/MS%20Excel-217346?style=for-the-badge&logo=microsoftexcel&logoColor=white" /><br>
+  <img src="https://img.shields.io/badge/Pandas-%23150458.svg?style=for-the-badge&logo=pandas&logoColor=white" />
+  <img src="https://img.shields.io/badge/NumPy-%23013243.svg?style=for-the-badge&logo=numpy&logoColor=white" />
+  <img src="https://img.shields.io/badge/Matplotlib-%230076A8.svg?style=for-the-badge&logo=python&logoColor=white" />
+  <img src="https://img.shields.io/badge/Seaborn-%232F4F4F.svg?style=for-the-badge&logo=python&logoColor=white" /><br>
+  <img src="https://img.shields.io/badge/Scikit--learn-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white" />
+  <img src="https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white" />
+  <img src="https://img.shields.io/badge/Keras-D00000?style=for-the-badge&logo=keras&logoColor=white" />
+  <img src="https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white" />
+  <img src="https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white" /><br>
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" />
+  <img src="https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white" />
+  <img src="https://img.shields.io/badge/GitHub%20Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white" /><br>
+  <img src="https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white" />
+  <img src="https://img.shields.io/badge/Azure-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white" /><br>
+  <img src="https://skillicons.dev/icons?i=linux,git,github,vscode,anaconda,postman" />
 </p>
 
----
+<img src="https://www.animatedimages.org/data/media/562/animated-line-image-0184.gif" width="1920" />
 
-## 🐍 Fun Touch
+<h2 align="center">🧩 Featured Projects 🧩</h2>
+
+<p align="center">
+  <a href="https://github.com/ialksng/BuddyBOT">
+    <img src="https://github-readme-stats.vercel.app/api/pin/?username=ialksng&repo=BuddyBOT&theme=react&border_radius=10" />
+  </a>
+  <a href="https://github.com/ialksng/electroDrive">
+    <img src="https://github-readme-stats.vercel.app/api/pin/?username=ialksng&repo=electroDrive&theme=react&border_radius=10" />
+  </a>
+  <a href="https://github.com/ialksng/analTiX">
+    <img src="https://github-readme-stats.vercel.app/api/pin/?username=ialksng&repo=analTiX&theme=react&border_radius=10" />
+  </a>
+</p>
+
+<!-- Footer Wave -->
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=120&section=footer" width="100%"/>
+</p>
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/Platane/snk/output/github-contribution-grid-snake.svg" alt="Snake animation" />
+  Made with ♥ by <b>Alok Singh</b> | Last updated: Oct 2025  
 </div>
-
-<p align="center">
-  <img src="https://komarev.com/ghpvc/?username=ialksng&label=Profile+Views&color=58A6FF&style=flat-square" alt="Profile Views" />
-</p>
