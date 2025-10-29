@@ -11,9 +11,9 @@
 <div align="center"> <img src="https://media1.giphy.com/media/qgQUggAC3Pfv687qPC/giphy.gif" width="350" alt="Coding gif" /> </div>
 
 <!-- Typing Animation -->
-<h5 align="center">
+<h2 align="center">
   <img src="https://readme-typing-svg.herokuapp.com/?font=Fira+Code&size=26&pause=900&color=00C6FF&center=true&vCenter=true&width=1000&height=50&lines=Hey+there!+👋;I'm+Alok+Singh+🤓;Data+Science+%7C+Java+%7C+Python+%7C+MERN+Stack;I+Build,+Learn,+and+Innovate+🚀" />
-</h5>
+</h2>
 
 ## 👨‍💻 About Me
 
