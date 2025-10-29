@@ -10,7 +10,7 @@ export const myProjects = [
     ],
     href: "https://buddy-bot-p4ko.onrender.com",
     logo: "",
-    image: "/assets/projects/buddyBOT.jpg",
+    image: "/assets/projects/BuddyBOT.png",
     tags: [
       {
         id: 1,
