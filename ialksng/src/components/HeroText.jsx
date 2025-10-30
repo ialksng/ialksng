@@ -91,7 +91,7 @@ const HeroText = () => {
             animate="visible"
             transition={{ delay: 1.8 }}
           >
-            <a href="https://drive.google.com/drive/folders/1rqTzighM1xueAw187FSVmlJQ0q8xlZKA?usp=drive_link" class="btn btn-primary" target="_blank"><i class="fa fa-file"> Resume</i></a>
+            <a href="https://drive.google.com/file/d/1RncZCzY-fZBqLkT_UtHpZw1RdW2ajCEv/view?usp=drive_link" class="btn btn-primary" target="_blank">Resume</a>
           </motion.p>
         </div>
       </div>
