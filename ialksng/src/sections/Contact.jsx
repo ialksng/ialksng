@@ -2,7 +2,6 @@ import { useState } from "react";
 import emailjs from "@emailjs/browser";
 import Alert from "../components/Alert";
 import { Particles } from "../components/Particles";
-import dotenv from "dotenv";
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -31,16 +30,16 @@ const Contact = () => {
     try {
       console.log("From submitted:", formData);
       await emailjs.send(
-        process.env.SERVICE_ID,
-        process.env.TEMPLATE_ID,
+        "service_booqm6l",
+        "template_ygibhi8",
         {
           from_name: formData.name,
           to_name: "Alok Singh",
           from_email: formData.email,
-          to_email: process.env.TO_EMAIL,
+          to_email: "ialksng@gmail.com",
           message: formData.message,
         },
-        process.env.PUBLIC_KEY
+        "51CHuyg4aofMDN1e7"
       );
       setIsLoading(false);
       setFormData({ name: "", email: "", message: "" });
