@@ -73,11 +73,8 @@
   <a href="https://github.com/ialksng/BuddyBOT">
     <img src="https://github-readme-stats.vercel.app/api/pin/?username=ialksng&repo=BuddyBOT&theme=react&border_radius=10" />
   </a>
-  <a href="https://github.com/ialksng/electroDrive">
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=ialksng&repo=electroDrive&theme=react&border_radius=10" />
-  </a>
-  <a href="https://github.com/ialksng/analTiX">
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=ialksng&repo=analTiX&theme=react&border_radius=10" />
+  <a href="https://github.com/ialksng/SmartSphere">
+    <img src="https://github-readme-stats.vercel.app/api/pin/?username=ialksng&repo=SmartSphere&theme=react&border_radius=10" />
   </a>
 </p>
 
