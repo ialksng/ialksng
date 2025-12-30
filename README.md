@@ -1,6 +1,6 @@
 <!-- Banner -->
 <p align="center">
-  <img src="https://github.com/ialksng/ialksng/blob/main/Banner.png" alt="Alok Singh Banner" width="100%" />
+  <img src="https://github.com/ialksng/ialksng/blob/main/Banner.jpg" alt="Alok Singh Banner" width="100%" />
 </p>
 
 <!-- Header Wave -->
