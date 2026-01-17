@@ -12,17 +12,8 @@
 
 <!-- Typing Animation -->
 <h2 align="center">
-  <img src="https://readme-typing-svg.herokuapp.com/?font=Fira+Code&size=26&pause=900&color=00C6FF&center=true&vCenter=true&width=1000&height=50&lines=Hey+there!+👋;I'm+Alok+Singh+🤓;Data+Science+%7C+Java+%7C+Python+%7C+MERN+Stack;I+Build,+Learn,+and+Innovate+🚀" />
-</h2>
-
-## 👨‍💻 About Me
-
-- 🎓 **CSE Undergrad** specializing in **Data Science**  
-- 💻 Passionate about **Full-Stack Development**, **Artificial Intelligence**, and **System Design**  
-- 🧠 Love solving real-world problems through **data-driven solutions** and **innovative tech**  
-- 🚀 Actively working on projects that blend **creativity**, **analytics**, and **automation**   
-- ✨ Outside tech, I enjoy **content creation**, **building startups**, and **experimenting with ideas**  
-- ⚡ Always exploring new tech & languages for fun!  
+  <img src="https://readme-typing-svg.herokuapp.com/?font=Fira+Code&size=26&pause=900&color=00C6FF&center=true&vCenter=true&width=1000&height=50&lines=Hey+there!+👋;I'm+Alok+Singh+🤓;Data+Science+%7C+Java+%7C+Python+%7C+MERN+Stack+SpringBoot;I+Build,+Learn,+and+Innovate+🚀" />
+</h2>  
 
 <img src="https://www.animatedimages.org/data/media/562/animated-line-image-0184.gif" width="1920" />
 
