@@ -12,7 +12,7 @@
 
 <!-- Typing Animation -->
 <h2 align="center">
-  <img src="https://readme-typing-svg.herokuapp.com/?font=Fira+Code&size=26&pause=900&color=00C6FF&center=true&vCenter=true&width=1000&height=50&lines=Hey+there!+👋;I'm+Alok+Singh+🤓;Data+Science+%7C+Java+%7C+Python+%7C+MERN+Stack+SpringBoot;I+Build,+Learn,+and+Innovate+🚀" />
+  <img src="https://readme-typing-svg.herokuapp.com/?font=Fira+Code&size=26&pause=900&color=00C6FF&center=true&vCenter=true&width=1000&height=50&lines=Hey+there!+👋;I'm+Alok+Singh" />
 </h2>  
 
 <img src="https://www.animatedimages.org/data/media/562/animated-line-image-0184.gif" width="1920" />
