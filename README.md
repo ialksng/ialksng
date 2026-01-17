@@ -61,7 +61,13 @@
 <h2 align="center">🧩 Featured Projects 🧩</h2>
 
 <p align="center">
-  <a href="https://github.com/ialksng/MeetX">
+    <a href="https://github.com/ialksng/Shopora">
+    <img src="https://github-readme-stats.vercel.app/api/pin/?username=ialksng&repo=BuddyBOT&theme=react&border_radius=10" />
+  </a>
+  <a href="https://github.com/ialksng/FlashURL">
+    <img src="https://github-readme-stats.vercel.app/api/pin/?username=ialksng&repo=SmartSphere&theme=react&border_radius=10" />
+  </a>
+  <a href="https://github.com/ialksng/ChatFlow">
     <img src="https://github-readme-stats.vercel.app/api/pin/?username=ialksng&repo=BuddyBOT&theme=react&border_radius=10" />
   </a>
   <a href="https://github.com/ialksng/NexTSTox">
