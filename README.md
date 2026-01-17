@@ -45,6 +45,7 @@
 <p align="center">
   <img src="https://skillicons.dev/icons?i=c,java,python" /><br>
   <img src="https://skillicons.dev/icons?i=mongodb,express,react,nodejs" /><br>
+  <img src="https://skillicons.dev/icons?i=spring" /><br>
   <img src="https://skillicons.dev/icons?i=mysql,postgresql" /><br>
   <img src="https://img.shields.io/badge/Power%20BI-F2C811?style=for-the-badge&logo=powerbi&logoColor=black" />
   <img src="https://img.shields.io/badge/MS%20Excel-217346?style=for-the-badge&logo=microsoftexcel&logoColor=white" /><br>
@@ -70,10 +71,10 @@
 <h2 align="center">🧩 Featured Projects 🧩</h2>
 
 <p align="center">
-  <a href="https://github.com/ialksng/BuddyBOT">
+  <a href="https://github.com/ialksng/MeetX">
     <img src="https://github-readme-stats.vercel.app/api/pin/?username=ialksng&repo=BuddyBOT&theme=react&border_radius=10" />
   </a>
-  <a href="https://github.com/ialksng/SmartSphere">
+  <a href="https://github.com/ialksng/NexTSTox">
     <img src="https://github-readme-stats.vercel.app/api/pin/?username=ialksng&repo=SmartSphere&theme=react&border_radius=10" />
   </a>
 </p>
@@ -84,5 +85,5 @@
 </p>
 
 <div align="center">
-  Made with ♥ by <b>Alok Singh</b> | Last updated: Oct 2025  
+  Made with ♥ by <b>Alok Singh</b> | Last updated: Jan 2026  
 </div>
