@@ -12,6 +12,7 @@ import adminRoutes from "./routes/adminRoutes.js";
 import statsRoutes from "./routes/statsRoutes.js";
 import blogRoutes from "./routes/blogRoutes.js";
 import aboutRoutes from "./routes/aboutRoutes.js";
+import projectRoutes from "./routes/projectRoutes.js";
 
 dotenv.config();
 
@@ -39,6 +40,7 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/public", statsRoutes);
 app.use("/api/blogs", blogRoutes);
 app.use("/api/about", aboutRoutes);
+app.use("/api/projects", projectRoutes);
 
 // 🔹 DATABASE
 mongoose.connect(process.env.MONGO_URI)
