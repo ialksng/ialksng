@@ -19,11 +19,11 @@ function ViewProduct() {
   useEffect(() => {
     const fetchProductAndAccess = async () => {
       try {
-        // 1. Fetch Product Details
+        // Fetch product
         const { data } = await axios.get(`/products/${id}`);
         setProduct(data.product || data);
 
-        // 2. Check Access (If user is logged in)
+        // Check access
         if (user) {
           if (user.role === "admin") {
             setHasAccess(true);
@@ -38,6 +38,7 @@ function ViewProduct() {
         console.error("Error fetching product:", err);
       }
     };
+
     fetchProductAndAccess();
   }, [id, user]);
 
@@ -45,7 +46,7 @@ function ViewProduct() {
     if (product?.fileUrl) {
       window.open(product.fileUrl, "_blank");
     } else {
-      alert("No file available for download.");
+      alert("No file available.");
     }
   };
 
@@ -54,11 +55,13 @@ function ViewProduct() {
   const handleCommentSubmit = (e) => {
     e.preventDefault();
     if (!comment.trim()) return;
+
     const newComment = {
       text: comment,
       user: user?.name || "Anonymous",
       date: new Date().toLocaleDateString(),
     };
+
     setComments([newComment, ...comments]);
     setComment("");
   };
@@ -68,61 +71,90 @@ function ViewProduct() {
   return (
     <div className="viewproduct">
       <div className="viewproduct__container">
-        
-        {/* Product Image & Main Info */}
+
+        {/* 🔥 MAIN PRODUCT */}
         <div className="viewproduct__main">
-          <img src={product.image} alt={product.title} className="viewproduct__img" />
-          
+          <img
+            src={product.image}
+            alt={product.title}
+            className="viewproduct__img"
+          />
+
           <div className="viewproduct__details">
             <span className="category-tag">{product.category}</span>
+
             <h1>{product.title}</h1>
             <p className="description">{product.description}</p>
-            <h2 className="price">₹{product.price}</h2>
+
+            {/* 🔥 UPDATED PRICE UI */}
+            <h2 className={`price ${hasAccess ? "status-paid" : ""}`}>
+              {hasAccess ? "PAID" : `₹${product.price}`}
+            </h2>
 
             <div className="viewproduct__actions">
               {hasAccess ? (
                 <>
                   <button onClick={handleDownload} className="btn-action download">
-                    <FaDownload /> Download File
+                    <FaDownload /> Download
                   </button>
-                  <button onClick={handleDownload} className="btn-action view">
-                    <FaEye /> View Content
+
+                  <button
+                    onClick={() => window.open(product.fileUrl, "_blank")}
+                    className="btn-action view"
+                  >
+                    <FaEye /> View
                   </button>
                 </>
               ) : (
-                <button onClick={() => navigate(`/checkout/${id}`)} className="btn-buy">
-                  Buy to Unlock Content
+                <button
+                  onClick={() => navigate(`/checkout/${id}`)}
+                  className="btn-buy"
+                >
+                  Buy Now
                 </button>
               )}
-              
-              <button className={`btn-icon ${isLiked ? 'liked' : ''}`} onClick={handleLike}>
+
+              <button
+                className={`btn-icon ${isLiked ? "liked" : ""}`}
+                onClick={handleLike}
+              >
                 {isLiked ? <FaHeart /> : <FaRegHeart />}
               </button>
             </div>
           </div>
         </div>
 
-        {/* Social Section: Comments */}
+        {/* 🔥 COMMENTS SECTION */}
         <div className="viewproduct__social">
-          <h3><FaComment /> Comments ({comments.length})</h3>
-          
+          <h3>
+            <FaComment /> Comments ({comments.length})
+          </h3>
+
           <form onSubmit={handleCommentSubmit} className="comment-form">
-            <textarea 
-              placeholder={user ? "Write a comment..." : "Please login to comment"} 
+            <textarea
+              placeholder={user ? "Write a comment..." : "Login to comment"}
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               disabled={!user}
             />
-            <button type="submit" disabled={!user || !comment.trim()}>Post Comment</button>
+
+            <button type="submit" disabled={!user || !comment.trim()}>
+              Post Comment
+            </button>
           </form>
 
           <div className="comments-list">
-            {comments.map((c, i) => (
-              <div key={i} className="comment-item">
-                <strong>{c.user}</strong> <span>{c.date}</span>
-                <p>{c.text}</p>
-              </div>
-            ))}
+            {comments.length === 0 ? (
+              <p className="no-comments">No comments yet</p>
+            ) : (
+              comments.map((c, i) => (
+                <div key={i} className="comment-item">
+                  <strong>{c.user}</strong>
+                  <span>{c.date}</span>
+                  <p>{c.text}</p>
+                </div>
+              ))
+            )}
           </div>
         </div>
 
