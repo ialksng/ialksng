@@ -13,6 +13,7 @@ import ViewProduct from "./pages/ViewProduct";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminRoute from "./components/AdminRoute";
 import AdminProducts from "./pages/AdminProducts";
+import Shop from "./components/Shop";
 import Blog from "./components/Blog";
 import AdminBlog from "./pages/admin/AdminBlog";
 import CreateBlog from "./pages/admin/CreateBlog";
@@ -21,6 +22,7 @@ import BlogDetail from "./components/BlogDetail";
 import AccessProduct from "./pages/AccessProduct";
 import AdminAbout from "./pages/admin/AdminAbout";
 import Loader from "./components/Loader";
+
 
 function App() {
   const location = useLocation();
@@ -70,6 +72,7 @@ function App() {
             }
           />
 
+          <Route path="/shop" element={<PageWrapper><Shop /></PageWrapper>} />
           <Route path="/blog" element={<PageWrapper><Blog /></PageWrapper>} />
           <Route path="/admin/blog" element={<PageWrapper><AdminBlog /></PageWrapper>} />
           <Route path="/admin/blog/create" element={<PageWrapper><CreateBlog /></PageWrapper>} />

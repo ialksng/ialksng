@@ -114,3 +114,117 @@
     flex-direction: column;
   }
 }
+
+/* --- ADMIN ABOUT SECTION STYLES --- */
+.admin-form {
+  max-width: 800px;
+  background: #1e2532; /* Matching your dark theme */
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 1rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.form-section {
+  background: #2a344a;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-section h3 {
+  margin-bottom: 1rem;
+  color: #fff;
+  border-bottom: 1px solid #3d4a60;
+  padding-bottom: 0.5rem;
+}
+
+.flex.gap-2 {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.p-2 {
+  padding: 0.75rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.mt-6 {
+  margin-top: 1.5rem;
+}
+
+/* Inputs and Textareas */
+.admin-form input,
+.admin-form textarea,
+.admin-form select {
+  background: #161b22;
+  border: 1px solid #3d4a60;
+  color: #fff;
+  border-radius: 4px;
+  outline: none;
+}
+
+.admin-form input:focus,
+.admin-form textarea:focus,
+.admin-form select:focus {
+  border-color: #3399cc;
+}
+
+.text-sm.text-gray-500 {
+  font-size: 0.85rem;
+  color: #aaa;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.relative {
+  position: relative;
+}
+
+.absolute.top-2.right-2 {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+}
+
+.border {
+  border: 1px solid #3d4a60;
+}
+
+.alert {
+  background-color: #4caf50;
+  color: white;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  text-align: center;
+}

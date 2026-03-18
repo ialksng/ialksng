@@ -85,9 +85,9 @@ function Navbar() {
           </li>
 
           <li>
-            <span onClick={() => handleNavigate("/shop")}>
+            <a href="#shop" className={active === "shop" ? "active" : ""}>
               Shop
-            </span>
+            </a>
           </li>
 
           <li>

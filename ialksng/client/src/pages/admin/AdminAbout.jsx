@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "../../utils/axios";
-import "../../styles/admin.css"; // Reusing your admin styles
+import "../../styles/admin.css";
 
 const AdminAbout = () => {
   const [formData, setFormData] = useState({
@@ -80,12 +80,16 @@ const AdminAbout = () => {
     setSaving(true);
     setMessage("");
     try {
-      // Assuming you have an admin token stored in cookies or localStorage that your axios instance handles
-      await axios.put("/api/admin/about", formData);
+      // ADDED: Authorization header to pass the token
+      await axios.put("/api/admin/about", formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      });
       setMessage("About section updated successfully!");
     } catch (error) {
-      console.error("Error saving data", error);
-      setMessage("Failed to update.");
+      console.error("Error saving data:", error.response?.data || error);
+      setMessage(error.response?.data?.message || "Failed to update. Check console for details.");
     } finally {
       setSaving(false);
     }
