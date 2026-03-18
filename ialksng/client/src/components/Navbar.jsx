@@ -119,9 +119,15 @@ function Navbar() {
           </li>
 
           <li>
-            <span onClick={() => handleNavigate("/shop")}>
+            <a
+              href="/shop"
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavigate("/shop");
+              }}
+            >
               Shop
-            </span>
+            </a>
           </li>
 
           <li>
