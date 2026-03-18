@@ -1,0 +1,12 @@
+.work {
+  padding: 100px 60px;
+  background: #020617;
+  text-align: center;
+}
+
+/* TITLE */
+.work__title {
+  font-size: 36px;
+  margin-bottom: 40px;
+  color: #38bdf8;
+}

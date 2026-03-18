@@ -1,0 +1,73 @@
+/* 🌌 Full page center */
+.auth__container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0f172a, #020617);
+}
+
+/* 🧾 Card */
+.auth__card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  padding: 2rem;
+  border-radius: 16px;
+  width: 350px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+/* 🏷 Title */
+.auth__card h2 {
+  color: #fff;
+  margin-bottom: 1.5rem;
+}
+
+/* 🧾 Inputs */
+.auth__card input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  background: #1e293b;
+  color: #fff;
+}
+
+/* ✨ Focus */
+.auth__card input:focus {
+  border: 1px solid #38bdf8;
+}
+
+/* 🔘 Button */
+.auth__card button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 1rem;
+  border: none;
+  border-radius: 8px;
+  background: #38bdf8;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* 🔥 Hover */
+.auth__card button:hover {
+  background: #0ea5e9;
+}
+
+/* 🔗 Links */
+.auth__link {
+  margin-top: 1rem;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.auth__link span {
+  color: #38bdf8;
+  cursor: pointer;
+}

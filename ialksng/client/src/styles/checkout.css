@@ -1,0 +1,61 @@
+/* 🌌 Page */
+.checkout__container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #020617, #0f172a);
+}
+
+/* 📦 Card */
+.checkout__card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  padding: 2rem;
+  border-radius: 16px;
+  width: 400px;
+  color: #fff;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  text-align: center;
+}
+
+/* 🏷 Title */
+.checkout__card h2 {
+  margin-bottom: 1rem;
+}
+
+/* 📄 Info */
+.checkout__info {
+  margin: 1.5rem 0;
+  text-align: left;
+}
+
+.checkout__info p {
+  margin: 8px 0;
+  color: #94a3b8;
+}
+
+/* 💰 Price */
+.checkout__price {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #38bdf8;
+  margin: 1rem 0;
+}
+
+/* 🔘 Button */
+.checkout__btn {
+  width: 100%;
+  padding: 12px;
+  background: #38bdf8;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* 🔥 Hover */
+.checkout__btn:hover {
+  background: #0ea5e9;
+}

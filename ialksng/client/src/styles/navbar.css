@@ -1,0 +1,154 @@
+/* NAVBAR CONTAINER */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 18px 60px;
+
+  background: rgba(2, 6, 23, 0.7);
+  backdrop-filter: blur(12px);
+
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* LOGO */
+.navbar_logo {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  cursor: pointer;
+  color: #e2e8f0;
+  transition: 0.3s ease;
+}
+
+.navbar_logo:hover {
+  color: #38bdf8;
+}
+
+/* NAV LINKS CONTAINER */
+.navbar_links ul {
+  display: flex;
+  align-items: center;
+  list-style: none; /* REMOVE BULLETS */
+  gap: 25px;
+}
+
+/* LIST ITEMS */
+.navbar_links li {
+  position: relative;
+}
+
+/* LINKS */
+.navbar_links a {
+  font-size: 15px;
+  color: #94a3b8;
+  transition: 0.3s ease;
+}
+
+/* HOVER EFFECT */
+.navbar_links a:hover {
+  color: #e2e8f0;
+}
+
+/* UNDERLINE ANIMATION 🔥 */
+.navbar_links a::after {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  background: #38bdf8;
+  left: 0;
+  bottom: -6px;
+  transition: 0.3s ease;
+}
+
+.navbar_links a:hover::after {
+  width: 100%;
+}
+
+/* RIGHT SIDE ACTIONS */
+.navbar_actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+/* ICONS */
+.icon {
+  font-size: 18px;
+  cursor: pointer;
+  color: #94a3b8;
+  transition: 0.3s ease;
+}
+
+.icon:hover {
+  color: #38bdf8;
+  transform: scale(1.1);
+}
+
+/* LOGIN BUTTON */
+.login-btn {
+  padding: 7px 16px;
+  background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  color: black;
+  transition: 0.3s ease;
+}
+
+.login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);
+}
+
+/* 👤 user menu wrapper */
+.user-menu {
+  position: relative;
+}
+
+/* 📦 dropdown */
+.dropdown {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+  padding: 10px;
+  width: 150px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  z-index: 100;
+}
+
+/* 🧾 dropdown items */
+.dropdown p {
+  margin: 8px 0;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 6px;
+  color: #fff;
+  transition: 0.2s;
+}
+
+/* ✨ hover */
+.dropdown p:hover {
+  background: #1e293b;
+}
+
+.cart-count {
+  position: absolute;
+  top: -5px;
+  right: -8px;
+  background: red;
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 50%;
+}

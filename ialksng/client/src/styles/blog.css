@@ -1,0 +1,46 @@
+.blog {
+  padding: 50px 20px;
+  color: white;
+}
+
+.blog__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.blog__card {
+  background: #0f172a;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: 0.3s;
+}
+
+.blog__card:hover {
+  transform: translateY(-5px);
+}
+
+.blog__card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.blog__card-content {
+  padding: 15px;
+}
+
+.blog__card-content h3 {
+  margin-bottom: 10px;
+}
+
+.blog__card-content p {
+  color: #ccc;
+  font-size: 14px;
+}
+
+.blog__card-content a {
+  color: #38bdf8;
+  text-decoration: none;
+  font-weight: bold;
+}
