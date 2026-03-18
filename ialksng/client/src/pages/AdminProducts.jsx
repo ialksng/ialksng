@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "../utils/axios"; // ✅ Using your configured axios instance
+import axios from "../utils/axios"; 
 import "../styles/adminproducts.css";
 
 function AdminProducts() {
@@ -8,18 +8,15 @@ function AdminProducts() {
     title: "",
     description: "",
     price: "",
+    category: "notes", // ✅ Added category with a default value from your enum
     image: "",
     fileUrl: ""
   });
   const [loading, setLoading] = useState(false);
 
-  // 🔹 fetch products
   const fetchProducts = async () => {
     try {
-      // Using relative path because axios instance has the base URL
       const res = await axios.get("/products");
-      
-      // ✅ Handle data normalization based on your controller response
       const data = res.data;
       setProducts(data.products || data || []);
     } catch (err) {
@@ -32,28 +29,24 @@ function AdminProducts() {
     fetchProducts();
   }, []);
 
-  // 🔹 handle input
   const handleChange = (e) => {
     const { name, value } = e.target;
-    // Ensure price is handled correctly if needed, otherwise keep as string for input
     setForm({ ...form, [name]: value });
   };
 
-  // 🔹 add product
   const handleAdd = async (e) => {
     e.preventDefault();
     
-    // Basic validation
-    if (!form.title || !form.price || !form.image) {
-        return alert("Please fill in Title, Price, and Image URL");
+    // ✅ Validation updated to include category
+    if (!form.title || !form.price || !form.image || !form.category) {
+        return alert("Please fill in Title, Price, Category, and Image URL");
     }
 
     setLoading(true);
     try {
-      // ✅ Axios automatically includes the token from your interceptor in utils/axios.js
       const res = await axios.post("/products", {
         ...form,
-        price: Number(form.price) // Ensure price is sent as a number
+        price: Number(form.price) 
       });
 
       if (res.data) {
@@ -62,6 +55,7 @@ function AdminProducts() {
           title: "",
           description: "",
           price: "",
+          category: "notes", // Reset to default
           image: "",
           fileUrl: ""
         });
@@ -75,7 +69,6 @@ function AdminProducts() {
     }
   };
 
-  // 🔹 delete product
   const handleDelete = async (id) => {
     if (!window.confirm("Delete product?")) return;
 
@@ -93,10 +86,18 @@ function AdminProducts() {
     <div className="adminP__container">
       <h2>Manage Products</h2>
 
-      {/* 🔥 ADD FORM */}
       <form className="adminP__form" onSubmit={handleAdd}>
         <input name="title" placeholder="Title" value={form.title} onChange={handleChange} required />
-        <input name="description" placeholder="Description" value={form.description} onChange={handleChange} />
+        
+        {/* ✅ Added Category Dropdown matching your Mongoose Enum */}
+        <select name="category" value={form.category} onChange={handleChange} required>
+          <option value="notes">Notes</option>
+          <option value="roadmap">Roadmap</option>
+          <option value="project">Project</option>
+          <option value="code">Code</option>
+        </select>
+
+        <input name="description" placeholder="Description" value={form.description} onChange={handleChange} required />
         <input name="price" type="number" placeholder="Price" value={form.price} onChange={handleChange} required />
         <input name="image" placeholder="Image URL" value={form.image} onChange={handleChange} required />
         <input name="fileUrl" placeholder="File URL (for digital access)" value={form.fileUrl} onChange={handleChange} />
@@ -106,7 +107,6 @@ function AdminProducts() {
         </button>
       </form>
 
-      {/* 🔥 PRODUCT LIST */}
       <div className="adminP__list">
         {products.length === 0 ? (
           <p style={{ color: "white" }}>No products found</p>
@@ -116,6 +116,8 @@ function AdminProducts() {
               <img src={p.image} alt={p.title} />
               <div className="adminP__card-info">
                 <h3>{p.title}</h3>
+                {/* ✅ Display Category in the list */}
+                <span className="adminP__category-tag">{p.category}</span>
                 <p>₹{p.price}</p>
               </div>
               <button className="delete-btn" onClick={() => handleDelete(p._id)}>

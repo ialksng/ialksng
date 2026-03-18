@@ -52,3 +52,26 @@
   color: white;
   cursor: pointer;
 }
+
+.adminP__category-tag {
+  background: rgba(56, 189, 248, 0.2);
+  color: #38bdf8;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: bold;
+  display: inline-block;
+  margin-bottom: 5px;
+}
+
+/* Style the select dropdown to match your inputs */
+.adminP__form select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background: #1e2532;
+  color: white;
+}
