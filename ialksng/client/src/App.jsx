@@ -1,5 +1,6 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -30,7 +31,7 @@ function App() {
 
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 500); 
+    }, 500);
 
     return () => clearTimeout(timer);
   }, [location]);
@@ -39,43 +40,60 @@ function App() {
     <>
       {loading && <Loader />}
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/checkout/:id" element={<Checkout />} />
-        <Route path="/my-purchases" element={<MyPurchases />} />
-        <Route path="/content/:id" element={<ProductContent />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/access/:id" element={<ViewProduct />} />
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
 
-        <Route
-          path="/admin"
-          element={
-            <AdminRoute>
-              <AdminDashboard />
-            </AdminRoute>
-          }
-        />
+          <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
+          <Route path="/login" element={<PageWrapper><Login /></PageWrapper>} />
+          <Route path="/signup" element={<PageWrapper><Signup /></PageWrapper>} />
+          <Route path="/checkout/:id" element={<PageWrapper><Checkout /></PageWrapper>} />
+          <Route path="/my-purchases" element={<PageWrapper><MyPurchases /></PageWrapper>} />
+          <Route path="/content/:id" element={<PageWrapper><ProductContent /></PageWrapper>} />
+          <Route path="/cart" element={<PageWrapper><Cart /></PageWrapper>} />
+          <Route path="/access/:id" element={<PageWrapper><ViewProduct /></PageWrapper>} />
 
-        <Route
-          path="/admin/products"
-          element={
-            <AdminRoute>
-              <AdminProducts />
-            </AdminRoute>
-          }
-        />
+          <Route
+            path="/admin"
+            element={
+              <AdminRoute>
+                <PageWrapper><AdminDashboard /></PageWrapper>
+              </AdminRoute>
+            }
+          />
 
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/admin/blog" element={<AdminBlog />} />
-        <Route path="/admin/blog/create" element={<CreateBlog />} />
-        <Route path="/admin/blog/edit/:id" element={<EditBlog />} />
-        <Route path="/blog/:id" element={<BlogDetail />} />
-        <Route path="/access/:id" element={<AccessProduct />} />
-      </Routes>
+          <Route
+            path="/admin/products"
+            element={
+              <AdminRoute>
+                <PageWrapper><AdminProducts /></PageWrapper>
+              </AdminRoute>
+            }
+          />
+
+          <Route path="/blog" element={<PageWrapper><Blog /></PageWrapper>} />
+          <Route path="/admin/blog" element={<PageWrapper><AdminBlog /></PageWrapper>} />
+          <Route path="/admin/blog/create" element={<PageWrapper><CreateBlog /></PageWrapper>} />
+          <Route path="/admin/blog/edit/:id" element={<PageWrapper><EditBlog /></PageWrapper>} />
+          <Route path="/blog/:id" element={<PageWrapper><BlogDetail /></PageWrapper>} />
+          <Route path="/access/:id" element={<PageWrapper><AccessProduct /></PageWrapper>} />
+
+        </Routes>
+      </AnimatePresence>
     </>
   );
 }
+
+const PageWrapper = ({ children }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.4 }}
+    >
+      {children}
+    </motion.div>
+  );
+};
 
 export default App;
