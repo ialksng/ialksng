@@ -34,7 +34,7 @@
 .navbar_links ul {
   display: flex;
   align-items: center;
-  list-style: none; /* REMOVE BULLETS */
+  list-style: none;
   gap: 25px;
 }
 
@@ -44,19 +44,23 @@
 }
 
 /* LINKS */
-.navbar_links a {
+.navbar_links a,
+.navbar_links span {
   font-size: 15px;
   color: #94a3b8;
   transition: 0.3s ease;
+  cursor: pointer;
 }
 
 /* HOVER EFFECT */
-.navbar_links a:hover {
+.navbar_links a:hover,
+.navbar_links span:hover {
   color: #e2e8f0;
 }
 
-/* UNDERLINE ANIMATION 🔥 */
-.navbar_links a::after {
+/* UNDERLINE ANIMATION */
+.navbar_links a::after,
+.navbar_links span::after {
   content: "";
   position: absolute;
   width: 0%;
@@ -67,7 +71,8 @@
   transition: 0.3s ease;
 }
 
-.navbar_links a:hover::after {
+.navbar_links a:hover::after,
+.navbar_links span:hover::after {
   width: 100%;
 }
 
@@ -108,12 +113,12 @@
   box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);
 }
 
-/* 👤 user menu wrapper */
+/* user menu wrapper */
 .user-menu {
   position: relative;
 }
 
-/* 📦 dropdown */
+/* dropdown */
 .dropdown {
   position: absolute;
   top: 40px;
@@ -127,7 +132,7 @@
   z-index: 100;
 }
 
-/* 🧾 dropdown items */
+/* dropdown items */
 .dropdown p {
   margin: 8px 0;
   padding: 8px;
@@ -137,11 +142,11 @@
   transition: 0.2s;
 }
 
-/* ✨ hover */
 .dropdown p:hover {
   background: #1e293b;
 }
 
+/* CART COUNT */
 .cart-count {
   position: absolute;
   top: -5px;
@@ -151,4 +156,55 @@
   font-size: 10px;
   padding: 2px 6px;
   border-radius: 50%;
+}
+
+/* HAMBURGER */
+.hamburger {
+  display: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #e2e8f0;
+}
+
+/* RESPONSIVE DESIGN */
+
+@media (max-width: 768px) {
+
+  .navbar {
+    padding: 15px 20px;
+  }
+
+  .hamburger {
+    display: block;
+  }
+
+  .navbar_links {
+    position: absolute;
+    top: 70px;
+    left: -100%;
+    width: 100%;
+    background: #020617;
+    transition: 0.3s ease;
+    border-top: 1px solid rgba(148, 163, 184, 0.1);
+  }
+
+  .navbar_links.active {
+    left: 0;
+  }
+
+  .navbar_links ul {
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px 0;
+    text-align: center;
+  }
+
+  .navbar_actions {
+    gap: 12px;
+  }
+
+  .login-btn {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
 }
