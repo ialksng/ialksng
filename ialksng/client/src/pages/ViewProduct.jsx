@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import "../styles/viewProduct.css";
+import "../styles/viewproduct.css";
 
 function ViewProduct() {
   const { id } = useParams();
