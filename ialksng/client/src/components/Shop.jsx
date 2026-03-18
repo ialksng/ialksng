@@ -11,17 +11,18 @@ function Shop() {
   const [ownedProducts, setOwnedProducts] = useState([]);
   const [previewProduct, setPreviewProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [addedId, setAddedId] = useState(null); // ✅ NEW
 
   const [activeCategory, setActiveCategory] = useState("all");
   const [search, setSearch] = useState("");
 
-  const { addToCart } = useContext(CartContext);
+  const { addToCart, cart } = useContext(CartContext); // ✅ use cart
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const API = import.meta.env.VITE_API_URL;
 
-  // 🔹 Fetch Products (SAFE)
+  // 🔹 Fetch Products
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -75,7 +76,7 @@ function Shop() {
     fetchOrders();
   }, [user, API]);
 
-  // 🔹 Filter Logic (SAFE)
+  // 🔹 Filter Logic
   useEffect(() => {
     let temp = Array.isArray(products) ? [...products] : [];
 
@@ -94,15 +95,25 @@ function Shop() {
     setFiltered(temp);
   }, [search, activeCategory, products]);
 
-  // 🔹 Add to Cart
+  // 🔹 Add to Cart (IMPROVED)
   const handleAddToCart = (product) => {
     if (!user) {
       navigate("/login", { state: { from: "/shop" } });
       return;
     }
 
+    // ✅ Prevent duplicate
+    const alreadyInCart = cart.some(item => item._id === product._id);
+    if (alreadyInCart) {
+      toast("Already in cart ⚠️");
+      return;
+    }
+
     addToCart(product);
+    setAddedId(product._id);
     toast.success("Added to cart 🛒");
+
+    setTimeout(() => setAddedId(null), 1500);
   };
 
   if (loading) {
@@ -172,6 +183,7 @@ function Shop() {
 
                   <div className="card-actions">
 
+                    {/* PREVIEW */}
                     <button
                       className="btn preview-btn"
                       onClick={() => setPreviewProduct(product)}
@@ -179,6 +191,7 @@ function Shop() {
                       Preview
                     </button>
 
+                    {/* VIEW / BUY */}
                     {ownedProducts.includes(product._id) ? (
                       <button
                         className="btn view-btn"
@@ -195,10 +208,15 @@ function Shop() {
                       </button>
                     ) : (
                       <button
-                        className="btn buy-btn"
+                        className={`btn buy-btn ${
+                          addedId === product._id ? "added" : ""
+                        }`}
                         onClick={() => handleAddToCart(product)}
+                        disabled={addedId === product._id}
                       >
-                        Buy ₹{product.price || 0}
+                        {addedId === product._id
+                          ? "Added ✓"
+                          : `Buy ₹${product.price || 0}`}
                       </button>
                     )}
 
@@ -216,9 +234,14 @@ function Shop() {
 
         {/* PREVIEW MODAL */}
         {previewProduct && (
-          <div className="preview-modal">
-            <div className="preview-box">
-
+          <div
+            className="preview-modal"
+            onClick={() => setPreviewProduct(null)} // ✅ close on outside
+          >
+            <div
+              className="preview-box"
+              onClick={(e) => e.stopPropagation()} // ✅ prevent close inside
+            >
               <button
                 className="close-btn"
                 onClick={() => setPreviewProduct(null)}
