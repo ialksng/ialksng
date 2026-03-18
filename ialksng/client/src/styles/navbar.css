@@ -13,16 +13,9 @@
 }
 
 .navbar_logo {
-  font-size: 20px;
-  font-weight: 600;
-  letter-spacing: 1px;
+  height: 40px;
   cursor: pointer;
-  color: #e2e8f0;
   transition: 0.3s ease;
-}
-
-.navbar_logo:hover {
-  color: #38bdf8;
 }
 
 .navbar_links ul {
@@ -236,4 +229,10 @@
 
 .navbar_links a.active::after {
   width: 100%;
+}
+
+@media (max-width: 768px) {
+  .navbar_logo {
+    height: 35px;
+  }
 }

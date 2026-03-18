@@ -4,6 +4,7 @@ import { useContext, useState, useRef, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { CartContext } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
+import logo from "../assets/logo.png";
 
 function Navbar() {
   const { user, logoutUser } = useContext(AuthContext);
@@ -58,9 +59,12 @@ function Navbar() {
   return (
     <header className="navbar">
       
-      <span className="navbar_logo" onClick={() => navigate("/")}>
-        Alok Singh
-      </span>
+      <img
+        src={logo}
+        alt="logo"
+        className="navbar_logo"
+        onClick={() => navigate("/")}
+      />
 
       <nav className="navbar_links desktop-only">
         <ul>
