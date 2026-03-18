@@ -1,103 +1,114 @@
-import Profiles from "./Profiles"
-import "../styles/about.css"
-import profile from "../assets/Alok Singh.png"
-import { useState } from "react"
-import { motion } from "framer-motion"
-
-import {
-  FaReact, FaNodeJs, FaPython, FaJava, FaGitAlt, FaAws
-} from "react-icons/fa"
-
-import {
-  SiMongodb, SiMysql, SiExpress, SiJavascript, SiDocker,
-  SiHtml5,
-  SiCss,
-  SiBootstrap,
-  SiTailwindcss
-} from "react-icons/si"
+import Profiles from "./Profiles";
+import "../styles/about.css";
+import defaultProfile from "../assets/Alok Singh.png"; // Used as fallback if no DB image
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import axios from "../utils/axios"; // UPDATED: Importing your configured axios instance
+import { iconMap } from "../utils/iconMap"; 
 
 function About() {
-  const [active, setActive] = useState("All")
+  const [active, setActive] = useState("All");
+  const [aboutData, setAboutData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const skills = [
-    { name: "HTML5", category: "Frontend", icon: <SiHtml5 /> },
-    { name: "CSS3", category: "Frontend", icon: <SiCss /> },
-    { name: "JavaScript (ES6+)", category: "Frontend", icon: <SiJavascript /> },
-    { name: "React", category: "Frontend", icon: <FaReact /> },
-    { name: "Tailwind CSS", category: "Frontend", icon: <SiTailwindcss /> },
-    { name: "BootStrap", category: "Frontend", icon: <SiBootstrap /> },
+  // Fetch data from the backend when component mounts
+  useEffect(() => {
+    const fetchAboutData = async () => {
+      try {
+        // UPDATED: Using a relative URL so it automatically uses your Render backend
+        // Make sure VITE_API_BASE_URL is set in your Render/Vercel environment variables
+        const { data } = await axios.get("/api/about"); 
+        setAboutData(data);
+      } catch (error) {
+        console.error("Error fetching about data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    { name: "Node.js", category: "Backend", icon: <FaNodeJs /> },
-    { name: "Express", category: "Backend", icon: <SiExpress /> },
+    fetchAboutData();
+  }, []);
 
-    { name: "MongoDB", category: "Databases", icon: <SiMongodb /> },
-    { name: "MySQL", category: "Databases", icon: <SiMysql /> },
+  if (loading) {
+    return (
+      <section className="about" id="about">
+        <h2 className="section__title">Loading About Me...</h2>
+      </section>
+    );
+  }
 
-    { name: "Python", category: "Languages", icon: <FaPython /> },
-    { name: "Java", category: "Languages", icon: <FaJava /> },
+  // Fallback in case there's an error or no data in the database yet
+  if (!aboutData) {
+    return (
+      <section className="about" id="about">
+        <h2 className="section__title">About Data Not Found</h2>
+      </section>
+    );
+  }
 
-    { name: "Docker", category: "Tools", icon: <SiDocker /> },
-    { name: "AWS", category: "Tools", icon: <FaAws /> },
-    { name: "Git", category: "Tools", icon: <FaGitAlt /> },
-  ]
-
+  // Filter skills dynamically based on DB data
   const filteredSkills =
     active === "All"
-      ? skills
-      : skills.filter(skill => skill.category === active)
+      ? aboutData.skills || []
+      : (aboutData.skills || []).filter((skill) => skill.category === active);
 
   return (
     <section className="about" id="about">
-
       <h2 className="section__title">About Me</h2>
 
       {/* TOP SECTION */}
       <div className="about__top">
-
         {/* IMAGE */}
         <div className="about__image">
-          <img src={profile} alt="Alok Singh" />
+          {/* Use DB image if available, else fallback to the local asset */}
+          <img src={aboutData.imageUrl || defaultProfile} alt={aboutData.name} />
         </div>
 
         {/* CONTENT */}
         <div className="about__content card">
-
-          <h3 className="about__role">Full Stack Developer</h3>
-          <p>
-            I'm Alok Singh, a passionate Full Stack Developer who builds
-            modern web applications and solves real-world problems.
-          </p>
-
-          <br />
-
-          <p>
-            I also create developer resources like notes, projects, and courses.
-          </p>
+          <h3 className="about__role">{aboutData.role}</h3>
+          
+          {/* Dynamically render paragraphs from the database */}
+          {aboutData.paragraphs && aboutData.paragraphs.length > 0 ? (
+            aboutData.paragraphs.map((para, index) => (
+              <p key={index} style={{ marginBottom: "1rem" }}>
+                {para}
+              </p>
+            ))
+          ) : (
+            <p>I am a passionate developer.</p> // Fallback text
+          )}
 
           <div className="resume__wrapper">
-            <a href="https://drive.google.com/file/d/1RncZCzY-fZBqLkT_UtHpZw1RdW2ajCEv/view" target="_blank" className="btn primary">Resume</a>
+            <a
+              href="https://drive.google.com/file/d/1RncZCzY-fZBqLkT_UtHpZw1RdW2ajCEv/view"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn primary"
+            >
+              Resume
+            </a>
           </div>
-
         </div>
-
       </div>
 
       {/* SKILLS */}
       <div className="about__skills">
-
         <h2 className="section__title">Skills</h2>
 
         {/* FILTER TABS */}
         <div className="skills__tabs">
-          {["All", "Frontend", "Backend", "Languages", "Tools", "Databases"].map(tab => (
-            <button
-              key={tab}
-              className={active === tab ? "active" : ""}
-              onClick={() => setActive(tab)}
-            >
-              {tab}
-            </button>
-          ))}
+          {["All", "Frontend", "Backend", "Languages", "Tools", "Databases"].map(
+            (tab) => (
+              <button
+                key={tab}
+                className={active === tab ? "active" : ""}
+                onClick={() => setActive(tab)}
+              >
+                {tab}
+              </button>
+            )
+          )}
         </div>
 
         {/* ANIMATED GRID */}
@@ -110,69 +121,42 @@ function About() {
         >
           {filteredSkills.map((skill, index) => (
             <div className="skill__card" key={index}>
-              <div className="icon">{skill.icon}</div>
+              {/* Translate the string 'iconName' from DB into the actual React Icon */}
+              <div className="icon">
+                {iconMap[skill.iconName] || <span>❖</span>}
+              </div>
               <p>{skill.name}</p>
             </div>
           ))}
         </motion.div>
-
       </div>
 
       {/* PROFILES */}
       <Profiles />
 
       {/* TIMELINE */}
-<div className="timeline">
+      <div className="timeline">
+        <h2 className="section__title">Experience</h2>
 
-  <h2 className="section__title">Experience</h2>
-
-  <div className="timeline__wrapper">
-
-    {/* ITEM 1 */}
-    <div className="timeline__item">
-      <div className="timeline__dot"></div>
-
-      <div className="timeline__card">
-        <h4>Freelance Developer</h4>
-        <span>2023 - Present</span>
-        <p>
-          Built multiple full-stack projects and worked with real clients.
-        </p>
+        <div className="timeline__wrapper">
+          {aboutData.experiences && aboutData.experiences.length > 0 ? (
+            aboutData.experiences.map((exp, index) => (
+              <div className="timeline__item" key={index}>
+                <div className="timeline__dot"></div>
+                <div className="timeline__card">
+                  <h4>{exp.title}</h4>
+                  <span>{exp.duration}</span>
+                  <p>{exp.description}</p>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>No experience data added yet.</p>
+          )}
+        </div>
       </div>
-    </div>
-
-    {/* ITEM 2 */}
-    <div className="timeline__item">
-      <div className="timeline__dot"></div>
-
-      <div className="timeline__card">
-        <h4>Frontend Intern</h4>
-        <span>2024</span>
-        <p>
-          Developed responsive UI using React and modern CSS.
-        </p>
-      </div>
-    </div>
-
-    {/* ITEM 3 */}
-    <div className="timeline__item">
-      <div className="timeline__dot"></div>
-
-      <div className="timeline__card">
-        <h4>Started Coding Journey</h4>
-        <span>2022</span>
-        <p>
-          Learned programming fundamentals and began web development.
-        </p>
-      </div>
-    </div>
-
-  </div>
-
-</div>
-
     </section>
-  )
+  );
 }
 
-export default About
+export default About;

@@ -19,7 +19,7 @@ import CreateBlog from "./pages/admin/CreateBlog";
 import EditBlog from "./pages/admin/EditBlog";
 import BlogDetail from "./components/BlogDetail";
 import AccessProduct from "./pages/AccessProduct";
-
+import AdminAbout from "./pages/admin/AdminAbout";
 import Loader from "./components/Loader";
 
 function App() {
@@ -76,7 +76,7 @@ function App() {
           <Route path="/admin/blog/edit/:id" element={<PageWrapper><EditBlog /></PageWrapper>} />
           <Route path="/blog/:id" element={<PageWrapper><BlogDetail /></PageWrapper>} />
           <Route path="/access/:id" element={<PageWrapper><AccessProduct /></PageWrapper>} />
-
+          <Route path="/admin/about" element={<PageWrapper><AdminAbout /></PageWrapper>} />
         </Routes>
       </AnimatePresence>
     </>
