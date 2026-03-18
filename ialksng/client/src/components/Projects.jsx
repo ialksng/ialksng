@@ -1,76 +1,76 @@
-import "../styles/projects.css"
-import { motion } from "framer-motion"
+import { useState, useEffect } from "react";
+import axios from "../utils/axios";
+import "../styles/projects.css";
+import { motion } from "framer-motion";
 
 function Projects() {
-  const projects = [
-    {
-      title: "Ride Booking App",
-      desc: "Full-stack MERN app like Rapido",
-      tech: "React • Node • MongoDB",
-      img: "/projects/project1.jpg",
-      github: "#",
-      live: "#"
-    },
-    {
-      title: "Portfolio Website",
-      desc: "Modern developer portfolio",
-      tech: "React • CSS",
-      img: "/projects/project2.jpg",
-      github: "#",
-      live: "#"
-    },
-    {
-      title: "Notes Selling Platform",
-      desc: "E-commerce platform for students",
-      tech: "MERN Stack",
-      img: "/projects/project3.jpg",
-      github: "#",
-      live: "#"
-    }
-  ]
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const { data } = await axios.get("/projects");
+        setProjects(data);
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="projects" id="projects">
+        <h2 className="projects__title">Loading Projects...</h2>
+      </section>
+    );
+  }
 
   return (
     <section className="projects" id="projects">
-
       <h2 className="projects__title">Projects</h2>
       <p className="projects__subtitle">Some of my recent work</p>
 
-      <div className="projects__grid">
-        {projects.map((project, index) => (
+      {projects.length === 0 ? (
+        <p style={{ textAlign: "center", color: "#aaa" }}>No projects added yet.</p>
+      ) : (
+        <div className="projects__grid">
+          {projects.map((project, index) => (
+            <motion.div
+              key={project._id || index}
+              className="project__card"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: index * 0.1 }}
+              viewport={{ once: true }}
+            >
+              {/* IMAGE */}
+              <div className="project__image">
+                <img src={project.imageUrl || "/projects/project1.jpg"} alt={project.title} />
 
-          <motion.div
-            key={index}
-            className="project__card"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: index * 0.1 }}
-          >
-
-            {/* IMAGE */}
-            <div className="project__image">
-              <img src={project.img} alt={project.title} />
-
-              {/* OVERLAY */}
-              <div className="project__overlay">
-                <a href={project.live} target="_blank">Live</a>
-                <a href={project.github} target="_blank">GitHub</a>
+                {/* OVERLAY */}
+                <div className="project__overlay">
+                  {project.liveUrl && <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">Live</a>}
+                  {project.githubUrl && <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">GitHub</a>}
+                </div>
               </div>
-            </div>
 
-            {/* CONTENT */}
-            <div className="project__content">
-              <h3>{project.title}</h3>
-              <p>{project.desc}</p>
-              <span>{project.tech}</span>
-            </div>
-
-          </motion.div>
-
-        ))}
-      </div>
-
+              {/* CONTENT */}
+              <div className="project__content">
+                <h3>{project.title}</h3>
+                <p>{project.description}</p>
+                <span>{project.tools ? project.tools.join(" • ") : ""}</span>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      )}
     </section>
-  )
+  );
 }
 
-export default Projects
+export default Projects;

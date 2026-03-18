@@ -22,7 +22,7 @@ import BlogDetail from "./components/BlogDetail";
 import AccessProduct from "./pages/AccessProduct";
 import AdminAbout from "./pages/admin/AdminAbout";
 import Loader from "./components/Loader";
-
+import AdminProjects from "./pages/admin/AdminProjects";
 
 function App() {
   const location = useLocation();
@@ -80,6 +80,14 @@ function App() {
           <Route path="/blog/:id" element={<PageWrapper><BlogDetail /></PageWrapper>} />
           <Route path="/access/:id" element={<PageWrapper><AccessProduct /></PageWrapper>} />
           <Route path="/admin/about" element={<PageWrapper><AdminAbout /></PageWrapper>} />
+          <Route
+            path="/admin/projects"
+            element={
+              <AdminRoute>
+                <PageWrapper><AdminProjects /></PageWrapper>
+              </AdminRoute>
+            }
+          />
         </Routes>
       </AnimatePresence>
     </>
