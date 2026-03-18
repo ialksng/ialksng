@@ -11,6 +11,7 @@ import { trackVisitor } from "./middleware/trackVisitor.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import statsRoutes from "./routes/statsRoutes.js";
 import blogRoutes from "./routes/blogRoutes.js";
+import aboutRoutes from "./routes/aboutRoutes.js";
 
 dotenv.config();
 
@@ -37,6 +38,7 @@ app.use(trackVisitor); // 🔥 global tracking
 app.use("/api/admin", adminRoutes);
 app.use("/api/public", statsRoutes);
 app.use("/api/blogs", blogRoutes);
+app.use("/api/about", aboutRoutes);
 
 // 🔹 DATABASE
 mongoose.connect(process.env.MONGO_URI)
