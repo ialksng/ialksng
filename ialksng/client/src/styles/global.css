@@ -45,3 +45,7 @@ a {
   background: #38bdf8;
   color: black;
 }
+
+html {
+  scroll-behavior: smooth;
+}

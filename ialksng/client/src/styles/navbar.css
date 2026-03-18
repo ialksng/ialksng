@@ -214,3 +214,11 @@
     z-index: -1;
   }
 }
+
+.navbar_links a.active {
+  color: #38bdf8;
+}
+
+.navbar_links a.active::after {
+  width: 100%;
+}
