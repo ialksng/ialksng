@@ -38,85 +38,11 @@ function Navbar() {
         Alok Singh
       </span>
 
-      <div className="navbar_right">
-
-        <div className="navbar_actions desktop-only">
-          {!user ? (
-            <button
-              className="login-btn"
-              onClick={() => navigate("/login")}
-            >
-              Login
-            </button>
-          ) : (
-            <>
-              {user.role !== "admin" && (
-                <div
-                  style={{ position: "relative", cursor: "pointer" }}
-                  onClick={() => navigate("/cart")}
-                >
-                  <FaShoppingCart className="icon" />
-                  {cart.length > 0 && (
-                    <span className="cart-count">
-                      {cart.length}
-                    </span>
-                  )}
-                </div>
-              )}
-
-              <div className="user-menu" ref={dropdownRef}>
-                <FaUser
-                  className="icon"
-                  onClick={() => setOpen(!open)}
-                />
-
-                {open && (
-                  <div className="dropdown">
-                    {user.role !== "admin" && (
-                      <p onClick={() => handleNavigate("/my-purchases")}>
-                        My Purchases
-                      </p>
-                    )}
-
-                    {user.role === "admin" && (
-                      <p onClick={() => handleNavigate("/admin")}>
-                        Admin Panel
-                      </p>
-                    )}
-
-                    <p onClick={() => {
-                      logoutUser();
-                      setOpen(false);
-                    }}>
-                      Logout
-                    </p>
-                  </div>
-                )}
-              </div>
-            </>
-          )}
-        </div>
-
-        <div
-          className="hamburger"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          {menuOpen ? <FaTimes /> : <FaBars />}
-        </div>
-
-      </div>
-
-      <nav className={`navbar_links ${menuOpen ? "active" : ""}`}>
+      <nav className="navbar_links desktop-only">
         <ul>
-          <li>
-            <a href="#home" onClick={() => setMenuOpen(false)}>Home</a>
-          </li>
-          <li>
-            <a href="#about" onClick={() => setMenuOpen(false)}>About</a>
-          </li>
-          <li>
-            <a href="#work" onClick={() => setMenuOpen(false)}>Work</a>
-          </li>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#work">Work</a></li>
 
           <li>
             <a
@@ -130,12 +56,97 @@ function Navbar() {
             </a>
           </li>
 
+          <li><a href="#blog">Blog</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div className="navbar_actions">
+
+        {!user ? (
+          <button
+            className="login-btn desktop-only"
+            onClick={() => navigate("/login")}
+          >
+            Login
+          </button>
+        ) : (
+          <div className="desktop-only">
+            {user.role !== "admin" && (
+              <div
+                style={{ position: "relative", cursor: "pointer" }}
+                onClick={() => navigate("/cart")}
+              >
+                <FaShoppingCart className="icon" />
+                {cart.length > 0 && (
+                  <span className="cart-count">
+                    {cart.length}
+                  </span>
+                )}
+              </div>
+            )}
+
+            <div className="user-menu" ref={dropdownRef}>
+              <FaUser
+                className="icon"
+                onClick={() => setOpen(!open)}
+              />
+
+              {open && (
+                <div className="dropdown">
+                  {user.role !== "admin" && (
+                    <p onClick={() => handleNavigate("/my-purchases")}>
+                      My Purchases
+                    </p>
+                  )}
+
+                  {user.role === "admin" && (
+                    <p onClick={() => handleNavigate("/admin")}>
+                      Admin Panel
+                    </p>
+                  )}
+
+                  <p onClick={() => {
+                    logoutUser();
+                    setOpen(false);
+                  }}>
+                    Logout
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        <div
+          className="hamburger"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          {menuOpen ? <FaTimes /> : <FaBars />}
+        </div>
+
+      </div>
+
+      <nav className={`navbar_links mobile-menu ${menuOpen ? "active" : ""}`}>
+        <ul>
+          <li><a href="#home" onClick={() => setMenuOpen(false)}>Home</a></li>
+          <li><a href="#about" onClick={() => setMenuOpen(false)}>About</a></li>
+          <li><a href="#work" onClick={() => setMenuOpen(false)}>Work</a></li>
+
           <li>
-            <a href="#blog" onClick={() => setMenuOpen(false)}>Blog</a>
+            <a
+              href="/shop"
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavigate("/shop");
+              }}
+            >
+              Shop
+            </a>
           </li>
-          <li>
-            <a href="#contact" onClick={() => setMenuOpen(false)}>Contact</a>
-          </li>
+
+          <li><a href="#blog" onClick={() => setMenuOpen(false)}>Blog</a></li>
+          <li><a href="#contact" onClick={() => setMenuOpen(false)}>Contact</a></li>
 
           {!user && (
             <li className="mobile-only">

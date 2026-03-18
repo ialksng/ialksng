@@ -24,12 +24,6 @@
   color: #38bdf8;
 }
 
-.navbar_right {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
 .navbar_links ul {
   display: flex;
   align-items: center;
@@ -41,21 +35,18 @@
   position: relative;
 }
 
-.navbar_links a,
-.navbar_links span {
+.navbar_links a {
   font-size: 15px;
   color: #94a3b8;
   transition: 0.3s ease;
   cursor: pointer;
 }
 
-.navbar_links a:hover,
-.navbar_links span:hover {
+.navbar_links a:hover {
   color: #e2e8f0;
 }
 
-.navbar_links a::after,
-.navbar_links span::after {
+.navbar_links a::after {
   content: "";
   position: absolute;
   width: 0%;
@@ -66,8 +57,7 @@
   transition: 0.3s ease;
 }
 
-.navbar_links a:hover::after,
-.navbar_links span:hover::after {
+.navbar_links a:hover::after {
   width: 100%;
 }
 
@@ -161,6 +151,10 @@
   z-index: 101;
 }
 
+.mobile-menu {
+  display: none;
+}
+
 @media (max-width: 768px) {
 
   .navbar {
@@ -180,7 +174,12 @@
     margin-top: 20px;
   }
 
-  .navbar_links {
+  .navbar_links.desktop-only {
+    display: none;
+  }
+
+  .mobile-menu {
+    display: flex;
     position: fixed;
     top: 0;
     left: -100%;
@@ -188,27 +187,26 @@
     height: 100vh;
     background: #020617;
     transition: 0.35s ease;
-    display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 99;
   }
 
-  .navbar_links.active {
+  .mobile-menu.active {
     left: 0;
   }
 
-  .navbar_links ul {
+  .mobile-menu ul {
     flex-direction: column;
     gap: 30px;
     text-align: center;
   }
 
-  .navbar_links a,
-  .navbar_links span {
+  .mobile-menu a {
     font-size: 20px;
   }
 
-  .navbar_links::before {
+  .mobile-menu::before {
     content: "";
     position: absolute;
     inset: 0;
