@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import axios from "../utils/axios"; // ✅ Using your configured axios instance
 import "../styles/adminproducts.css";
 
 function AdminProducts() {
@@ -10,51 +11,52 @@ function AdminProducts() {
     image: "",
     fileUrl: ""
   });
-
-  // ✅ FIX 1: fallback API
-  const API =
-    import.meta.env.VITE_API_URL || "https://your-backend.onrender.com";
-
-  const token = localStorage.getItem("token");
+  const [loading, setLoading] = useState(false);
 
   // 🔹 fetch products
   const fetchProducts = async () => {
     try {
-      const res = await fetch(`${API}/api/products`);
-      const data = await res.json();
-
-      // ✅ FIX 2: safe handling
-      setProducts(data.products || []);
+      // Using relative path because axios instance has the base URL
+      const res = await axios.get("/products");
+      
+      // ✅ Handle data normalization based on your controller response
+      const data = res.data;
+      setProducts(data.products || data || []);
     } catch (err) {
-      console.log("Fetch products error:", err);
+      console.error("Fetch products error:", err);
       setProducts([]);
     }
   };
 
   useEffect(() => {
     fetchProducts();
-  }, [API]);
+  }, []);
 
   // 🔹 handle input
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    // Ensure price is handled correctly if needed, otherwise keep as string for input
+    setForm({ ...form, [name]: value });
   };
 
   // 🔹 add product
-  const handleAdd = async () => {
+  const handleAdd = async (e) => {
+    e.preventDefault();
+    
+    // Basic validation
+    if (!form.title || !form.price || !form.image) {
+        return alert("Please fill in Title, Price, and Image URL");
+    }
+
+    setLoading(true);
     try {
-      const res = await fetch(`${API}/api/products`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify(form)
+      // ✅ Axios automatically includes the token from your interceptor in utils/axios.js
+      const res = await axios.post("/products", {
+        ...form,
+        price: Number(form.price) // Ensure price is sent as a number
       });
 
-      const data = await res.json();
-
-      if (res.ok) {
+      if (res.data) {
         alert("Product added ✅");
         setForm({
           title: "",
@@ -64,12 +66,12 @@ function AdminProducts() {
           fileUrl: ""
         });
         fetchProducts();
-      } else {
-        alert(data.msg || "Failed to add product");
       }
-
     } catch (err) {
-      console.log("Add product error:", err);
+      console.error("Add product error:", err.response?.data || err.message);
+      alert(err.response?.data?.error || "Failed to add product");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -78,16 +80,12 @@ function AdminProducts() {
     if (!window.confirm("Delete product?")) return;
 
     try {
-      await fetch(`${API}/api/products/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-
+      await axios.delete(`/products/${id}`);
+      alert("Product deleted");
       fetchProducts();
     } catch (err) {
-      console.log("Delete error:", err);
+      console.error("Delete error:", err);
+      alert("Failed to delete product");
     }
   };
 
@@ -96,15 +94,17 @@ function AdminProducts() {
       <h2>Manage Products</h2>
 
       {/* 🔥 ADD FORM */}
-      <div className="adminP__form">
-        <input name="title" placeholder="Title" value={form.title} onChange={handleChange} />
+      <form className="adminP__form" onSubmit={handleAdd}>
+        <input name="title" placeholder="Title" value={form.title} onChange={handleChange} required />
         <input name="description" placeholder="Description" value={form.description} onChange={handleChange} />
-        <input name="price" placeholder="Price" value={form.price} onChange={handleChange} />
-        <input name="image" placeholder="Image URL" value={form.image} onChange={handleChange} />
-        <input name="fileUrl" placeholder="File URL" value={form.fileUrl} onChange={handleChange} />
+        <input name="price" type="number" placeholder="Price" value={form.price} onChange={handleChange} required />
+        <input name="image" placeholder="Image URL" value={form.image} onChange={handleChange} required />
+        <input name="fileUrl" placeholder="File URL (for digital access)" value={form.fileUrl} onChange={handleChange} />
 
-        <button onClick={handleAdd}>Add Product</button>
-      </div>
+        <button type="submit" disabled={loading}>
+            {loading ? "Adding..." : "Add Product"}
+        </button>
+      </form>
 
       {/* 🔥 PRODUCT LIST */}
       <div className="adminP__list">
@@ -113,12 +113,12 @@ function AdminProducts() {
         ) : (
           products.map(p => (
             <div key={p._id} className="adminP__card">
-              <img src={p.image} alt="" />
-
-              <h3>{p.title}</h3>
-              <p>₹{p.price}</p>
-
-              <button onClick={() => handleDelete(p._id)}>
+              <img src={p.image} alt={p.title} />
+              <div className="adminP__card-info">
+                <h3>{p.title}</h3>
+                <p>₹{p.price}</p>
+              </div>
+              <button className="delete-btn" onClick={() => handleDelete(p._id)}>
                 Delete
               </button>
             </div>
