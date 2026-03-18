@@ -81,7 +81,7 @@ function About() {
 
           <div className="resume__wrapper">
             <a
-              href="https://drive.google.com/file/d/1RncZCzY-fZBqLkT_UtHpZw1RdW2ajCEv/view"
+              href={aboutData.resumeLink}
               target="_blank"
               rel="noopener noreferrer"
               className="btn primary"
