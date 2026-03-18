@@ -14,7 +14,7 @@ import Blog from "./components/Blog";
 import AdminBlog from "./pages/admin/AdminBlog";
 import CreateBlog from "./pages/admin/CreateBlog";
 import EditBlog from "./pages/admin/EditBlog";
-import BlogDetails from "./components/BlogDetail"; // or correct path
+import BlogDetail from "./components/BlogDetail"; // or correct path
 
 function App() {
   return (
@@ -26,9 +26,7 @@ function App() {
       <Route path="/my-purchases" element={<MyPurchases />} />
       <Route path="/content/:id" element={<ProductContent />} />
       <Route path="/cart" element={<Cart />} />
-      <Route path="/my-purchases" element={<MyPurchases />} />
       <Route path="/access/:id" element={<ViewProduct />} />
-      <Route path="/admin" element={<AdminDashboard />} />
       <Route
         path="/admin"
         element={
