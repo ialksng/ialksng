@@ -14,7 +14,8 @@ import Blog from "./components/Blog";
 import AdminBlog from "./pages/admin/AdminBlog";
 import CreateBlog from "./pages/admin/CreateBlog";
 import EditBlog from "./pages/admin/EditBlog";
-import BlogDetail from "./components/BlogDetail"; // or correct path
+import BlogDetail from "./components/BlogDetail";
+import AccessProduct from "./pages/AccessProduct";
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
       <Route path="/admin/blog/create" element={<CreateBlog />} />
       <Route path="/admin/blog/edit/:id" element={<EditBlog />} />
       <Route path="/blog/:id" element={<BlogDetail />} />
+      <Route path="/access/:id" element={<AccessProduct />} />
     </Routes>
   );
 }

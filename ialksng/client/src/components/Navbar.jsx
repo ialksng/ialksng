@@ -45,7 +45,17 @@ function Navbar() {
           <li><a href="#home">Home</a></li>
           <li><a href="#about">About</a></li>
           <li><a href="#work">Work</a></li>    
-          <li><a href="#shop">Shop</a></li>
+
+          {/* ✅ FIXED SHOP BUTTON */}
+          <li>
+            <span
+              onClick={() => navigate("/shop")}
+              style={{ cursor: "pointer" }}
+            >
+              Shop
+            </span>
+          </li>
+
           <li><a href="#blog">Blog</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
