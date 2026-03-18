@@ -5,21 +5,33 @@ function ProductContent() {
   const { id } = useParams();
   const [allowed, setAllowed] = useState(null);
 
+  const API = import.meta.env.VITE_API_URL; // ✅ backend URL
+
   useEffect(() => {
-    fetch(`http://localhost:8080/api/orders/check/${id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`
-      }
-    })
-      .then(res => {
+    const checkAccess = async () => {
+      try {
+        const res = await fetch(`${API}/api/orders/check/${id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        });
+
         if (res.status === 403) {
           setAllowed(false);
-        } else {
+        } else if (res.ok) {
           setAllowed(true);
+        } else {
+          setAllowed(false);
         }
-      })
-      .catch(err => console.log(err));
-  }, [id]);
+
+      } catch (err) {
+        console.log("Access check error:", err);
+        setAllowed(false);
+      }
+    };
+
+    checkAccess();
+  }, [id, API]);
 
   if (allowed === null) return <h2>Checking access...</h2>;
 

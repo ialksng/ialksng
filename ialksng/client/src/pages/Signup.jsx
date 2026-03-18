@@ -14,6 +14,8 @@ function Signup() {
   const { loginUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  const API = import.meta.env.VITE_API_URL; // ✅ backend URL
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -23,7 +25,7 @@ function Signup() {
 
     try {
       // 🔹 Signup
-      const res = await fetch("http://localhost:8080/api/auth/signup", {
+      const res = await fetch(`${API}/api/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -32,14 +34,15 @@ function Signup() {
       });
 
       const data = await res.json();
+      console.log("SIGNUP RESPONSE:", data); // ✅ debug
 
       if (!res.ok) {
-        alert(data.msg);
+        alert(data.msg || "Signup failed");
         return;
       }
 
       // 🔹 Auto login
-      const loginRes = await fetch("http://localhost:8080/api/auth/login", {
+      const loginRes = await fetch(`${API}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -51,6 +54,7 @@ function Signup() {
       });
 
       const loginData = await loginRes.json();
+      console.log("AUTO LOGIN RESPONSE:", loginData); // ✅ debug
 
       if (loginRes.ok) {
         loginUser(loginData);
@@ -60,7 +64,7 @@ function Signup() {
       }
 
     } catch (err) {
-      console.log(err);
+      console.log("Signup error:", err);
     }
   };
 

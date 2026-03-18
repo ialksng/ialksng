@@ -12,6 +12,8 @@ function Login() {
 
   const from = location.state?.from || "/";
 
+  const API = import.meta.env.VITE_API_URL; // ✅ backend URL
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -20,7 +22,7 @@ function Login() {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:8080/api/auth/login", {
+      const res = await fetch(`${API}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -29,18 +31,18 @@ function Login() {
       });
 
       const data = await res.json();
+      console.log("LOGIN RESPONSE:", data); // ✅ moved inside
 
       if (res.ok) {
         loginUser(data);
         navigate(from);
       } else {
-        alert(data.msg);
+        alert(data.msg || "Login failed");
       }
 
     } catch (err) {
-      console.log(err);
+      console.log("Login error:", err);
     }
-    console.log("LOGIN RESPONSE:", data);
   };
 
   return (
