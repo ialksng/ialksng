@@ -28,7 +28,7 @@ function Navbar() {
   const handleNavigate = (path) => {
     navigate(path);
     setOpen(false);
-    setMenuOpen(false); 
+    setMenuOpen(false);
   };
 
   return (
@@ -38,11 +38,72 @@ function Navbar() {
         Alok Singh
       </span>
 
-      <div
-        className="hamburger"
-        onClick={() => setMenuOpen(!menuOpen)}
-      >
-        {menuOpen ? <FaTimes /> : <FaBars />}
+      <div className="navbar_right">
+
+        <div className="navbar_actions desktop-only">
+          {!user ? (
+            <button
+              className="login-btn"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </button>
+          ) : (
+            <>
+              {user.role !== "admin" && (
+                <div
+                  style={{ position: "relative", cursor: "pointer" }}
+                  onClick={() => navigate("/cart")}
+                >
+                  <FaShoppingCart className="icon" />
+                  {cart.length > 0 && (
+                    <span className="cart-count">
+                      {cart.length}
+                    </span>
+                  )}
+                </div>
+              )}
+
+              <div className="user-menu" ref={dropdownRef}>
+                <FaUser
+                  className="icon"
+                  onClick={() => setOpen(!open)}
+                />
+
+                {open && (
+                  <div className="dropdown">
+                    {user.role !== "admin" && (
+                      <p onClick={() => handleNavigate("/my-purchases")}>
+                        My Purchases
+                      </p>
+                    )}
+
+                    {user.role === "admin" && (
+                      <p onClick={() => handleNavigate("/admin")}>
+                        Admin Panel
+                      </p>
+                    )}
+
+                    <p onClick={() => {
+                      logoutUser();
+                      setOpen(false);
+                    }}>
+                      Logout
+                    </p>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+        </div>
+
+        <div
+          className="hamburger"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          {menuOpen ? <FaTimes /> : <FaBars />}
+        </div>
+
       </div>
 
       <nav className={`navbar_links ${menuOpen ? "active" : ""}`}>
@@ -69,71 +130,19 @@ function Navbar() {
           <li>
             <a href="#contact" onClick={() => setMenuOpen(false)}>Contact</a>
           </li>
+
+          {!user && (
+            <li className="mobile-only">
+              <button
+                className="login-btn"
+                onClick={() => handleNavigate("/login")}
+              >
+                Login
+              </button>
+            </li>
+          )}
         </ul>
       </nav>
-
-      <div className="navbar_actions">
-
-        {!user ? (
-          <button
-            className="login-btn"
-            onClick={() => navigate("/login")}
-          >
-            Login
-          </button>
-        ) : (
-          <>
-
-            {user.role !== "admin" && (
-              <div
-                style={{ position: "relative", cursor: "pointer" }}
-                onClick={() => navigate("/cart")}
-              >
-                <FaShoppingCart className="icon" />
-
-                {cart.length > 0 && (
-                  <span className="cart-count">
-                    {cart.length}
-                  </span>
-                )}
-              </div>
-            )}
-
-            <div className="user-menu" ref={dropdownRef}>
-              <FaUser
-                className="icon"
-                onClick={() => setOpen(!open)}
-              />
-
-              {open && (
-                <div className="dropdown">
-
-                  {user.role !== "admin" && (
-                    <p onClick={() => handleNavigate("/my-purchases")}>
-                      My Purchases
-                    </p>
-                  )}
-
-                  {user.role === "admin" && (
-                    <p onClick={() => handleNavigate("/admin")}>
-                      Admin Panel
-                    </p>
-                  )}
-
-                  <p onClick={() => {
-                    logoutUser();
-                    setOpen(false);
-                  }}>
-                    Logout
-                  </p>
-
-                </div>
-              )}
-            </div>
-          </>
-        )}
-
-      </div>
 
     </header>
   );

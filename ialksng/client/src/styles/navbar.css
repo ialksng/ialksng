@@ -30,6 +30,13 @@
   color: #38bdf8;
 }
 
+/* RIGHT SIDE WRAPPER */
+.navbar_right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
 /* NAV LINKS CONTAINER */
 .navbar_links ul {
   display: flex;
@@ -81,6 +88,15 @@
   display: flex;
   align-items: center;
   gap: 18px;
+}
+
+/* DESKTOP / MOBILE CONTROL */
+.desktop-only {
+  display: flex;
+}
+
+.mobile-only {
+  display: none;
 }
 
 /* ICONS */
@@ -167,7 +183,6 @@
 }
 
 /* RESPONSIVE DESIGN */
-
 @media (max-width: 768px) {
 
   .navbar {
@@ -176,6 +191,15 @@
 
   .hamburger {
     display: block;
+  }
+
+  .desktop-only {
+    display: none;
+  }
+
+  .mobile-only {
+    display: block;
+    margin-top: 10px;
   }
 
   .navbar_links {
