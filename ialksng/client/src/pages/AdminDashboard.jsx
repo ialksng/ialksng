@@ -141,24 +141,9 @@ function AdminDashboard() {
           <p>Manage portfolio projects</p>
         </div>
 
-        <div className="admin__card" onClick={() => navigate("/admin/experience")}>
-          <h2>💼 Experience</h2>
-          <p>Manage work experience</p>
-        </div>
-
-        <div className="admin__card" onClick={() => navigate("/admin/profiles")}>
-          <h2>💻 Coding Profiles</h2>
-          <p>Manage coding platform links</p>
-        </div>
-
         <div className="admin__card" onClick={() => navigate("/admin/socials")}>
           <h2>🌐 Social Media</h2>
           <p>Manage social media links</p>
-        </div>
-
-        <div className="admin__card" onClick={() => navigate("/admin/skills")}>
-          <h2>🧠 Skills</h2>
-          <p>Manage your skills</p>
         </div>
 
         <div className="admin__card" onClick={() => navigate("/admin/about")}>

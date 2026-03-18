@@ -1,20 +1,36 @@
-import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useState, useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 import "../styles/checkout.css";
 
 function Checkout() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
+  // 🔥 Get user from AuthContext
+  const { user } = useContext(AuthContext);
   const token = localStorage.getItem("token");
 
   // ✅ FIX 1: fallback API
   const API =
     import.meta.env.VITE_API_URL || "https://your-backend.onrender.com";
 
+  // ✅ FIX: Redirect unauthenticated users immediately
+  useEffect(() => {
+    if (!user || !token) {
+      navigate("/login", {
+        state: { from: `/checkout/${id}` },
+      });
+    }
+  }, [user, token, navigate, id]);
+
   // 🔹 fetch product
   useEffect(() => {
+    // Prevent fetching if not logged in
+    if (!user) return;
+
     const fetchProduct = async () => {
       try {
         const res = await fetch(`${API}/api/products/${id}`);
@@ -31,7 +47,7 @@ function Checkout() {
     };
 
     fetchProduct();
-  }, [id, API]);
+  }, [id, API, user]);
 
   const handlePayment = async () => {
     try {
@@ -57,6 +73,12 @@ function Checkout() {
       console.log("CREATE ORDER RESPONSE:", data);
 
       if (!data.success) {
+        // Prevent crash if user token is invalid/expired
+        if (res.status === 401) {
+          alert("Session expired. Please login again.");
+          navigate("/login");
+          return;
+        }
         return alert(data.error || "Failed to create order");
       }
 
@@ -142,8 +164,8 @@ function Checkout() {
     }
   };
 
-  if (!product) {
-    return <h2 style={{ color: "white" }}>Loading...</h2>;
+  if (!user || !product) {
+    return <h2 style={{ color: "white", textAlign: "center", marginTop: "5rem" }}>Loading...</h2>;
   }
 
   return (
