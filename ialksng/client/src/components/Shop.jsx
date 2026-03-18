@@ -1,43 +1,54 @@
-import { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { CartContext } from "../context/CartContext";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import "../styles/shop.css";
 import toast from "react-hot-toast";
+import "../styles/shop.css";
 
 function Shop() {
   const [products, setProducts] = useState([]);
+  const [filtered, setFiltered] = useState([]);
   const [ownedProducts, setOwnedProducts] = useState([]);
-  const [addedId, setAddedId] = useState(null);
+  const [previewProduct, setPreviewProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const [activeCategory, setActiveCategory] = useState("all");
+  const [search, setSearch] = useState("");
 
   const { addToCart } = useContext(CartContext);
   const { user } = useContext(AuthContext);
-
   const navigate = useNavigate();
 
-  // ✅ FIX 1: fallback API (prevents crash)
-  const API =
-    import.meta.env.VITE_API_URL || "https://your-backend.onrender.com";
+  const API = import.meta.env.VITE_API_URL;
 
-  // 🔹 fetch products
+  // 🔹 Fetch Products (SAFE)
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const res = await fetch(`${API}/api/products`);
         const data = await res.json();
 
-        // ✅ FIX 2: safe handling
-        setProducts(data.products || []);
+        const list = Array.isArray(data.products)
+          ? data.products
+          : Array.isArray(data)
+          ? data
+          : [];
+
+        setProducts(list);
+        setFiltered(list);
       } catch (err) {
-        console.log("Products fetch error:", err);
-        setProducts([]); // prevent crash
+        console.log("Product fetch error:", err);
+        setProducts([]);
+        setFiltered([]);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchProducts();
   }, [API]);
 
-  // 🔹 fetch purchased products
+  // 🔹 Fetch Owned Products
   useEffect(() => {
     if (!user) return;
 
@@ -51,8 +62,10 @@ function Shop() {
 
         const data = await res.json();
 
-        // ✅ FIX 3: safe mapping
-        const ids = (data.orders || []).map(o => o.product?._id);
+        const ids = Array.isArray(data.orders)
+          ? data.orders.map(o => o.product?._id).filter(Boolean)
+          : [];
+
         setOwnedProducts(ids);
       } catch (err) {
         console.log("Orders fetch error:", err);
@@ -62,7 +75,26 @@ function Shop() {
     fetchOrders();
   }, [user, API]);
 
-  // 🔹 handle add to cart
+  // 🔹 Filter Logic (SAFE)
+  useEffect(() => {
+    let temp = Array.isArray(products) ? [...products] : [];
+
+    if (activeCategory !== "all") {
+      temp = temp.filter(
+        p => (p.category || "").toLowerCase() === activeCategory
+      );
+    }
+
+    if (search.trim() !== "") {
+      temp = temp.filter(p =>
+        (p.title || "").toLowerCase().includes(search.toLowerCase())
+      );
+    }
+
+    setFiltered(temp);
+  }, [search, activeCategory, products]);
+
+  // 🔹 Add to Cart
   const handleAddToCart = (product) => {
     if (!user) {
       navigate("/login", { state: { from: "/shop" } });
@@ -71,54 +103,154 @@ function Shop() {
 
     addToCart(product);
     toast.success("Added to cart 🛒");
-
-    setAddedId(product._id);
-
-    setTimeout(() => {
-      setAddedId(null);
-    }, 1500);
   };
 
+  if (loading) {
+    return (
+      <div className="shop-loader">
+        <span className="spinner"></span>
+      </div>
+    );
+  }
+
   return (
-    <section id="shop" className="shop">
-      <h2>Shop</h2>
+    <section className="shop-section">
+      <div className="shop-container">
 
-      <div className="shop__grid">
-        {products.length === 0 ? (
-          <p style={{ color: "white" }}>No products available</p>
-        ) : (
-          products.map((product) => (
-            <div className="shop__card" key={product._id}>
-              <img src={product.image} alt={product.title} />
+        {/* HEADER */}
+        <div className="shop-header">
+          <h2>Explore Resources</h2>
+          <p>Premium notes, projects & code</p>
+        </div>
 
-              <h3>{product.title}</h3>
-              <p>{product.description}</p>
+        {/* TABS */}
+        <div className="shop-tabs">
+          {["all", "notes", "roadmap", "project", "code"].map(cat => (
+            <button
+              key={cat}
+              className={activeCategory === cat ? "active" : ""}
+              onClick={() => setActiveCategory(cat)}
+            >
+              {cat === "all" ? "All" : cat}
+            </button>
+          ))}
+        </div>
 
-              <h4>₹{product.price}</h4>
+        {/* SEARCH */}
+        <div className="shop-controls">
+          <input
+            type="text"
+            placeholder="Search..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
 
-              {ownedProducts.includes(product._id) ? (
-                <button
-                  onClick={() => navigate(`/access/${product._id}`)}
-                  className="shop__btn view"
+        {/* PRODUCTS */}
+        <div className="shop-grid">
+          {Array.isArray(filtered) && filtered.length > 0 ? (
+            filtered.map(product => (
+              <div className="shop-card" key={product._id}>
+
+                {/* IMAGE */}
+                <div className="card-left">
+                  <img
+                    src={product.image || "/default-product.png"}
+                    alt={product.title || "product"}
+                  />
+                </div>
+
+                {/* CONTENT */}
+                <div className="card-right">
+                  <h3>{product.title || "Untitled"}</h3>
+                  <p>{product.description || "No description"}</p>
+
+                  <div className="tags">
+                    <span>{product.category || "general"}</span>
+                    {product.price === 0 && <span className="free">Free</span>}
+                  </div>
+
+                  <div className="card-actions">
+
+                    <button
+                      className="btn preview-btn"
+                      onClick={() => setPreviewProduct(product)}
+                    >
+                      Preview
+                    </button>
+
+                    {ownedProducts.includes(product._id) ? (
+                      <button
+                        className="btn view-btn"
+                        onClick={() => navigate(`/access/${product._id}`)}
+                      >
+                        View
+                      </button>
+                    ) : product.price === 0 ? (
+                      <button
+                        className="btn view-btn"
+                        onClick={() => navigate(`/access/${product._id}`)}
+                      >
+                        View
+                      </button>
+                    ) : (
+                      <button
+                        className="btn buy-btn"
+                        onClick={() => handleAddToCart(product)}
+                      >
+                        Buy ₹{product.price || 0}
+                      </button>
+                    )}
+
+                  </div>
+                </div>
+
+              </div>
+            ))
+          ) : (
+            <div className="empty-state">
+              No products found.
+            </div>
+          )}
+        </div>
+
+        {/* PREVIEW MODAL */}
+        {previewProduct && (
+          <div className="preview-modal">
+            <div className="preview-box">
+
+              <button
+                className="close-btn"
+                onClick={() => setPreviewProduct(null)}
+              >
+                ✕
+              </button>
+
+              <img
+                src={
+                  previewProduct.previewImage ||
+                  previewProduct.image ||
+                  "/default-product.png"
+                }
+                alt=""
+              />
+
+              <h3>{previewProduct.title}</h3>
+              <p>{previewProduct.description}</p>
+
+              {previewProduct.previewUrl && (
+                <a
+                  href={previewProduct.previewUrl}
+                  target="_blank"
+                  rel="noreferrer"
                 >
-                  View Product
-                </button>
-              ) : (
-                <button
-                  onClick={() => handleAddToCart(product)}
-                  disabled={addedId === product._id}
-                  className={`shop__btn ${
-                    addedId === product._id ? "added" : ""
-                  }`}
-                >
-                  {addedId === product._id
-                    ? "✅ Added!"
-                    : `🔒 Buy for ₹${product.price}`}
-                </button>
+                  Open Preview →
+                </a>
               )}
             </div>
-          ))
+          </div>
         )}
+
       </div>
     </section>
   );

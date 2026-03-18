@@ -56,7 +56,7 @@ export const getProduct = async (req, res) => {
 };
 
 
-// 🔥 UPDATE PRODUCT (ADMIN)  ← (THIS FIXES YOUR ERROR)
+// 🔥 UPDATE PRODUCT (FULL SAFE UPDATE)
 export const updateProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
@@ -65,11 +65,16 @@ export const updateProduct = async (req, res) => {
       return res.status(404).json({ error: "Product not found" });
     }
 
-    // update fields safely
-    product.title = req.body.title || product.title;
-    product.description = req.body.description || product.description;
-    product.price = req.body.price || product.price;
-    product.image = req.body.image || product.image;
+    // ✅ Update ALL fields safely
+    product.title = req.body.title ?? product.title;
+    product.description = req.body.description ?? product.description;
+    product.price = req.body.price ?? product.price;
+    product.category = req.body.category ?? product.category;
+
+    product.image = req.body.image ?? product.image;
+    product.previewImage = req.body.previewImage ?? product.previewImage;
+    product.previewUrl = req.body.previewUrl ?? product.previewUrl;
+    product.fileUrl = req.body.fileUrl ?? product.fileUrl;
 
     const updatedProduct = await product.save();
 

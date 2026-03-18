@@ -17,15 +17,13 @@ const router = express.Router();
 
 // 👤 PUBLIC ROUTES
 router.get("/", getProducts);
-router.get("/:id", getProduct);
 
-
-// 🔐 ACCESS DIGITAL PRODUCT (ONLY IF PURCHASED)
+// 🔥 IMPORTANT: keep specific routes BEFORE :id
 router.get("/access/:id", protect, async (req, res) => {
   try {
     const productId = req.params.id;
 
-    // 🔎 check if user purchased
+    // 🔎 check purchase
     const order = await Order.findOne({
       user: req.user.id,
       product: productId,
@@ -33,13 +31,25 @@ router.get("/access/:id", protect, async (req, res) => {
     });
 
     if (!order) {
-      return res.status(403).json({ msg: "You need to purchase this product" });
+      return res.status(403).json({
+        success: false,
+        message: "You need to purchase this product"
+      });
     }
 
-    // 📦 return product
     const product = await Product.findById(productId);
 
-    res.json(product);
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found"
+      });
+    }
+
+    res.json({
+      success: true,
+      product
+    });
 
   } catch (err) {
     console.error("Access Error:", err);
@@ -47,36 +57,14 @@ router.get("/access/:id", protect, async (req, res) => {
   }
 });
 
+// 🔹 GET SINGLE PRODUCT (KEEP AFTER /access)
+router.get("/:id", getProduct);
+
 
 // 👑 ADMIN ROUTES
 router.post("/", protect, adminOnly, addProduct);
-
-// 🔥 NEW: update product
 router.put("/:id", protect, adminOnly, updateProduct);
-
 router.delete("/:id", protect, adminOnly, deleteProduct);
 
-router.get("/access/:id", protect, async (req, res) => {
-  try {
-    const productId = req.params.id;
-
-    const order = await Order.findOne({
-      user: req.user.id,
-      product: productId,
-      isPaid: true
-    });
-
-    if (!order) {
-      return res.status(403).json({ msg: "Not purchased" });
-    }
-
-    const product = await Product.findById(productId);
-
-    res.json(product);
-
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
 
 export default router;

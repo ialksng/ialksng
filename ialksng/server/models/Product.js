@@ -3,18 +3,31 @@ import mongoose from "mongoose";
 const productSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true
+    required: true,
   },
-  description: String,
+
+  description: {
+    type: String,
+    required: true,
+  },
+
   price: {
     type: Number,
-    required: true
+    default: 0,
   },
+
+  category: {
+    type: String,
+    enum: ["notes", "roadmap", "project", "code"],
+    required: true,
+  },
+
   image: String,
 
-  // optional (useful later)
-  category: String,
-  fileUrl: String,
+  previewImage: String,
+  previewUrl: String,
+
+  fileUrl: String, // download after purchase
 
 }, { timestamps: true });
 
