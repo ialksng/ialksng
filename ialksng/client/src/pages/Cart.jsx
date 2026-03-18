@@ -10,7 +10,10 @@ function Cart() {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const API = import.meta.env.VITE_API_URL;
+  // ✅ FIX 1: fallback API
+  const API =
+    import.meta.env.VITE_API_URL || "https://your-backend.onrender.com";
+
   const token = localStorage.getItem("token");
 
   // 🔹 remove ONE item
@@ -25,7 +28,7 @@ function Cart() {
   };
 
   // 🔹 total price
-  const total = cart.reduce((acc, item) => acc + item.price, 0);
+  const total = cart.reduce((acc, item) => acc + (item.price || 0), 0);
 
   // 🔥 CHECKOUT ALL (RAZORPAY)
   const handleCheckout = async () => {
@@ -44,7 +47,7 @@ function Cart() {
           Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
-          items: cart.map(item => item._id) // 🔥 send product IDs only
+          items: cart.map(item => item._id)
         })
       });
 
@@ -56,7 +59,12 @@ function Cart() {
 
       const order = data.order;
 
-      // 2️⃣ Razorpay popup
+      // ⚠️ FIX 2: check Razorpay exists
+      if (!window.Razorpay) {
+        alert("Payment SDK not loaded");
+        return;
+      }
+
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount: order.amount,
@@ -99,14 +107,14 @@ function Cart() {
 
             if (orderData.success) {
               alert("Payment successful 🎉");
-              setCart([]); // 🧹 clear cart
+              setCart([]);
               navigate("/my-purchases");
             } else {
               alert("Order saving failed ❌");
             }
 
           } catch (err) {
-            console.log(err);
+            console.log("Post-payment error:", err);
             alert("Error after payment");
           }
         },
@@ -132,7 +140,7 @@ function Cart() {
       rzp.open();
 
     } catch (err) {
-      console.log(err);
+      console.log("Checkout error:", err);
       alert("Checkout failed ❌");
     }
   };
@@ -169,12 +177,10 @@ function Cart() {
               </div>
             ))}
 
-            {/* 💰 total */}
             <h3 className="cart__total">
               Total: ₹{total}
             </h3>
 
-            {/* 🔥 checkout */}
             <button
               className="cart__checkout"
               onClick={handleCheckout}

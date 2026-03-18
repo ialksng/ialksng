@@ -11,20 +11,29 @@ function AdminProducts() {
     fileUrl: ""
   });
 
-  const API = import.meta.env.VITE_API_URL;
+  // ✅ FIX 1: fallback API
+  const API =
+    import.meta.env.VITE_API_URL || "https://your-backend.onrender.com";
+
   const token = localStorage.getItem("token");
 
   // 🔹 fetch products
-  const fetchProducts = () => {
-    fetch(`${API}/api/products`)
-      .then(res => res.json())
-      .then(data => setProducts(data.products))
-      .catch(err => console.log(err));
+  const fetchProducts = async () => {
+    try {
+      const res = await fetch(`${API}/api/products`);
+      const data = await res.json();
+
+      // ✅ FIX 2: safe handling
+      setProducts(data.products || []);
+    } catch (err) {
+      console.log("Fetch products error:", err);
+      setProducts([]);
+    }
   };
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [API]);
 
   // 🔹 handle input
   const handleChange = (e) => {
@@ -43,6 +52,8 @@ function AdminProducts() {
         body: JSON.stringify(form)
       });
 
+      const data = await res.json();
+
       if (res.ok) {
         alert("Product added ✅");
         setForm({
@@ -53,24 +64,31 @@ function AdminProducts() {
           fileUrl: ""
         });
         fetchProducts();
+      } else {
+        alert(data.msg || "Failed to add product");
       }
+
     } catch (err) {
-      console.log(err);
+      console.log("Add product error:", err);
     }
   };
 
   // 🔹 delete product
   const handleDelete = async (id) => {
-    if (!confirm("Delete product?")) return;
+    if (!window.confirm("Delete product?")) return;
 
-    await fetch(`${API}/api/products/${id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
+    try {
+      await fetch(`${API}/api/products/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
 
-    fetchProducts();
+      fetchProducts();
+    } catch (err) {
+      console.log("Delete error:", err);
+    }
   };
 
   return (
@@ -90,18 +108,22 @@ function AdminProducts() {
 
       {/* 🔥 PRODUCT LIST */}
       <div className="adminP__list">
-        {products.map(p => (
-          <div key={p._id} className="adminP__card">
-            <img src={p.image} alt="" />
+        {products.length === 0 ? (
+          <p style={{ color: "white" }}>No products found</p>
+        ) : (
+          products.map(p => (
+            <div key={p._id} className="adminP__card">
+              <img src={p.image} alt="" />
 
-            <h3>{p.title}</h3>
-            <p>₹{p.price}</p>
+              <h3>{p.title}</h3>
+              <p>₹{p.price}</p>
 
-            <button onClick={() => handleDelete(p._id)}>
-              Delete
-            </button>
-          </div>
-        ))}
+              <button onClick={() => handleDelete(p._id)}>
+                Delete
+              </button>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

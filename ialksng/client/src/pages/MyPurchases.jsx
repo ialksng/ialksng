@@ -5,18 +5,31 @@ function MyPurchases() {
   const [orders, setOrders] = useState([]);
   const navigate = useNavigate();
 
-  const API = import.meta.env.VITE_API_URL;
+  // ✅ FIX 1: fallback API (prevents crash)
+  const API =
+    import.meta.env.VITE_API_URL || "https://your-backend.onrender.com";
 
   useEffect(() => {
-    fetch(`${API}/api/orders/my-orders`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`
+    const fetchOrders = async () => {
+      try {
+        const res = await fetch(`${API}/api/orders/my-orders`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        });
+
+        const data = await res.json();
+
+        // ✅ FIX 2: safe handling
+        setOrders(data.orders || []);
+      } catch (err) {
+        console.log("Orders fetch error:", err);
+        setOrders([]); // prevent crash
       }
-    })
-      .then(res => res.json())
-      .then(data => setOrders(data.orders || []))
-      .catch(err => console.log(err));
-  }, []);
+    };
+
+    fetchOrders();
+  }, [API]);
 
   return (
     <div style={{ padding: "20px", color: "white" }}>
@@ -54,7 +67,6 @@ function MyPurchases() {
               alignItems: "center"
             }}
           >
-            {/* 📦 PRODUCT IMAGE */}
             <img
               src={order.product?.image}
               alt=""
@@ -63,10 +75,8 @@ function MyPurchases() {
             />
 
             <div>
-              {/* 🏷 TITLE */}
               <p><strong>{order.product?.title}</strong></p>
 
-              {/* 📊 STATUS */}
               <p>
                 Status:{" "}
                 <span style={{
@@ -77,13 +87,11 @@ function MyPurchases() {
                 </span>
               </p>
 
-              {/* 💳 PAYMENT ID */}
               <p style={{ fontSize: "12px", opacity: 0.7 }}>
                 Payment ID: {order.paymentId || "N/A"}
               </p>
 
-              {/* 🔓 ACCESS BUTTON */}
-              {order.status === "Paid" && (
+              {order.status === "Paid" && order.product?._id && (
                 <button
                   onClick={() => navigate(`/access/${order.product._id}`)}
                   style={{

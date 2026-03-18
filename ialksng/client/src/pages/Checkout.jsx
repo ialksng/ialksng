@@ -8,24 +8,40 @@ function Checkout() {
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
-  const API = import.meta.env.VITE_API_URL;
 
-  // 🔹 fetch product (FIXED)
+  // ✅ FIX 1: fallback API
+  const API =
+    import.meta.env.VITE_API_URL || "https://your-backend.onrender.com";
+
+  // 🔹 fetch product
   useEffect(() => {
-    fetch(`${API}/api/products/${id}`)
-      .then(res => res.json())
-      .then(data => {
+    const fetchProduct = async () => {
+      try {
+        const res = await fetch(`${API}/api/products/${id}`);
+        const data = await res.json();
+
         console.log("PRODUCT DATA:", data);
-        setProduct(data.product); // ✅ FIX
-      })
-      .catch(err => console.log(err));
-  }, [id]);
+
+        // ✅ FIX 2: safe handling
+        setProduct(data.product || null);
+      } catch (err) {
+        console.log("Product fetch error:", err);
+        setProduct(null);
+      }
+    };
+
+    fetchProduct();
+  }, [id, API]);
 
   const handlePayment = async () => {
     try {
       if (!product) return;
 
-      console.log("START PAYMENT");
+      // ⚠️ FIX 3: check Razorpay loaded
+      if (!window.Razorpay) {
+        alert("Payment SDK not loaded");
+        return;
+      }
 
       // 1️⃣ Create order
       const res = await fetch(`${API}/api/payment/create-order`, {
@@ -56,8 +72,6 @@ function Checkout() {
         order_id: order.id,
 
         handler: async function (response) {
-          console.log("PAYMENT RESPONSE:", response);
-
           try {
             // 3️⃣ Verify
             const verifyRes = await fetch(`${API}/api/payment/verify-payment`, {
@@ -69,7 +83,6 @@ function Checkout() {
             });
 
             const verifyData = await verifyRes.json();
-            console.log("VERIFY RESPONSE:", verifyData);
 
             if (!verifyData.success) {
               return alert("Payment verification failed ❌");
@@ -89,19 +102,16 @@ function Checkout() {
             });
 
             const orderData = await orderRes.json();
-            console.log("ORDER SAVE RESPONSE:", orderData);
 
             if (orderData.success) {
               alert("Payment successful 🎉");
-
-              // ✅ redirect to purchases
               navigate("/my-purchases");
             } else {
               alert("Order saving failed ❌");
             }
 
           } catch (err) {
-            console.log(err);
+            console.log("Post-payment error:", err);
             alert("Error after payment");
           }
         },
@@ -127,12 +137,14 @@ function Checkout() {
       rzp.open();
 
     } catch (err) {
-      console.log(err);
+      console.log("Payment error:", err);
       alert("Payment failed");
     }
   };
 
-  if (!product) return <h2 style={{ color: "white" }}>Loading...</h2>;
+  if (!product) {
+    return <h2 style={{ color: "white" }}>Loading...</h2>;
+  }
 
   return (
     <div className="checkout__container">

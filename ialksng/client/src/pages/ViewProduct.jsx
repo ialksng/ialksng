@@ -7,32 +7,45 @@ function ViewProduct() {
   const [product, setProduct] = useState(null);
   const navigate = useNavigate();
 
-  const API = import.meta.env.VITE_API_URL;
+  // ✅ FIX 1: fallback API
+  const API =
+    import.meta.env.VITE_API_URL || "https://your-backend.onrender.com";
 
   useEffect(() => {
-    fetch(`${API}/api/products/access/${id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`
-      }
-    })
-      .then(res => {
+    const fetchProduct = async () => {
+      try {
+        const res = await fetch(`${API}/api/products/access/${id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        });
+
         if (!res.ok) throw new Error("Not authorized");
-        return res.json();
-      })
-      .then(data => setProduct(data))
-      .catch(() => {
+
+        const data = await res.json();
+
+        // ✅ FIX 2: safe data
+        setProduct(data || null);
+
+      } catch (err) {
+        console.log("Access error:", err);
+
         alert("You don't have access ❌");
         navigate("/");
-      });
-  }, [id]);
+      }
+    };
 
-  if (!product) return <h2 style={{ color: "white" }}>Loading...</h2>;
+    fetchProduct();
+  }, [id, API, navigate]);
+
+  if (!product) {
+    return <h2 style={{ color: "white" }}>Loading...</h2>;
+  }
 
   return (
     <div className="view__container">
       <div className="view__card">
 
-        {/* 🔙 back */}
         <button className="view__back" onClick={() => navigate(-1)}>
           ⬅ Back
         </button>
@@ -47,7 +60,6 @@ function ViewProduct() {
 
         <p className="view__desc">{product.description}</p>
 
-        {/* 🔥 download */}
         {product.fileUrl && (
           <a
             href={product.fileUrl}
