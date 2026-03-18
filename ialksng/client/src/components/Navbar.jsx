@@ -81,15 +81,9 @@ function Navbar() {
           </li>
 
           <li>
-            <a
-              href="/shop"
-              onClick={(e) => {
-                e.preventDefault();
-                handleNavigate("/shop");
-              }}
-            >
+            <span onClick={() => handleNavigate("/shop")}>
               Shop
-            </a>
+            </span>
           </li>
 
           <li>
@@ -123,7 +117,9 @@ function Navbar() {
               >
                 <FaShoppingCart className="icon" />
                 {cart.length > 0 && (
-                  <span className="cart-count">{cart.length}</span>
+                  <span className="cart-count">
+                    {cart.length}
+                  </span>
                 )}
               </div>
             )}
@@ -200,15 +196,9 @@ function Navbar() {
           </li>
 
           <li>
-            <a
-              href="/shop"
-              onClick={(e) => {
-                e.preventDefault();
-                handleNavigate("/shop");
-              }}
-            >
+            <span onClick={() => handleNavigate("/shop")}>
               Shop
-            </a>
+            </span>
           </li>
 
           <li>
@@ -240,6 +230,44 @@ function Navbar() {
               </button>
             </li>
           )}
+
+          {user && user.role !== "admin" && (
+            <>
+              <li className="mobile-only" onClick={() => handleNavigate("/cart")}>
+                🛒 Cart ({cart.length})
+              </li>
+              <li className="mobile-only" onClick={() => handleNavigate("/my-purchases")}>
+                My Purchases
+              </li>
+              <li
+                className="mobile-only"
+                onClick={() => {
+                  logoutUser();
+                  setMenuOpen(false);
+                }}
+              >
+                Logout
+              </li>
+            </>
+          )}
+
+          {user && user.role === "admin" && (
+            <>
+              <li className="mobile-only" onClick={() => handleNavigate("/admin")}>
+                Admin Panel
+              </li>
+              <li
+                className="mobile-only"
+                onClick={() => {
+                  logoutUser();
+                  setMenuOpen(false);
+                }}
+              >
+                Logout
+              </li>
+            </>
+          )}
+
         </ul>
       </nav>
 

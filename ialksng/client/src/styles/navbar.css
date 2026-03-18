@@ -9,6 +9,7 @@
   position: sticky;
   top: 0;
   z-index: 100;
+  transition: 0.3s ease;
 }
 
 .navbar_logo {
@@ -35,18 +36,21 @@
   position: relative;
 }
 
-.navbar_links a {
+.navbar_links a,
+.navbar_links span {
   font-size: 15px;
   color: #94a3b8;
   transition: 0.3s ease;
   cursor: pointer;
 }
 
-.navbar_links a:hover {
+.navbar_links a:hover,
+.navbar_links span:hover {
   color: #e2e8f0;
 }
 
-.navbar_links a::after {
+.navbar_links a::after,
+.navbar_links span::after {
   content: "";
   position: absolute;
   width: 0%;
@@ -57,7 +61,8 @@
   transition: 0.3s ease;
 }
 
-.navbar_links a:hover::after {
+.navbar_links a:hover::after,
+.navbar_links span:hover::after {
   width: 100%;
 }
 
@@ -172,6 +177,14 @@
   .mobile-only {
     display: block;
     margin-top: 20px;
+    font-size: 18px;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .mobile-only:hover {
+    color: #38bdf8;
   }
 
   .navbar_links.desktop-only {
@@ -202,7 +215,8 @@
     text-align: center;
   }
 
-  .mobile-menu a {
+  .mobile-menu a,
+  .mobile-menu span {
     font-size: 20px;
   }
 
@@ -217,6 +231,7 @@
 
 .navbar_links a.active {
   color: #38bdf8;
+  text-shadow: 0 0 8px rgba(56,189,248,0.6);
 }
 
 .navbar_links a.active::after {
