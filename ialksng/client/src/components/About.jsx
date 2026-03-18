@@ -17,7 +17,7 @@ function About() {
       try {
         // UPDATED: Using a relative URL so it automatically uses your Render backend
         // Make sure VITE_API_BASE_URL is set in your Render/Vercel environment variables
-        const { data } = await axios.get("/api/about"); 
+        const { data } = await axios.get("/about"); 
         setAboutData(data);
       } catch (error) {
         console.error("Error fetching about data:", error);

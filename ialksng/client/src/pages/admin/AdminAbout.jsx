@@ -20,7 +20,7 @@ const AdminAbout = () => {
   useEffect(() => {
     const fetchAboutData = async () => {
       try {
-        const { data } = await axios.get("/api/about");
+        const { data } = await axios.get("/about");
         setFormData(data || {
           name: "", role: "", imageUrl: "", resumeLink: "", paragraphs: [], skills: [], experiences: []
         });
@@ -81,7 +81,7 @@ const AdminAbout = () => {
     setMessage("");
     try {
       // ADDED: Authorization header to pass the token
-      await axios.put("/api/admin/about", formData, {
+      await axios.put("/admin/about", formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`
         }
