@@ -1,62 +1,112 @@
-import { useEffect, useState } from "react";
-import axios from "../../utils/axios";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Editor from "../../components/Editor";
+import axios from "../../utils/axios";
+import "../../styles/admin.css";
 
 function EditBlog() {
   const { id } = useParams();
   const navigate = useNavigate();
-
-  const [form, setForm] = useState({
+  
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [formData, setFormData] = useState({
     title: "",
-    content: "",
     category: "",
+    image: "",
+    author: "",
+    content: "",
   });
 
+  // Fetch the existing blog data when page loads
   useEffect(() => {
     const fetchBlog = async () => {
       try {
         const { data } = await axios.get(`/blogs/${id}`);
-        setForm(data);
+        setFormData({
+          title: data.title || "",
+          category: data.category || "",
+          image: data.image || "",
+          author: data.author || "",
+          content: data.content || "",
+        });
       } catch (err) {
-        console.error(err);
+        console.error("Error fetching blog:", err);
+        alert("Failed to load blog data.");
+      } finally {
+        setLoading(false);
       }
     };
-
     fetchBlog();
   }, [id]);
 
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setSaving(true);
     try {
-      await axios.put(`/blogs/${id}`, form);
+      await axios.put(`/blogs/${id}`, formData);
+      alert("Blog updated successfully!");
       navigate("/admin/blog");
     } catch (err) {
       console.error(err);
+      alert("Failed to update blog");
+    } finally {
+      setSaving(false);
     }
   };
 
+  if (loading) return <div className="admin-container p-6">Loading blog data...</div>;
+
   return (
-    <form onSubmit={handleSubmit}>
-      <h1>Edit Blog</h1>
+    <div className="admin-container p-6">
+      <button onClick={() => navigate(-1)} className="btn secondary mb-6">
+        ⬅ Back
+      </button>
 
-      <input
-        value={form.title}
-        onChange={(e) =>
-          setForm({ ...form, title: e.target.value })
-        }
-      />
+      <h2>Edit Blog</h2>
 
-      <Editor
-        content={form.content}
-        setContent={(value) =>
-          setForm({ ...form, content: value })
-        }
-      />
+      <form onSubmit={handleSubmit} className="admin-form">
+        <div className="form-group">
+          <label>Blog Title</label>
+          <input type="text" name="title" value={formData.title} onChange={handleChange} required />
+        </div>
 
-      <button type="submit">Update</button>
-    </form>
+        <div className="flex gap-2">
+          <div className="form-group w-full">
+            <label>Category</label>
+            <input type="text" name="category" value={formData.category} onChange={handleChange} />
+          </div>
+          
+          <div className="form-group w-full">
+            <label>Author</label>
+            <input type="text" name="author" value={formData.author} onChange={handleChange} />
+          </div>
+        </div>
+
+        <div className="form-group">
+          <label>Image URL</label>
+          <input type="text" name="image" value={formData.image} onChange={handleChange} placeholder="https://..." />
+        </div>
+
+        <div className="form-group">
+          <label>Blog Content (HTML supported)</label>
+          <textarea 
+            name="content" 
+            value={formData.content} 
+            onChange={handleChange} 
+            rows="10" 
+            required 
+          />
+        </div>
+
+        <button type="submit" className="btn primary w-full mt-4" disabled={saving}>
+          {saving ? "Saving Updates..." : "Save Updates"}
+        </button>
+      </form>
+    </div>
   );
 }
 

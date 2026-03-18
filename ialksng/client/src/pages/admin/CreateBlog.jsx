@@ -1,107 +1,90 @@
 import { useState } from "react";
-import axios from "../../utils/axios";
 import { useNavigate } from "react-router-dom";
-import Editor from "../../components/Editor";
+import axios from "../../utils/axios";
+import "../../styles/admin.css"; // Reuse our nice admin styles
 
 function CreateBlog() {
-  const [form, setForm] = useState({
+  const navigate = useNavigate();
+  const [saving, setSaving] = useState(false);
+  
+  // State matching your Mongoose Blog Model
+  const [formData, setFormData] = useState({
     title: "",
-    content: "",
     category: "",
+    image: "",
+    author: "Alok Singh", // Defaulting to you
+    content: "",
   });
 
-  const [loading, setLoading] = useState(false);
-
-  const navigate = useNavigate();
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setSaving(true);
+    
     try {
-      setLoading(true);
-
-      console.log("FORM DATA:", form);
-
-      // ✅ CLEAN CONTENT (remove empty HTML)
-      const cleanContent = form.content
-        ?.replace(/<[^>]+>/g, "") // remove tags
-        .trim();
-
-      // ✅ VALIDATION
-      if (!form.title.trim() || !cleanContent) {
-        alert("Title and content are required ❌");
-        setLoading(false);
-        return;
-      }
-
-      // ✅ API CALL
-      const res = await axios.post("/blogs", {
-        title: form.title,
-        content: form.content,
-        category: form.category,
-      });
-
-      console.log("CREATED:", res.data);
-
-      alert("Blog created ✅");
-
-      // ✅ RESET FORM
-      setForm({
-        title: "",
-        content: "",
-        category: "",
-      });
-
-      navigate("/admin/blog");
-
+      // Send data to the backend
+      await axios.post("/blogs", formData);
+      alert("Blog created successfully!");
+      navigate("/admin/blog"); // Go back to blog list
     } catch (err) {
-      console.error("CREATE ERROR:", err);
-
-      // 🔥 show real backend message
-      const message =
-        err.response?.data?.message ||
-        err.message ||
-        "Failed to create blog ❌";
-
-      alert(message);
-
+      console.error(err);
+      alert("Failed to create blog");
     } finally {
-      setLoading(false);
+      setSaving(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h1>Create Blog</h1>
-
-      <input
-        placeholder="Title"
-        value={form.title}
-        onChange={(e) =>
-          setForm({ ...form, title: e.target.value })
-        }
-      />
-
-      {/* 🔥 EDITOR */}
-      <Editor
-        content={form.content}
-        setContent={(value) =>
-          setForm({ ...form, content: value })
-        }
-      />
-
-      <input
-        placeholder="Category"
-        value={form.category}
-        onChange={(e) =>
-          setForm({ ...form, category: e.target.value })
-        }
-      />
-
-      <button type="submit" disabled={loading}>
-        {loading ? "Creating..." : "Create"}
+    <div className="admin-container p-6">
+      <button onClick={() => navigate(-1)} className="btn secondary mb-6">
+        ⬅ Back
       </button>
-    </form>
+      
+      <h2>Create New Blog</h2>
+
+      <form onSubmit={handleSubmit} className="admin-form">
+        <div className="form-group">
+          <label>Blog Title</label>
+          <input type="text" name="title" value={formData.title} onChange={handleChange} required />
+        </div>
+
+        <div className="flex gap-2">
+          <div className="form-group w-full">
+            <label>Category (e.g., Tech, Tutorial, Personal)</label>
+            <input type="text" name="category" value={formData.category} onChange={handleChange} />
+          </div>
+          
+          <div className="form-group w-full">
+            <label>Author</label>
+            <input type="text" name="author" value={formData.author} onChange={handleChange} />
+          </div>
+        </div>
+
+        <div className="form-group">
+          <label>Image URL</label>
+          <input type="text" name="image" value={formData.image} onChange={handleChange} placeholder="https://..." />
+        </div>
+
+        <div className="form-group">
+          <label>Blog Content (HTML supported)</label>
+          <textarea 
+            name="content" 
+            value={formData.content} 
+            onChange={handleChange} 
+            rows="10" 
+            required 
+            placeholder="Write your blog post here..."
+          />
+        </div>
+
+        <button type="submit" className="btn primary w-full mt-4" disabled={saving}>
+          {saving ? "Publishing..." : "Publish Blog"}
+        </button>
+      </form>
+    </div>
   );
 }
 
