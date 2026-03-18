@@ -10,10 +10,9 @@ import { Toaster } from "react-hot-toast";
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <CartProvider>
-        <AuthProvider>
+      <AuthProvider>
+        <CartProvider>
 
-          {/* 🔥 TOASTER (IMPORTANT) */}
           <Toaster
             position="top-right"
             toastOptions={{
@@ -27,8 +26,8 @@ createRoot(document.getElementById('root')).render(
 
           <App />
 
-        </AuthProvider>
-      </CartProvider>
+        </CartProvider>
+      </AuthProvider>
     </BrowserRouter>
   </StrictMode>
 );
