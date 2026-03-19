@@ -25,12 +25,10 @@ export const signup = async (req, res) => {
     });
 
     res.status(201).json({ msg: "Signup successful" });
-
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
-
 
 // 🔹 LOGIN
 export const login = async (req, res) => {
@@ -38,16 +36,13 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
-
     if (!user) {
       return res.status(400).json({ msg: "User not found" });
     }
 
-    // 🚨 Prevent password login for Google users
+    // 🚨 Prevent password login for users who signed up via Google
     if (!user.password) {
-      return res.status(400).json({
-        msg: "Please login with Google"
-      });
+      return res.status(400).json({ msg: "Please login with Google" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -71,19 +66,17 @@ export const login = async (req, res) => {
         avatar: user.avatar || null
       }
     });
-
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
-
 
 // 🔥 GOOGLE AUTH (LOGIN + SIGNUP)
 export const googleAuth = async (req, res) => {
   try {
     const { token } = req.body;
 
-    // ✅ Verify Google token
+    // ✅ Verify the Google ID token sent from the frontend
     const ticket = await client.verifyIdToken({
       idToken: token,
       audience: process.env.GOOGLE_CLIENT_ID,
@@ -91,21 +84,21 @@ export const googleAuth = async (req, res) => {
 
     const { email, name, picture } = ticket.getPayload();
 
-    // 🔍 Check if user exists
+    // 🔍 Find or create the user
     let user = await User.findOne({ email });
 
-    // 🆕 Create if not exists
     if (!user) {
       user = await User.create({
-        username: email.split("@")[0], // auto username
+        username: email.split("@")[0] + Math.floor(Math.random() * 1000),
         name,
         email,
         avatar: picture,
-        password: null // no password for Google users
+        password: null, // Indicates a Google-only account
+        role: "user"
       });
     }
 
-    // 🔐 Generate JWT
+    // 🔐 Generate backend JWT for session management
     const jwtToken = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET,
@@ -122,9 +115,23 @@ export const googleAuth = async (req, res) => {
         avatar: user.avatar || picture
       }
     });
-
   } catch (error) {
     console.error("Google Auth Error:", error);
     res.status(500).json({ msg: "Google authentication failed" });
+  }
+};
+
+// 🔹 GET CURRENT USER (Session Verification)
+// This is critical for the 'initAuth' call in your AuthContext.jsx
+export const getMe = async (req, res) => {
+  try {
+    // req.user is populated by the 'protect' middleware
+    const user = await User.findById(req.user.id).select("-password");
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+    res.json({ user });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 };

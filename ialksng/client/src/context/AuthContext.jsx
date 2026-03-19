@@ -17,7 +17,6 @@ export const AuthProvider = ({ children }) => {
   };
 
   // 🔥 AUTO LOGIN (SAFE + STABLE)
-  // Restores session from localStorage and verifies the token with the backend
   useEffect(() => {
     const initAuth = async () => {
       try {
@@ -28,10 +27,12 @@ export const AuthProvider = ({ children }) => {
           return;
         }
 
+        // Set token for the verification request
         setAuthToken(token);
 
         // Verify token with backend to get fresh user data
-        const res = await axios.get("/api/auth/me"); // Ensure this route exists in authRoutes.js
+        // This calls the 'getMe' controller via 'protect' middleware
+        const res = await axios.get("/api/auth/me"); 
 
         if (!res?.data?.user) {
           throw new Error("Invalid user data");
@@ -46,12 +47,8 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem("user", JSON.stringify(userData));
       } catch (err) {
         console.warn("Auth restore failed:", err.message);
-
-        // 🔴 Clean everything if verification fails
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        setAuthToken(null);
-        setUser(null);
+        // Clean everything if verification fails (expired or invalid token)
+        logoutUser(); 
       } finally {
         setLoading(false);
       }
@@ -61,11 +58,10 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   // 🔥 LOGIN (EMAIL + GOOGLE SAFE)
-  // Handles data from authController.js login or Google OAuth success
   const loginUser = (data) => {
-    // Check if data contains the expected structure from your controller
-    const token = data.token;
-    const userBase = data.user;
+    // Expects { token, user: { ... } } from authController.js
+    const token = data?.token;
+    const userBase = data?.user;
 
     if (!userBase || !token) {
       console.error("Invalid login data received", data);
@@ -106,7 +102,7 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         user,
-        setUser,      // kept for manual Google login overrides if needed
+        setUser,      
         loginUser,
         logoutUser,
         updateUser,
