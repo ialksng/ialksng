@@ -31,7 +31,6 @@ const productSchema = new mongoose.Schema({
 
   notionPageId: {
   type: String,
-  required: true,
   },
 
 }, { timestamps: true });
