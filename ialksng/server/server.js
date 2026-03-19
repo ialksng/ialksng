@@ -13,7 +13,7 @@ import statsRoutes from "./routes/statsRoutes.js";
 import blogRoutes from "./routes/blogRoutes.js";
 import aboutRoutes from "./routes/aboutRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
-import notesRoutes from "./routes/notesRoute.js";
+import notesRoute from "./routes/notesRoute.js";
 
 dotenv.config();
 
