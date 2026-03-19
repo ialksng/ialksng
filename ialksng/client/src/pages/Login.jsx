@@ -6,7 +6,8 @@ import "../styles/auth.css";
 
 function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
-  const { loginUser, setUser } = useContext(AuthContext);
+  // Removed setUser as loginUser handles state and header updates internally
+  const { loginUser } = useContext(AuthContext); 
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -34,7 +35,7 @@ function Login() {
       const data = await res.json();
 
       if (res.ok) {
-        loginUser(data);
+        loginUser(data); // Updates context and authorization headers
         navigate(from);
       } else {
         alert(data.msg || "Login failed");
@@ -61,13 +62,9 @@ function Login() {
       const data = await res.json();
 
       if (res.ok) {
-        // save token
-        localStorage.setItem("token", data.token);
-
-        // update context
-        setUser(data.user);
-
-        // redirect
+        // ✅ FIX: Use loginUser(data) instead of manual localStorage/setUser calls.
+        // This ensures the token is saved and axios headers are configured for protected routes.
+        loginUser(data); 
         navigate(from);
       } else {
         alert("Google login failed");

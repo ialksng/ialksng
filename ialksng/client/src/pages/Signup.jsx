@@ -12,7 +12,7 @@ function Signup() {
     password: ""
   });
 
-  const { loginUser, setUser } = useContext(AuthContext);
+  const { loginUser } = useContext(AuthContext); // Removed setUser as loginUser handles it
   const navigate = useNavigate();
 
   const API = import.meta.env.VITE_API_URL;
@@ -57,7 +57,7 @@ function Signup() {
       const loginData = await loginRes.json();
 
       if (loginRes.ok) {
-        loginUser(loginData);
+        loginUser(loginData); // Successfully updates context and headers
         navigate("/");
       } else {
         alert("Login after signup failed");
@@ -68,7 +68,7 @@ function Signup() {
     }
   };
 
-  // 🔥 GOOGLE SIGNUP (same as login)
+  // 🔥 GOOGLE SIGNUP
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
       const res = await fetch(`${API}/api/auth/google`, {
@@ -84,8 +84,9 @@ function Signup() {
       const data = await res.json();
 
       if (res.ok) {
-        localStorage.setItem("token", data.token);
-        setUser(data.user);
+        // ✅ FIX: Use loginUser instead of manual localStorage/setUser calls.
+        // loginUser(data) ensures the token is saved AND axios headers are set.
+        loginUser(data); 
         navigate("/");
       } else {
         alert("Google signup failed");
