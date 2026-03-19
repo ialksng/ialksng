@@ -6,28 +6,31 @@ import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { CartProvider } from "./context/CartContext";
 import { Toaster } from "react-hot-toast";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
-      <AuthProvider>
-        <CartProvider>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+      <BrowserRouter>
+        <AuthProvider>
+          <CartProvider>
 
-          <Toaster
-            position="top-right"
-            toastOptions={{
-              style: {
-                background: "#111a2b",
-                color: "#fff",
-                border: "1px solid #2a344a"
-              }
-            }}
-          />
+            <Toaster
+              position="top-right"
+              toastOptions={{
+                style: {
+                  background: "#111a2b",
+                  color: "#fff",
+                  border: "1px solid #2a344a"
+                }
+              }}
+            />
 
-          <App />
+            <App />
 
-        </CartProvider>
-      </AuthProvider>
-    </BrowserRouter>
+          </CartProvider>
+        </AuthProvider>
+      </BrowserRouter>
+    </GoogleOAuthProvider>
   </StrictMode>
 );

@@ -71,3 +71,39 @@
   color: #38bdf8;
   cursor: pointer;
 }
+
+.auth__divider {
+  margin: 20px 0;
+  text-align: center;
+  position: relative;
+  color: #aaa;
+}
+
+.auth__divider::before,
+.auth__divider::after {
+  content: "";
+  height: 1px;
+  width: 40%;
+  background: #2a344a;
+  position: absolute;
+  top: 50%;
+}
+
+.auth__divider::before {
+  left: 0;
+}
+
+.auth__divider::after {
+  right: 0;
+}
+
+.auth__divider span {
+  padding: 0 10px;
+  background: #111a2b;
+}
+
+.google-btn {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}

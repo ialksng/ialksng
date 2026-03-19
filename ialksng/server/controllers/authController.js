@@ -1,7 +1,9 @@
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { OAuth2Client } from "google-auth-library";
 
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // 🔹 SIGNUP
 export const signup = async (req, res) => {
@@ -36,8 +38,16 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
+
     if (!user) {
       return res.status(400).json({ msg: "User not found" });
+    }
+
+    // 🚨 Prevent password login for Google users
+    if (!user.password) {
+      return res.status(400).json({
+        msg: "Please login with Google"
+      });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -57,11 +67,64 @@ export const login = async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
-        role: user.role
+        role: user.role,
+        avatar: user.avatar || null
       }
     });
 
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+};
+
+
+// 🔥 GOOGLE AUTH (LOGIN + SIGNUP)
+export const googleAuth = async (req, res) => {
+  try {
+    const { token } = req.body;
+
+    // ✅ Verify Google token
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const { email, name, picture } = ticket.getPayload();
+
+    // 🔍 Check if user exists
+    let user = await User.findOne({ email });
+
+    // 🆕 Create if not exists
+    if (!user) {
+      user = await User.create({
+        username: email.split("@")[0], // auto username
+        name,
+        email,
+        avatar: picture,
+        password: null // no password for Google users
+      });
+    }
+
+    // 🔐 Generate JWT
+    const jwtToken = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    res.json({
+      token: jwtToken,
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        avatar: user.avatar || picture
+      }
+    });
+
+  } catch (error) {
+    console.error("Google Auth Error:", error);
+    res.status(500).json({ msg: "Google authentication failed" });
   }
 };

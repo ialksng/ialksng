@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
+import { GoogleLogin } from "@react-oauth/google";
 import "../styles/auth.css";
 
 function Signup() {
@@ -11,20 +12,21 @@ function Signup() {
     password: ""
   });
 
-  const { loginUser } = useContext(AuthContext);
+  const { loginUser, setUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const API = import.meta.env.VITE_API_URL; // ✅ backend URL
+  const API = import.meta.env.VITE_API_URL;
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // 🔐 NORMAL SIGNUP
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      // 🔹 Signup
+      // Signup
       const res = await fetch(`${API}/api/auth/signup`, {
         method: "POST",
         headers: {
@@ -34,14 +36,13 @@ function Signup() {
       });
 
       const data = await res.json();
-      console.log("SIGNUP RESPONSE:", data); // ✅ debug
 
       if (!res.ok) {
         alert(data.msg || "Signup failed");
         return;
       }
 
-      // 🔹 Auto login
+      // Auto login
       const loginRes = await fetch(`${API}/api/auth/login`, {
         method: "POST",
         headers: {
@@ -54,7 +55,6 @@ function Signup() {
       });
 
       const loginData = await loginRes.json();
-      console.log("AUTO LOGIN RESPONSE:", loginData); // ✅ debug
 
       if (loginRes.ok) {
         loginUser(loginData);
@@ -68,11 +68,40 @@ function Signup() {
     }
   };
 
+  // 🔥 GOOGLE SIGNUP (same as login)
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      const res = await fetch(`${API}/api/auth/google`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          token: credentialResponse.credential
+        })
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        localStorage.setItem("token", data.token);
+        setUser(data.user);
+        navigate("/");
+      } else {
+        alert("Google signup failed");
+      }
+
+    } catch (err) {
+      console.log("Google signup error:", err);
+    }
+  };
+
   return (
     <div className="auth__container">
       <div className="auth__card">
         <h2>Signup</h2>
 
+        {/* 🔐 NORMAL SIGNUP */}
         <form onSubmit={handleSubmit}>
           <input
             name="username"
@@ -106,6 +135,19 @@ function Signup() {
 
           <button type="submit">Signup</button>
         </form>
+
+        {/* 🔥 OR DIVIDER */}
+        <div className="auth__divider">
+          <span>OR</span>
+        </div>
+
+        {/* 🔥 GOOGLE SIGNUP */}
+        <div className="google-btn">
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={() => console.log("Google Signup Failed")}
+          />
+        </div>
 
         <p className="auth__link">
           Already have an account?{" "}
