@@ -7,10 +7,7 @@ function NotesViewer() {
   const { id } = useParams();
   const [content, setContent] = useState([]);
 
-  useEffect(() => {
-    fetchNotes();
-  }, []);
-
+  // Moved fetchNotes ABOVE useEffect so it's initialized before being called
   const fetchNotes = async () => {
     try {
       const res = await axios.get(`/notes/${id}`);
@@ -19,6 +16,11 @@ function NotesViewer() {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    fetchNotes();
+    // Added id as a dependency so it refetches if the id changes
+  }, [id]);
 
   return (
     <div className="notes-container">
