@@ -15,13 +15,30 @@ function NotesViewer() {
       try {
         setLoading(true);
         setError(null);
+        
+        console.log(`Fetching notes for ID: ${id}`);
         const res = await axios.get(`/notes/${id}`);
         
-        // Ensure content is always an array to prevent crashes
-        setContent(res.data.content || []);
+        // --- DEBUGGING LOG ---
+        console.log("Full backend response:", res.data);
+
+        // Try to find the array no matter how the backend formats it
+        let fetchedContent = [];
+        if (Array.isArray(res.data)) {
+          fetchedContent = res.data; // Backend returned the array directly
+        } else if (res.data && Array.isArray(res.data.content)) {
+          fetchedContent = res.data.content; 
+        } else if (res.data && Array.isArray(res.data.data)) {
+          fetchedContent = res.data.data;
+        } else if (res.data && Array.isArray(res.data.blocks)) {
+          fetchedContent = res.data.blocks;
+        }
+
+        setContent(fetchedContent);
+        
       } catch (err) {
         console.error("Notes fetch error:", err);
-        setError("Failed to load notes. Please check the Notion Page ID or your connection.");
+        setError("Failed to load notes. Please check the backend connection.");
       } finally {
         setLoading(false);
       }
@@ -30,7 +47,6 @@ function NotesViewer() {
     fetchNotes();
   }, [id]);
 
-  // Prevent blank screen while loading or on error
   if (loading) return <div style={{ color: "white", padding: "50px", textAlign: "center" }}>Loading Notes...</div>;
   
   if (error) return (
