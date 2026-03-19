@@ -99,7 +99,7 @@ function ViewProduct() {
                   </button>
 
                   <button
-                    onClick={() => window.open(product.fileUrl, "_blank")}
+                    onClick={() => navigate(`/notes/${product._id}`)}
                     className="btn-action view"
                   >
                     <FaEye /> View

@@ -29,6 +29,11 @@ const productSchema = new mongoose.Schema({
 
   fileUrl: String, // download after purchase
 
+  notionPageId: {
+  type: String,
+  required: true,
+  },
+
 }, { timestamps: true });
 
 export default mongoose.model("Product", productSchema);

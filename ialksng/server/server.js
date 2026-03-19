@@ -13,6 +13,7 @@ import statsRoutes from "./routes/statsRoutes.js";
 import blogRoutes from "./routes/blogRoutes.js";
 import aboutRoutes from "./routes/aboutRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
+import notesRoutes from "./routes/notesRoutes.js";
 
 dotenv.config();
 
@@ -41,6 +42,7 @@ app.use("/api/public", statsRoutes);
 app.use("/api/blogs", blogRoutes);
 app.use("/api/about", aboutRoutes);
 app.use("/api/projects", projectRoutes);
+app.use("/api/notes", notesRoutes);
 
 // 🔹 DATABASE
 mongoose.connect(process.env.MONGO_URI)
