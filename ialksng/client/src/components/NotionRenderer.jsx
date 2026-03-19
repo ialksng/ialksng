@@ -1,13 +1,12 @@
 import React from "react";
 
-// NEW HELPER: Processes bold, italic, code, and links!
+// Helper: Processes bold, italic, code, and links!
 const renderRichText = (richTextArray) => {
   if (!richTextArray) return null;
 
   return richTextArray.map((textObj, i) => {
     let style = {};
 
-    // 1. Apply Notion formatting (Annotations)
     if (textObj.annotations?.bold) style.fontWeight = "bold";
     if (textObj.annotations?.italic) style.fontStyle = "italic";
     if (textObj.annotations?.underline) style.textDecoration = "underline";
@@ -22,13 +21,11 @@ const renderRichText = (richTextArray) => {
 
     const textContent = textObj.plain_text || "";
 
-    // 2. Determine if it's a link (Check Notion's href OR force it if it starts with http)
     let linkUrl = textObj.href;
     if (!linkUrl && (textContent.startsWith("http://") || textContent.startsWith("https://"))) {
       linkUrl = textContent.trim();
     }
 
-    // 3. Render Link
     if (linkUrl) {
       return (
         <a 
@@ -43,13 +40,16 @@ const renderRichText = (richTextArray) => {
       );
     }
 
-    // 4. Otherwise, return normal formatted text
-    return (
-      <span key={i} style={style}>
-        {textContent}
-      </span>
-    );
+    return <span key={i} style={style}>{textContent}</span>;
   });
+};
+
+// NEW HELPER: Extracts the correct URL for images and videos from Notion API
+const getMediaUrl = (block, type) => {
+  const mediaObj = block[type];
+  if (!mediaObj) return null;
+  // Notion returns either an 'external' URL (hosted elsewhere) or a 'file' URL (hosted by Notion)
+  return mediaObj.type === "external" ? mediaObj.external.url : mediaObj.file.url;
 };
 
 function NotionRenderer({ content }) {
@@ -71,7 +71,6 @@ function NotionRenderer({ content }) {
             return <h3 key={i} style={{ marginTop: "20px", marginBottom: "12px" }}>{renderRichText(block.heading_3?.rich_text)}</h3>;
 
           case "paragraph":
-            // Notion sends empty paragraphs as blank lines, so we preserve that height
             return (
               <p key={i} style={{ marginBottom: "12px", lineHeight: "1.6", minHeight: "24px" }}>
                 {renderRichText(block.paragraph?.rich_text)}
@@ -101,8 +100,73 @@ function NotionRenderer({ content }) {
               </blockquote>
             );
 
+          // ======== NEW MEDIA CASES ========
+
+          case "image": {
+            const imageUrl = getMediaUrl(block, "image");
+            if (!imageUrl) return null;
+            return (
+              <img 
+                key={i} 
+                src={imageUrl} 
+                alt="Notion block" 
+                style={{ maxWidth: "100%", borderRadius: "8px", margin: "16px 0", display: "block" }} 
+              />
+            );
+          }
+
+          case "video": {
+            const videoUrl = getMediaUrl(block, "video");
+            if (!videoUrl) return null;
+
+            // Handle YouTube links securely using iframes
+            if (videoUrl.includes("youtube.com") || videoUrl.includes("youtu.be")) {
+              let videoId = "";
+              if (videoUrl.includes("youtu.be")) {
+                videoId = videoUrl.split("/").pop();
+              } else {
+                videoId = new URLSearchParams(new URL(videoUrl).search).get("v");
+              }
+              
+              return (
+                <iframe 
+                  key={i}
+                  width="100%" 
+                  height="400" 
+                  src={`https://www.youtube.com/embed/${videoId}`} 
+                  title="YouTube video player" 
+                  frameBorder="0" 
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                  allowFullScreen
+                  style={{ borderRadius: "8px", margin: "16px 0" }}
+                ></iframe>
+              );
+            }
+
+            // Standard video (e.g. mp4 file uploaded directly to Notion)
+            return (
+              <video key={i} controls style={{ width: "100%", borderRadius: "8px", margin: "16px 0" }}>
+                <source src={videoUrl} />
+                Your browser does not support the video tag.
+              </video>
+            );
+          }
+
+          case "embed": {
+            const embedUrl = block.embed?.url;
+            if (!embedUrl) return null;
+            return (
+              <iframe 
+                key={i} 
+                src={embedUrl} 
+                style={{ width: "100%", height: "400px", borderRadius: "8px", border: "none", margin: "16px 0" }} 
+                allowFullScreen 
+              />
+            );
+          }
+
           default:
-            return null;
+            return null; // Ignore unknown block types safely
         }
       })}
     </div>
