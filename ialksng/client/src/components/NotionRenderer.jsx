@@ -20,24 +20,30 @@ const renderRichText = (richTextArray) => {
       style.fontFamily = "monospace";
     }
 
-    const textContent = textObj.plain_text;
+    const textContent = textObj.plain_text || "";
 
-    // 2. Check if this piece of text is a Link
-    if (textObj.href) {
+    // 2. Determine if it's a link (Check Notion's href OR force it if it starts with http)
+    let linkUrl = textObj.href;
+    if (!linkUrl && (textContent.startsWith("http://") || textContent.startsWith("https://"))) {
+      linkUrl = textContent.trim();
+    }
+
+    // 3. Render Link
+    if (linkUrl) {
       return (
         <a 
           key={i} 
-          href={textObj.href} 
+          href={linkUrl} 
           target="_blank" 
           rel="noreferrer" 
-          style={{ ...style, color: "#3ea8ff", textDecoration: "none" }}
+          style={{ ...style, color: "#3ea8ff", textDecoration: "underline" }}
         >
           {textContent}
         </a>
       );
     }
 
-    // 3. Otherwise, return normal formatted text
+    // 4. Otherwise, return normal formatted text
     return (
       <span key={i} style={style}>
         {textContent}
