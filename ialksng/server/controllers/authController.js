@@ -10,6 +10,11 @@ export const signup = async (req, res) => {
   try {
     const { username, name, email, password } = req.body;
 
+    // 🔒 Manual validation: Explicitly require password for standard signups
+    if (!password) {
+      return res.status(400).json({ msg: "Password is required to sign up." });
+    }
+
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ msg: "User already exists" });
