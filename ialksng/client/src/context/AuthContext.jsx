@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }) => {
 
         // Verify token with backend to get fresh user data
         // This calls the 'getMe' controller via 'protect' middleware
-        const res = await axios.get("/api/auth/me"); 
+        const res = await axios.get("/auth/me"); 
 
         if (!res?.data?.user) {
           throw new Error("Invalid user data");
