@@ -19,7 +19,8 @@ import AdminBlog from "./pages/admin/AdminBlog";
 import CreateBlog from "./pages/admin/CreateBlog";
 import EditBlog from "./pages/admin/EditBlog";
 import BlogDetail from "./components/BlogDetail";
-import AccessProduct from "./pages/AccessProduct";
+// Import NotesViewer to handle the "View" button navigation
+import NotesViewer from "./pages/NotesViewer"; 
 import AdminAbout from "./pages/admin/AdminAbout";
 import Loader from "./components/Loader";
 import AdminProjects from "./pages/admin/AdminProjects";
@@ -52,7 +53,12 @@ function App() {
           <Route path="/my-purchases" element={<PageWrapper><MyPurchases /></PageWrapper>} />
           <Route path="/content/:id" element={<PageWrapper><ProductContent /></PageWrapper>} />
           <Route path="/cart" element={<PageWrapper><Cart /></PageWrapper>} />
+          
+          {/* Main Product Access Dashboard */}
           <Route path="/access/:id" element={<PageWrapper><ViewProduct /></PageWrapper>} />
+          
+          {/* Route for viewing detailed notes/Notion content */}
+          <Route path="/notes/:id" element={<PageWrapper><NotesViewer /></PageWrapper>} />
 
           <Route
             path="/admin"
@@ -78,7 +84,7 @@ function App() {
           <Route path="/admin/blog/create" element={<PageWrapper><CreateBlog /></PageWrapper>} />
           <Route path="/admin/blog/edit/:id" element={<PageWrapper><EditBlog /></PageWrapper>} />
           <Route path="/blog/:id" element={<PageWrapper><BlogDetail /></PageWrapper>} />
-          <Route path="/access/:id" element={<PageWrapper><AccessProduct /></PageWrapper>} />
+          
           <Route path="/admin/about" element={<PageWrapper><AdminAbout /></PageWrapper>} />
           <Route
             path="/admin/projects"
