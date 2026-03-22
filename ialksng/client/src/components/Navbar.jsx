@@ -85,9 +85,13 @@ function Navbar() {
           </li>
 
           <li>
-            <a href="#shop" className={active === "shop" ? "active" : ""}>
+            <span 
+              className={active === "shop" ? "active" : ""} 
+              onClick={() => handleNavigate("/shop")}
+              style={{ cursor: "pointer" }}
+            >
               Shop
-            </a>
+            </span>
           </li>
 
           <li>
