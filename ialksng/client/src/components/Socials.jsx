@@ -1,4 +1,4 @@
-import "../styles/socials.css"
+import "../styles/socials.css";
 import {
   FaGithub,
   FaLinkedin,
@@ -11,23 +11,23 @@ function Socials() {
   return (
     <div className="socials">
 
-      <a href="https://github.com/ialksng" target="_blank">
+      <a href="https://github.com/ialksng" target="_blank" rel="noopener noreferrer">
         <FaGithub />
       </a>
 
-      <a href="https://linkedin.com/in/ialksng" target="_blank">
+      <a href="https://linkedin.com/in/ialksng" target="_blank" rel="noopener noreferrer">
         <FaLinkedin />
       </a>
 
-      <a href="https://instagram.com/ialksng" target="_blank">
+      <a href="https://instagram.com/ialksng" target="_blank" rel="noopener noreferrer">
         <FaInstagram />
       </a>
 
-      <a href="https://x.com/ialksng" target="_blank">
+      <a href="https://x.com/ialksng" target="_blank" rel="noopener noreferrer">
         <FaXTwitter />
       </a>
 
-      <a href="https://www.youtube.com/@ialksng" target="_blank">
+      <a href="https://www.youtube.com/@ialksng" target="_blank" rel="noopener noreferrer">
         <FaYoutube />
       </a>
 
