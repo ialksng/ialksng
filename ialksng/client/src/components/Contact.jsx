@@ -148,8 +148,8 @@ function Contact() {
           {/* REGISTERED ADDRESS FOR RAZORPAY COMPLIANCE */}
           <div className="contact__address">
             <p>📍 Registered Business Address</p>
-            <p>[Your House/Flat Number], [Sector/Locality]</p>
-            <p>Greater Noida, Uttar Pradesh, [Pincode]</p>
+            <p>D-635, Main Market, Nathupura</p>
+            <p>Delhi, 110084</p>
             <p>India</p>
           </div>
 
