@@ -11,7 +11,7 @@ function RefundPolicy() {
         
         <div className="legal-page__content">
           <h3>1. Digital Products</h3>
-          <p>Since our website offers non-tangible, irrevocable goods (digital products, source code access, premium notes, and digital services), <strong>we do not provide refunds after the product is purchased</strong>.</p>
+          <p>Since our website offers non-tangible, irrevocable digital goods (digital products, source code access, premium notes, and digital services), <strong>all payments are non-refundable</strong>.</p>
           <p>You acknowledge this policy prior to purchasing any product on the Website. Please make sure that you've carefully read the product description before making a purchase.</p>
 
           <h3>2. Delivery Policy</h3>

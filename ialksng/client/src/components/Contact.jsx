@@ -52,7 +52,11 @@ function Contact() {
       <div className="contact-page__header">
         <h2>Get In Touch</h2>
         <p>
-          Have a project, idea, or opportunity? Let’s connect and build something amazing.
+          Have a project, idea, or opportunity? Let’s connect and build something amazing.<br />
+          {/* ✅ Added Response Time for Razorpay Compliance */}
+          <span style={{ display: "block", marginTop: "8px", color: "#38bdf8", fontWeight: "500" }}>
+            ⏱️ We respond within 24 hours.
+          </span>
         </p>
       </div>
 

@@ -12,6 +12,10 @@ function Footer() {
         <div className="footer__brand">
           <h3>Alok Singh</h3>
           <p>Building modern web experiences.</p>
+          {/* ✅ Added Business Operator Info for Razorpay Compliance */}
+          <p style={{ fontSize: "12px", color: "#64748b", marginTop: "15px", maxWidth: "250px", lineHeight: "1.5" }}>
+            This website is operated by Alok Singh, offering digital services and products through ialksng.me.
+          </p>
         </div>
 
         {/* CENTER (NAV LINKS) */}
@@ -23,11 +27,12 @@ function Footer() {
           <a href="#blog">Blog</a>
           <a href="#contact">Contact</a>
 
-        {/* Add the mandatory legal links below */}
+          {/* Add the mandatory legal links below */}
           <Link to="/privacy-policy">Privacy Policy</Link>
           <Link to="/terms-and-conditions">Terms & Conditions</Link>
           <Link to="/refund-policy">Refund & Cancellation Policy</Link>
         </div>
+        
         {/* RIGHT (SOCIALS) */}
         <div className="footer__socials">
           <Socials />

@@ -191,6 +191,11 @@ function Checkout() {
         <button className="checkout__btn" onClick={handlePayment}>
           Pay Now
         </button>
+        
+        {/* ✅ Added Secure Payment Trust Line for Razorpay Compliance */}
+        <p style={{ textAlign: "center", fontSize: "12px", color: "#94a3b8", marginTop: "12px" }}>
+          🔒 All payments are secured and processed via Razorpay.
+        </p>
       </div>
     </div>
   );

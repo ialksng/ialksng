@@ -12,12 +12,12 @@ function Shop() {
   const [ownedProducts, setOwnedProducts] = useState([]);
   const [previewProduct, setPreviewProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [addedId, setAddedId] = useState(null); // ✅ NEW
+  const [addedId, setAddedId] = useState(null);
 
   const [activeCategory, setActiveCategory] = useState("all");
   const [search, setSearch] = useState("");
 
-  const { addToCart, cart } = useContext(CartContext); // ✅ use cart
+  const { addToCart, cart } = useContext(CartContext);
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -128,7 +128,8 @@ function Shop() {
         {/* HEADER */}
         <div className="shop-header">
           <h2>Explore Resources</h2>
-          <p>Premium notes, projects & code</p>
+          {/* ✅ Explicitly mentioned product types for Razorpay compliance */}
+          <p>Portfolio website services, premium code, AI tools access, and design templates.</p>
         </div>
 
         {/* TABS */}
@@ -204,17 +205,23 @@ function Shop() {
                         View
                       </button>
                     ) : (
-                      <button
-                        className={`btn buy-btn ${
-                          addedId === product._id ? "added" : ""
-                        }`}
-                        onClick={() => handleAddToCart(product)}
-                        disabled={addedId === product._id}
-                      >
-                        {addedId === product._id
-                          ? "Added ✓"
-                          : `Buy ₹${product.price || 0}`}
-                      </button>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+                        <button
+                          className={`btn buy-btn ${
+                            addedId === product._id ? "added" : ""
+                          }`}
+                          onClick={() => handleAddToCart(product)}
+                          disabled={addedId === product._id}
+                        >
+                          {addedId === product._id
+                            ? "Added ✓"
+                            : `Buy ₹${product.price || 0}`}
+                        </button>
+                        {/* ✅ Added Delivery Time text for Razorpay compliance */}
+                        <span style={{ fontSize: "11px", color: "#94a3b8", textAlign: "center" }}>
+                          ⚡ Instant delivery to your account
+                        </span>
+                      </div>
                     )}
 
                   </div>
