@@ -3,18 +3,20 @@ import { useEffect, useState } from "react";
 import axios from "../utils/axios";
 import "../styles/blogdetail.css";
 import Loader from "./Loader";
+import NotionRenderer from "./NotionRenderer";
+import ReactMarkdown from "react-markdown"; // ✅ Import the markdown renderer
 
 function BlogDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [blog, setBlog] = useState(null);
+  const [blogData, setBlogData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchBlog = async () => {
       try {
         const { data } = await axios.get(`/blogs/${id}`);
-        setBlog(data);
+        setBlogData(data.blog ? data : { blog: data, notionContent: null });
       } catch (err) {
         console.error(err);
       } finally {
@@ -25,11 +27,9 @@ function BlogDetail() {
     fetchBlog();
   }, [id]);
 
-  if (loading) {
-    return <Loader />;
-  }
+  if (loading) return <Loader />;
 
-  if (!blog) {
+  if (!blogData || !blogData.blog) {
     return (
       <div className="blogdetail__loading">
         <h2>Article not found.</h2>
@@ -40,7 +40,8 @@ function BlogDetail() {
     );
   }
 
-  // Format the date if it exists
+  const { blog, notionContent } = blogData;
+
   const formattedDate = blog.createdAt
     ? new Date(blog.createdAt).toLocaleDateString("en-US", {
         year: "numeric",
@@ -53,12 +54,10 @@ function BlogDetail() {
     <div className="blogdetail">
       <div className="blogdetail__container">
         
-        {/* Navigation */}
         <button onClick={() => navigate("/blog")} className="blogdetail__back-btn">
           ← Back to Blogs
         </button>
 
-        {/* 🖼 HERO IMAGE */}
         <div className="blogdetail__image-wrapper">
           <img
             src={blog.image || "https://via.placeholder.com/800x400?text=Blog+Post"}
@@ -67,12 +66,8 @@ function BlogDetail() {
           />
         </div>
 
-        {/* 📝 HEADER INFO */}
         <div className="blogdetail__header">
-          {blog.category && (
-            <span className="blogdetail__category">{blog.category}</span>
-          )}
-          
+          {blog.category && <span className="blogdetail__category">{blog.category}</span>}
           <h1 className="blogdetail__title">{blog.title}</h1>
 
           <div className="blogdetail__meta">
@@ -87,12 +82,14 @@ function BlogDetail() {
           </div>
         </div>
 
-        {/* 📝 CONTENT */}
-        {/* We use dangerouslySetInnerHTML because the content is saved as HTML from the rich text editor */}
-        <div
-          className="blogdetail__content"
-          dangerouslySetInnerHTML={{ __html: blog.content }}
-        />
+        <div className="blogdetail__content" style={{ marginTop: "30px" }}>
+          {/* ✅ Now using ReactMarkdown for standard blogs */}
+          {notionContent ? (
+             <NotionRenderer content={notionContent} />
+          ) : (
+             <ReactMarkdown>{blog.content}</ReactMarkdown> 
+          )}
+        </div>
         
       </div>
     </div>

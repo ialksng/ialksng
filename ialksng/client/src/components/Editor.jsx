@@ -1,31 +1,32 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { Markdown } from "tiptap-markdown"; // ✅ Import the markdown extension
+import { Markdown } from "tiptap-markdown";
 import { useEffect } from "react";
 
 function Editor({ content, setContent }) {
   const editor = useEditor({
     extensions: [
       StarterKit,
-      Markdown, // ✅ Add Markdown to extensions
+      Markdown,
     ],
-    content: content || "",
+    // ✅ Leave this empty. If we pass Markdown here, Tiptap thinks it's plain text.
+    content: "", 
     onUpdate: ({ editor }) => {
-      // ✅ Get Markdown instead of HTML
       const markdown = editor.storage.markdown.getMarkdown();
-      console.log("EDITOR MARKDOWN:", markdown);
       setContent(markdown);
     },
   });
 
-  // ✅ IMPORTANT: sync external content (for edit page)
+  // ✅ Inject the markdown after the editor loads so the Markdown extension can parse it
   useEffect(() => {
-    if (editor && content !== editor.storage.markdown.getMarkdown()) {
-      editor.commands.setContent(content || "");
+    if (editor && content) {
+      const currentContent = editor.storage.markdown.getMarkdown();
+      if (content !== currentContent) {
+        editor.commands.setContent(content);
+      }
     }
   }, [content, editor]);
 
-  // ✅ prevent crash if editor not ready
   if (!editor) return <p>Loading editor...</p>;
 
   return (
