@@ -1,11 +1,10 @@
 import { 
   FaReact, FaNodeJs, FaPython, FaJava, FaGitAlt, FaAws, FaGithub, 
-  FaDocker, FaChartLine, FaChartBar, FaHtml5, FaCss3Alt, FaBootstrap 
+  FaDocker, FaHtml5, FaCss3Alt, FaBootstrap 
 } from "react-icons/fa";
 import { 
   SiMongodb, SiMysql, SiExpress, SiJavascript, SiTailwindcss, 
-  SiSpringboot, SiPostgresql, SiGithubactions, SiKubernetes, 
-  SiMicrosoftexcel, SiPowerbi, SiNumpy, SiPandas 
+  SiSpringboot, SiPostgresql, SiGithubactions, SiKubernetes
 } from "react-icons/si";
 import { TbSql, TbApi } from "react-icons/tb";
 
