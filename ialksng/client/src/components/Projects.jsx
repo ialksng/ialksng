@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "../utils/axios";
 import "../styles/projects.css";
 import { motion } from "framer-motion";
+import Loader from "./Loader";
 
 function Projects() {
   const [projects, setProjects] = useState([]);
@@ -25,7 +26,7 @@ function Projects() {
   if (loading) {
     return (
       <section className="projects" id="projects">
-        <h2 className="projects__title">Loading Projects...</h2>
+        <Loader />
       </section>
     );
   }

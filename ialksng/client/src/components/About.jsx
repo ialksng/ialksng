@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import axios from "../utils/axios"; // UPDATED: Importing your configured axios instance
 import { iconMap } from "../utils/iconMap"; 
+import Loader from "./Loader";
 
 function About() {
   const [active, setActive] = useState("All");
@@ -32,7 +33,7 @@ function About() {
   if (loading) {
     return (
       <section className="about" id="about">
-        <h2 className="section__title">Loading About Me...</h2>
+        <Loader />
       </section>
     );
   }
