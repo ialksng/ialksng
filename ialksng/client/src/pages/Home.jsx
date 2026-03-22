@@ -7,7 +7,6 @@ import Shop from "../components/Shop.jsx"
 import Blog from "../components/Blog.jsx"
 import Contact from "../components/Contact"
 import Updates from "../components/Updates"
-import Footer from "../components/Footer"
 
 function Home() {
   return (
@@ -21,7 +20,6 @@ function Home() {
       <Blog />
       <Contact />
       <Updates />
-      <Footer /> 
     </>
   )
 }
