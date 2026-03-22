@@ -1,6 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// Initialize the Gemini client using your API key
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 export const handleChat = async (req, res) => {
@@ -11,14 +10,12 @@ export const handleChat = async (req, res) => {
             return res.status(400).json({ error: "Message is required" });
         }
 
-        // Initialize the Gemini 1.5 Flash model (extremely fast and free)
-        // We also pass the system instructions here so it knows its role
+        // 🚀 UPDATED MODEL NAME HERE
         const model = genAI.getGenerativeModel({ 
-            model: "gemini-1.5-flash",
+            model: "gemini-2.5-flash",
             systemInstruction: "You are a helpful assistant for Alok Singh's portfolio and product website. Answer questions politely and concisely."
         });
 
-        // Call the Gemini API
         const result = await model.generateContent(message);
         const responseText = result.response.text();
 
