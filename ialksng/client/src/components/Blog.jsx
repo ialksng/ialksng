@@ -3,6 +3,7 @@ import axios from "../utils/axios"; // ✅ Use custom configured axios
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import "../styles/blog.css"; 
+import Loader from "./Loader";
 
 function Blog() {
   const [blogs, setBlogs] = useState([]);
@@ -37,11 +38,7 @@ function Blog() {
   }, []);
 
   if (loading) {
-    return (
-      <section className="blog" id="blog">
-        <h2 style={{ textAlign: "center", color: "white" }}>Loading blogs...</h2>
-      </section>
-    );
+    return <Loader />;
   }
 
   return (

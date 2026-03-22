@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "../../utils/axios";
 import "../../styles/admin.css";
+import Loader from "../../components/Loader";
 
 const AdminProjects = () => {
   const [projects, setProjects] = useState([]);
@@ -106,7 +107,7 @@ const AdminProjects = () => {
     }
   };
 
-  if (loading) return <div>Loading Projects...</div>;
+  if (loading) return <Loader />;
 
   return (
     <div className="admin-container p-6">

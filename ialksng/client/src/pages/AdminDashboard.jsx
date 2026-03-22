@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "../styles/admin.css";
+import Loader from "../components/Loader";
 
 // 📊 chart
 import {
@@ -53,7 +54,7 @@ function AdminDashboard() {
       <h1 className="admin__title">Admin Dashboard</h1>
 
       {/* 🔄 LOADING */}
-      {loading && <p>Loading analytics...</p>}
+      {loading && <Loader />}
 
       {/* 🔥 ANALYTICS */}
       {stats && !loading && (

@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "../utils/axios";
 import "../styles/blogdetail.css";
+import Loader from "./Loader";
 
 function BlogDetail() {
   const { id } = useParams();
@@ -25,11 +26,7 @@ function BlogDetail() {
   }, [id]);
 
   if (loading) {
-    return (
-      <div className="blogdetail__loading">
-        <h2>Loading Article...</h2>
-      </div>
-    );
+    return <Loader />;
   }
 
   if (!blog) {

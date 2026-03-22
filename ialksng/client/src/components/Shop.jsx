@@ -4,6 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import "../styles/shop.css";
+import Loader from "./Loader";
 
 function Shop() {
   const [products, setProducts] = useState([]);
@@ -117,11 +118,7 @@ function Shop() {
   };
 
   if (loading) {
-    return (
-      <div className="shop-loader">
-        <span className="spinner"></span>
-      </div>
-    );
+    return <Loader />;
   }
 
   return (

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "../utils/axios";
 import { useParams, useNavigate } from "react-router-dom";
 import NotionRenderer from "../components/NotionRenderer";
+import Loader from "../components/Loader";
 
 function NotesViewer() {
   const { id } = useParams();
@@ -47,7 +48,7 @@ function NotesViewer() {
     fetchNotes();
   }, [id]);
 
-  if (loading) return <div style={{ color: "white", padding: "50px", textAlign: "center" }}>Loading Notes...</div>;
+  if (loading) return <Loader />;
   
   if (error) return (
     <div style={{ color: "red", padding: "50px", textAlign: "center" }}>

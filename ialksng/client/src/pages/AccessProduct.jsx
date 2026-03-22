@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import Loader from "../components/Loader";
 
 function AccessProduct() {
   const { id } = useParams();
@@ -40,13 +41,7 @@ function AccessProduct() {
   }, [id, API]);
 
   // 🔄 Loading state
-  if (loading) {
-    return (
-      <div style={{ color: "white", padding: "2rem" }}>
-        Loading product...
-      </div>
-    );
-  }
+  if (loading) return <Loader />;
 
   // ❌ Access denied UI
   if (denied) {

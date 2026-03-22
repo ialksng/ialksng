@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "../../utils/axios";
 import "../../styles/admin.css";
+import Loader from "../../components/Loader";
 
 function EditBlog() {
   const { id } = useParams();
@@ -58,7 +59,7 @@ function EditBlog() {
     }
   };
 
-  if (loading) return <div className="admin-container p-6">Loading blog data...</div>;
+  if (loading) return <Loader />;
 
   return (
     <div className="admin-container p-6">

@@ -4,6 +4,7 @@ import axios from "../utils/axios";
 import { AuthContext } from "../context/AuthContext";
 import { FaDownload, FaEye, FaHeart, FaRegHeart, FaComment } from "react-icons/fa";
 import "../styles/viewproduct.css";
+import Loader from "../components/Loader";
 
 function ViewProduct() {
   const { id } = useParams();
@@ -66,7 +67,7 @@ function ViewProduct() {
     setComment("");
   };
 
-  if (!product) return <div className="loading">Loading Product Details...</div>;
+  if (!product) return <Loader />;
 
   return (
     <div className="viewproduct">

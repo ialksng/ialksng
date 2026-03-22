@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import Loader from "../components/Loader";
 
 function ProductContent() {
   const { id } = useParams();
@@ -33,7 +34,7 @@ function ProductContent() {
     checkAccess();
   }, [id, API]);
 
-  if (allowed === null) return <h2>Checking access...</h2>;
+  if (allowed === null) return <Loader />;
 
   if (!allowed) {
     return <h2 style={{ color: "red" }}>Access Denied ❌</h2>;
