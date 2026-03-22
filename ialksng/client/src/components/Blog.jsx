@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "../utils/axios"; // ✅ Use custom configured axios
+import axios from "../utils/axios"; 
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import "../styles/blog.css"; 
@@ -12,10 +12,7 @@ function Blog() {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        // Since we are using custom axios, we just need "/blogs"
         const res = await axios.get("/blogs");
-
-        // ✅ normalize safely
         const data = res?.data;
 
         const blogArray =
@@ -48,13 +45,19 @@ function Blog() {
       {blogs.length > 0 ? (
         <div className="blog__grid">
           {blogs.map((blog, index) => {
-            // ✅ Strip HTML tags from content for the preview excerpt
+            
+            // ✅ Clean up BOTH HTML tags (old posts) and Markdown symbols (new posts)
             let textContent = "";
             if (typeof blog?.content === "string") {
-              textContent = blog.content.replace(/<[^>]+>/g, "");
+              textContent = blog.content
+                .replace(/<[^>]+>/g, "") // Remove HTML tags
+                .replace(/#{1,6}\s/g, "") // Remove Markdown headings (##)
+                .replace(/[*_~`>]/g, "") // Remove Markdown bold, italic, code, quotes
+                .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1") // Convert Markdown links to just text
+                .trim();
             }
 
-            // ✅ Format the database timestamp into a readable date (e.g., "Oct 24, 2024")
+            // ✅ Format the database timestamp into a readable date
             const formattedDate = blog.createdAt 
               ? new Date(blog.createdAt).toLocaleDateString("en-US", {
                   month: "short",
@@ -85,7 +88,7 @@ function Blog() {
                     {blog.category ? (
                       <span className="blog__category-badge">{blog.category}</span>
                     ) : (
-                      <span></span> /* Empty span to keep date pushed to the right if no category */
+                      <span></span>
                     )}
                     <span className="blog__date">{formattedDate}</span>
                   </div>
