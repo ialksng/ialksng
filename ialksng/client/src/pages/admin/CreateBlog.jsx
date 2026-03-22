@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../utils/axios";
 import "../../styles/admin.css"; // Reuse our nice admin styles
+import Editor from "../../components/Editor"; // ✅ Import the Editor
 
 function CreateBlog() {
   const navigate = useNavigate();
@@ -68,15 +69,12 @@ function CreateBlog() {
           <input type="text" name="image" value={formData.image} onChange={handleChange} placeholder="https://..." />
         </div>
 
+        {/* ✅ Replaced textarea with your Markdown Editor */}
         <div className="form-group">
-          <label>Blog Content (HTML supported)</label>
-          <textarea 
-            name="content" 
-            value={formData.content} 
-            onChange={handleChange} 
-            rows="10" 
-            required 
-            placeholder="Write your blog post here..."
+          <label>Blog Content (Markdown only)</label>
+          <Editor 
+            content={formData.content} 
+            setContent={(newContent) => setFormData({ ...formData, content: newContent })} 
           />
         </div>
 

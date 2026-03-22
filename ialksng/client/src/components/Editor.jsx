@@ -1,22 +1,27 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import { Markdown } from "tiptap-markdown"; // ✅ Import the markdown extension
 import { useEffect } from "react";
 
 function Editor({ content, setContent }) {
   const editor = useEditor({
-    extensions: [StarterKit],
-    content: content || "<p>Start writing...</p>",
+    extensions: [
+      StarterKit,
+      Markdown, // ✅ Add Markdown to extensions
+    ],
+    content: content || "",
     onUpdate: ({ editor }) => {
-      const html = editor.getHTML();
-      console.log("EDITOR HTML:", html);
-      setContent(html);
+      // ✅ Get Markdown instead of HTML
+      const markdown = editor.storage.markdown.getMarkdown();
+      console.log("EDITOR MARKDOWN:", markdown);
+      setContent(markdown);
     },
   });
 
   // ✅ IMPORTANT: sync external content (for edit page)
   useEffect(() => {
-    if (editor && content !== editor.getHTML()) {
-      editor.commands.setContent(content || "<p></p>");
+    if (editor && content !== editor.storage.markdown.getMarkdown()) {
+      editor.commands.setContent(content || "");
     }
   }, [content, editor]);
 

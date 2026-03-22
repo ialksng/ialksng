@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "../../utils/axios";
 import "../../styles/admin.css";
 import Loader from "../../components/Loader";
+import Editor from "../../components/Editor"; // ✅ Import the Editor
 
 function EditBlog() {
   const { id } = useParams();
@@ -23,12 +24,15 @@ function EditBlog() {
     const fetchBlog = async () => {
       try {
         const { data } = await axios.get(`/blogs/${id}`);
+        // Safely handle both standard response and the updated Notion response
+        const blogData = data.blog || data; 
+        
         setFormData({
-          title: data.title || "",
-          category: data.category || "",
-          image: data.image || "",
-          author: data.author || "",
-          content: data.content || "",
+          title: blogData.title || "",
+          category: blogData.category || "",
+          image: blogData.image || "",
+          author: blogData.author || "",
+          content: blogData.content || "",
         });
       } catch (err) {
         console.error("Error fetching blog:", err);
@@ -92,14 +96,12 @@ function EditBlog() {
           <input type="text" name="image" value={formData.image} onChange={handleChange} placeholder="https://..." />
         </div>
 
+        {/* ✅ Replaced textarea with your Markdown Editor */}
         <div className="form-group">
-          <label>Blog Content (HTML supported)</label>
-          <textarea 
-            name="content" 
-            value={formData.content} 
-            onChange={handleChange} 
-            rows="10" 
-            required 
+          <label>Blog Content (Markdown only)</label>
+          <Editor 
+            content={formData.content} 
+            setContent={(newContent) => setFormData({ ...formData, content: newContent })} 
           />
         </div>
 
