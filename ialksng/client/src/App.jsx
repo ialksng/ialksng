@@ -25,6 +25,9 @@ import AdminAbout from "./pages/admin/AdminAbout";
 import Loader from "./components/Loader";
 import AdminProjects from "./pages/admin/AdminProjects";
 import Chatbot from "./components/Chatbot";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsConditions from "./pages/TermsConditions";
+import RefundPolicy from "./pages/RefundPolicy";
 
 function App() {
   const location = useLocation();
@@ -54,7 +57,9 @@ function App() {
           <Route path="/my-purchases" element={<PageWrapper><MyPurchases /></PageWrapper>} />
           <Route path="/content/:id" element={<PageWrapper><ProductContent /></PageWrapper>} />
           <Route path="/cart" element={<PageWrapper><Cart /></PageWrapper>} />
-          
+          <Route path="/privacy-policy" element={<PageWrapper><PrivacyPolicy /></PageWrapper>} />
+          <Route path="/terms-and-conditions" element={<PageWrapper><TermsConditions /></PageWrapper>} />
+          <Route path="/refund-policy" element={<PageWrapper><RefundPolicy /></PageWrapper>} />
           {/* Main Product Access Dashboard */}
           <Route path="/access/:id" element={<PageWrapper><ViewProduct /></PageWrapper>} />
           

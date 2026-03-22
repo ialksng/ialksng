@@ -1,7 +1,7 @@
 import { useState } from "react";
 import emailjs from "@emailjs/browser";
 import Socials from "../components/Socials";
-import "../styles/contact.css"
+import "../styles/contact.css";
 
 function Contact() {
   const [formData, setFormData] = useState({
@@ -107,38 +107,49 @@ function Contact() {
           )}
 
         </form>
+        
         {/* OR Divider */}
-<div className="contact__divider">
-  <span>OR</span>
-</div>
+        <div className="contact__divider">
+          <span>OR</span>
+        </div>
 
-{/* WHATSAPP */}
-<a
-  href= "https://wa.me/9319574689"
-  target="_blank"
-  rel="noreferrer"
-  className="contact__whatsapp"
->
-  WhatsApp
-</a>
+        {/* WHATSAPP */}
+        <a
+          href="https://wa.me/9319574689"
+          target="_blank"
+          rel="noreferrer"
+          className="contact__whatsapp"
+        >
+          WhatsApp
+        </a>
 
-{/* OR Divider */}
-<div className="contact__divider small">
-  <span>OR</span>
-</div>
+        {/* OR Divider */}
+        <div className="contact__divider small">
+          <span>OR</span>
+        </div>
 
-{/* EMAIL + PHONE */}
-<div className="contact__alt">
+        {/* EMAIL + PHONE + ADDRESS */}
+        <div className="contact__alt">
+          
+          <div className="contact__alt-buttons">
+            <a href="mailto:ialksng@gmail.com" target="_blank" rel="noreferrer">
+              📧 Email
+            </a>
 
-  <a href="mailto:ialksng@gmail.com" target="_blank">
-    📧 Email
-  </a>
+            <a href="tel:+919319574689">
+              📞 Call
+            </a>
+          </div>
 
-  <a href="tel:+919319574689">
-    📞 Call
-  </a>
+          {/* REGISTERED ADDRESS FOR RAZORPAY COMPLIANCE */}
+          <div className="contact__address">
+            <p>📍 Registered Business Address</p>
+            <p>[Your House/Flat Number], [Sector/Locality]</p>
+            <p>Greater Noida, Uttar Pradesh, [Pincode]</p>
+            <p>India</p>
+          </div>
 
-</div>
+        </div>
 
       </div>
 
