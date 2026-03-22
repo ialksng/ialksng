@@ -10,6 +10,7 @@
   "author": "Alok Singh",
   "license": "ISC",
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@notionhq/client": "^5.13.0",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.3",
@@ -21,8 +22,6 @@
     "google-auth-library": "^10.6.2",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.3.1",
-    "openai": "^6.32.0",
-    "openapi": "^1.0.0",
     "razorpay": "^2.9.6"
   },
   "keywords": [],
