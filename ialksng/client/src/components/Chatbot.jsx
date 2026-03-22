@@ -21,7 +21,7 @@ const Chatbot = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post('/api/chat', { message: userMessage });
+      const response = await axios.post('/chat', { message: userMessage });
       setMessages((prev) => [...prev, { text: response.data.reply, sender: "bot" }]);
     } catch (error) {
       setMessages((prev) => [...prev, { text: "Sorry, I am having trouble connecting right now.", sender: "bot" }]);
