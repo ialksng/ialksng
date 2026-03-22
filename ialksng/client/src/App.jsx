@@ -24,6 +24,7 @@ import NotesViewer from "./pages/NotesViewer";
 import AdminAbout from "./pages/admin/AdminAbout";
 import Loader from "./components/Loader";
 import AdminProjects from "./pages/admin/AdminProjects";
+import Chatbot from "./components/Chatbot";
 
 function App() {
   const location = useLocation();
@@ -96,6 +97,7 @@ function App() {
           />
         </Routes>
       </AnimatePresence>
+      <Chatbot />
     </>
   );
 }
