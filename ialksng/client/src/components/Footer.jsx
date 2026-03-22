@@ -52,7 +52,6 @@ function Footer() {
       <div className="footer__bottom" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
         <p>© {new Date().getFullYear()} Alok Singh. All rights reserved.</p>
         <p style={{ fontSize: "12px", color: "#38bdf8", display: "flex", alignItems: "center", gap: "5px" }}>
-          🔒 Payments are securely processed via Razorpay.
         </p>
       </div>
 
