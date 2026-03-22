@@ -4,7 +4,9 @@ import axios from "../utils/axios";
 import "../styles/blogdetail.css";
 import Loader from "./Loader";
 import NotionRenderer from "./NotionRenderer";
-import ReactMarkdown from "react-markdown"; // ✅ Import the markdown renderer
+import ReactMarkdown from "react-markdown"; 
+import remarkGfm from "remark-gfm"; // ✅ Adds support for tables, tasklists, and URLs
+import rehypeRaw from "rehype-raw"; // ✅ Allows your older HTML-based blogs to still render correctly!
 
 function BlogDetail() {
   const { id } = useParams();
@@ -82,12 +84,17 @@ function BlogDetail() {
           </div>
         </div>
 
-        <div className="blogdetail__content" style={{ marginTop: "30px" }}>
-          {/* ✅ Now using ReactMarkdown for standard blogs */}
+        <div className="blogdetail__content" style={{ marginTop: "30px", lineHeight: "1.6" }}>
+          {/* ✅ Markdown with plugins to support all formats and legacy HTML */}
           {notionContent ? (
              <NotionRenderer content={notionContent} />
           ) : (
-             <ReactMarkdown>{blog.content}</ReactMarkdown> 
+             <ReactMarkdown 
+               remarkPlugins={[remarkGfm]} 
+               rehypePlugins={[rehypeRaw]}
+             >
+               {blog.content || ""}
+             </ReactMarkdown> 
           )}
         </div>
         
