@@ -1,4 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { buddyBotPrompt } from "../config/botPrompt.js"; // 🚀 Import your external prompt
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
@@ -10,10 +11,9 @@ export const handleChat = async (req, res) => {
             return res.status(400).json({ error: "Message is required" });
         }
 
-        // 🚀 UPDATED MODEL NAME HERE
         const model = genAI.getGenerativeModel({ 
             model: "gemini-2.5-flash",
-            systemInstruction: "You are a helpful assistant for Alok Singh's portfolio and product website. Answer questions politely and concisely."
+            systemInstruction: buddyBotPrompt // 🚀 Plug the imported prompt into the AI
         });
 
         const result = await model.generateContent(message);
