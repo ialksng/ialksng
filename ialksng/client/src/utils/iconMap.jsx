@@ -11,42 +11,42 @@ import { TbSql, TbApi } from "react-icons/tb";
 
 export const iconMap = {
   // Languages
-  FaJava: <FaJava />,
-  SiJavascript: <SiJavascript />,
-  FaPython: <FaPython />,
-  TbSql: <TbSql />,
+  "Java": <FaJava />,
+  "JavaScript": <SiJavascript />,
+  "Python": <FaPython />,
+  "SQL": <TbSql />,
 
   // Frontend
-  FaReact: <FaReact />,
-  FaHtml5: <FaHtml5 />,       
-  FaCss3Alt: <FaCss3Alt />,   
-  FaBootstrap: <FaBootstrap />, 
-  SiTailwindcss: <SiTailwindcss />,
+  "React.js": <FaReact />,
+  "HTML5": <FaHtml5 />,       
+  "CSS3": <FaCss3Alt />,   
+  "Tailwind CSS": <SiTailwindcss />,
+  "Bootstrap": <FaBootstrap />,
 
   // Backend
-  SiSpringboot: <SiSpringboot />,
-  FaNodeJs: <FaNodeJs />,
-  SiExpress: <SiExpress />,
-  TbApi: <TbApi />,
+  "Spring Boot": <SiSpringboot />,
+  "Node.js": <FaNodeJs />,
+  "Express.js": <SiExpress />,
+  "REST APIs": <TbApi />,
 
   // Databases
-  SiMysql: <SiMysql />,
-  SiPostgresql: <SiPostgresql />,
-  SiMongodb: <SiMongodb />,
+  "MySQL": <SiMysql />,
+  "PostgreSQL": <SiPostgresql />,
+  "MongoDB": <SiMongodb />,
 
   // DevOps & Tools
-  FaGitAlt: <FaGitAlt />,
-  FaGithub: <FaGithub />,
-  SiGithubactions: <SiGithubactions />,
-  FaDocker: <FaDocker />,      
-  SiKubernetes: <SiKubernetes />,
-  FaAws: <FaAws />,
+  "Git": <FaGitAlt />,
+  "GitHub": <FaGithub />,
+  "GitHub Actions": <SiGithubactions />,
+  "Docker": <FaDocker />,      
+  "Kubernetes (Basics)": <SiKubernetes />,
+  "AWS (Basics)": <FaAws />,
 
   // Others
-  SiMicrosoftexcel: <SiMicrosoftexcel />,
-  SiPowerbi: <SiPowerbi />,
-  SiNumpy: <SiNumpy />,
-  SiPandas: <SiPandas />,
-  FaChartLine: <FaChartLine />, // Using generic line chart for Matplotlib
-  FaChartBar: <FaChartBar />,   // Using generic bar chart for Seaborn
+  "MS Excel": <SiMicrosoftexcel />,
+  "Power BI": <SiPowerbi />,
+  "NumPy": <SiNumpy />,
+  "Pandas": <SiPandas />,
+  "Matplotlib": <FaChartLine />, 
+  "Seaborn": <FaChartBar />   
 };

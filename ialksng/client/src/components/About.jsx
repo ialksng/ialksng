@@ -122,9 +122,9 @@ function About() {
         >
           {filteredSkills.map((skill, index) => (
             <div className="skill__card" key={index}>
-              {/* Translate the string 'iconName' from DB into the actual React Icon */}
+              {/* Translate the string 'name' from DB into the actual React Icon */}
               <div className="icon">
-                {iconMap[skill.iconName] || <span>❖</span>}
+                {iconMap[skill.name?.trim()] || <span>❖</span>}
               </div>
               <p>{skill.name}</p>
             </div>
