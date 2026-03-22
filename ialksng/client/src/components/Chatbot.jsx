@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import axios from '../utils/axios'; // Using your existing axios setup
-import '../styles/chatbot.css'; // Create this CSS file next
+import axios from '../utils/axios'; 
+import ReactMarkdown from 'react-markdown'; // 🚀 Import Markdown parser
+import '../styles/chatbot.css'; 
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,7 +21,7 @@ const Chatbot = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post('/chat', { message: userMessage });
+      const response = await axios.post('/api/chat', { message: userMessage });
       setMessages((prev) => [...prev, { text: response.data.reply, sender: "bot" }]);
     } catch (error) {
       setMessages((prev) => [...prev, { text: "Sorry, I am having trouble connecting right now.", sender: "bot" }]);
@@ -31,12 +32,10 @@ const Chatbot = () => {
 
   return (
     <div className="chatbot-container">
-      {/* Chat Button */}
       <button className="chat-toggle-btn" onClick={() => setIsOpen(!isOpen)}>
         {isOpen ? '✕' : '💬'}
       </button>
 
-      {/* Chat Window */}
       {isOpen && (
         <div className="chat-window">
           <div className="chat-header">
@@ -46,7 +45,12 @@ const Chatbot = () => {
           <div className="chat-messages">
             {messages.map((msg, index) => (
               <div key={index} className={`message ${msg.sender}`}>
-                {msg.text}
+                {/* 🚀 Render Markdown for bot, regular text for user */}
+                {msg.sender === 'bot' ? (
+                  <ReactMarkdown>{msg.text}</ReactMarkdown>
+                ) : (
+                  msg.text
+                )}
               </div>
             ))}
             {isLoading && <div className="message bot">Typing...</div>}
