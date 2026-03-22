@@ -12,12 +12,6 @@ function Updates() {
       content: "🔥 Working on a new UI design",
       image: "https://via.placeholder.com/500x250",
       time: "5 days ago"
-    },
-    {
-      type: "video",
-      content: "🎥 Check out my latest project walkthrough",
-      video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      time: "1 week ago"
     }
   ]
 
