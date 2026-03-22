@@ -20,7 +20,6 @@ dotenv.config();
 
 const app = express();
 
-
 // 🔹 MIDDLEWARE
 app.use(cors());
 app.use(express.json());
@@ -41,7 +40,10 @@ app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/payment", paymentRoutes);
+
+// Non-blocking visitor tracking
 app.use(trackVisitor); 
+
 app.use("/api/admin", adminRoutes);
 app.use("/api/public", statsRoutes);
 app.use("/api/blogs", blogRoutes);
