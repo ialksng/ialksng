@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import axios from "../utils/axios";
+import Loader from "../components/Loader";
 
 export const AuthContext = createContext();
 
@@ -109,7 +110,7 @@ export const AuthProvider = ({ children }) => {
         loading,
       }}
     >
-      {!loading ? children : <div className="loading">Loading...</div>}
+      {!loading ? children : <Loader fullScreen={true} />}
     </AuthContext.Provider>
   );
 };
