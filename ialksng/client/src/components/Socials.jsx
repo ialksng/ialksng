@@ -10,19 +10,19 @@ function Socials() {
   return (
     <div className="socials">
 
-      <a href="https://github.com/your-username" target="_blank">
+      <a href="https://github.com/ialksng" target="_blank">
         <FaGithub />
       </a>
 
-      <a href="https://linkedin.com/in/your-username" target="_blank">
+      <a href="https://linkedin.com/in/ialksng" target="_blank">
         <FaLinkedin />
       </a>
 
-      <a href="https://instagram.com/your-username" target="_blank">
+      <a href="https://instagram.com/ialksng" target="_blank">
         <FaInstagram />
       </a>
 
-      <a href="https://twitter.com/your-username" target="_blank">
+      <a href="https://twitter.com/ialksng" target="_blank">
         <FaTwitter />
       </a>
 
