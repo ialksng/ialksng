@@ -41,12 +41,4 @@ export const iconMap = {
   "Docker": <FaDocker />,      
   "Kubernetes (Basics)": <SiKubernetes />,
   "AWS (Basics)": <FaAws />,
-
-  // Others
-  "MS Excel": <SiMicrosoftexcel />,
-  "Power BI": <SiPowerbi />,
-  "NumPy": <SiNumpy />,
-  "Pandas": <SiPandas />,
-  "Matplotlib": <FaChartLine />, 
-  "Seaborn": <FaChartBar />   
 };
