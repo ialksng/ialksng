@@ -3,7 +3,7 @@ import {
   FaGithub,
   FaLinkedin,
   FaInstagram,
-  FaXTwitter,
+  FaTwitter,
   FaYoutube,
 } from "react-icons/fa";
 
@@ -24,7 +24,7 @@ function Socials() {
       </a>
 
       <a href="https://x.com/ialksng" target="_blank" rel="noopener noreferrer">
-        <FaXTwitter />
+        <FaTwitter />
       </a>
 
       <a href="https://www.youtube.com/@ialksng" target="_blank" rel="noopener noreferrer">
