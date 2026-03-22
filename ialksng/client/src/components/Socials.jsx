@@ -4,6 +4,7 @@ import {
   FaLinkedin,
   FaInstagram,
   FaTwitter,
+  FaYoutube,
 } from "react-icons/fa";
 
 function Socials() {
@@ -24,6 +25,10 @@ function Socials() {
 
       <a href="https://twitter.com/ialksng" target="_blank">
         <FaTwitter />
+      </a>
+
+      <a href="https://www.youtube.com/@ialksng" target="_blank">
+        <FaYoutube />
       </a>
 
     </div>
