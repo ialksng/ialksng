@@ -130,15 +130,15 @@
 
 .blog__grid {
   display: grid;
-  /* 🔥 FIX: Changed auto-fit to auto-fill so a single card doesn't stretch 100% wide */
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  /* Reduced to 280px so it fits nicely on mid-sized screens too */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 2rem;
   max-width: 1200px;
   margin: 0 auto;
 }
 
 .blog__card {
-  background: #1e2532; /* Matches your beautiful dark projects theme */
+  background: #1e2532; 
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
@@ -154,7 +154,7 @@
 
 .blog__card img {
   width: 100%;
-  height: 220px; /* Perfect height for blog thumbnails */
+  height: 220px; 
   object-fit: cover;
   border-bottom: 1px solid #2a344a;
 }
@@ -163,7 +163,7 @@
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  flex-grow: 1; /* Pushes the "Read More" button to the bottom if text is short */
+  flex-grow: 1; 
 }
 
 .blog__card-content h3 {
@@ -214,4 +214,20 @@
 .blog__date {
   color: #94a3b8;
   font-size: 0.85rem;
+}
+
+/* =========================================================
+   ✅ MOBILE RESPONSIVENESS (Fixes overflow on small screens)
+   ========================================================= */
+@media (max-width: 768px) {
+  /* Adjust padding for smaller screens */
+  .projects, .blog {
+    padding: 3rem 1rem;
+  }
+
+  /* Force grids into a single 100%-width column on mobile */
+  .projects__grid, .blog__grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
 }
