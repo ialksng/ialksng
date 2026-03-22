@@ -29,6 +29,9 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsConditions from "./pages/TermsConditions";
 import RefundPolicy from "./pages/RefundPolicy";
 
+// ✅ Imported Footer so it can be rendered globally
+import Footer from "./components/Footer";
+
 function App() {
   const location = useLocation();
   const [loading, setLoading] = useState(false);
@@ -102,6 +105,9 @@ function App() {
           />
         </Routes>
       </AnimatePresence>
+      
+      {/* ✅ Added Footer here so it is visible on all pages */}
+      <Footer />
       <Chatbot />
     </>
   );

@@ -157,11 +157,6 @@ function Contact() {
 
       </div>
 
-      {/* SOCIALS */}
-      <div className="contact-page__socials">
-        <Socials />
-      </div>
-
     </section>
   );
 }

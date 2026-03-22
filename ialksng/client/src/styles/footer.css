@@ -58,3 +58,62 @@
   font-size: 13px;
   color: #64748b;
 }
+
+/* --- REPLACE YOUR OLD LINK STYLES WITH THIS --- */
+
+/* Wrapper for both columns */
+.footer__nav-groups {
+  display: flex;
+  gap: 60px; /* Space between Explore and Legal columns */
+}
+
+/* Individual Column */
+.footer__link-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Column Headings */
+.footer__link-group h4 {
+  color: #cbd5f5; /* Light readable text matching your theme */
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* The Links */
+.footer__link-group a {
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s ease;
+}
+
+.footer__link-group a:hover {
+  color: #38bdf8;
+}
+
+/* --- RESPONSIVE FIXES --- */
+@media (max-width: 768px) {
+  .footer__container {
+    flex-direction: column;
+    text-align: center;
+    gap: 40px;
+  }
+
+  .footer__nav-groups {
+    flex-direction: column; /* Stack the groups on small screens */
+    gap: 30px;
+  }
+
+  .footer__link-group {
+    align-items: center; /* Center the links on mobile */
+  }
+  
+  .footer__brand p {
+    margin: 15px auto 0 auto; /* Center the business text on mobile */
+  }
+}

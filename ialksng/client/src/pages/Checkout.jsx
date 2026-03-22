@@ -192,10 +192,15 @@ function Checkout() {
           Pay Now
         </button>
         
-        {/* ✅ Added Secure Payment Trust Line for Razorpay Compliance */}
-        <p style={{ textAlign: "center", fontSize: "12px", color: "#94a3b8", marginTop: "12px" }}>
-          🔒 All payments are secured and processed via Razorpay.
-        </p>
+        {/* ✅ Explicit Delivery Timeline & Trust Line */}
+        <div style={{ textAlign: "center", marginTop: "15px" }}>
+          <p style={{ fontSize: "12px", color: "#cbd5f5", marginBottom: "5px" }}>
+            ⚡ Upon successful payment, you will receive <strong>instant access</strong> to the digital product/service in your dashboard.
+          </p>
+          <p style={{ fontSize: "12px", color: "#94a3b8" }}>
+            🔒 All payments are secured and processed via Razorpay.
+          </p>
+        </div>
       </div>
     </div>
   );
