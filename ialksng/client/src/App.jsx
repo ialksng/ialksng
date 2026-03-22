@@ -1,5 +1,4 @@
 import { Routes, Route, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import Home from "./pages/Home";
@@ -22,7 +21,6 @@ import BlogDetail from "./components/BlogDetail";
 // Import NotesViewer to handle the "View" button navigation
 import NotesViewer from "./pages/NotesViewer"; 
 import AdminAbout from "./pages/admin/AdminAbout";
-import Loader from "./components/Loader";
 import AdminProjects from "./pages/admin/AdminProjects";
 import Chatbot from "./components/Chatbot";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -34,22 +32,9 @@ import Footer from "./components/Footer";
 
 function App() {
   const location = useLocation();
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    setLoading(true);
-
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [location]);
 
   return (
     <>
-      {loading && <Loader />}
-
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
 

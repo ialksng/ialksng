@@ -31,6 +31,10 @@ app.get("/", (req, res) => {
   res.send("API is running...");
 });
 
+// HEALTH
+app.get("/api/health", (req, res) => {
+  res.status(200).send("Backend is awake!");
+});
 
 // 🔹 ROUTES
 app.use("/api/auth", authRoutes);
