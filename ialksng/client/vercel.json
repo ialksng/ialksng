@@ -7,6 +7,14 @@
     {
       "source": "/(.*)",
       "destination": "/index.html"
+    },
+    {
+      "source": "/projects/chatflow",
+      "destination": "https://chatflow-zvul.onrender.com/"
+    },
+    {
+      "source": "/projects/chatflow/(.*)",
+      "destination": "https://chatflow-zvul.onrender.com/$1"
     }
   ]
 }
