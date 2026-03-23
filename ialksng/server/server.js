@@ -21,7 +21,14 @@ dotenv.config();
 const app = express();
 
 // 🔹 MIDDLEWARE
-app.use(cors());
+app.use(cors({
+  origin: [
+    "https://ialksng.me", 
+    "https://www.ialksng.me", 
+    "http://localhost:5173" // for your local testing
+  ],
+  credentials: true
+}));
 app.use(express.json());
 
 

@@ -15,7 +15,7 @@ function Checkout() {
 
   // ✅ FIX 1: fallback API
   const API =
-    import.meta.env.VITE_API_URL || "https://your-backend.onrender.com";
+    import.meta.env.VITE_API_URL || "https://ialksng-backend.onrender.com";
 
   // ✅ FIX: Redirect unauthenticated users immediately
   useEffect(() => {
