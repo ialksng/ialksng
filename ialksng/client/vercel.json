@@ -5,11 +5,11 @@
       "destination": "https://ialksng-backend.onrender.com/api/$1"
     },
     {
-      "source": "/projects/ChatFlow",
+      "source": "/projects/chatflow",
       "destination": "https://chatflow-zvul.onrender.com/"
     },
     {
-      "source": "/projects/ChatFlow/(.*)",
+      "source": "/projects/chatflow/(.*)",
       "destination": "https://chatflow-zvul.onrender.com/$1"
     },
     {
