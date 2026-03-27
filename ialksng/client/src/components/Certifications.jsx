@@ -7,7 +7,6 @@ const Certifications = () => {
   useEffect(() => {
     const fetchCerts = async () => {
       try {
-        // Removed /api/ since axios.js already has it in the baseURL
         const { data } = await axios.get('/certifications'); 
         setCertifications(data);
       } catch (error) {
@@ -17,20 +16,62 @@ const Certifications = () => {
     fetchCerts();
   }, []);
 
-  if (certifications.length === 0) return null; // Don't show section if empty
+  if (certifications.length === 0) return null;
 
   return (
-    <section className="certifications-section" id="certifications" style={{ padding: '4rem 2rem' }}>
-      <h2>My Certifications</h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', marginTop: '20px' }}>
+    <section className="certifications-section" id="certifications" style={{ padding: '4rem 0' }}>
+      <h2 className="section__title">My Certifications</h2>
+      
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', marginTop: '2rem' }}>
         {certifications.map(cert => (
-          <div key={cert._id} style={{ border: '1px solid #eaeaea', padding: '20px', borderRadius: '8px' }}>
-            {cert.imageUrl && <img src={cert.imageUrl} alt={cert.title} style={{ width: '50px', height: '50px', objectFit: 'contain' }} />}
-            <h3 style={{ marginTop: '10px' }}>{cert.title}</h3>
-            <p>{cert.issuer} | {cert.date}</p>
+          <div key={cert._id} style={{ 
+            border: '1px solid var(--border-color, #2a344a)', 
+            padding: '25px', 
+            borderRadius: '12px',
+            backgroundColor: 'var(--card-bg, #111827)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between'
+          }}>
+            <div>
+              {cert.imageUrl && (
+                <img 
+                  src={cert.imageUrl} 
+                  alt={cert.title} 
+                  style={{ width: '60px', height: '60px', objectFit: 'contain', marginBottom: '15px' }} 
+                />
+              )}
+              <h3 style={{ fontSize: '1.2rem', marginBottom: '10px', color: 'var(--text-color, #fff)' }}>
+                {cert.title}
+              </h3>
+              <p style={{ color: 'var(--text-muted, #9ca3af)', fontSize: '0.95rem' }}>
+                {cert.issuer} {cert.date ? `| ${cert.date}` : ''}
+              </p>
+            </div>
+
+            {/* 🔥 THIS IS YOUR NEW VIEW BUTTON 🔥 */}
             {cert.credentialUrl && (
-              <a href={cert.credentialUrl} target="_blank" rel="noreferrer" style={{ display: 'inline-block', marginTop: '10px', color: 'blue' }}>
-                View Credential &rarr;
+              <a 
+                href={cert.credentialUrl} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                style={{ 
+                  display: 'inline-block', 
+                  marginTop: '20px', 
+                  padding: '10px 20px', 
+                  backgroundColor: '#3399cc', // using your theme's blue
+                  color: 'white', 
+                  textDecoration: 'none', 
+                  borderRadius: '6px', 
+                  fontSize: '0.95rem',
+                  fontWeight: '500',
+                  textAlign: 'center',
+                  transition: 'background 0.3s'
+                }}
+                onMouseOver={(e) => e.target.style.backgroundColor = '#287aa3'}
+                onMouseOut={(e) => e.target.style.backgroundColor = '#3399cc'}
+              >
+                View Certificate ↗
               </a>
             )}
           </div>

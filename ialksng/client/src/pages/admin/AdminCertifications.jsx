@@ -54,7 +54,12 @@ const AdminCertifications = () => {
         <input type="text" placeholder="Title" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} required />
         <input type="text" placeholder="Issuer (e.g., Google, Coursera)" value={formData.issuer} onChange={e => setFormData({...formData, issuer: e.target.value})} required />
         <input type="text" placeholder="Date (e.g., Aug 2023)" value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} />
-        <input type="text" placeholder="Credential URL" value={formData.credentialUrl} onChange={e => setFormData({...formData, credentialUrl: e.target.value})} />
+        <input 
+            type="text" 
+            placeholder="Credential URL (Google Drive Link, etc.)" 
+            value={formData.credentialUrl} 
+            onChange={e => setFormData({...formData, credentialUrl: e.target.value})} 
+        />
         <input type="text" placeholder="Image URL (Optional)" value={formData.imageUrl} onChange={e => setFormData({...formData, imageUrl: e.target.value})} />
         <button type="submit">Add Certification</button>
       </form>
