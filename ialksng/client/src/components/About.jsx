@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import axios from "../utils/axios"; // UPDATED: Importing your configured axios instance
 import { iconMap } from "../utils/iconMap"; 
 import Loader from "./Loader";
+import Certifications from "./Certifications";
 
 function About() {
   const [active, setActive] = useState("All");
@@ -131,6 +132,7 @@ function About() {
           ))}
         </motion.div>
       </div>
+      <Certifications />
 
       {/* PROFILES */}
       <Profiles />
