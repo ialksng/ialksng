@@ -31,7 +31,7 @@ const AdminProjects = lazy(() => import("./pages/admin/AdminProjects"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsConditions = lazy(() => import("./pages/TermsConditions"));
 const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
-
+const AdminCertifications = lazy(() => import("./pages/admin/AdminCertifications"));
 
 function App() {
   const location = useLocation();
@@ -94,6 +94,7 @@ function App() {
                 </AdminRoute>
               }
             />
+            <Route path="/admin/certifications" element={<AdminRoute><PageWrapper><AdminCertifications /></PageWrapper></AdminRoute>} />
           </Routes>
         </AnimatePresence>
       </Suspense>

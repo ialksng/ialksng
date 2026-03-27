@@ -126,6 +126,10 @@ function AdminDashboard() {
           <h2>🔔 Updates</h2>
           <p>Post announcements or updates</p>
         </div>
+        <div className="admin__card" onClick={() => navigate("/admin/certifications")}>
+          <h2>📜 Certifications</h2>
+          <p>Manage your certifications</p>
+        </div>
 
         <div className="admin__card" onClick={() => navigate("/admin/testimonials")}>
           <h2>⭐ Testimonials</h2>

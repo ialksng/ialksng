@@ -1,6 +1,7 @@
 import Navbar from "../components/Navbar"
 import Hero from "../components/Hero"
 import About from "../components/About"
+import Certifications from "../components/Certifications"
 import Work from "../components/Work"
 import Testimonials from "../components/Testimonials"
 import Shop from "../components/Shop.jsx"
@@ -14,6 +15,7 @@ function Home() {
       <Navbar />
       <Hero />
       <About />
+      <Certifications />
       <Work />
       <Testimonials />
       <Shop />
