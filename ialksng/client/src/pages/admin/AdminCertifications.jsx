@@ -11,7 +11,8 @@ const AdminCertifications = () => {
 
   const fetchCertifications = async () => {
     try {
-      const { data } = await axios.get('/api/certifications');
+      // Removed /api/ since axios.js already has it in the baseURL
+      const { data } = await axios.get('/certifications'); 
       setCertifications(data);
     } catch (error) {
       console.error('Error fetching certifications', error);
@@ -21,20 +22,28 @@ const AdminCertifications = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('/api/certifications', formData);
+      // Removed /api/ here too
+      await axios.post('/certifications', formData); 
       setFormData({ title: '', issuer: '', date: '', credentialUrl: '', imageUrl: '' });
       fetchCertifications();
+      alert("✅ Certification added successfully!"); // Added success message
     } catch (error) {
       console.error('Error adding certification', error);
+      alert("❌ Failed to add certification. Check console for details."); // Added error message
     }
   };
 
   const handleDelete = async (id) => {
-    try {
-      await axios.delete(`/api/certifications/${id}`);
-      fetchCertifications();
-    } catch (error) {
-      console.error('Error deleting certification', error);
+    if (window.confirm("Are you sure you want to delete this certification?")) {
+      try {
+        // Removed /api/ here too
+        await axios.delete(`/certifications/${id}`); 
+        fetchCertifications();
+        alert("🗑️ Certification deleted!");
+      } catch (error) {
+        console.error('Error deleting certification', error);
+        alert("❌ Failed to delete certification.");
+      }
     }
   };
 
@@ -51,11 +60,12 @@ const AdminCertifications = () => {
       </form>
 
       <div className="cert-list">
+        {certifications.length === 0 && <p>No certifications added yet.</p>}
         {certifications.map(cert => (
           <div key={cert._id} style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '10px' }}>
             <h3>{cert.title}</h3>
             <p>{cert.issuer} - {cert.date}</p>
-            <button onClick={() => handleDelete(cert._id)} style={{ background: 'red', color: 'white' }}>Delete</button>
+            <button onClick={() => handleDelete(cert._id)} style={{ background: 'red', color: 'white', padding: '5px 10px', border: 'none', cursor: 'pointer', marginTop: '10px' }}>Delete</button>
           </div>
         ))}
       </div>
