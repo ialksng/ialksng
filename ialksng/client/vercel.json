@@ -8,6 +8,7 @@
       "source": "/chatflow-api/(.*)",
       "destination": "https://chatflow-zvul.onrender.com/api/$1"
     },
+
     {
       "source": "/projects/chatflow",
       "destination": "https://chatflow-zvul.onrender.com/"
@@ -16,6 +17,7 @@
       "source": "/projects/chatflow/(.*)",
       "destination": "https://chatflow-zvul.onrender.com/$1"
     },
+
     {
       "source": "/projects/smartsphere",
       "destination": "https://smartsphere-2n32.onrender.com/projects/smartsphere"
@@ -24,6 +26,16 @@
       "source": "/projects/smartsphere/(.*)",
       "destination": "https://smartsphere-2n32.onrender.com/projects/smartsphere/$1"
     },
+
+    {
+      "source": "/projects/truthlens",
+      "destination": "https://truthlens.onrender.com/"
+    },
+    {
+      "source": "/projects/truthlens/(.*)",
+      "destination": "https://truthlens.onrender.com/$1"
+    },
+
     {
       "source": "/(.*)",
       "destination": "/index.html"
