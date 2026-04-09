@@ -29,11 +29,11 @@
 
     {
       "source": "/projects/truthlens",
-      "destination": "https://truthlens.onrender.com/projects/truthlens"
+      "destination": "https://truthlens-3r4q.onrender.com/projects/truthlens"
     },
     {
       "source": "/projects/truthlens/:path*",
-      "destination": "https://truthlens.onrender.com/projects/truthlens/:path*"
+      "destination": "https://truthlens-3r4q.onrender.com/projects/truthlens/:path*"
     },
 
     {
