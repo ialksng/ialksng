@@ -1,38 +1,31 @@
 {
-  "redirects": [
-    {
-      "source": "/projects/truthlens",
-      "destination": "https://YOUR-TRUTHLENS-RENDER-URL.onrender.com",
-      "permanent": false
-    }
-  ],
   "rewrites": [
     {
-      "source": "/api/:path*",
-      "destination": "https://ialksng-backend.onrender.com/api/:path*"
+      "source": "/api/(.*)",
+      "destination": "https://ialksng-backend.onrender.com/api/$1"
     },
     {
-      "source": "/chatflow-api/:path*",
-      "destination": "https://chatflow-zvul.onrender.com/api/:path*"
+      "source": "/chatflow-api/(.*)",
+      "destination": "https://chatflow-zvul.onrender.com/api/$1"
     },
     {
       "source": "/projects/chatflow",
       "destination": "https://chatflow-zvul.onrender.com/"
     },
     {
-      "source": "/projects/chatflow/:path*",
-      "destination": "https://chatflow-zvul.onrender.com/:path*"
+      "source": "/projects/chatflow/(.*)",
+      "destination": "https://chatflow-zvul.onrender.com/$1"
     },
     {
       "source": "/projects/smartsphere",
       "destination": "https://smartsphere-2n32.onrender.com/projects/smartsphere"
     },
     {
-      "source": "/projects/smartsphere/:path*",
-      "destination": "https://smartsphere-2n32.onrender.com/projects/smartsphere/:path*"
+      "source": "/projects/smartsphere/(.*)",
+      "destination": "https://smartsphere-2n32.onrender.com/projects/smartsphere/$1"
     },
     {
-      "source": "/:path*",
+      "source": "/(.*)",
       "destination": "/index.html"
     }
   ]
