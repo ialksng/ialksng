@@ -20,20 +20,20 @@
 
     {
       "source": "/projects/smartsphere",
-      "destination": "https://smartsphere-2n32.onrender.com/"
+      "destination": "https://smartsphere-2n32.onrender.com/projects/smartsphere"
     },
     {
       "source": "/projects/smartsphere/:path*",
-      "destination": "https://smartsphere-2n32.onrender.com/:path*"
+      "destination": "https://smartsphere-2n32.onrender.com/projects/smartsphere/:path*"
     },
 
     {
       "source": "/projects/truthlens",
-      "destination": "https://truthlens-3r4q.onrender.com/"
+      "destination": "https://truthlens-3r4q.onrender.com/projects/truthlens"
     },
     {
       "source": "/projects/truthlens/:path*",
-      "destination": "https://truthlens-3r4q.onrender.com/:path*"
+      "destination": "https://truthlens-3r4q.onrender.com/projects/truthlens/:path*"
     },
 
     {
