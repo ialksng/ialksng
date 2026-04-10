@@ -20,8 +20,20 @@
 <h2 align="center">🌍 Connect with Me 🌍</h2>
 
 <p align="center">
-  <a href="https://linktr.ee/ialksng" target="_blank">
-    <img src="https://img.shields.io/badge/Linktree-39E09B?style=for-the-badge&logo=linktree&logoColor=white" alt="Linktree" />
+  <a href="https://www.ialksng.me" target="_blank" 
+     style="text-decoration: none;">
+    <span style="
+      display:inline-block;
+      padding:10px 18px;
+      font-size:14px;
+      font-weight:600;
+      color:#ffffff;
+      background:linear-gradient(135deg,#6366f1,#3b82f6);
+      border-radius:8px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.15);
+      transition:0.3s;">
+      🌐 My Website
+    </span>
   </a>
 </p>
 
@@ -61,17 +73,17 @@
 <h2 align="center">🧩 Featured Projects 🧩</h2>
 
 <p align="center">
-    <a href="https://github.com/ialksng/Shopora">
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=ialksng&repo=BuddyBOT&theme=react&border_radius=10" />
+  <a href="https://github.com/ialksng/chatflow">
+    <img width="300" src="https://github-readme-stats-sigma-five.vercel.app/api/pin/?username=ialksng&repo=chatflow&theme=tokyonight&hide_border=true" />
   </a>
-  <a href="https://github.com/ialksng/FlashURL">
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=ialksng&repo=SmartSphere&theme=react&border_radius=10" />
+  <a href="https://github.com/ialksng/smartsphere">
+    <img width="300" src="https://github-readme-stats-sigma-five.vercel.app/api/pin/?username=ialksng&repo=smartsphere&theme=tokyonight&hide_border=true" />
   </a>
-  <a href="https://github.com/ialksng/ChatFlow">
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=ialksng&repo=BuddyBOT&theme=react&border_radius=10" />
-  </a>
-  <a href="https://github.com/ialksng/NexTSTox">
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=ialksng&repo=SmartSphere&theme=react&border_radius=10" />
+</p>
+
+<p align="center">
+  <a href="https://github.com/ialksng/truthlens">
+    <img width="300" src="https://github-readme-stats-sigma-five.vercel.app/api/pin/?username=ialksng&repo=truthlens&theme=tokyonight&hide_border=true" />
   </a>
 </p>
 
@@ -81,5 +93,5 @@
 </p>
 
 <div align="center">
-  Made with ♥ by <b>Alok Singh</b> | Last updated: Jan 2026  
+  Made with ♥ by <b>Alok Singh</b> | Last updated: Apr 2026  
 </div>
