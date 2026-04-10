@@ -49,3 +49,15 @@ a {
 html {
   scroll-behavior: smooth;
 }
+
+/* --- GLOBAL MOBILE FIX --- */
+html, body {
+  overflow-x: hidden; /* Stops horizontal scrolling */
+  width: 100%;
+  position: relative;
+}
+
+#root {
+  overflow-x: hidden;
+  width: 100%;
+}

@@ -66,16 +66,19 @@
 /* --- MOBILE RESPONSIVENESS --- */
 @media screen and (max-width: 768px) {
   .testimonials {
-    padding: 60px 20px; /* Reduce horizontal padding to 20px */
+    padding: 60px 15px; /* Tighter padding for mobile */
+    width: 100%;
+    overflow: hidden;
   }
 
   .testimonials__title {
-    font-size: 28px; /* Slightly smaller title for mobile */
+    font-size: 28px;
   }
 
   .testimonials__grid {
-    /* Stack testimonials in a single column on small screens */
-    grid-template-columns: 1fr; 
+    display: flex; /* Switch to flexbox for bulletproof mobile stacking */
+    flex-direction: column;
     gap: 20px;
+    width: 100%;
   }
 }
