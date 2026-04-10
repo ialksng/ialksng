@@ -1,11 +1,10 @@
 .projects {
-  padding: 80px 20px;
+  padding: 20px 0;
   background: #020617;
   text-align: center;
   overflow-x: hidden;
 }
 
-/* TITLE */
 .projects__title {
   font-size: 36px;
   color: #38bdf8;
@@ -16,29 +15,26 @@
   margin-bottom: 50px;
 }
 
-/* 🚀 CSS GRID REPLACEMENT (Mathematically perfect centering) */
 .projects__grid {
   display: grid;
-  grid-template-columns: 1fr; /* Single strict column on mobile */
-  justify-items: center; /* Locks the cards in the dead center of the column */
+  grid-template-columns: 1fr;
+  justify-items: center;
   gap: 30px;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-/* TABLET & DESKTOP GRID */
 @media (min-width: 768px) {
   .projects__grid {
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   }
 }
 
-/* CARD */
 .project__card {
   box-sizing: border-box;
   width: 100%;
-  max-width: 340px; 
-  margin: 0; /* Let CSS Grid handle the centering */
+  max-width: 340px;
+  margin: 0;
   border-radius: 16px;
   overflow: hidden;
   background: rgba(15, 23, 42, 0.7);
@@ -46,13 +42,11 @@
   transition: 0.3s ease;
 }
 
-/* HOVER CARD */
 .project__card:hover {
   transform: translateY(-8px);
   box-shadow: 0 20px 50px rgba(56, 189, 248, 0.2);
 }
 
-/* IMAGE */
 .project__image {
   position: relative;
   height: 200px;
@@ -67,12 +61,10 @@
   transition: 0.4s ease;
 }
 
-/* ZOOM */
 .project__card:hover img {
   transform: scale(1.1);
 }
 
-/* OVERLAY */
 .project__overlay {
   position: absolute;
   inset: 0;
@@ -85,12 +77,10 @@
   transition: 0.3s ease;
 }
 
-/* SHOW OVERLAY */
 .project__card:hover .project__overlay {
   opacity: 1;
 }
 
-/* BUTTONS */
 .project__overlay a {
   padding: 8px 16px;
   border-radius: 8px;
@@ -100,7 +90,6 @@
   font-size: 14px;
 }
 
-/* CONTENT */
 .project__content {
   padding: 20px;
   text-align: left;
