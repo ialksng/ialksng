@@ -21,7 +21,10 @@
 
 <p align="center">
   <a href="https://www.ialksng.me" target="_blank">
-    <img src="https://img.shields.io/badge/🌐%20Enter%20My%20Portfolio-ff4d4d?style=for-the-badge&logo=vercel&logoColor=white&labelColor=000000" />
+    <img src="https://img.shields.io/badge/🚀%20Portfolio-0f172a?style=for-the-badge&logo=vercel&logoColor=white" />
+  </a>
+  <a href="https://github.com/ialksng" target="_blank">
+    <img src="https://img.shields.io/badge/💻%20Projects-111827?style=for-the-badge&logo=github&logoColor=white" />
   </a>
 </p>
 
