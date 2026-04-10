@@ -73,3 +73,28 @@
 
   cursor: pointer;
 }
+
+/* --- MOBILE RESPONSIVENESS --- */
+@media screen and (max-width: 768px) {
+  .services {
+    padding: 60px 20px; /* Reduces horizontal padding */
+  }
+
+  .services__title {
+    font-size: 28px;
+  }
+
+  .services__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    place-items: center; /* Forces perfect centering */
+    gap: 30px;
+  }
+
+  .service__card {
+    width: 100%;
+    max-width: 350px; /* Prevents the card from stretching out of bounds */
+    margin: 0;
+    box-sizing: border-box;
+  }
+}

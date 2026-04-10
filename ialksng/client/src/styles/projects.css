@@ -116,8 +116,7 @@
 /* --- MOBILE RESPONSIVENESS --- */
 @media screen and (max-width: 768px) {
   .projects {
-    padding: 60px 20px; 
-    /* Remove width: 100% to prevent padding overflow */
+    padding: 60px 20px; /* Reduces horizontal padding */
   }
 
   .projects__title {
@@ -125,15 +124,16 @@
   }
 
   .projects__grid {
-    display: grid; 
-    grid-template-columns: 1fr; 
-    place-items: center; /* 👈 This is the magic bullet for perfect centering */
+    display: grid;
+    grid-template-columns: 1fr;
+    place-items: center; /* Forces perfect centering */
     gap: 30px;
   }
 
   .project__card {
-    width: 100%; 
-    max-width: 350px; /* Constrains the width nicely */
-    margin: 0; /* Strips out any accidental margin shifts */
+    width: 100%;
+    max-width: 350px; /* Prevents the card from stretching out of bounds */
+    margin: 0;
+    box-sizing: border-box;
   }
 }
