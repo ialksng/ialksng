@@ -1,7 +1,9 @@
 .projects {
-  padding: 80px 20px;
+  padding: 80px 0; /* Removed side padding, letting the cards handle their own spacing */
   background: #020617;
   text-align: center;
+  width: 100%;
+  overflow-x: hidden; /* Prevents any accidental horizontal scroll */
 }
 
 /* TITLE */
@@ -15,17 +17,18 @@
   margin-bottom: 50px;
 }
 
-/* GRID: Mobile-First Strict Centering */
+/* GRID: Strict Mobile-First */
 .projects__grid {
   display: flex;
-  flex-direction: column; /* Stacks vertically on phones */
-  align-items: center;    /* Forces absolute center on phones */
+  flex-direction: column;
+  align-items: center;
   gap: 30px;
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-/* GRID: Tablet and Desktop */
+/* TABLET & DESKTOP GRID */
 @media (min-width: 768px) {
   .projects__grid {
     flex-direction: row;
@@ -34,11 +37,12 @@
   }
 }
 
-/* CARD */
+/* CARD - NUCLEAR CENTERING FIX */
 .project__card {
-  width: 100%;
-  max-width: 340px; 
-  margin: 0 auto; /* Failsafe centering */
+  box-sizing: border-box !important;
+  width: 90vw !important; /* Forces it to always be slightly smaller than the screen */
+  max-width: 340px !important; /* Caps the size on bigger screens */
+  margin: 0 auto !important; /* Absolutely forces it to the center */
   border-radius: 16px;
   overflow: hidden;
   background: rgba(15, 23, 42, 0.7);
@@ -57,6 +61,7 @@
   position: relative;
   height: 200px;
   overflow: hidden;
+  width: 100%;
 }
 
 .project__image img {
