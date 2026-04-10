@@ -1,6 +1,5 @@
 .projects {
-  box-sizing: border-box;
-  padding: 80px 20px; /* Reduced side padding so cards have room on mobile */
+  padding: 80px 20px;
   background: #020617;
   text-align: center;
 }
@@ -16,22 +15,30 @@
   margin-bottom: 50px;
 }
 
-/* GRID (Using Flexbox for absolute centering on all devices) */
+/* GRID: Mobile-First Strict Centering */
 .projects__grid {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center; /* Absolutely centers the cards */
+  flex-direction: column; /* Stacks vertically on phones */
+  align-items: center;    /* Forces absolute center on phones */
   gap: 30px;
   max-width: 1200px;
-  margin: 0 auto; /* Centers the container block itself */
+  margin: 0 auto;
+}
+
+/* GRID: Tablet and Desktop */
+@media (min-width: 768px) {
+  .projects__grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 }
 
 /* CARD */
 .project__card {
-  box-sizing: border-box;
   width: 100%;
-  max-width: 340px; /* Stops cards from getting too wide or too squished */
-  margin: 0 auto;
+  max-width: 340px; 
+  margin: 0 auto; /* Failsafe centering */
   border-radius: 16px;
   overflow: hidden;
   background: rgba(15, 23, 42, 0.7);
@@ -110,12 +117,4 @@
 .project__content span {
   font-size: 12px;
   color: #38bdf8;
-}
-
-/* MOBILE RESPONSIVENESS */
-@media (max-width: 768px) {
-  .projects__grid {
-    flex-direction: column;
-    align-items: center;
-  }
 }
