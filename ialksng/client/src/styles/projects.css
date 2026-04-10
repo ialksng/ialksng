@@ -112,3 +112,20 @@
   font-size: 12px;
   color: #38bdf8;
 }
+
+/* --- MOBILE RESPONSIVENESS --- */
+@media screen and (max-width: 768px) {
+  .projects {
+    padding: 60px 20px; /* Reduce horizontal padding to 20px */
+  }
+
+  .projects__title {
+    font-size: 28px; /* Slightly smaller title for mobile */
+  }
+
+  .projects__grid {
+    /* Stack cards in a single column on small screens */
+    grid-template-columns: 1fr; 
+    gap: 20px;
+  }
+}

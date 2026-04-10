@@ -62,3 +62,20 @@
   font-size: 13px;
   color: #38bdf8;
 }
+
+/* --- MOBILE RESPONSIVENESS --- */
+@media screen and (max-width: 768px) {
+  .testimonials {
+    padding: 60px 20px; /* Reduce horizontal padding to 20px */
+  }
+
+  .testimonials__title {
+    font-size: 28px; /* Slightly smaller title for mobile */
+  }
+
+  .testimonials__grid {
+    /* Stack testimonials in a single column on small screens */
+    grid-template-columns: 1fr; 
+    gap: 20px;
+  }
+}
