@@ -20,8 +20,20 @@
 <h2 align="center">🌍 Connect with Me 🌍</h2>
 
 <p align="center">
-  <a href="https://www.ialksng.me" target="_blank">
-    <img src="https://img.shields.io/badge/My%20Website-39E09B?style=for-the-badge&logo=google-chrome&logoColor=white" alt="My Website" />
+  <a href="https://www.ialksng.me" target="_blank" 
+     style="text-decoration:none;">
+    <span style="
+      display:inline-block;
+      padding:10px 18px;
+      font-size:14px;
+      font-weight:600;
+      color:#ffffff;
+      background:linear-gradient(135deg,#6366f1,#3b82f6);
+      border-radius:8px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.15);
+      transition:0.3s;">
+      🌐 My Website
+    </span>
   </a>
 </p>
 
@@ -61,14 +73,14 @@
 <h2 align="center">🧩 Featured Projects 🧩</h2>
 
 <p align="center">
-    <a href="https://github.com/ialksng/chatflow">
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=ialksng&repo=chatflow&theme=react&border_radius=10" />
+  <a href="https://github.com/ialksng/chatflow">
+    <img src="https://github-readme-stats.vercel.app/api/pin/?username=ialksng&repo=chatflow&theme=react&border_radius=12" />
   </a>
   <a href="https://github.com/ialksng/smartsphere">
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=ialksng&repo=smartsphere&theme=react&border_radius=10" />
+    <img src="https://github-readme-stats.vercel.app/api/pin/?username=ialksng&repo=smartsphere&theme=react&border_radius=12" />
   </a>
   <a href="https://github.com/ialksng/truthlens">
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=ialksng&repo=truthlens&theme=react&border_radius=10" />
+    <img src="https://github-readme-stats.vercel.app/api/pin/?username=ialksng&repo=truthlens&theme=react&border_radius=12" />
   </a>
 </p>
 
