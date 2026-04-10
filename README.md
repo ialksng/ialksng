@@ -21,7 +21,7 @@
 
 <p align="center">
   <a href="https://www.ialksng.me" target="_blank">
-    <img src="https://readme-typing-svg.herokuapp.com/?lines=🚀+My+Projects&center=true&width=220&height=40&color=6366F1&vCenter=true&pause=400&repeat=true" />
+    <img src="https://img.shields.io/badge/My%20Projects-ff4d4d?style=for-the-badge&logo=github&logoColor=white" />
   </a>
 </p>
 
