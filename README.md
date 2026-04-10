@@ -21,7 +21,7 @@
 
 <p align="center">
   <a href="https://www.ialksng.me" target="_blank">
-    <img src="https://img.shields.io/badge/ialksng.me-000000?style=for-the-badge&logo=google-chrome&logoColor=white" />
+    <img src="https://img.shields.io/badge/My Website-000000?style=for-the-badge&logo=google-chrome&logoColor=white" />
   </a>
 </p>
 
