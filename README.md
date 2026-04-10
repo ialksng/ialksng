@@ -21,7 +21,7 @@
 
 <p align="center">
   <a href="https://www.ialksng.me" target="_blank">
-    <img src="https://img.shields.io/badge/My%20Projects-ff4d4d?style=for-the-badge&logo=github&logoColor=white" />
+    <img src="https://img.shields.io/badge/My%20Website-ff4d4d?style=for-the-badge" />
   </a>
 </p>
 
