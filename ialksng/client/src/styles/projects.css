@@ -1,4 +1,5 @@
 .projects {
+  box-sizing: border-box;
   padding: 80px 20px; /* Reduced side padding so cards have room on mobile */
   background: #020617;
   text-align: center;
@@ -27,8 +28,10 @@
 
 /* CARD */
 .project__card {
+  box-sizing: border-box;
   width: 100%;
   max-width: 340px; /* Stops cards from getting too wide or too squished */
+  margin: 0 auto;
   border-radius: 16px;
   overflow: hidden;
   background: rgba(15, 23, 42, 0.7);
@@ -107,4 +110,12 @@
 .project__content span {
   font-size: 12px;
   color: #38bdf8;
+}
+
+/* MOBILE RESPONSIVENESS */
+@media (max-width: 768px) {
+  .projects__grid {
+    flex-direction: column;
+    align-items: center;
+  }
 }

@@ -1,4 +1,5 @@
 .services {
+  box-sizing: border-box;
   padding: 80px 20px; /* Reduced side padding so cards have room on mobile */
   background: #020617;
   text-align: center;
@@ -27,8 +28,10 @@
 
 /* CARD */
 .service__card {
+  box-sizing: border-box;
   width: 100%;
   max-width: 340px; /* Stops cards from getting too wide or too squished */
+  margin: 0 auto;
   padding: 30px 25px;
   border-radius: 16px;
 
@@ -74,4 +77,12 @@
   color: black;
 
   cursor: pointer;
+}
+
+/* MOBILE RESPONSIVENESS */
+@media (max-width: 768px) {
+  .services__grid {
+    flex-direction: column;
+    align-items: center;
+  }
 }
