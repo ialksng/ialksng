@@ -21,7 +21,7 @@
 
 <p align="center">
   <a href="https://www.ialksng.me" target="_blank">
-    <img src="https://readme-typing-svg.herokuapp.com/?lines=✨+My+Projects+✨&center=true&width=200&height=40&color=00C6FF&vCenter=true&pause=500&repeat=true" />
+    <img src="https://readme-typing-svg.herokuapp.com/?lines=🚀+My+Projects&center=true&width=220&height=40&color=6366F1&vCenter=true&pause=400&repeat=true" />
   </a>
 </p>
 
