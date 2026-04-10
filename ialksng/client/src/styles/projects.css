@@ -116,9 +116,8 @@
 /* --- MOBILE RESPONSIVENESS --- */
 @media screen and (max-width: 768px) {
   .projects {
-    padding: 60px 15px; /* Tighter padding for mobile */
-    width: 100%;
-    overflow: hidden;
+    padding: 60px 20px; 
+    /* Remove width: 100% to prevent padding overflow */
   }
 
   .projects__title {
@@ -126,9 +125,15 @@
   }
 
   .projects__grid {
-    display: flex; /* Switch to flexbox for bulletproof mobile stacking */
-    flex-direction: column;
-    gap: 20px;
-    width: 100%;
+    display: grid; 
+    grid-template-columns: 1fr; 
+    place-items: center; /* 👈 This is the magic bullet for perfect centering */
+    gap: 30px;
+  }
+
+  .project__card {
+    width: 100%; 
+    max-width: 350px; /* Constrains the width nicely */
+    margin: 0; /* Strips out any accidental margin shifts */
   }
 }
