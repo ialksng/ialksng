@@ -21,7 +21,7 @@
 
 <p align="center">
   <a href="https://www.ialksng.me" target="_blank" 
-     style="text-decoration:none;">
+     style="text-decoration: none;">
     <span style="
       display:inline-block;
       padding:10px 18px;
@@ -74,13 +74,16 @@
 
 <p align="center">
   <a href="https://github.com/ialksng/chatflow">
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=ialksng&repo=chatflow&theme=react&border_radius=12" />
+    <img width="300" src="https://github-readme-stats.vercel.app/api/pin/?username=ialksng&repo=chatflow&theme=tokyonight&border_radius=12&hide_border=true&cache_seconds=1800" />
   </a>
   <a href="https://github.com/ialksng/smartsphere">
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=ialksng&repo=smartsphere&theme=react&border_radius=12" />
+    <img width="300" src="https://github-readme-stats.vercel.app/api/pin/?username=ialksng&repo=smartsphere&theme=tokyonight&border_radius=12&hide_border=true&cache_seconds=1800" />
   </a>
+</p>
+
+<p align="center">
   <a href="https://github.com/ialksng/truthlens">
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=ialksng&repo=truthlens&theme=react&border_radius=12" />
+    <img width="300" src="https://github-readme-stats.vercel.app/api/pin/?username=ialksng&repo=truthlens&theme=tokyonight&border_radius=12&hide_border=true&cache_seconds=1800" />
   </a>
 </p>
 
