@@ -74,16 +74,16 @@
 
 <p align="center">
   <a href="https://github.com/ialksng/chatflow">
-    <img width="300" src="https://github-readme-stats.vercel.app/api/pin/?username=ialksng&repo=chatflow&theme=tokyonight&border_radius=12&hide_border=true&cache_seconds=1800" />
+    <img width="300" src="https://github-readme-stats-sigma-five.vercel.app/api/pin/?username=ialksng&repo=chatflow&theme=tokyonight&hide_border=true" />
   </a>
   <a href="https://github.com/ialksng/smartsphere">
-    <img width="300" src="https://github-readme-stats.vercel.app/api/pin/?username=ialksng&repo=smartsphere&theme=tokyonight&border_radius=12&hide_border=true&cache_seconds=1800" />
+    <img width="300" src="https://github-readme-stats-sigma-five.vercel.app/api/pin/?username=ialksng&repo=smartsphere&theme=tokyonight&hide_border=true" />
   </a>
 </p>
 
 <p align="center">
   <a href="https://github.com/ialksng/truthlens">
-    <img width="300" src="https://github-readme-stats.vercel.app/api/pin/?username=ialksng&repo=truthlens&theme=tokyonight&border_radius=12&hide_border=true&cache_seconds=1800" />
+    <img width="300" src="https://github-readme-stats-sigma-five.vercel.app/api/pin/?username=ialksng&repo=truthlens&theme=tokyonight&hide_border=true" />
   </a>
 </p>
 
