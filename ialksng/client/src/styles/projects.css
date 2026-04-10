@@ -1,9 +1,8 @@
 .projects {
-  padding: 80px 0; /* Removed side padding, letting the cards handle their own spacing */
+  padding: 80px 20px;
   background: #020617;
   text-align: center;
-  width: 100%;
-  overflow-x: hidden; /* Prevents any accidental horizontal scroll */
+  overflow-x: hidden;
 }
 
 /* TITLE */
@@ -17,13 +16,12 @@
   margin-bottom: 50px;
 }
 
-/* GRID: Strict Mobile-First */
+/* 🚀 CSS GRID REPLACEMENT (Mathematically perfect centering) */
 .projects__grid {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr; /* Single strict column on mobile */
+  justify-items: center; /* Locks the cards in the dead center of the column */
   gap: 30px;
-  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -31,18 +29,16 @@
 /* TABLET & DESKTOP GRID */
 @media (min-width: 768px) {
   .projects__grid {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   }
 }
 
-/* CARD - NUCLEAR CENTERING FIX */
+/* CARD */
 .project__card {
-  box-sizing: border-box !important;
-  width: 90vw !important; /* Forces it to always be slightly smaller than the screen */
-  max-width: 340px !important; /* Caps the size on bigger screens */
-  margin: 0 auto !important; /* Absolutely forces it to the center */
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 340px; 
+  margin: 0; /* Let CSS Grid handle the centering */
   border-radius: 16px;
   overflow: hidden;
   background: rgba(15, 23, 42, 0.7);
