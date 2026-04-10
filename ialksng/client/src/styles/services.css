@@ -74,27 +74,34 @@
   cursor: pointer;
 }
 
-/* --- MOBILE RESPONSIVENESS --- */
+/* --- MOBILE RESPONSIVENESS (NUCLEAR CENTERING FIX) --- */
 @media screen and (max-width: 768px) {
   .services {
-    padding: 60px 20px; /* Reduces horizontal padding */
+    padding: 60px 10px; /* Minimal padding */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Force center all content in section */
+    overflow: hidden;
   }
 
-  .services__title {
-    font-size: 28px;
+  .services__title, .services__subtitle {
+    text-align: center;
+    width: 100%;
   }
 
   .services__grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    place-items: center; /* Forces perfect centering */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
     gap: 30px;
   }
 
   .service__card {
-    width: 100%;
-    max-width: 350px; /* Prevents the card from stretching out of bounds */
-    margin: 0;
+    width: 90vw !important; /* Force width relative to the physical screen */
+    max-width: 350px !important; /* Prevent it from getting too big */
+    margin: 0 auto !important; /* Absolute auto-margin centering */
     box-sizing: border-box;
   }
 }
