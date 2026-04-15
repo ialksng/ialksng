@@ -1,109 +1,176 @@
-/* 🌌 Full page center */
+/* 🌌 Page */
 .auth__container {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #0f172a, #020617);
+  background: radial-gradient(circle at top, #0f172a, #020617);
+  padding: 20px;
 }
 
 /* 🧾 Card */
 .auth__card {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(12px);
-  padding: 2rem;
-  border-radius: 16px;
-  width: 350px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 380px;
+  padding: 32px 28px;
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  backdrop-filter: blur(18px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+
   text-align: center;
 }
 
 /* 🏷 Title */
 .auth__card h2 {
+  font-size: 22px;
+  font-weight: 600;
   color: #fff;
-  margin-bottom: 1.5rem;
+  margin-bottom: 6px;
+}
+
+/* 📝 Subtitle */
+.auth__subtitle {
+  font-size: 13px;
+  color: #94a3b8;
+  margin-bottom: 22px;
 }
 
 /* 🧾 Inputs */
 .auth__card input {
   width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 8px;
-  border: none;
-  outline: none;
-  background: #1e293b;
+  padding: 12px;
+  margin: 6px 0;
+
+  border-radius: 10px;
+  border: 1px solid #1e293b;
+
+  background: #020617;
   color: #fff;
+
+  font-size: 14px;
+  transition: all 0.2s ease;
 }
 
 /* ✨ Focus */
 .auth__card input:focus {
   border: 1px solid #38bdf8;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
 }
 
-/* 🔘 Button */
+/* 🔘 Primary Button */
 .auth__card button {
   width: 100%;
-  padding: 10px;
-  margin-top: 1rem;
+  padding: 12px;
+  margin-top: 12px;
+
+  border-radius: 10px;
   border: none;
-  border-radius: 8px;
-  background: #38bdf8;
+
+  background: linear-gradient(135deg, #38bdf8, #0ea5e9);
   color: #000;
-  font-weight: bold;
+  font-weight: 600;
+
   cursor: pointer;
-  transition: 0.3s;
+  transition: all 0.2s ease;
 }
 
 /* 🔥 Hover */
 .auth__card button:hover {
-  background: #0ea5e9;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4);
+}
+
+/* ❌ Disabled */
+.auth__card button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* 🔗 Links */
 .auth__link {
-  margin-top: 1rem;
+  margin-top: 14px;
+  font-size: 13px;
   color: #94a3b8;
-  font-size: 14px;
 }
 
-.auth__link span {
+.auth__link a {
   color: #38bdf8;
-  cursor: pointer;
+  text-decoration: none;
 }
 
+/* ❌ Error */
+.auth__error {
+  color: #ef4444;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+/* ➖ Divider */
 .auth__divider {
-  margin: 20px 0;
-  text-align: center;
+  margin: 18px 0;
   position: relative;
-  color: #aaa;
+  font-size: 12px;
+  color: #64748b;
 }
 
 .auth__divider::before,
 .auth__divider::after {
   content: "";
-  height: 1px;
-  width: 40%;
-  background: #2a344a;
   position: absolute;
   top: 50%;
+  width: 42%;
+  height: 1px;
+  background: #1e293b;
 }
 
-.auth__divider::before {
-  left: 0;
-}
-
-.auth__divider::after {
-  right: 0;
-}
+.auth__divider::before { left: 0; }
+.auth__divider::after { right: 0; }
 
 .auth__divider span {
+  background: #020617;
   padding: 0 10px;
-  background: #111a2b;
 }
 
-.google-btn {
+/* 🔐 OAuth */
+.auth__oauth {
   display: flex;
-  justify-content: center;
-  margin-bottom: 15px;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* 🍎 Apple Button */
+.apple-btn {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+
+  background: #000;
+  color: #fff;
+  border: 1px solid #222;
+
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.apple-btn:hover {
+  background: #111;
+  border-color: #444;
+}
+
+/* 📄 Legal */
+.auth__legal-text {
+  font-size: 11px;
+  color: #6b7280;
+  margin: 14px 0;
+  line-height: 1.5;
+}
+
+.auth__legal-text a {
+  color: #38bdf8;
+  text-decoration: none;
 }

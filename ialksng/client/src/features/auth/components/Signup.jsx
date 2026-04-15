@@ -2,8 +2,8 @@ import React, { useState, useContext } from "react";
 import { AuthContext } from "../AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
-import axios from "../../../shared/utils/axios";
-import "../../../shared/styles/auth.css";
+import axios from "../../../utils/axios";
+import "../../../styles/auth.css";
 
 const Signup = () => {
   const { loginSuccess } = useContext(AuthContext);

@@ -10,8 +10,9 @@ import Loader from "./components/Loader"; // Using your existing Loader componen
 
 // 🚀 Lazy Loaded Pages (Code Splitting)
 const Home = lazy(() => import("./pages/Home"));
-const Login = lazy(() => import("./pages/Login"));
-const Signup = lazy(() => import("./pages/Signup"));
+const Login = lazy(() => import("./features/auth/components/pages/Login"));
+const Signup = lazy(() => import("./features/auth/components/pages/Signup"));
+const ForgotPassword = lazy(() => import("./features/auth/components/ForgotPassword"));
 const Checkout = lazy(() => import("./pages/Checkout"));
 const MyPurchases = lazy(() => import("./pages/MyPurchases"));
 const ProductContent = lazy(() => import("./pages/ProductContent"));
@@ -46,6 +47,7 @@ function App() {
             <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
             <Route path="/login" element={<PageWrapper><Login /></PageWrapper>} />
             <Route path="/signup" element={<PageWrapper><Signup /></PageWrapper>} />
+            <Route path="/forgot-password" element={<PageWrapper><ForgotPassword /></PageWrapper>} />
             <Route path="/checkout/:id" element={<PageWrapper><Checkout /></PageWrapper>} />
             <Route path="/my-purchases" element={<PageWrapper><MyPurchases /></PageWrapper>} />
             <Route path="/content/:id" element={<PageWrapper><ProductContent /></PageWrapper>} />
