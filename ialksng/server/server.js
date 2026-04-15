@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import chatRoutes from './routes/chatRoutes.js';
 
-import authRoutes from "./routes/authRoutes.js";
+import authRoutes from "./modules/auth/auth.routes.js";
 import productRoutes from "./routes/productRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
