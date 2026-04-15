@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
 import axios from "../utils/axios";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../features/auth/AuthContext";
 import { FaDownload, FaEye, FaHeart, FaRegHeart, FaComment } from "react-icons/fa";
 import "../styles/viewproduct.css";
 import Loader from "../components/Loader";

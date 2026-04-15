@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { CartContext } from "../context/CartContext";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../features/auth/AuthContext";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import "../styles/shop.css";

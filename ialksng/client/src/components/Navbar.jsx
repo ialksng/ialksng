@@ -1,7 +1,7 @@
 import "../styles/navbar.css";
 import { FaShoppingCart, FaUser, FaBars, FaTimes } from "react-icons/fa";
 import { useContext, useState, useRef, useEffect } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../features/auth/AuthContext";
 import { CartContext } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";

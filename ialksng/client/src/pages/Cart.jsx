@@ -3,7 +3,7 @@ import { CartContext } from "../context/CartContext";
 import "../styles/cart.css";
 import { useNavigate } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../features/auth/AuthContext";
 
 function Cart() {
   const { cart, setCart } = useContext(CartContext);
