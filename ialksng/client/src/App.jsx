@@ -10,8 +10,8 @@ import Loader from "./components/Loader"; // Using your existing Loader componen
 
 // 🚀 Lazy Loaded Pages (Code Splitting)
 const Home = lazy(() => import("./pages/Home"));
-const Login = lazy(() => import("./features/auth/components/pages/Login"));
-const Signup = lazy(() => import("./features/auth/components/pages/Signup"));
+const Login = lazy(() => import("./features/auth/components/Login"));
+const Signup = lazy(() => import("./features/auth/components/Signup"));
 const ForgotPassword = lazy(() => import("./features/auth/components/ForgotPassword"));
 const Checkout = lazy(() => import("./pages/Checkout"));
 const MyPurchases = lazy(() => import("./pages/MyPurchases"));
