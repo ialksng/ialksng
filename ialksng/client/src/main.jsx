@@ -7,7 +7,6 @@ import { AuthProvider } from "./features/auth/AuthContext.jsx";
 import { CartProvider } from "./context/CartContext";
 import { Toaster } from "react-hot-toast";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import Chatbot from './components/Chatbot';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -28,7 +27,6 @@ createRoot(document.getElementById('root')).render(
             />
 
             <App />
-            <Chatbot />
 
           </CartProvider>
         </AuthProvider>
