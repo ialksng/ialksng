@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
-import axios from "../../utils/axios"; 
+import axios from "../../utils/axios";
 
 export const AuthContext = createContext();
 
@@ -19,29 +19,36 @@ export const AuthProvider = ({ children }) => {
     const initAuth = async () => {
       try {
         const token = localStorage.getItem("token");
-        if (!token) return setLoading(false);
+        if (!token) {
+          setLoading(false);
+          return;
+        }
 
         setAuthToken(token);
-        const res = await axios.get("/auth/me"); 
-        if (!res?.data?.user) throw new Error("Invalid user data");
 
-        setUser({ ...res.data.user, token });
+        const res = await axios.get("/auth/me");
+
+        if (!res?.data?.user) throw new Error("Invalid user");
+
+        setUser(res.data.user);
       } catch (err) {
-        logoutUser(); 
+        logoutUser();
       } finally {
         setLoading(false);
       }
     };
+
     initAuth();
   }, []);
 
   const loginSuccess = (data) => {
-    const { token, user: userBase } = data;
-    if (!userBase || !token) return;
+    const { token, user } = data;
 
-    setAuthToken(token);
+    if (!token || !user) return;
+
     localStorage.setItem("token", token);
-    setUser({ ...userBase, token });
+    setAuthToken(token);
+    setUser(user);
   };
 
   const logoutUser = () => {
