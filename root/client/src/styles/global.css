@@ -1,3 +1,21 @@
+:root {
+  --nav-height: 70px;
+  --container-max-width: 1200px;
+  --bg-primary: #0f172a;      
+  --bg-secondary: #1e293b;     
+  --bg-card: #1e293b;         
+  
+  --text-primary: #f8fafc;     
+  --text-secondary: #cbd5e1; 
+  --text-muted: #94a3b8;      
+  
+  --accent-primary: #38bdf8;   
+  --accent-hover: #0284c7;     
+  
+  --border-color: #334155;    
+  --danger-color: #ef4444;     
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -6,8 +24,8 @@
 
 body {
   font-family: 'Poppins', sans-serif;
-  background: #0f172a;
-  color: #e2e8f0;
+  background: var(--bg-primary); 
+  color: var(--text-primary);   
   line-height: 1.6;
 }
 
@@ -17,7 +35,7 @@ a {
 }
 
 .container {
-  max-width: 1200px;
+  max-width: var(--container-max-width); 
   margin: auto;
   padding: 0 20px;
 }
@@ -31,13 +49,13 @@ a {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #38bdf8;
+  background: var(--accent-primary);
   border-radius: 10px;
 }
 
 ::selection {
-  background: #38bdf8;
-  color: black;
+  background: var(--accent-primary);
+  color: #0f172a;
 }
 
 html {
