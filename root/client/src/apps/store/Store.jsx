@@ -6,7 +6,7 @@ import { CartContext } from "../../features/cart/CartContext";
 import { AuthContext } from "../../features/auth/AuthContext";
 import Loader from "../../core/components/Loader";
 
-import "./Store.module.css";
+import "./Store.css";
 
 function Shop() {
   const [products, setProducts] = useState([]);

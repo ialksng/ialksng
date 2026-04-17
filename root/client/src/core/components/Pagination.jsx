@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
-import './Pagination.module.css';
+import './Pagination.css';
 
 
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {

@@ -1,7 +1,7 @@
 import { FaCode } from "react-icons/fa"
 import { SiLeetcode, SiCodechef, SiKaggle } from "react-icons/si"
 
-import "./Profiles.module.css"
+import "./Profiles.css"
 
 function Profiles() {
   const profiles = [

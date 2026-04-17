@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import axios from "../../../core/utils/axios";
 
-import "./AdminProducts.module.css";
+import "./AdminProducts.css";
 
 function AdminProducts() {
   const [products, setProducts] = useState([]);

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaGithub, FaLinkedin, FaTwitter, FaEnvelope, FaInstagram, FaYoutube } from 'react-icons/fa';
 
-import './Footer.module.css';
+import './Footer.css';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();

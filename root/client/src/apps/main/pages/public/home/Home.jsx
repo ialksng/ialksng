@@ -11,7 +11,7 @@ import Updates from './components/Updates';
 import FinalCTA from './components/FinalCTA';
 import FunExtras from './components/FunExtras';
 
-import './Home.module.css';
+import './Home.css';
 
 function Home() {
   return (

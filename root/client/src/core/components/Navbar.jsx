@@ -7,7 +7,7 @@ import { CartContext } from "../../features/cart/CartContext";
 
 import logo from "../../core/assets/logo.png";
 
-import "./Navbar.module.css";
+import "./Navbar.css";
 
 function Navbar() {
   const { user, logoutUser } = useContext(AuthContext);
