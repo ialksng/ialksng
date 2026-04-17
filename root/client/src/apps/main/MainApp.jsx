@@ -6,6 +6,7 @@ import AdminRoute from "../admin/AdminRoute.jsx";
 import Chatbot from "../ai/Chatbot.jsx";
 import Loader from "../../core/components/Loader.jsx";
 import MainLayout from "../../core/layouts/MainLayout.jsx";
+import CookieConsent from "../../core/components/CookieConsent.jsx"
 
 const Home = lazy(() => import("./pages/public/home/Home"));
 const About = lazy(() => import("./pages/public/about/About"));
@@ -97,6 +98,7 @@ function MainApp() {
       </Suspense>
 
       <Chatbot />
+      <CookieConsent />
     </>
   );
 }
