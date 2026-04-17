@@ -8,7 +8,7 @@ import axios from "../../core/utils/axios";
 import Loader from "../../core/components/Loader";
 import NotionRenderer from "../lms/NotionRenderer";
 
-import "./BlogDetail.module.css";
+import "./BlogDetail.css";
 
 function BlogDetail() {
   const { id } = useParams();

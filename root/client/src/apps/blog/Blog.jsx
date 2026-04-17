@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import axios from "../../core/utils/axios"; 
 import Loader from "../../core/components/Loader";
 
-import "./Blog.module.css"; 
+import "./Blog.css"; 
 
 function Blog() {
   const [blogs, setBlogs] = useState([]);
