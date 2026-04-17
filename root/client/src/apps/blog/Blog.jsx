@@ -1,126 +1,139 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
-
-import axios from "../../core/utils/axios"; 
+import axios from "../../core/utils/axios";
 import Loader from "../../core/components/Loader";
+import Pagination from "../../core/components/Pagination";
+import "./Blog.css";
 
-import "./Blog.css"; 
-
-function Blog() {
+const Blog = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const [email, setEmail] = useState("");
+  const [nlMessage, setNlMessage] = useState("");
+  const [nlLoading, setNlLoading] = useState(false);
+
   useEffect(() => {
     const fetchBlogs = async () => {
+      setLoading(true);
       try {
-        const res = await axios.get("/blogs");
-        const data = res?.data;
-
-        const blogArray =
-          Array.isArray(data)
-            ? data
-            : Array.isArray(data?.blogs)
-            ? data.blogs
-            : [];
-
-        setBlogs(blogArray);
-      } catch (err) {
-        console.error("Error fetching blogs:", err);
-        setBlogs([]);
+        const res = await axios.get(`/blogs?page=${currentPage}&limit=6`);
+        setBlogs(res.data.blogs);
+        setTotalPages(res.data.totalPages);
+      } catch (error) {
+        console.error("Error fetching blogs", error);
       } finally {
         setLoading(false);
       }
     };
-
     fetchBlogs();
-  }, []);
+  }, [currentPage]);
 
-  if (loading) {
-    return <Loader />;
-  }
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    if (!email) return;
+    setNlLoading(true);
+    setNlMessage("");
+    try {
+      const res = await axios.post("/newsletter/subscribe", { email });
+      setNlMessage({ type: "success", text: res.data.msg });
+      setEmail("");
+    } catch (err) {
+      setNlMessage({
+        type: "error",
+        text: err.response?.data?.msg || "Subscription failed.",
+      });
+    } finally {
+      setNlLoading(false);
+    }
+  };
 
   return (
-    <section className="blog" id="blog">
-      <h2 style={{ textAlign: "center", marginBottom: "40px", fontSize: "2rem" }}>Latest Articles</h2>
+    <div className="blog-page container">
+      <section className="newsletter-banner">
+        <div className="newsletter-content">
+          <h2>Join the Newsletter</h2>
+          <p>
+            Get the latest articles on Full-Stack MERN, AI integrations, and tech tutorials delivered straight to your inbox.
+          </p>
 
-      {blogs.length > 0 ? (
-        <div className="blog__grid">
-          {blogs.map((blog, index) => {
-            
-            // ✅ Clean up BOTH HTML tags (old posts) and Markdown symbols (new posts)
-            let textContent = "";
-            if (typeof blog?.content === "string") {
-              textContent = blog.content
-                .replace(/<[^>]+>/g, "") // Remove HTML tags
-                .replace(/#{1,6}\s/g, "") // Remove Markdown headings (##)
-                .replace(/[*_~`>]/g, "") // Remove Markdown bold, italic, code, quotes
-                .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1") // Convert Markdown links to just text
-                .trim();
-            }
+          <form onSubmit={handleSubscribe} className="newsletter-form">
+            <input
+              type="email"
+              placeholder="Enter your email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <button type="submit" disabled={nlLoading}>
+              {nlLoading ? "Subscribing..." : "Subscribe"}
+            </button>
+          </form>
 
-            // ✅ Format the database timestamp into a readable date
-            const formattedDate = blog.createdAt 
-              ? new Date(blog.createdAt).toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric"
-                })
-              : "Recently";
-
-            return (
-              <motion.div
-                key={blog._id || Math.random()}
-                className="blog__card"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                {/* 🖼 IMAGE (Fallback if missing) */}
-                <img
-                  src={blog.image || "https://via.placeholder.com/400x250?text=Blog+Post"}
-                  alt={blog?.title || "Blog Post"}
-                />
-
-                <div className="blog__card-content">
-                  
-                  {/* ✅ Meta container for Category and Date */}
-                  <div className="blog__card-meta">
-                    {blog.category ? (
-                      <span className="blog__category-badge">{blog.category}</span>
-                    ) : (
-                      <span></span>
-                    )}
-                    <span className="blog__date">{formattedDate}</span>
-                  </div>
-                  
-                  <h3 style={{ marginTop: "8px", marginBottom: "12px", color: "white" }}>
-                    {blog?.title || "Untitled Post"}
-                  </h3>
-
-                  <p style={{ marginBottom: "15px", lineHeight: "1.5" }}>
-                    {textContent
-                      ? textContent.substring(0, 100) + "..."
-                      : "No content available"}
-                  </p>
-
-                  {/* ✅ safe link */}
-                  {blog?._id && (
-                    <Link to={`/blog/${blog._id}`}>
-                      Read More →
-                    </Link>
-                  )}
-                </div>
-              </motion.div>
-            );
-          })}
+          {nlMessage && (
+            <p className={`newsletter-msg ${nlMessage.type}`}>
+              {nlMessage.text}
+            </p>
+          )}
         </div>
-      ) : (
-        <p style={{ textAlign: "center", color: "#aaa" }}>No blogs found yet.</p>
-      )}
-    </section>
+      </section>
+
+      <section className="blog-list-section">
+        <h1 className="section-title">Latest Articles</h1>
+
+        {loading ? (
+          <Loader />
+        ) : blogs.length === 0 ? (
+          <p className="empty-msg">
+            No blog posts available right now. Check back soon!
+          </p>
+        ) : (
+          <>
+            <div className="blog-grid">
+              {blogs.map((blog) => (
+                <div key={blog._id} className="blog-card">
+                  {blog.coverImage && (
+                    <img
+                      src={blog.coverImage}
+                      alt={blog.title}
+                      className="blog-image"
+                    />
+                  )}
+                  <div className="blog-content">
+                    <span className="blog-date">
+                      {new Date(blog.createdAt).toLocaleDateString()}
+                    </span>
+                    <h3>{blog.title}</h3>
+                    <p className="blog-excerpt">
+                      {blog.excerpt ||
+                        blog.content.substring(0, 100) + "..."}
+                    </p>
+                    <Link
+                      to={`/blog/${blog._id}`}
+                      className="read-more"
+                    >
+                      Read Article →
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {totalPages > 1 && (
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={(page) => setCurrentPage(page)}
+              />
+            )}
+          </>
+        )}
+      </section>
+    </div>
   );
-}
+};
 
 export default Blog;

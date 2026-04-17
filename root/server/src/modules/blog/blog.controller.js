@@ -2,8 +2,6 @@ import Blog from "./blog.model.js";
 
 export const createBlog = async (req, res) => {
   try {
-    console.log("REQ BODY:", req.body);
-
     const { title, content, category } = req.body;
 
     if (!title || !content) {
@@ -21,7 +19,6 @@ export const createBlog = async (req, res) => {
     const saved = await blog.save();
 
     res.status(201).json(saved);
-
   } catch (err) {
     console.error("CREATE BLOG ERROR:", err);
     res.status(500).json({ message: err.message });
@@ -30,8 +27,22 @@ export const createBlog = async (req, res) => {
 
 export const getBlogs = async (req, res) => {
   try {
-    const blogs = await Blog.find().sort({ createdAt: -1 });
-    res.json(blogs);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 6;
+    const skip = (page - 1) * limit;
+
+    const totalBlogs = await Blog.countDocuments();
+    const blogs = await Blog.find()
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    res.status(200).json({
+      blogs,
+      currentPage: page,
+      totalPages: Math.ceil(totalBlogs / limit),
+      totalBlogs,
+    });
   } catch (err) {
     console.error("GET BLOGS ERROR:", err);
     res.status(500).json({ message: err.message });

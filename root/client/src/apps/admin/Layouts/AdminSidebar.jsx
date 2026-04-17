@@ -35,6 +35,10 @@ const AdminSidebar = () => {
           <FaPenNib className="admin-nav__icon" /> Blog Posts
         </NavLink>
 
+        <NavLink to="/admin/newsletter" className={({ isActive }) => isActive ? "admin-nav__link active" : "admin-nav__link"}>
+          <FaPenNib className="admin-nav__icon" /> Newsletter
+        </NavLink>
+
         <NavLink to="/admin/projects" className={({ isActive }) => isActive ? "admin-nav__link active" : "admin-nav__link"}>
           <FaBriefcase className="admin-nav__icon" /> Projects
         </NavLink>

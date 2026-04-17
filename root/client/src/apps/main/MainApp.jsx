@@ -45,6 +45,8 @@ const AdminProjects = lazy(() => import("../admin/pages/AdminProjects.jsx"));
 const AdminBlog = lazy(() => import("../admin/pages/AdminBlog.jsx"));
 const AdminProducts = lazy(() => import("../admin/pages/AdminProducts.jsx"));
 const AdminCertifications = lazy(() => import("../admin/pages/AdminCertifications.jsx"));
+const AdminNewsletter = lazy(() => import("../admin/pages/AdminNewsletter.jsx"));
+
 
 function MainApp() {
   const location = useLocation();
@@ -93,6 +95,7 @@ function MainApp() {
                 <Route path="/admin/about" element={<PageWrapper><AdminAbout /></PageWrapper>} />
                 <Route path="/admin/projects" element={<PageWrapper><AdminProjects /></PageWrapper>} />
                 <Route path="/admin/certifications" element={<PageWrapper><AdminCertifications /></PageWrapper>} />
+                <Route path="/admin/newsletter" element={<PageWrapper><AdminNewsletter /></PageWrapper>} />
               </Route>
 
             </Route>
