@@ -149,6 +149,11 @@ function AdminDashboard() {
           <p>Edit your profile & bio</p>
         </div>
 
+        <div className="admin__card" onClick={() => navigate("/admin/home")}>
+          <h2>👤 Home Section</h2>
+          <p>Edit your Home</p>
+        </div>
+
       </div>
     </div>
   );
