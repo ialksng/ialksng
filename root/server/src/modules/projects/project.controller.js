@@ -2,7 +2,7 @@ import Project from "./project.model.js";
 
 export const getProjects = async (req, res) => {
   try {
-    const projects = await Project.find().sort({ createdAt: -1 }); // Newest first
+    const projects = await Project.find().sort({ createdAt: -1 }); 
     res.status(200).json(projects);
   } catch (error) {
     res.status(500).json({ message: "Server Error", error });
