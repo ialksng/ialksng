@@ -1,4 +1,4 @@
-import Visitor from "../../modules/stats/visitor.model";
+import Visitor from "../../modules/stats/visitor.model.js";
 
 export const trackVisitor = (req, res, next) => {
   next();
