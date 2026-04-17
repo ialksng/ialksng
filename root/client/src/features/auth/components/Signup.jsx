@@ -64,7 +64,7 @@ const Signup = () => {
           <p className="auth__legal-text" style={{ fontSize: '11px', color: '#8e8e8e', margin: '15px 0', textAlign: 'center', lineHeight: '1.4' }}>
             People who use our service may have uploaded your contact information to our ecosystem.
             <br /><br />
-            By tapping Submit, you agree to create an account and to our <Link to="/legal/terms-conditions" style={{color: '#00376b'}}>Terms</Link>, <Link to="/legal/privacy-policy" style={{color: '#00376b'}}>Privacy Policy</Link> and <Link to="/legal/cookies-policy" style={{color: '#00376b'}}>Cookies Policy</Link>.
+            By tapping Submit, you agree to create an account and to our <Link to="/legal/TermsConditions" style={{color: '#00376b'}}>Terms</Link>, <Link to="/legal/PrivacyPolicy" style={{color: '#00376b'}}>Privacy Policy</Link> and <Link to="/legal/cookies-policy" style={{color: '#00376b'}}>Cookies Policy</Link>.
           </p>
 
           <button type="submit">Submit & Sign up</button>

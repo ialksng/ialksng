@@ -9,7 +9,7 @@ import {
   FaClock 
 } from "react-icons/fa";
 
-import "./Contact.module.css";
+import "./Contact.css";
 
 function Contact() {
   const [formData, setFormData] = useState({
