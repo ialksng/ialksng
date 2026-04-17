@@ -75,7 +75,7 @@ const Chatbot = () => {
             <div className="chat-header-info">
               <img src={BOT_GIF} alt="bot" className="bot-avatar" />
               <div>
-                <h3>AI Assistant</h3>
+                <h3>Buddy Bot</h3>
                 <span className="chat-status-dot"></span>
               </div>
             </div>
