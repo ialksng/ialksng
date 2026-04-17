@@ -1,7 +1,5 @@
 import Project from "./project.model.js";
 
-// @route   GET /api/projects
-// @access  Public
 export const getProjects = async (req, res) => {
   try {
     const projects = await Project.find().sort({ createdAt: -1 }); // Newest first
@@ -11,8 +9,6 @@ export const getProjects = async (req, res) => {
   }
 };
 
-// @route   POST /api/projects
-// @access  Private/Admin
 export const createProject = async (req, res) => {
   try {
     const project = await Project.create(req.body);
@@ -22,8 +18,6 @@ export const createProject = async (req, res) => {
   }
 };
 
-// @route   PUT /api/projects/:id
-// @access  Private/Admin
 export const updateProject = async (req, res) => {
   try {
     const project = await Project.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -33,8 +27,6 @@ export const updateProject = async (req, res) => {
   }
 };
 
-// @route   DELETE /api/projects/:id
-// @access  Private/Admin
 export const deleteProject = async (req, res) => {
   try {
     await Project.findByIdAndDelete(req.params.id);

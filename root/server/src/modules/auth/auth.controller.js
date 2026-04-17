@@ -1,16 +1,15 @@
-import User from "./user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
 import nodemailer from "nodemailer";
 
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+import User from "./user.model.js";
 
-// Helper: Generate 6-digit OTP
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const generateOTP = () =>
   Math.floor(100000 + Math.random() * 900000).toString();
 
-// ======================= SIGNUP =======================
+
 export const signup = async (req, res) => {
   try {
     const { username, name, email, password } = req.body;
@@ -47,7 +46,6 @@ export const signup = async (req, res) => {
   }
 };
 
-// ======================= LOGIN =======================
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -85,7 +83,6 @@ export const login = async (req, res) => {
   }
 };
 
-// ======================= GOOGLE AUTH =======================
 export const googleAuth = async (req, res) => {
   try {
     const { token } = req.body;
@@ -129,7 +126,6 @@ export const googleAuth = async (req, res) => {
   }
 };
 
-// ======================= GET ME =======================
 export const getMe = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password -otp -otpExpires");
@@ -145,7 +141,6 @@ export const getMe = async (req, res) => {
   }
 };
 
-// ======================= SEND OTP =======================
 export const sendForgotPasswordOTP = async (req, res) => {
   try {
     const { email } = req.body;
@@ -239,7 +234,6 @@ export const sendForgotPasswordOTP = async (req, res) => {
   }
 };
 
-// ======================= RESET PASSWORD =======================
 export const resetPasswordWithOTP = async (req, res) => {
   try {
     const { email, otp, newPassword } = req.body;

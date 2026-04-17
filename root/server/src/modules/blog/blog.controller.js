@@ -1,13 +1,11 @@
-import Blog from "../models/Blog.js";
+import Blog from "./blog.model.js";
 
-// CREATE
 export const createBlog = async (req, res) => {
   try {
-    console.log("REQ BODY:", req.body); // 🔥 debug
+    console.log("REQ BODY:", req.body);
 
     const { title, content, category } = req.body;
 
-    // ✅ VALIDATION
     if (!title || !content) {
       return res.status(400).json({
         message: "Title and content are required",
@@ -25,12 +23,11 @@ export const createBlog = async (req, res) => {
     res.status(201).json(saved);
 
   } catch (err) {
-    console.error("CREATE BLOG ERROR:", err); // 🔥 important
+    console.error("CREATE BLOG ERROR:", err);
     res.status(500).json({ message: err.message });
   }
 };
 
-// GET ALL
 export const getBlogs = async (req, res) => {
   try {
     const blogs = await Blog.find().sort({ createdAt: -1 });
@@ -41,7 +38,6 @@ export const getBlogs = async (req, res) => {
   }
 };
 
-// GET SINGLE
 export const getSingleBlog = async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id);
@@ -57,7 +53,6 @@ export const getSingleBlog = async (req, res) => {
   }
 };
 
-// UPDATE
 export const updateBlog = async (req, res) => {
   try {
     const updated = await Blog.findByIdAndUpdate(
@@ -77,7 +72,6 @@ export const updateBlog = async (req, res) => {
   }
 };
 
-// DELETE
 export const deleteBlog = async (req, res) => {
   try {
     const deleted = await Blog.findByIdAndDelete(req.params.id);

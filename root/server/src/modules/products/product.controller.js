@@ -1,7 +1,5 @@
-import Product from "../src/modules/products/Product.js";
+import Product from "../products/product.model";
 
-
-// 🔹 ADD PRODUCT (ADMIN)
 export const addProduct = async (req, res) => {
   try {
     const product = await Product.create(req.body);
@@ -17,8 +15,6 @@ export const addProduct = async (req, res) => {
   }
 };
 
-
-// 🔹 GET ALL PRODUCTS
 export const getProducts = async (req, res) => {
   try {
     const products = await Product.find().sort({ createdAt: -1 });
@@ -34,8 +30,6 @@ export const getProducts = async (req, res) => {
   }
 };
 
-
-// 🔹 GET SINGLE PRODUCT
 export const getProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
@@ -55,8 +49,6 @@ export const getProduct = async (req, res) => {
   }
 };
 
-
-// 🔥 UPDATE PRODUCT (FULL SAFE UPDATE)
 export const updateProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
@@ -65,7 +57,6 @@ export const updateProduct = async (req, res) => {
       return res.status(404).json({ error: "Product not found" });
     }
 
-    // ✅ Update ALL fields safely
     product.title = req.body.title ?? product.title;
     product.description = req.body.description ?? product.description;
     product.price = req.body.price ?? product.price;
@@ -89,8 +80,6 @@ export const updateProduct = async (req, res) => {
   }
 };
 
-
-// 🔹 DELETE PRODUCT (ADMIN)
 export const deleteProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);

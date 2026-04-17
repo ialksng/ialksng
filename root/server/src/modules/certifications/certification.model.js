@@ -10,13 +10,13 @@ const certificationSchema = new mongoose.Schema({
     required: true,
   },
   date: {
-    type: String, // e.g., "August 2023"
+    type: String, 
   },
   credentialUrl: {
-    type: String, // Link to the certificate validation
+    type: String, 
   },
   imageUrl: {
-    type: String, // Optional: Image or badge of the certification
+    type: String, 
   }
 }, { timestamps: true });
 

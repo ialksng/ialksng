@@ -1,15 +1,13 @@
-import User from "../modules/auth/user.model.js";
-import Order from "../models/Order.js";
-import Visitor from "../models/Visitor.js";
-import Product from "../models/Product.js";
+import User from "../auth/user.model.js";
+import Order from "../orders/order.model.js";
+import Visitor from "../stats/visitor.model.js";
+import Product from "../products/product.model.js";
 
 export const getStats = async (req, res) => {
   try {
-    // 📅 today start
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // 🚀 run all queries in parallel (FAST)
     const [
       users,
       orders,
@@ -23,13 +21,12 @@ export const getStats = async (req, res) => {
 
       Order.countDocuments(),
 
-      Visitor.distinct("ip"), // total unique visitors
+      Visitor.distinct("ip"), 
 
       Visitor.distinct("ip", {
         visitedAt: { $gte: today }
-      }), // today's unique visitors
+      }), 
 
-      // 💰 revenue aggregation (FAST)
       Order.aggregate([
         { $match: { isPaid: true } },
         {
@@ -40,7 +37,6 @@ export const getStats = async (req, res) => {
         }
       ]),
 
-      // 🏆 top products
       Order.aggregate([
         { $match: { isPaid: true } },
         {
@@ -54,18 +50,14 @@ export const getStats = async (req, res) => {
       ])
     ]);
 
-    // ✅ extract values
     const visitors = uniqueIPs.length;
     const todayVisitors = todayUniqueIPs.length;
     const revenue = revenueData[0]?.total || 0;
-
-    // 🔗 populate product titles
     const topProducts = await Product.populate(topProductsRaw, {
       path: "_id",
       select: "title"
     });
 
-    // 🎯 response
     res.json({
       users,
       orders,

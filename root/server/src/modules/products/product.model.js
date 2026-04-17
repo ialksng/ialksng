@@ -27,7 +27,7 @@ const productSchema = new mongoose.Schema({
   previewImage: String,
   previewUrl: String,
 
-  fileUrl: String, // download after purchase
+  fileUrl: String, 
 
   notionPageId: {
   type: String,

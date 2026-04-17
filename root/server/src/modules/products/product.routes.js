@@ -1,29 +1,24 @@
 import express from "express";
+
 import {
   addProduct,
   getProducts,
   getProduct,
   deleteProduct,
   updateProduct
-} from "../../../controllers/productController.js";
-
-import { protect } from "../middleware/authMiddleware.js";
-import { adminOnly } from "../middleware/adminMiddleware.js";
-import Order from "../models/Order.js";
-import Product from "./product.model.js";
+} from "../products/product.controller.js";
+import { protect } from "../../core/middlewares/auth.middleware.js";
+import { adminOnly } from "../../core/middlewares/admin.middleware.js";
+import Order from "../orders/order.model.js";
+import Product from "../products/product.model.js";
 
 const router = express.Router();
 
-
-// 👤 PUBLIC ROUTES
 router.get("/", getProducts);
 
-// 🔥 IMPORTANT: keep specific routes BEFORE :id
 router.get("/access/:id", protect, async (req, res) => {
   try {
     const productId = req.params.id;
-
-    // 🔎 check purchase
     const order = await Order.findOne({
       user: req.user.id,
       product: productId,
@@ -57,11 +52,7 @@ router.get("/access/:id", protect, async (req, res) => {
   }
 });
 
-// 🔹 GET SINGLE PRODUCT (KEEP AFTER /access)
 router.get("/:id", getProduct);
-
-
-// 👑 ADMIN ROUTES
 router.post("/", protect, adminOnly, addProduct);
 router.put("/:id", protect, adminOnly, updateProduct);
 router.delete("/:id", protect, adminOnly, deleteProduct);

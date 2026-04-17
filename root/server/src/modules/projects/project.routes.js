@@ -1,7 +1,8 @@
 import express from "express";
+
 import { getProjects, createProject, updateProject, deleteProject } from "./project.controller.js";
-import { protect } from "../middleware/authMiddleware.js";
-import { adminOnly } from "../middleware/adminMiddleware.js";
+import { protect } from "../../core/middlewares/auth.middleware.js";
+import { adminOnly } from "../../core/middlewares/admin.middleware.js";
 
 const router = express.Router();
 

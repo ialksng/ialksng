@@ -1,30 +1,23 @@
 import express from "express";
+
 import Order from "./order.model.js";
 import {
   createOrder,
   getMyOrders,
   checkoutCart
-} from "../../../controllers/orderController.js";
-import { protect } from "../middleware/authMiddleware.js";
+} from "./order.controller.js";
+import { protect } from "../../core/middlewares/auth.middleware.js";
 
 const router = express.Router();
 
-
-// ✅ CREATE ORDER (after payment)
 router.post("/", protect, createOrder);
-
-
-// ✅ GET MY ORDERS
 router.get("/my-orders", protect, getMyOrders);
-
-
-// ✅ CHECK IF USER PURCHASED PRODUCT (CONTENT PROTECTION)
 router.get("/check/:productId", protect, async (req, res) => {
   try {
     const order = await Order.findOne({
       user: req.user.id,
       product: req.params.productId,
-      isPaid: true // 🔥 IMPORTANT FIX
+      isPaid: true
     });
 
     if (!order) {
@@ -38,10 +31,6 @@ router.get("/check/:productId", protect, async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
-
-// 🛒 CART CHECKOUT (optional - keep if using)
 router.post("/checkout-cart", protect, checkoutCart);
-
 
 export default router;

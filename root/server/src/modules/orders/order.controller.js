@@ -1,8 +1,6 @@
-import Order from "../src/modules/orders/Order.js";
-import Product from "../models/Product.js";
+import Order from "./order.model.js";
+import Product from "../products/product.model.js";
 
-
-// ✅ CREATE ORDER (AFTER PAYMENT)
 export const createOrder = async (req, res) => {
   try {
     const { product, paymentId } = req.body;
@@ -11,14 +9,12 @@ export const createOrder = async (req, res) => {
       return res.status(400).json({ error: "Missing fields" });
     }
 
-    // 🔍 get product from DB (never trust frontend)
     const productData = await Product.findById(product);
 
     if (!productData) {
       return res.status(404).json({ error: "Product not found" });
     }
 
-    // 🚫 prevent duplicate purchase
     const existingOrder = await Order.findOne({
       user: req.user.id,
       product,
@@ -31,11 +27,10 @@ export const createOrder = async (req, res) => {
       });
     }
 
-    // ✅ create order
     const order = await Order.create({
       user: req.user.id,
       product,
-      price: productData.price, // 🔥 safe price
+      price: productData.price,
       paymentId,
       isPaid: true,
       status: "Paid"
@@ -52,8 +47,6 @@ export const createOrder = async (req, res) => {
   }
 };
 
-
-// ✅ GET MY ORDERS
 export const getMyOrders = async (req, res) => {
   try {
     const orders = await Order.find({ user: req.user.id })
@@ -71,8 +64,6 @@ export const getMyOrders = async (req, res) => {
   }
 };
 
-
-// 🛒 CHECKOUT CART (OPTIONAL - for future)
 export const checkoutCart = async (req, res) => {
   try {
     const { items, paymentId } = req.body;

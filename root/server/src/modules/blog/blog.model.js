@@ -10,7 +10,7 @@ const blogSchema = new mongoose.Schema({
     required: true,
   },
   image: {
-    type: String, // URL or file path
+    type: String,
   },
   category: {
     type: String,

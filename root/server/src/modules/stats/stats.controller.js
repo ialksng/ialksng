@@ -1,5 +1,5 @@
-import User from "../modules/auth/user.model.js";
-import Project from "../models/Project.js";
+import User from "../auth/user.model.js";
+import Project from "../projects/project.model.js";
 import Testimonial from "../testimonials/testimonial.model.js";
 
 export const getPublicStats = async (req, res) => {

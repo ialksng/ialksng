@@ -1,6 +1,7 @@
 import express from "express";
-import { signup, login, googleAuth, getMe, sendForgotPasswordOTP, resetPasswordWithOTP } from "./auth.controller.js"; // Import them here
-import { protect } from "../../middleware/authMiddleware.js";
+
+import { signup, login, googleAuth, getMe, sendForgotPasswordOTP, resetPasswordWithOTP } from "./auth.controller.js";
+import { protect } from "../../core/middlewares/auth.middleware.js";
 
 const router = express.Router();
 

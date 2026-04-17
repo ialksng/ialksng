@@ -7,14 +7,14 @@ const testimonialSchema = new mongoose.Schema(
       required: true,
     },
     role: {
-      type: String, // e.g. "CEO, XYZ"
+      type: String, 
     },
     message: {
       type: String,
       required: true,
     },
     image: {
-      type: String, // profile image URL
+      type: String,
     },
     rating: {
       type: Number,

@@ -1,22 +1,19 @@
 import express from "express";
-import razorpay from "../config/razorpay.js";
 import crypto from "crypto";
 
-import { protect } from "../middleware/authMiddleware.js";
+import razorpay from "../../core/config/razorpay.js";
+import { protect } from "../../core/middlewares/auth.middleware.js";
 import Product from "../products/product.model.js";
 import Order from "./order.model.js";
 
 const router = express.Router();
 
-
-// ✅ CREATE ORDER (SINGLE + CART SUPPORT)
 router.post("/create-order", protect, async (req, res) => {
   try {
     const { productId, items } = req.body;
 
     let totalAmount = 0;
 
-    // 🔹 SINGLE PRODUCT FLOW
     if (productId) {
       const product = await Product.findById(productId);
 
@@ -24,7 +21,6 @@ router.post("/create-order", protect, async (req, res) => {
         return res.status(404).json({ error: "Product not found" });
       }
 
-      // prevent duplicate purchase
       const existingOrder = await Order.findOne({
         user: req.user.id,
         product: productId,
@@ -38,7 +34,6 @@ router.post("/create-order", protect, async (req, res) => {
       totalAmount = product.price;
     }
 
-    // 🔹 CART FLOW
     if (items && items.length > 0) {
       const products = await Product.find({
         _id: { $in: items }
@@ -51,14 +46,12 @@ router.post("/create-order", protect, async (req, res) => {
       totalAmount = products.reduce((sum, p) => sum + p.price, 0);
     }
 
-    // ❌ safety check
     if (!totalAmount) {
       return res.status(400).json({ error: "Invalid request" });
     }
 
-    // 💳 create Razorpay order
     const order = await razorpay.orders.create({
-      amount: totalAmount * 100, // ₹ → paise
+      amount: totalAmount * 100, 
       currency: "INR",
       receipt: "order_" + Date.now(),
     });
@@ -74,8 +67,6 @@ router.post("/create-order", protect, async (req, res) => {
   }
 });
 
-
-// ✅ VERIFY PAYMENT
 router.post("/verify-payment", (req, res) => {
   try {
     const {

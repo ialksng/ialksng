@@ -1,8 +1,5 @@
 import Certification from "./certification.model.js";
 
-// @desc    Get all certifications
-// @route   GET /api/certifications
-// @access  Public
 export const getCertifications = async (req, res) => {
   try {
     const certs = await Certification.find().sort({ createdAt: -1 });
@@ -12,9 +9,6 @@ export const getCertifications = async (req, res) => {
   }
 };
 
-// @desc    Add a certification
-// @route   POST /api/certifications
-// @access  Private/Admin
 export const addCertification = async (req, res) => {
   try {
     const { title, issuer, date, credentialUrl, imageUrl } = req.body;
@@ -26,9 +20,6 @@ export const addCertification = async (req, res) => {
   }
 };
 
-// @desc    Delete a certification
-// @route   DELETE /api/certifications/:id
-// @access  Private/Admin
 export const deleteCertification = async (req, res) => {
   try {
     const cert = await Certification.findById(req.params.id);

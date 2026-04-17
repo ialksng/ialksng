@@ -1,4 +1,5 @@
 import express from 'express';
+
 import { globalSearch, getSuggestions } from './search.controller.js';
 
 const router = express.Router();
