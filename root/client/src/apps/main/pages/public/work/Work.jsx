@@ -1,7 +1,7 @@
 import Projects from "./components/Projects"
 import Services from "./components/Services"
 
-import "./Work.module.css"
+import "./Work.css"
 
 function Work() {
     return (

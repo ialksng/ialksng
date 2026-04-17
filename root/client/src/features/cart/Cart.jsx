@@ -5,7 +5,7 @@ import { HashLink } from "react-router-hash-link";
 import { AuthContext } from "../auth/AuthContext";
 import { CartContext } from "./CartContext";
 
-import "./Cart.module.css";
+import "./Cart.css";
 
 function Cart() {
   const { cart, setCart } = useContext(CartContext);

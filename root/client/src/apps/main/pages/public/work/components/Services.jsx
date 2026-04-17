@@ -1,7 +1,7 @@
 import { motion } from "framer-motion"
 import { FaCode, FaPaintBrush, FaServer } from "react-icons/fa"
 
-import "./Services.module.css"
+import "./Services.css"
 
 function Services() {
   const services = [

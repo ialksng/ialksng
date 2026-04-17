@@ -3,7 +3,7 @@ import { useEffect, useState, useContext } from "react";
 
 import { AuthContext } from "../auth/AuthContext";
 
-import "./Checkout.module.css";
+import "./Checkout.css";
 
 function Checkout() {
   const { id } = useParams();

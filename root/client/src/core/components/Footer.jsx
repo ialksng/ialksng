@@ -63,7 +63,7 @@ const Footer = () => {
             </a>
 
             <a
-              href="https://youtube.com/ialksng"
+              href="https://youtube.com/@ialksng"
               target="_blank"
               rel="noreferrer"
               className="social__icon"

@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import axios from "../../../../../../core/utils/axios";
 import Loader from "../../../../../../core/components/Loader";
 
-import "./Projects.module.css";
+import "./Projects.css";
 
 function Projects() {
   const [projects, setProjects] = useState([]);
