@@ -73,7 +73,7 @@ const Chatbot = () => {
         <div className="chat-window">
           <div className="chat-header">
             <div className="chat-header-info">
-              <img src={BOT_GIF} alt="bot" className="bot-avatar" />
+              <img src={BOT_GIF} alt="bot" className="bot-avatar-large" />
               <div>
                 <h3>Buddy Bot</h3>
                 <span className="chat-status-dot"></span>
@@ -84,9 +84,6 @@ const Chatbot = () => {
           <div className="chat-messages">
             {messages.map((msg, index) => (
               <div key={index} className={`message-wrapper ${msg.sender}`}>
-                {msg.sender === "bot" && (
-                  <img src={BOT_GIF} alt="bot" className="bot-avatar-msg" />
-                )}
                 <div className={`message ${msg.sender}`}>
                   {msg.sender === 'bot' ? (
                     <ReactMarkdown>{msg.text}</ReactMarkdown>
@@ -99,7 +96,6 @@ const Chatbot = () => {
 
             {isLoading && (
               <div className="message-wrapper bot">
-                <img src={BOT_GIF} alt="bot" className="bot-avatar-msg" />
                 <div className="message bot typing-indicator">
                   <span></span><span></span><span></span>
                 </div>
