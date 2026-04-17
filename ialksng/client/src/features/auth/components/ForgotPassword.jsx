@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "../../../utils/axios";
-import "../../../styles/auth.css";
+
+import axios from "../../../core/utils/axios";
+
+import "./auth.css";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false); // ✅ NEW
+  const [loading, setLoading] = useState(false);
 
   const handleReset = async (e) => {
     e.preventDefault();
 
-    if (loading) return; // ✅ prevent multiple clicks
+    if (loading) return; 
 
     setLoading(true);
     setMessage("");
@@ -25,7 +27,7 @@ const ForgotPassword = () => {
     } catch (err) {
       setMessage(err.response?.data?.msg || "Failed to send OTP");
     } finally {
-      setLoading(false); // ✅ reset loading
+      setLoading(false);
     }
   };
 

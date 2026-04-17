@@ -1,11 +1,9 @@
-/* RESET */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* BODY */
 body {
   font-family: 'Poppins', sans-serif;
   background: #0f172a;
@@ -13,20 +11,17 @@ body {
   line-height: 1.6;
 }
 
-/* LINKS */
 a {
   text-decoration: none;
   color: inherit;
 }
 
-/* CONTAINER (use later) */
 .container {
   max-width: 1200px;
   margin: auto;
   padding: 0 20px;
 }
 
-/* SCROLLBAR (aesthetic touch 🔥) */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -40,7 +35,6 @@ a {
   border-radius: 10px;
 }
 
-/* SELECTION COLOR */
 ::selection {
   background: #38bdf8;
   color: black;
@@ -50,9 +44,8 @@ html {
   scroll-behavior: smooth;
 }
 
-/* --- GLOBAL MOBILE FIX --- */
 html, body {
-  overflow-x: hidden; /* Stops horizontal scrolling */
+  overflow-x: hidden;
   width: 100%;
   position: relative;
 }

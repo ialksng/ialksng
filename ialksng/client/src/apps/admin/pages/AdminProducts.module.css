@@ -1,0 +1,76 @@
+.adminP__container {
+  padding: 30px;
+  color: white;
+  background: #0b1220;
+  min-height: 100vh;
+}
+
+.adminP__form {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.adminP__form input {
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+}
+
+.adminP__form button {
+  padding: 10px;
+  background: #3399cc;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.adminP__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.adminP__card {
+  background: #111a2b;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.adminP__card img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.adminP__card button {
+  margin-top: 10px;
+  background: red;
+  border: none;
+  padding: 6px;
+  color: white;
+  cursor: pointer;
+}
+
+.adminP__category-tag {
+  background: rgba(56, 189, 248, 0.2);
+  color: #38bdf8;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: bold;
+  display: inline-block;
+  margin-bottom: 5px;
+}
+
+.adminP__form select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background: #1e2532;
+  color: white;
+}

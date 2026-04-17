@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import axios from '../utils/axios'; 
-import ReactMarkdown from 'react-markdown'; // 🚀 Import Markdown parser
-import '../styles/chatbot.css'; 
+import ReactMarkdown from 'react-markdown'; 
+
+import axios from '../../core/utils/axios'; 
+
+import './Chatbot.module.css'; 
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,7 +47,6 @@ const Chatbot = () => {
           <div className="chat-messages">
             {messages.map((msg, index) => (
               <div key={index} className={`message ${msg.sender}`}>
-                {/* 🚀 Render Markdown for bot, regular text for user */}
                 {msg.sender === 'bot' ? (
                   <ReactMarkdown>{msg.text}</ReactMarkdown>
                 ) : (
