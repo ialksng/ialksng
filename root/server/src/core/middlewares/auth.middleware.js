@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
 
-// PROTECT
 export const protect = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
@@ -19,7 +18,6 @@ export const protect = (req, res, next) => {
   }
 };
 
-// ADMIN
 export const admin = (req, res, next) => {
   if (req.user && req.user.role === "admin") {
     next();
