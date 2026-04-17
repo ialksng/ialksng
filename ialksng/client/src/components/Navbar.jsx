@@ -2,9 +2,9 @@ import "../styles/navbar.css";
 import { FaShoppingCart, FaUser, FaBars, FaTimes } from "react-icons/fa";
 import { useContext, useState, useRef, useEffect } from "react";
 import { AuthContext } from "../features/auth/AuthContext";
-import { CartContext } from "../context/CartContext";
+import { CartContext } from "../features/cart/CartContext";
 import { useNavigate } from "react-router-dom";
-import logo from "../assets/logo.png";
+import logo from "../shared/assets/logo.png";
 
 function Navbar() {
   const { user, logoutUser } = useContext(AuthContext);

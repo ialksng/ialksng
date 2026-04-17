@@ -4,7 +4,7 @@ import './styles/global.css';
 import App from './App';
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./features/auth/AuthContext.jsx";
-import { CartProvider } from "./context/CartContext";
+import { CartProvider } from "./features/cart/CartContext.jsx";
 import { Toaster } from "react-hot-toast";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 

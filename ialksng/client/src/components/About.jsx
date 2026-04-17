@@ -1,6 +1,6 @@
 import Profiles from "./Profiles";
 import "../styles/about.css";
-import defaultProfile from "../assets/Alok Singh.png"; // Used as fallback if no DB image
+import defaultProfile from "../shared/assets/Alok Singh.png"; // Used as fallback if no DB image
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import axios from "../utils/axios"; // UPDATED: Importing your configured axios instance
