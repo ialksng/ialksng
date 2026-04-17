@@ -9,12 +9,12 @@ import productRoutes from "./modules/products/product.routes.js";
 import projectRoutes from "./modules/projects/project.routes.js";
 import searchRoutes from "./modules/search/search.routes.js";
 import orderRoutes from "./modules/orders/order.routes.js";
-import paymentRoutes from "./modules/payment/payment.routes.js";
+import paymentRoutes from "./modules/payments/payment.routes.js";
 import adminRoutes from "./modules/admin/admin.routes.js";
 import statsRoutes from "./modules/stats/stats.routes.js";
 import aboutRoutes from "./modules/about/about.routes.js";
 import notesRoutes from "./modules/notes/notes.routes.js";
-import certificationRoutes from "./modules/certification/certification.routes.js";
+import certificationRoutes from "./modules/certifications/certification.routes.js";
 import chatRoutes from "./modules/chat/chat.routes.js";
 
 const app = express();
