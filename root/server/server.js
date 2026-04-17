@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import chatRoutes from './routes/chatRoutes.js';
 
+import { globalSearch } from './controllers/searchController.js';
 import authRoutes from "./modules/auth/auth.routes.js";
 import productRoutes from "./routes/productRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
@@ -51,6 +52,8 @@ app.use("/api/payment", paymentRoutes);
 
 // Non-blocking visitor tracking
 app.use(trackVisitor); 
+
+app.get('/api/search', globalSearch);
 
 app.use("/api/admin", adminRoutes);
 app.use("/api/public", statsRoutes);
