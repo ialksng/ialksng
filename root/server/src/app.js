@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 
-import { trackVisitor } from "./core/middleware/trackVisitor.js";
+import { trackVisitor } from "./core/middlewares/trackVisitor.middleware.js";
 
 import authRoutes from "./modules/auth/auth.routes.js";
 import blogRoutes from "./modules/blog/blog.routes.js";
