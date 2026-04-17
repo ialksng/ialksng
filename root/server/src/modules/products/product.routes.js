@@ -5,12 +5,12 @@ import {
   getProduct,
   deleteProduct,
   updateProduct
-} from "../controllers/productController.js";
+} from "../../../controllers/productController.js";
 
 import { protect } from "../middleware/authMiddleware.js";
 import { adminOnly } from "../middleware/adminMiddleware.js";
 import Order from "../models/Order.js";
-import Product from "../models/Product.js";
+import Product from "./product.model.js";
 
 const router = express.Router();
 

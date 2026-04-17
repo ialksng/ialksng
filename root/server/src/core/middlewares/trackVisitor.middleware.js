@@ -1,4 +1,4 @@
-import Visitor from "../models/Visitor.js";
+import Visitor from "../../../models/Visitor.js";
 
 export const trackVisitor = (req, res, next) => {
   // 1. Call next() immediately so the user's request continues without delay

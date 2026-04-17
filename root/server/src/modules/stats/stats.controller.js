@@ -1,6 +1,6 @@
 import User from "../modules/auth/user.model.js";
 import Project from "../models/Project.js";
-import Testimonial from "../models/Testimonial.js";
+import Testimonial from "../testimonials/testimonial.model.js";
 
 export const getPublicStats = async (req, res) => {
   try {

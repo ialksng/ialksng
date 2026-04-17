@@ -1,10 +1,10 @@
 import express from "express";
-import Order from "../models/Order.js";
+import Order from "./order.model.js";
 import {
   createOrder,
   getMyOrders,
   checkoutCart
-} from "../controllers/orderController.js";
+} from "../../../controllers/orderController.js";
 import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();

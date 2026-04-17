@@ -1,5 +1,5 @@
 import notion from "../utils/notionClient.js";
-import Product from "../models/Product.js";
+import Product from "../products/product.model.js";
 
 export const getNoteContent = async (req, res) => {
   try {

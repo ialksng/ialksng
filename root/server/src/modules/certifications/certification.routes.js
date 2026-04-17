@@ -1,5 +1,5 @@
 import express from "express";
-import { getCertifications, addCertification, deleteCertification } from "../controllers/certificationController.js";
+import { getCertifications, addCertification, deleteCertification } from "./certification.controller.js";
 import { protect } from "../middleware/authMiddleware.js";
 import { adminOnly } from "../middleware/adminMiddleware.js";
 

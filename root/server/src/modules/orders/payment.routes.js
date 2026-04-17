@@ -3,8 +3,8 @@ import razorpay from "../config/razorpay.js";
 import crypto from "crypto";
 
 import { protect } from "../middleware/authMiddleware.js";
-import Product from "../models/Product.js";
-import Order from "../models/Order.js";
+import Product from "../products/product.model.js";
+import Order from "./order.model.js";
 
 const router = express.Router();
 

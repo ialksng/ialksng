@@ -1,4 +1,4 @@
-import Product from "../models/Product.js";
+import Product from "../src/modules/products/Product.js";
 
 
 // 🔹 ADD PRODUCT (ADMIN)

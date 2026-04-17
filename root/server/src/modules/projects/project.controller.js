@@ -1,4 +1,4 @@
-import Project from "../models/Project.js";
+import Project from "./project.model.js";
 
 // @route   GET /api/projects
 // @access  Public

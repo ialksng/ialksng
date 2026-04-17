@@ -1,4 +1,4 @@
-import Order from "../models/Order.js";
+import Order from "../src/modules/orders/Order.js";
 import Product from "../models/Product.js";
 
 

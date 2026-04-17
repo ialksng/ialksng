@@ -1,5 +1,5 @@
 import express from "express";
-import { getProjects, createProject, updateProject, deleteProject } from "../controllers/projectController.js";
+import { getProjects, createProject, updateProject, deleteProject } from "./project.controller.js";
 import { protect } from "../middleware/authMiddleware.js";
 import { adminOnly } from "../middleware/adminMiddleware.js";
 

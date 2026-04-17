@@ -1,12 +1,12 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FaShoppingCart, FaUser, FaBars, FaTimes, FaSearch } from "react-icons/fa";
+import axios from "../utils/axios";
 
 import { AuthContext } from "../../features/auth/AuthContext";
 import { CartContext } from "../../features/cart/CartContext";
 
 import logo from "../../core/assets/logo.png";
-
 import "./Navbar.css";
 
 function Navbar() {
@@ -17,18 +17,40 @@ function Navbar() {
   const [open, setOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
   const dropdownRef = useRef();
+  const searchRef = useRef();
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setOpen(false);
-      }
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) setOpen(false);
+      if (searchRef.current && !searchRef.current.contains(e.target)) setShowSuggestions(false);
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      if (searchQuery.trim().length < 2) {
+        setSuggestions([]);
+        return;
+      }
+
+      try {
+        const res = await axios.get(`/search/suggestions?q=${encodeURIComponent(searchQuery)}`);
+        setSuggestions(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    const timer = setTimeout(fetchSuggestions, 300);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   const handleNavigate = (path) => {
     navigate(path);
@@ -36,14 +58,20 @@ function Navbar() {
     setMenuOpen(false);
   };
 
-  const handleSearch = (e) => {
+  const handleSearchSubmit = (e) => {
     e.preventDefault();
-
     if (searchQuery.trim()) {
       navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
-      setSearchQuery("");
+      setShowSuggestions(false);
       setMenuOpen(false);
     }
+  };
+
+  const handleSuggestionClick = (url) => {
+    navigate(url);
+    setSearchQuery("");
+    setShowSuggestions(false);
+    setMenuOpen(false);
   };
 
   return (
@@ -68,22 +96,44 @@ function Navbar() {
       </nav>
 
       <div className="navbar__actions">
-        <form className="nav__search-wrapper desktop-only" onSubmit={handleSearch}>
-          <FaSearch className="nav__search-icon" />
-          <input
-            type="text"
-            placeholder="Search..."
-            className="nav__search-input"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </form>
+        <div className="nav__search-container desktop-only" ref={searchRef}>
+          <form className="nav__search-wrapper" onSubmit={handleSearchSubmit}>
+            <FaSearch className="nav__search-icon" />
+            <input
+              type="text"
+              placeholder="Search..."
+              className="nav__search-input"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setShowSuggestions(true);
+              }}
+              onFocus={() => setShowSuggestions(true)}
+            />
+          </form>
+
+          {showSuggestions && searchQuery.trim().length >= 2 && (
+            <div className="search-suggestions__dropdown">
+              {suggestions.length > 0 ? (
+                suggestions.map((item) => (
+                  <div
+                    key={item._id}
+                    className="suggestion__item"
+                    onClick={() => handleSuggestionClick(item.url)}
+                  >
+                    <span className="suggestion__title">{item.title}</span>
+                    <span className={`suggestion__badge type-${item.type}`}>{item.type}</span>
+                  </div>
+                ))
+              ) : (
+                <div className="suggestion__empty">No results found</div>
+              )}
+            </div>
+          )}
+        </div>
 
         {!user ? (
-          <button
-            className="nav__btn desktop-only"
-            onClick={() => navigate("/login")}
-          >
+          <button className="nav__btn desktop-only" onClick={() => navigate("/login")}>
             Login
           </button>
         ) : (
@@ -91,9 +141,7 @@ function Navbar() {
             {user.role !== "admin" && (
               <div className="icon__wrapper" onClick={() => navigate("/cart")}>
                 <FaShoppingCart />
-                {cart?.length > 0 && (
-                  <span className="cart__badge">{cart.length}</span>
-                )}
+                {cart?.length > 0 && <span className="cart__badge">{cart.length}</span>}
               </div>
             )}
 
@@ -106,32 +154,12 @@ function Navbar() {
                 <div className="dropdown__menu">
                   {user.role !== "admin" ? (
                     <>
-                      <div
-                        className="dropdown__item"
-                        onClick={() => handleNavigate("/my-purchases")}
-                      >
-                        My Purchases
-                      </div>
-                      <div
-                        className="dropdown__item"
-                        onClick={() => handleNavigate("/profile")}
-                      >
-                        Profile
-                      </div>
-                      <div
-                        className="dropdown__item"
-                        onClick={() => handleNavigate("/settings")}
-                      >
-                        Settings
-                      </div>
+                      <div className="dropdown__item" onClick={() => handleNavigate("/my-purchases")}>My Purchases</div>
+                      <div className="dropdown__item" onClick={() => handleNavigate("/profile")}>Profile</div>
+                      <div className="dropdown__item" onClick={() => handleNavigate("/settings")}>Settings</div>
                     </>
                   ) : (
-                    <div
-                      className="dropdown__item"
-                      onClick={() => handleNavigate("/admin")}
-                    >
-                      Admin Panel
-                    </div>
+                    <div className="dropdown__item" onClick={() => handleNavigate("/admin")}>Admin Panel</div>
                   )}
 
                   <div
@@ -155,13 +183,10 @@ function Navbar() {
           {menuOpen ? <FaTimes /> : <FaBars />}
         </div>
       </div>
+
       <nav className={`mobile__menu ${menuOpen ? "active" : ""}`}>
         <div className="mobile__search-container">
-          <form
-            className="nav__search-wrapper"
-            onSubmit={handleSearch}
-            style={{ width: "100%" }}
-          >
+          <form className="nav__search-wrapper" onSubmit={handleSearchSubmit} style={{ width: "100%" }}>
             <FaSearch className="nav__search-icon" />
             <input
               type="text"
@@ -184,36 +209,21 @@ function Navbar() {
 
           {!user ? (
             <li className="mobile__login">
-              <button className="nav__btn" onClick={() => handleNavigate("/login")}>
-                Login
-              </button>
+              <button className="nav__btn" onClick={() => handleNavigate("/login")}>Login</button>
             </li>
           ) : (
             <>
               {user.role !== "admin" && (
                 <>
-                  <li onClick={() => handleNavigate("/cart")} className="mobile__action">
-                    🛒 Cart ({cart?.length || 0})
-                  </li>
-                  <li onClick={() => handleNavigate("/my-purchases")} className="mobile__action">
-                    📦 My Purchases
-                  </li>
-                  <li onClick={() => handleNavigate("/profile")} className="mobile__action">
-                    👤 Profile
-                  </li>
-                  <li onClick={() => handleNavigate("/settings")} className="mobile__action">
-                    ⚙️ Settings
-                  </li>
+                  <li onClick={() => handleNavigate("/cart")} className="mobile__action">🛒 Cart ({cart?.length || 0})</li>
+                  <li onClick={() => handleNavigate("/my-purchases")} className="mobile__action">📦 My Purchases</li>
+                  <li onClick={() => handleNavigate("/profile")} className="mobile__action">👤 Profile</li>
+                  <li onClick={() => handleNavigate("/settings")} className="mobile__action">⚙️ Settings</li>
                 </>
               )}
 
               {user.role === "admin" && (
-                <li
-                  onClick={() => handleNavigate("/admin")}
-                  className="mobile__action mobile__admin"
-                >
-                  👑 Admin Panel
-                </li>
+                <li onClick={() => handleNavigate("/admin")} className="mobile__action mobile__admin">👑 Admin Panel</li>
               )}
 
               <li

@@ -1,0 +1,62 @@
+import express from "express";
+import cors from "cors";
+
+import { trackVisitor } from "./core/middleware/trackVisitor.js";
+
+import authRoutes from "./modules/auth/auth.routes.js";
+import blogRoutes from "./modules/blog/blog.routes.js";
+import productRoutes from "./modules/products/product.routes.js";
+import projectRoutes from "./modules/projects/project.routes.js";
+import searchRoutes from "./modules/search/search.routes.js";
+import orderRoutes from "./modules/orders/order.routes.js";
+import paymentRoutes from "./modules/payment/payment.routes.js";
+import adminRoutes from "./modules/admin/admin.routes.js";
+import statsRoutes from "./modules/stats/stats.routes.js";
+import aboutRoutes from "./modules/about/about.routes.js";
+import notesRoutes from "./modules/notes/notes.routes.js";
+import certificationRoutes from "./modules/certification/certification.routes.js";
+import chatRoutes from "./modules/chat/chat.routes.js";
+
+const app = express();
+
+app.use(cors({
+  origin: [
+    "https://ialksng.me",
+    "https://www.ialksng.me",
+    "http://localhost:5173"
+  ],
+  credentials: true
+}));
+
+app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.send("API is running...");
+});
+
+app.get("/api/health", (req, res) => {
+  res.status(200).send("Backend is awake!");
+});
+
+
+app.use("/api/auth", authRoutes);
+
+app.use("/api/products", productRoutes);
+app.use("/api/projects", projectRoutes);
+app.use("/api/blogs", blogRoutes);
+app.use("/api/search", searchRoutes);
+
+app.use("/api/orders", orderRoutes);
+app.use("/api/payment", paymentRoutes);
+
+app.use(trackVisitor);
+
+app.use("/api/admin", adminRoutes);
+app.use("/api/public", statsRoutes);
+
+app.use("/api/about", aboutRoutes);
+app.use("/api/notes", notesRoutes);
+app.use("/api/certifications", certificationRoutes);
+app.use("/api/chat", chatRoutes);
+
+export default app;
