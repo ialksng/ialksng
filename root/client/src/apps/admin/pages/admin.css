@@ -1,23 +1,103 @@
 .admin-container {
-  min-height: 100vh;
-  background: var(--bg-primary, #0f172a);
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
   color: var(--text-primary, #f8fafc);
-  padding: 40px;
   font-family: 'Poppins', sans-serif;
 }
 
-.admin-container h2 {
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.admin-header h2 {
   font-size: 28px;
   font-weight: 600;
-  margin-bottom: 24px;
   color: #fff;
   letter-spacing: -0.5px;
+  margin: 0;
+}
+
+.admin-table-container {
+  background: rgba(30, 41, 59, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.admin-table th {
+  background: rgba(15, 23, 42, 0.8);
+  color: var(--text-muted, #94a3b8);
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color, #334155);
+}
+
+.admin-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary, #cbd5e1);
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.admin-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.admin-table tr:last-child td {
+  border-bottom: none;
+}
+
+.table-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-icon {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-icon.edit:hover { 
+  background: rgba(56, 189, 248, 0.1); 
+  color: #38bdf8; 
+  border-color: #38bdf8; 
+}
+
+.btn-icon.delete:hover { 
+  background: rgba(239, 68, 68, 0.1); 
+  color: #ef4444; 
+  border-color: #ef4444; 
 }
 
 .admin-form {
+  width: 100%;
   max-width: 900px;
   background: rgba(30, 41, 59, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   padding: 32px;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
@@ -154,7 +234,6 @@
 .mt-6 { margin-top: 32px; }
 
 .relative { position: relative; }
-
 .absolute.top-2.right-2 {
   position: absolute;
   top: 12px;
