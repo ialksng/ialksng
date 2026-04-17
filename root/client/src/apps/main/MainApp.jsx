@@ -2,7 +2,7 @@ import React, { Suspense, lazy } from "react";
 import { Routes, Route, useLocation, Outlet } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
-import AdminRoute from "./components/AdminRoute";
+import AdminRoute from "../admin/AdminRoute.jsx";
 import Chatbot from "../ai/Chatbot.jsx";
 import Loader from "../../core/components/Loader.jsx";
 import MainLayout from "../../core/layouts/MainLayout.jsx";
@@ -15,9 +15,9 @@ const Store = lazy(() => import("../store/Store.jsx"));
 const Contact = lazy(() => import("./pages/public/contact/Contact.jsx"));
 const More = lazy(() => import("../more/More.jsx"));
 
-const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
-const TermsConditions = lazy(() => import("./pages/TermsConditions"));
-const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
+const PrivacyPolicy = lazy(() => import("./pages/legal/PrivacyPolicy.jsx"));
+const TermsConditions = lazy(() => import("./pages/legal/TermsConditions"));
+const RefundPolicy = lazy(() => import("./pages/legal/RefundPolicy"));
 
 const Login = lazy(() => import("./features/auth/components/Login"));
 const Signup = lazy(() => import("./features/auth/components/Signup"));
