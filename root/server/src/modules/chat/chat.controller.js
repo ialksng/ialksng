@@ -1,5 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { buddyBotPrompt } from "../config/botPrompt.js";
+
+import { buddyBotPrompt } from "../chat/chat.prompt.js";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
