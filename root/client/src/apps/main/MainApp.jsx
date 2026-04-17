@@ -19,26 +19,26 @@ const PrivacyPolicy = lazy(() => import("./pages/legal/PrivacyPolicy.jsx"));
 const TermsConditions = lazy(() => import("./pages/legal/TermsConditions"));
 const RefundPolicy = lazy(() => import("./pages/legal/RefundPolicy"));
 
-const Login = lazy(() => import("./features/auth/components/Login"));
-const Signup = lazy(() => import("./features/auth/components/Signup"));
-const ForgotPassword = lazy(() => import("./features/auth/components/ForgotPassword"));
-const Checkout = lazy(() => import("./pages/Checkout"));
-const MyPurchases = lazy(() => import("./pages/MyPurchases"));
-const ProductContent = lazy(() => import("./pages/ProductContent"));
-const Cart = lazy(() => import("./pages/Cart"));
-const ViewProduct = lazy(() => import("./pages/ViewProduct"));
+const Login = lazy(() => import("../../features/auth/components/Login.jsx"));
+const Signup = lazy(() => import("../../features/auth/components/Signup"));
+const ForgotPassword = lazy(() => import("../../features/auth/components/ForgotPassword"));
+const Checkout = lazy(() => import("../../features/checkout/Checkout.jsx"));
+const MyPurchases = lazy(() => import("../../features/products/MyPurchases.jsx"));
+const ProductContent = lazy(() => import("../../apps/lms/ProductContent.jsx"));
+const Cart = lazy(() => import("../../features/cart/Cart.jsx"));
+const ViewProduct = lazy(() => import("../../apps/lms/ViewProduct.jsx"));
 
-const BlogDetail = lazy(() => import("./components/BlogDetail"));
-const NotesViewer = lazy(() => import("./pages/NotesViewer"));
+const BlogDetail = lazy(() => import("../blog/BlogDetail.jsx"));
+const CreateBlog = lazy(() => import("../blog/CreateBlog.jsx"));
+const EditBlog = lazy(() => import("../blog/EditBlog.jsx"));
+const NotesViewer = lazy(() => import("../lms/NotesViewer.jsx"));
 
-const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
-const AdminProducts = lazy(() => import("./pages/AdminProducts"));
-const AdminBlog = lazy(() => import("./pages/admin/AdminBlog"));
-const CreateBlog = lazy(() => import("./pages/admin/CreateBlog"));
-const EditBlog = lazy(() => import("./pages/admin/EditBlog"));
-const AdminAbout = lazy(() => import("./pages/admin/AdminAbout"));
-const AdminProjects = lazy(() => import("./pages/admin/AdminProjects"));
-const AdminCertifications = lazy(() => import("./pages/admin/AdminCertifications"));
+const AdminDashboard = lazy(() => import("../admin/pages/AdminDashboard.jsx"));
+const AdminProducts = lazy(() => import("../admin/pages/AdminProducts"));
+const AdminBlog = lazy(() => import("../admin/pages/AdminBlog"));
+const AdminAbout = lazy(() => import("../admin/pages/AdminAbout"));
+const AdminProjects = lazy(() => import("../admin/pages/AdminProjects"));
+const AdminCertifications = lazy(() => import("../admin/pages/AdminCertifications"));
 
 function MainApp() {
   const location = useLocation();

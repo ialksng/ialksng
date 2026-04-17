@@ -1,8 +1,10 @@
 import { BrowserRouter } from "react-router-dom";
-import { AuthProvider } from "../features/auth/AuthContext";
-import { CartProvider } from "../features/cart/CartContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Toaster } from "react-hot-toast";
+
+import { AuthProvider } from "../features/auth/AuthContext";
+import { CartProvider } from "../features/cart/CartContext";
+
 
 function AppProviders({ children }) {
   return (
