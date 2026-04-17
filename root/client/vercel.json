@@ -9,15 +9,15 @@
       "destination": "https://chatflow-zvul.onrender.com/api/:path*"
     },
     {
-      "source": "/projects/chatflow(/:path*)?",
+      "source": "/projects/chatflow/:path*",
       "destination": "https://chatflow-zvul.onrender.com/:path*"
     },
     {
-      "source": "/projects/smartsphere(/:path*)?",
+      "source": "/projects/smartsphere/:path*",
       "destination": "https://smartsphere-2n32.onrender.com/:path*"
     },
     {
-      "source": "/projects/truthlens(/:path*)?",
+      "source": "/projects/truthlens/:path*",
       "destination": "https://truthlens-3r4q.onrender.com/:path*"
     },
     {
