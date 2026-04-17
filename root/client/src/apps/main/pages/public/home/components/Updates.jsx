@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './Updates.module.css';
+import './Updates.css';
 
 export default function Updates() {
   const updatesData = [

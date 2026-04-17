@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaLaptopCode, FaServer, FaInfinity } from 'react-icons/fa';
 
-import './ServicesPreview.module.css';
+import './ServicesPreview.css';
 
 export default function ServicesPreview() {
   const services = [

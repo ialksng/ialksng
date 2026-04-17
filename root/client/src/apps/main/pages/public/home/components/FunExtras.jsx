@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaHeadphones, FaGamepad, FaMobileAlt, FaLaptop } from 'react-icons/fa';
 
-import './FunExtras.module.css';
+import './FunExtras.css';
 
 export default function FunExtras() {
   return (

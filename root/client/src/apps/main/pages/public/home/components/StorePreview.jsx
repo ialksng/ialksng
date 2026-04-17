@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaShoppingCart, FaArrowRight } from 'react-icons/fa';
 
-import './StorePreview.module.css';
+import './StorePreview.css';
 
 export default function StorePreview() {
   const previewProducts = [

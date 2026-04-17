@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaGithub, FaExternalLinkAlt, FaArrowRight } from 'react-icons/fa';
 
-import './FeaturedProjects.module.css';
+import './FeaturedProjects.css';
 
 export default function FeaturedProjects() {
   const projects = [

@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaStar } from 'react-icons/fa';
 
-import './Testimonials.module.css';
+import './Testimonials.css';
 
 export default function Testimonials() {
   const testimonials = [

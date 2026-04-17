@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaUserAlt, FaArrowRight } from 'react-icons/fa';
 
-import './AboutPreview.module.css';
+import './AboutPreview.css';
 
 export default function AboutPreview() {
   return (

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Typewriter } from "react-simple-typewriter";
 
-import "./Hero.module.css";
+import "./Hero.css";
 
 function Hero() {
   const [stats, setStats] = useState({
