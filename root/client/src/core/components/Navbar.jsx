@@ -59,7 +59,7 @@ function Navbar() {
         <ul>
           <li><NavLink to="/" className="nav__link">Home</NavLink></li>
           <li><NavLink to="/about" className="nav__link">About</NavLink></li>
-          <li><NavLink to="/projects" className="nav__link">Work</NavLink></li>
+          <li><NavLink to="/work" className="nav__link">Work</NavLink></li>
           <li><NavLink to="/blog" className="nav__link">Blog</NavLink></li>
           <li><NavLink to="/store" className="nav__link">Store</NavLink></li>
           <li><NavLink to="/contact" className="nav__link">Contact</NavLink></li>

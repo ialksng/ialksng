@@ -80,7 +80,7 @@ const Footer = () => {
           <div className="footer__links">
             <Link to="/" className="footer__link">Home</Link>
             <Link to="/about" className="footer__link">About</Link>
-            <Link to="/projects" className="footer__link">Work</Link>
+            <Link to="/work" className="footer__link">Work</Link>
             <Link to="/blog" className="footer__link">Blog</Link>
             <Link to="/store" className="footer__link">Store</Link>
             <Link to="/more" className="footer__link">More</Link>
@@ -90,9 +90,9 @@ const Footer = () => {
         <div className="footer__col">
           <h3 className="footer__title">Legal</h3>
           <div className="footer__links">
-            <Link to="/legal/privacy-policy" className="footer__link">Privacy Policy</Link>
-            <Link to="/legal/terms-conditions" className="footer__link">Terms of Service</Link>
-            <Link to="/legal/refund-policy" className="footer__link">Refund Policy</Link>
+            <Link to="/legal/Privacyolicy" className="footer__link">Privacy Policy</Link>
+            <Link to="/legal/TermsConditions" className="footer__link">Terms of Service</Link>
+            <Link to="/legal/RefundPolicy" className="footer__link">Refund Policy</Link>
             <Link to="/contact" className="footer__link">Contact Support</Link>
           </div>
         </div>
