@@ -1,10 +1,11 @@
 import React from 'react';
+
 import './legal.css'; 
 
 const CookiesPolicy = () => {
   return (
-    <div className="legal__container">
-      <div className="legal__content">
+    <div className="legal-page__container">
+      <div className="legal-page__content">
         <h1>Cookie Policy</h1>
         <p>Last updated: {new Date().toLocaleDateString()}</p>
         
