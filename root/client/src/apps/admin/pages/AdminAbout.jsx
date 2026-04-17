@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 
-import axios from "../../utils/axios";
+import axios from "../../../core/utils/axios";
 
-import "../../styles/admin.css";
+import "./admin.css";
 
 const AdminAbout = () => {
   const [formData, setFormData] = useState({
