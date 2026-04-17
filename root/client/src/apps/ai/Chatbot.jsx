@@ -3,7 +3,7 @@ import ReactMarkdown from 'react-markdown';
 
 import axios from '../../core/utils/axios'; 
 
-import './Chatbot.module.css'; 
+import './Chatbot.css'; 
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
