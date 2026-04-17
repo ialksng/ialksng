@@ -107,9 +107,11 @@ const Blog = () => {
                       {new Date(blog.createdAt).toLocaleDateString()}
                     </span>
                     <h3>{blog.title}</h3>
+                    
                     <p className="blog-excerpt">
                       {blog.excerpt || (blog.content ? blog.content.substring(0, 100) + "..." : "No preview available.")}
                     </p>
+                    
                     <Link
                       to={`/blog/${blog._id}`}
                       className="read-more"

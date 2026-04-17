@@ -3,6 +3,7 @@ import { Routes, Route, useLocation, Outlet } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
 import MainLayout from "../../core/layouts/MainLayout.jsx";
+import AdminLayout from "../../apps/admin/Layouts/AdminLayout.jsx";
 import Loader from "../../core/components/Loader.jsx";
 import CookieConsent from "../../core/components/CookieConsent.jsx";
 import Chatbot from "../ai/Chatbot.jsx";
@@ -85,7 +86,7 @@ function MainApp() {
               <Route path="/refund-policy" element={<PageWrapper><RefundPolicy /></PageWrapper>} />
               <Route path="/cookie-policy" element={<PageWrapper><CookiesPolicy /></PageWrapper>} />
 
-              <Route element={<AdminRoute><Outlet /></AdminRoute>}>
+              <Route element={<AdminRoute><AdminLayout /></AdminRoute>}>
                 <Route path="/admin" element={<PageWrapper><AdminDashboard /></PageWrapper>} />
                 <Route path="/admin/home" element={<PageWrapper><AdminHome /></PageWrapper>} />
                 <Route path="/admin/products" element={<PageWrapper><AdminProducts /></PageWrapper>} />
