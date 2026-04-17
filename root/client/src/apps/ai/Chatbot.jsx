@@ -72,13 +72,27 @@ const Chatbot = () => {
       {isOpen && (
         <div className="chat-window">
           <div className="chat-header">
-            <div className="chat-header-info">
+
+            <div className="chat-header-left">
               <img src={BOT_GIF} alt="bot" className="bot-avatar-large" />
-              <div>
-                <h3>Buddy Bot</h3>
-                <span className="chat-status-dot"></span>
+              <div className="chat-header-text">
+                <h3>BuddyBot</h3>
+                <span className="chat-status">
+                  <span className="chat-status-dot"></span>
+                  Online
+                </span>
               </div>
             </div>
+
+            <a
+              href="https://www.ialksng.me/projects/buddybot"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="chat-header-btn"
+            >
+              View
+            </a>
+
           </div>
           
           <div className="chat-messages">
