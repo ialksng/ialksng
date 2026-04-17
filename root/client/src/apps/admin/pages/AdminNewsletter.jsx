@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
+
 import axios from "../../../core/utils/axios";
+import Loader from "../../../core/components/Loader";
+
 import "./admin.css";
 
 const AdminNewsletter = () => {
@@ -44,7 +47,7 @@ const AdminNewsletter = () => {
     }
   };
 
-  if (loading) return <div>Loading Subscribers...</div>;
+  if (loading) return <div className="admin-container"><Loader /></div>;
 
   return (
     <div className="admin-container p-6">

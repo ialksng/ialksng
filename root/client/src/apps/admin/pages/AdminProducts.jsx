@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 
 import axios from "../../../core/utils/axios";
+import Loader from "../../../core/components/Loader";
 
 import "./AdminProducts.css";
 
 function AdminProducts() {
   const [products, setProducts] = useState([]);
+
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -15,15 +17,20 @@ function AdminProducts() {
     fileUrl: "",
     notionPageId: ""  
   });
+
   const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(true);
 
   const fetchProducts = async () => {
+    setFetching(true);
     try {
       const res = await axios.get("/products");
       setProducts(res.data.products || res.data || []);
     } catch (err) {
       console.error("Fetch products error:", err);
       setProducts([]);
+    } finally {
+      setFetching(false);
     }
   };
 
@@ -70,7 +77,6 @@ function AdminProducts() {
 
         fetchProducts();
       }
-
     } catch (err) {
       console.error(err.response?.data || err.message);
       alert("Failed to add product");
@@ -92,18 +98,20 @@ function AdminProducts() {
     }
   };
 
+  if (fetching) {
+    return (
+      <div className="admin-container">
+        <Loader />
+      </div>
+    );
+  }
+
   return (
     <div className="adminP__container">
       <h2>Manage Products</h2>
 
       <form className="adminP__form" onSubmit={handleAdd}>
-        <input
-          name="title"
-          placeholder="Title"
-          value={form.title}
-          onChange={handleChange}
-          required
-        />
+        <input name="title" placeholder="Title" value={form.title} onChange={handleChange} required />
 
         <select name="category" value={form.category} onChange={handleChange}>
           <option value="notes">Notes</option>
@@ -112,44 +120,18 @@ function AdminProducts() {
           <option value="code">Code</option>
         </select>
 
-        <input
-          name="description"
-          placeholder="Description"
-          value={form.description}
-          onChange={handleChange}
-        />
+        <input name="description" placeholder="Description" value={form.description} onChange={handleChange} />
 
-        <input
-          name="price"
-          type="number"
-          placeholder="Price"
-          value={form.price}
-          onChange={handleChange}
-        />
+        <input name="price" type="number" placeholder="Price" value={form.price} onChange={handleChange} />
 
-        <input
-          name="image"
-          placeholder="Image URL"
-          value={form.image}
-          onChange={handleChange}
-        />
+        <input name="image" placeholder="Image URL" value={form.image} onChange={handleChange} />
 
         {form.category !== "notes" && (
-          <input
-            name="fileUrl"
-            placeholder="File URL (download)"
-            value={form.fileUrl}
-            onChange={handleChange}
-          />
+          <input name="fileUrl" placeholder="File URL (download)" value={form.fileUrl} onChange={handleChange} />
         )}
 
         {form.category === "notes" && (
-          <input
-            name="notionPageId"
-            placeholder="Notion Page ID"
-            value={form.notionPageId}
-            onChange={handleChange}
-          />
+          <input name="notionPageId" placeholder="Notion Page ID" value={form.notionPageId} onChange={handleChange} />
         )}
 
         <button type="submit" disabled={loading}>
@@ -171,10 +153,7 @@ function AdminProducts() {
                 <p>₹{p.price}</p>
               </div>
 
-              <button
-                className="delete-btn"
-                onClick={() => handleDelete(p._id)}
-              >
+              <button className="delete-btn" onClick={() => handleDelete(p._id)}>
                 Delete
               </button>
             </div>

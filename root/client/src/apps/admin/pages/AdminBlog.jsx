@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
-import axios from "../../../core/utils/axios";
-import "./admin.css";
 import { FaEdit, FaTrash, FaPlus, FaTimes } from "react-icons/fa"; 
+
+import axios from "../../../core/utils/axios";
+import Loader from "../../../core/components/Loader";
+
+import "./admin.css";
+
 
 const AdminBlog = () => {
   const [blogs, setBlogs] = useState([]);
@@ -78,8 +82,7 @@ const AdminBlog = () => {
     }
   };
 
-  if (loading && view === "list") return <div className="admin-container p-6">Loading Blogs...</div>;
-
+  if (loading && view === "list") return <div className="admin-container"><Loader /></div>;
   return (
     <div className="admin-container">
       {view === "list" ? (
