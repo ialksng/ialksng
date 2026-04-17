@@ -15,6 +15,7 @@ const Blog = lazy(() => import("../blog/Blog.jsx"));
 const Store = lazy(() => import("../store/Store.jsx"));
 const Contact = lazy(() => import("./pages/public/contact/Contact.jsx"));
 const More = lazy(() => import("../more/More.jsx"));
+const Search = lazy(() => import("./pages/public/search/Search.jsx"));
 
 const PrivacyPolicy = lazy(() => import("./pages/legal/PrivacyPolicy.jsx"));
 const TermsConditions = lazy(() => import("./pages/legal/TermsConditions"));
@@ -60,7 +61,7 @@ function MainApp() {
               <Route path="/store" element={<PageWrapper><Store /></PageWrapper>} />
               <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
               <Route path="/more" element={<PageWrapper><More /></PageWrapper>} />
-
+              <Route path="/search" element={<PageWrapper><Search /></PageWrapper>} />
 
               <Route path="/login" element={<PageWrapper><Login /></PageWrapper>} />
               <Route path="/signup" element={<PageWrapper><Signup /></PageWrapper>} />

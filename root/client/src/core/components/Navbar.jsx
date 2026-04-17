@@ -40,7 +40,7 @@ function Navbar() {
     e.preventDefault();
 
     if (searchQuery.trim()) {
-      console.log("Searching for:", searchQuery);
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
       setSearchQuery("");
       setMenuOpen(false);
     }
