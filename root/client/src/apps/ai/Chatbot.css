@@ -241,3 +241,19 @@
   border-color: var(--accent-primary, #38bdf8);
   transform: translateY(-1px);
 }
+
+.bot-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--accent-primary, #38bdf8);
+}
+
+.bot-avatar-msg {
+  width: 28px;
+  height: 28px;
+  margin-right: 8px;
+  border-radius: 50%;
+  align-self: flex-end;
+}
