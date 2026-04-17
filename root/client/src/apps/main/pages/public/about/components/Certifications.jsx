@@ -4,7 +4,7 @@ import { SiUdemy, SiCoursera, SiPostman } from 'react-icons/si';
 
 import Pagination from '../../../../../../core/components/Pagination'; 
 
-import './Certifications.module.css';
+import './Certifications.css';
 
 export default function Certifications() {
   const [activeCert, setActiveCert] = useState(null);

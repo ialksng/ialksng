@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaGraduationCap, FaUniversity, FaCalendarAlt } from 'react-icons/fa';
 
-import './Education.module.css';
+import './Education.css';
 
 export default function Education() {
   const educationData = [

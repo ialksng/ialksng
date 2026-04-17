@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaCalendarAlt } from 'react-icons/fa';
 
-import './Experience.module.css';
+import './Experience.css';
 
 export default function Experience() {
   const experiences = [

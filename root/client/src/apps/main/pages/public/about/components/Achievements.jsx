@@ -3,7 +3,7 @@ import { FaTrophy, FaMedal, FaStar } from 'react-icons/fa';
 
 import Pagination from '../../../../../../core/components/Pagination'; 
 
-import './Achievements.module.css';
+import './Achievements.css';
 
 export default function Achievements() {
   const [currentPage, setCurrentPage] = useState(1);

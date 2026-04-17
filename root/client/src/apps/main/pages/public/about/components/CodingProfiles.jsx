@@ -1,7 +1,7 @@
 import React from 'react';
 import { SiLeetcode, SiCodechef, SiGithub, SiHackerrank } from 'react-icons/si';
 
-import './CodingProfiles.module.css';
+import './CodingProfiles.css';
 
 export default function CodingProfiles() {
   const profiles = [

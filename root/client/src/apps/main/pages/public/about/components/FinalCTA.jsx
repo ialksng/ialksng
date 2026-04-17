@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaPaperPlane, FaFolderOpen } from 'react-icons/fa';
 
-import './FinalCTA.module.css';
+import './FinalCTA.css';
 
 export default function FinalCTA() {
   return (

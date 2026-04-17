@@ -6,7 +6,7 @@ import axios from "../../core/utils/axios";
 import { AuthContext } from "../../features/auth/AuthContext";
 import Loader from "../../core/components/Loader";
 
-import "./ViewProduct.module.css";
+import "./ViewProduct.css";
 
 function ViewProduct() {
   const { id } = useParams();

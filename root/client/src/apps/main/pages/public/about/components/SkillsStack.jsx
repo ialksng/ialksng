@@ -18,7 +18,7 @@ import {
   SiDocker, SiLinux, SiPostman
 } from 'react-icons/si';
 
-import './SkillsStack.module.css';
+import './SkillsStack.css';
 
 export default function SkillsStack() {
   const [activeFilter, setActiveFilter] = useState("All");

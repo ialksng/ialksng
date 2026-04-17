@@ -11,7 +11,7 @@ import Education from './components/Education';
 import Achievements from './components/Achievements';
 import FinalCTA from './components/FinalCTA';
 
-import './About.module.css';
+import './About.css';
 
 function About() {
   return (

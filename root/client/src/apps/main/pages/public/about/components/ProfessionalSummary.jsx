@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaCheckCircle } from 'react-icons/fa';
 
-import './ProfessionalSummary.module.css';
+import './ProfessionalSummary.css';
 
 export default function ProfessionalSummary() {
   return (

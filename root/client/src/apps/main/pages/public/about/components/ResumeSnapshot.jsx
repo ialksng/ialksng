@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaFilePdf, FaDownload, FaTimes, FaMapMarkerAlt, FaGraduationCap, FaBookReader } from 'react-icons/fa';
 
-import './ResumeSnapshot.module.css'; 
+import './ResumeSnapshot.css'; 
 
 export default function ResumeSnapshot() {
   const [isModalOpen, setIsModalOpen] = useState(false);
