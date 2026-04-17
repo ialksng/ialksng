@@ -30,6 +30,7 @@
 .navbar__links ul {
   display: flex;
   gap: 2rem;
+  list-style: none; 
 }
 
 .nav__link {
@@ -268,6 +269,7 @@
   align-items: center;
   gap: 0.25rem;
   padding-top: 0.75rem;
+  list-style: none; 
 }
 
 .mobile__menu li {

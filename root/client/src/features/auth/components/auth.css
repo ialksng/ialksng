@@ -35,7 +35,9 @@
   margin-bottom: 22px;
 }
 
-.auth__card input {
+.auth__card input[type="text"],
+.auth__card input[type="email"],
+.auth__card input[type="password"] {
   width: 100%;
   padding: 12px;
   margin: 6px 0;
@@ -48,14 +50,20 @@
 
   font-size: 14px;
   transition: all 0.2s ease;
+  box-sizing: border-box; 
 }
 
-.auth__card input:focus {
+.auth__card input[type="text"]:focus,
+.auth__card input[type="email"]:focus,
+.auth__card input[type="password"]:focus {
   border: 1px solid #38bdf8;
   box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+  outline: none;
 }
 
 .auth__card button {
+  display: block; 
+  box-sizing: border-box; 
   width: 100%;
   padding: 12px;
   margin-top: 12px;
@@ -126,6 +134,7 @@
 .auth__oauth {
   display: flex;
   flex-direction: column;
+  align-items: center; 
   gap: 10px;
 }
 
