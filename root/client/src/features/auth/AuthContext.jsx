@@ -1,5 +1,4 @@
 import React, { createContext, useState, useEffect } from "react";
-
 import axios from "../../core/utils/axios";
 
 export const AuthContext = createContext();
@@ -19,14 +18,14 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const initAuth = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+        
         if (!token) {
           setLoading(false);
           return;
         }
 
         setAuthToken(token);
-
         const res = await axios.get("/auth/me");
 
         if (!res?.data?.user) throw new Error("Invalid user");
@@ -42,18 +41,26 @@ export const AuthProvider = ({ children }) => {
     initAuth();
   }, []);
 
-  const loginSuccess = (data) => {
+  const loginSuccess = (data, rememberMe = true) => {
     const { token, user } = data;
 
     if (!token || !user) return;
 
-    localStorage.setItem("token", token);
+    if (rememberMe) {
+      localStorage.setItem("token", token);
+      sessionStorage.removeItem("token"); 
+    } else {
+      sessionStorage.setItem("token", token);
+      localStorage.removeItem("token"); 
+    }
+
     setAuthToken(token);
     setUser(user);
   };
 
   const logoutUser = () => {
     localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
     setAuthToken(null);
     setUser(null);
   };

@@ -22,7 +22,7 @@ const Login = () => {
     setError("");
     try {
       const res = await axios.post("/auth/login", form);
-      loginSuccess(res.data); 
+      loginSuccess(res.data, rememberMe); 
       navigate(from);
     } catch (err) {
       setError(err.response?.data?.msg || "Login failed");
@@ -32,7 +32,7 @@ const Login = () => {
   const handleGoogleSuccess = async (response) => {
     try {
       const res = await axios.post("/auth/google", { token: response.credential });
-      loginSuccess(res.data);
+      loginSuccess(res.data, true);
       navigate(from);
     } catch (err) {
       setError("Google login failed");
@@ -52,7 +52,7 @@ const Login = () => {
             onChange={(e) => setForm({ ...form, password: e.target.value })} />
           
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', margin: '10px 0 20px 0' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#fff' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#fff', cursor: 'pointer' }}>
               <input type="checkbox" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
               Remember me
             </label>

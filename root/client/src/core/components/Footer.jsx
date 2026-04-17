@@ -90,9 +90,10 @@ const Footer = () => {
         <div className="footer__col">
           <h3 className="footer__title">Legal</h3>
           <div className="footer__links">
-            <Link to="/legal/Privacyolicy" className="footer__link">Privacy Policy</Link>
-            <Link to="/legal/TermsConditions" className="footer__link">Terms of Service</Link>
-            <Link to="/legal/RefundPolicy" className="footer__link">Refund Policy</Link>
+            <Link to="/privacy-policy" className="footer__link">Privacy Policy</Link>
+            <Link to="/terms-and-conditions" className="footer__link">Terms of Service</Link>
+            <Link to="/cookie-policy" className="footer__link">Cookie Policy</Link>
+            <Link to="/refund-policy" className="footer__link">Refund Policy</Link>
             <Link to="/contact" className="footer__link">Contact Support</Link>
           </div>
         </div>

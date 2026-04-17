@@ -18,6 +18,7 @@ const More = lazy(() => import("../more/More.jsx"));
 const PrivacyPolicy = lazy(() => import("./pages/legal/PrivacyPolicy.jsx"));
 const TermsConditions = lazy(() => import("./pages/legal/TermsConditions"));
 const RefundPolicy = lazy(() => import("./pages/legal/RefundPolicy"));
+const CookiesPolicy = lazy(() => import("./pages/legal/CookiesPolicy"));
 
 const Login = lazy(() => import("../../features/auth/components/Login.jsx"));
 const Signup = lazy(() => import("../../features/auth/components/Signup"));
@@ -63,7 +64,7 @@ function MainApp() {
               <Route path="/login" element={<PageWrapper><Login /></PageWrapper>} />
               <Route path="/signup" element={<PageWrapper><Signup /></PageWrapper>} />
               <Route path="/forgot-password" element={<PageWrapper><ForgotPassword /></PageWrapper>} />
-
+              <Route path="/cookie-policy" element={<PageWrapper><CookiesPolicy /></PageWrapper>} />
 
               <Route path="/blog/:id" element={<PageWrapper><BlogDetail /></PageWrapper>} />
 
