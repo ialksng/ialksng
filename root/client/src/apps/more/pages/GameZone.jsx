@@ -9,7 +9,7 @@ const GameZone = () => {
   useEffect(() => {
     const fetchGames = async () => {
       try {
-        const { data } = await axios.get('/api/more/games');
+        const { data } = await axios.get('/more/games');
         setGames(data);
       } catch (err) {
         console.error("Failed to load games", err);

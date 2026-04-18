@@ -9,7 +9,7 @@ const Life = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const { data } = await axios.get('/api/more/life');
+        const { data } = await axios.get('/more/life');
         setPosts(data);
       } catch (err) {
         console.error(err);
