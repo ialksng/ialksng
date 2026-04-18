@@ -61,10 +61,6 @@ function BlogDetail() {
   };
 
   const handleShare = async () => {
-    if (!user) {
-      toast.error("You must be logged in to share this post.");
-      return;
-    }
     try {
       await navigator.clipboard.writeText(window.location.href);
       toast.success("Link copied to clipboard!");
