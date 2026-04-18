@@ -43,7 +43,10 @@ function BlogDetail() {
   };
 
   const handleLike = async () => {
-    if (!user) return toast.error("Please log in to like this post.");
+    if (!user) {
+      toast.error("Please log in to like this post.");
+      return;
+    }
     try {
       const res = await axios.post(`/blogs/${id}/like`, {}, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
@@ -52,22 +55,18 @@ function BlogDetail() {
         ...prev,
         blog: { ...prev.blog, likes: res.data }
       }));
+      toast.success("Updated");
     } catch (err) {
       toast.error("Failed to like post.");
     }
   };
 
-  const handleShare = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      toast.success("Copied to clipboard", { id: "share-toast" });
-    } catch (error) {
-      toast.error("Failed to copy", { id: "share-error" });
-    }
-  };
-
   const handleComment = async (e) => {
     e.preventDefault();
+    if (!user) {
+      toast.error("Please log in to comment.");
+      return;
+    }
     if (!commentText.trim()) return;
 
     const commentPromise = axios.post(`/blogs/${id}/comment`, { text: commentText }, {
@@ -75,7 +74,7 @@ function BlogDetail() {
     });
 
     toast.promise(commentPromise, {
-      loading: 'Posting...',
+      loading: "Posting...",
       success: (res) => {
         updateComments(res.data);
         setCommentText("");
@@ -87,10 +86,12 @@ function BlogDetail() {
 
   const handleDeleteComment = (commentId) => {
     toast((t) => (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', padding: '4px' }}>
-        <span style={{ fontSize: '14px', fontWeight: '500', color: 'var(--text-primary)' }}>Delete this comment?</span>
-        <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
-          <button 
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px", padding: "4px" }}>
+        <span style={{ fontSize: "14px", fontWeight: "500", color: "var(--text-primary)" }}>
+          Delete this comment?
+        </span>
+        <div style={{ display: "flex", gap: "10px", width: "100%" }}>
+          <button
             onClick={async () => {
               toast.dismiss(t.id);
               const loadingToast = toast.loading("Deleting...");
@@ -100,17 +101,17 @@ function BlogDetail() {
                 });
                 updateComments(res.data);
                 toast.success("Comment deleted", { id: loadingToast });
-              } catch (err) {
+              } catch {
                 toast.error("Failed to delete", { id: loadingToast });
               }
-            }} 
-            style={{ flex: 1, padding: '6px 12px', background: 'var(--danger-color)', color: '#fff', border: 'none', borderRadius: '6px', fontSize: '13px', cursor: 'pointer' }}
+            }}
+            style={{ flex: 1, padding: "6px 12px", background: "var(--danger-color)", color: "#fff", border: "none", borderRadius: "6px", fontSize: "13px", cursor: "pointer" }}
           >
             Delete
           </button>
-          <button 
-            onClick={() => toast.dismiss(t.id)} 
-            style={{ flex: 1, padding: '6px 12px', background: 'transparent', color: 'var(--text-secondary)', border: '1px solid var(--border-color)', borderRadius: '6px', fontSize: '13px', cursor: 'pointer' }}
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            style={{ flex: 1, padding: "6px 12px", background: "transparent", color: "var(--text-secondary)", border: "1px solid var(--border-color)", borderRadius: "6px", fontSize: "13px", cursor: "pointer" }}
           >
             Cancel
           </button>
@@ -128,7 +129,7 @@ function BlogDetail() {
     });
 
     toast.promise(editPromise, {
-      loading: 'Saving edit...',
+      loading: "Saving edit...",
       success: (res) => {
         updateComments(res.data);
         setEditingCommentId(null);
@@ -139,15 +140,23 @@ function BlogDetail() {
     });
   };
 
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast.success("Copied to clipboard!");
+    } catch {
+      toast.error("Failed to copy link");
+    }
+  };
+
   if (loading) return <Loader />;
-  if (!blogData || !blogData.blog) return <h2 style={{textAlign: "center", color: "var(--text-muted)", marginTop: "5rem"}}>Blog Not found</h2>;
+  if (!blogData || !blogData.blog) return <h2 style={{ textAlign: "center", color: "var(--text-muted)", marginTop: "5rem" }}>Blog Not found</h2>;
 
   const { blog, notionContent } = blogData;
 
   return (
     <div className="blogdetail">
       <div className="blogdetail__container">
-
         <button onClick={() => navigate("/blog")} className="blogdetail__back-btn">
           ← Back to Blogs
         </button>
@@ -166,14 +175,14 @@ function BlogDetail() {
 
         <div className="social-container">
           <div className="social-actions-bar">
-            <button 
-              className={`like-btn ${blog.likes?.includes(user?._id) ? 'liked' : ''}`} 
+            <button
+              className={`like-btn ${blog.likes?.includes(user?._id) ? "liked" : ""}`}
               onClick={handleLike}
             >
-              {blog.likes?.includes(user?._id) ? '❤️' : '🤍'} 
+              {blog.likes?.includes(user?._id) ? "❤️" : "🤍"}
               <span>{blog.likes?.length || 0} Likes</span>
             </button>
-            
+
             <button className="like-btn" onClick={handleShare}>
               🔗 Share
             </button>
@@ -184,9 +193,9 @@ function BlogDetail() {
 
             {user ? (
               <form onSubmit={handleComment} className="comment-input-area">
-                <textarea 
+                <textarea
                   className="comment-textarea"
-                  placeholder="Share your thoughts..." 
+                  placeholder="Share your thoughts..."
                   value={commentText}
                   onChange={(e) => setCommentText(e.target.value)}
                   required
@@ -206,23 +215,21 @@ function BlogDetail() {
 
             <div>
               {(!blog.comments || blog.comments.length === 0) ? (
-                <p className="blogdetail__empty-comments">
-                  Be the first to leave a comment!
-                </p>
+                <p className="blogdetail__empty-comments">Be the first to leave a comment!</p>
               ) : (
                 blog.comments.slice().reverse().map((c) => (
                   <div key={c._id} className="comment-card">
                     <div className="comment-avatar">
                       {c.user.charAt(0).toUpperCase()}
                     </div>
-                    
+
                     <div style={{ flex: 1 }}>
                       <div className="comment-meta">
                         <div>
                           <span className="comment-author">{c.user}</span>
                           <span className="comment-date">{new Date(c.date).toLocaleDateString()}</span>
                         </div>
-                        
+
                         {user && user._id === c.userId && (
                           <div className="comment-actions">
                             <button onClick={() => { setEditingCommentId(c._id); setEditText(c.text); }} className="comment-action-btn edit">
@@ -237,7 +244,7 @@ function BlogDetail() {
 
                       {editingCommentId === c._id ? (
                         <form onSubmit={(e) => handleEditCommentSubmit(e, c._id)} style={{ marginTop: "10px" }}>
-                          <textarea 
+                          <textarea
                             value={editText}
                             onChange={(e) => setEditText(e.target.value)}
                             className="comment-textarea"
@@ -259,7 +266,6 @@ function BlogDetail() {
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );
