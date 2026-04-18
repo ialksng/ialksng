@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaDownload, FaEnvelope } from 'react-icons/fa';
 
+import "./AboutHero.css";
+
 export default function AboutHero() {
   return (
     <section className="about__hero">
