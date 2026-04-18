@@ -218,7 +218,7 @@ function Navbar() {
               {user.role !== "admin" && (
                 <>
                   <li onClick={() => handleNavigate("/cart")} className="mobile__action">🛒 Cart ({cart?.length || 0})</li>
-                  <li onClick={() => handleNavigate("/profile")} className="mobile__action">👤 Profile Dashboard</li>
+                  <li onClick={() => handleNavigate("/profile")} className="mobile__action">👤 Profile</li>
                 </>
               )}
 

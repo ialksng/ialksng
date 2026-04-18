@@ -49,7 +49,7 @@ const AdminBlog = lazy(() => import("../admin/pages/AdminBlog.jsx"));
 const AdminProducts = lazy(() => import("../admin/pages/AdminProducts.jsx"));
 const AdminCertifications = lazy(() => import("../admin/pages/AdminCertifications.jsx"));
 const AdminNewsletter = lazy(() => import("../admin/pages/AdminNewsletter.jsx"));
-const AdminTestimonials = lazy(() => import("../admin/pages/AdminTestimonials.jsx")); 
+const AdminTestimonials = lazy(() => import("../admin/pages/AdminTestimonials.jsx"));
 
 
 function MainApp() {
