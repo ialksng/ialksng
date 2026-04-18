@@ -63,9 +63,9 @@ function BlogDetail() {
   const handleShare = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
-      toast.success("Link copied to clipboard!");
+      toast.success("Copied to clipboard", { id: "share-toast" });
     } catch (error) {
-      toast.error("Failed to copy the link.");
+      toast.error("Failed to copy the link.", { id: "share-error" });
     }
   };
 
