@@ -66,6 +66,7 @@ function Navbar() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [menuOpen]);
+
   useEffect(() => {
     const fetchSuggestions = async () => {
       if (searchQuery.trim().length < 2) {
@@ -278,11 +279,11 @@ function Navbar() {
           ) : (
             <>
               {user.role !== "admin" && (
-                <li onClick={() => handleNavigate("/profile")} className="mobile__action">👤 Profile</li>
+                <li onClick={() => handleNavigate("/profile")} className="mobile__action">Profile</li>
               )}
 
               {user.role === "admin" && (
-                <li onClick={() => handleNavigate("/admin")} className="mobile__action mobile__admin">👑 Admin Panel</li>
+                <li onClick={() => handleNavigate("/admin")} className="mobile__action mobile__admin">Admin Panel</li>
               )}
 
               <li
@@ -294,7 +295,7 @@ function Navbar() {
                 }}
                 className="mobile__action mobile__logout"
               >
-                🚪 Logout
+                Logout
               </li>
             </>
           )}
