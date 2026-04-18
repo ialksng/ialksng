@@ -1,0 +1,149 @@
+.gd-container {
+  background: #0f172a;
+  min-height: 100vh;
+  color: #fff;
+}
+
+/* HERO */
+.gd-hero {
+  position: relative;
+  height: 60vh;
+  overflow: hidden;
+}
+
+.gd-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.6);
+}
+
+.gd-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, #0f172a 10%, transparent);
+}
+
+.gd-hero-content {
+  position: absolute;
+  bottom: 40px;
+  left: 40px;
+}
+
+.gd-hero-content h1 {
+  font-size: 3rem;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.gd-back {
+  color: #94a3b8;
+  text-decoration: none;
+}
+
+.gd-back:hover {
+  color: #22d3ee;
+}
+
+/* BUTTON */
+.gd-btn {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 12px 20px;
+  background: #7c3aed;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #fff;
+  transition: 0.3s;
+}
+
+.gd-btn:hover {
+  background: #6d28d9;
+}
+
+/* USERNAME */
+.gd-username {
+  background: rgba(255,255,255,0.1);
+  padding: 6px 12px;
+  border-radius: 6px;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+/* SECTIONS */
+.gd-section {
+  padding: 40px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.gd-section h2 {
+  margin-bottom: 15px;
+}
+
+/* HEADER */
+.gd-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* GRID */
+.gd-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+/* CARD */
+.gd-card {
+  background: #1e293b;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: 0.3s;
+}
+
+.gd-card:hover {
+  transform: translateY(-5px);
+}
+
+.gd-card-body {
+  padding: 15px;
+}
+
+.gd-card-body h4 {
+  margin-bottom: 8px;
+}
+
+/* EMPTY */
+.gd-empty {
+  text-align: center;
+  padding: 40px;
+  color: #94a3b8;
+}
+
+/* LOADING */
+.gd-loading {
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #cbd5f5;
+}
+
+.gd-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #7c3aed;
+  border-top: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 10px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
