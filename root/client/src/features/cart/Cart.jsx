@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
+import toast from "react-hot-toast";
 
 import { AuthContext } from "../auth/AuthContext";
 import { CartContext } from "./CartContext";
@@ -30,6 +31,7 @@ function Cart() {
 
   const handleCheckout = async () => {
     if (!user) {
+      toast.error("Please login to checkout");
       navigate("/login", { state: { from: "/cart" } });
       return;
     }
@@ -49,13 +51,13 @@ function Cart() {
       const data = await res.json();
 
       if (!data.success) {
-        return alert(data.error || "Checkout failed ❌");
+        return toast.error(data.error || "Checkout failed ❌");
       }
 
       const order = data.order;
 
       if (!window.Razorpay) {
-        alert("Payment SDK not loaded");
+        toast.error("Payment SDK not loaded");
         return;
       }
 
@@ -67,14 +69,13 @@ function Cart() {
         description: "Cart Purchase",
         order_id: order.id,
         handler: async function (response) {
+          const loadingToast = toast.loading("Verifying payment...");
           try {
             const verifyRes = await fetch(
               `${API}/api/payment/verify-payment`,
               {
                 method: "POST",
-                headers: {
-                  "Content-Type": "application/json"
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(response)
               }
             );
@@ -82,7 +83,8 @@ function Cart() {
             const verifyData = await verifyRes.json();
 
             if (!verifyData.success) {
-              return alert("Payment verification failed ❌");
+              toast.dismiss(loadingToast);
+              return toast.error("Payment verification failed ❌");
             }
 
             const orderRes = await fetch(
@@ -101,37 +103,35 @@ function Cart() {
             );
 
             const orderData = await orderRes.json();
+            toast.dismiss(loadingToast);
 
             if (orderData.success) {
-              alert("Payment successful 🎉");
+              toast.success("Payment successful 🎉");
               setCart([]);
               navigate("/my-purchases");
             } else {
-              alert("Order saving failed ❌");
+              toast.error("Order saving failed ❌");
             }
           } catch (err) {
-            alert("Error after payment");
+            toast.dismiss(loadingToast);
+            toast.error("Error after payment");
           }
         },
         modal: {
           ondismiss: function () {
-            alert("Payment cancelled");
+            toast("Payment cancelled", { icon: "ℹ️" });
           }
         },
-        theme: {
-          color: "#3399cc"
-        }
+        theme: { color: "#3399cc" }
       };
 
       const rzp = new window.Razorpay(options);
-
       rzp.on("payment.failed", function () {
-        alert("Payment failed ❌");
+        toast.error("Payment failed ❌");
       });
-
       rzp.open();
     } catch (err) {
-      alert("Checkout failed ❌");
+      toast.error("Checkout failed ❌");
     }
   };
 

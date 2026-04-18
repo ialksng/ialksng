@@ -1,6 +1,8 @@
 import React, { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
+import toast from "react-hot-toast";
+
 import { AuthContext } from "../AuthContext";
 import axios from "../../../core/utils/axios";
 import "./Signup.css";
@@ -10,29 +12,39 @@ const Signup = () => {
   const navigate = useNavigate();
 
   const [form, setForm] = useState({ username: "", name: "", email: "", password: "" });
-  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    try {
+    
+    const signupPromise = (async () => {
       await axios.post("/auth/signup", form);
       const res = await axios.post("/auth/login", { email: form.email, password: form.password });
-      loginSuccess(res.data);
-      navigate("/");
-    } catch (err) {
-      setError(err.response?.data?.msg || "Signup failed");
-    }
+      return res;
+    })();
+
+    toast.promise(signupPromise, {
+      loading: 'Creating your account...',
+      success: (res) => {
+        loginSuccess(res.data);
+        navigate("/");
+        return 'Account created successfully!';
+      },
+      error: (err) => err.response?.data?.msg || "Signup failed",
+    });
   };
 
   const handleGoogleSuccess = async (response) => {
-    try {
-      const res = await axios.post("/auth/google", { token: response.credential });
-      loginSuccess(res.data);
-      navigate("/");
-    } catch (err) {
-      setError("Google signup failed");
-    }
+    const googlePromise = axios.post("/auth/google", { token: response.credential });
+
+    toast.promise(googlePromise, {
+      loading: 'Authenticating...',
+      success: (res) => {
+        loginSuccess(res.data);
+        navigate("/");
+        return 'Signup successful!';
+      },
+      error: 'Google signup failed',
+    });
   };
 
   return (
@@ -41,10 +53,13 @@ const Signup = () => {
         <h2>Create an Account</h2>
         <p className="signup__subtitle">Sign up to see projects, buy notes, and access the AI.</p>
         
-        {error && <p className="signup__error">{error}</p>}
+        {/* Removed inline error message block */}
 
         <div className="signup__oauth">
-          <GoogleLogin onSuccess={handleGoogleSuccess} onError={() => setError("Google Error")} />
+          <GoogleLogin 
+            onSuccess={handleGoogleSuccess} 
+            onError={() => toast.error("Google Error")} 
+          />
         </div>
 
         <div className="signup__divider"><span>OR</span></div>

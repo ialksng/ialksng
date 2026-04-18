@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect, useRef } from "react";
 import axios from "../../core/utils/axios";
 import { AuthContext } from "../auth/AuthContext";
 import MyPurchases from "../products/MyPurchases";
+import toast from "react-hot-toast"; // <-- Imported toast
 import "./Profile.css";
 
 const Profile = () => {
@@ -15,7 +16,6 @@ const Profile = () => {
   });
   const [passData, setPassData] = useState({ currentPassword: "", newPassword: "" });
   const [feedback, setFeedback] = useState({ subject: "", message: "" });
-  const [msg, setMsg] = useState({ text: "", type: "" });
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
 
   useEffect(() => {
@@ -40,8 +40,7 @@ const Profile = () => {
     const file = e.target.files[0];
     if (file) {
       if (file.size > 2 * 1024 * 1024) {
-        setMsg({ text: "Image must be less than 2MB", type: "error" });
-        setTimeout(() => setMsg({ text: "", type: "" }), 3000);
+        toast.error("Image must be less than 2MB");
         return;
       }
       
@@ -50,17 +49,18 @@ const Profile = () => {
         const base64Image = reader.result;
         setProfileData((prev) => ({ ...prev, avatar: base64Image }));
         
-        try {
-          const res = await axios.put("/auth/profile", { ...profileData, avatar: base64Image }, {
-            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-          });
-          if(dispatch) dispatch({ type: "LOGIN_SUCCESS", payload: { user: res.data, token: localStorage.getItem("token") } });
-          setMsg({ text: "Avatar saved successfully!", type: "success" });
-        } catch (err) {
-          console.error(err);
-          setMsg({ text: "Failed to save avatar.", type: "error" });
-        }
-        setTimeout(() => setMsg({ text: "", type: "" }), 3000);
+        const uploadPromise = axios.put("/auth/profile", { ...profileData, avatar: base64Image }, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+        });
+
+        toast.promise(uploadPromise, {
+          loading: 'Uploading avatar...',
+          success: (res) => {
+            if(dispatch) dispatch({ type: "LOGIN_SUCCESS", payload: { user: res.data, token: localStorage.getItem("token") } });
+            return 'Avatar saved successfully!';
+          },
+          error: 'Failed to save avatar.',
+        });
       };
       reader.readAsDataURL(file);
     }
@@ -68,44 +68,50 @@ const Profile = () => {
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
-    try {
-      const res = await axios.put("/auth/profile", profileData, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-      });
-      if(dispatch) dispatch({ type: "LOGIN_SUCCESS", payload: { user: res.data, token: localStorage.getItem("token") } });
-      setMsg({ text: "Profile updated successfully!", type: "success" });
-    } catch (err) { 
-      setMsg({ text: err.response?.data?.msg || "Failed to update profile.", type: "error" }); 
-    }
-    setTimeout(() => setMsg({ text: "", type: "" }), 3000);
+    const updatePromise = axios.put("/auth/profile", profileData, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+    });
+
+    toast.promise(updatePromise, {
+      loading: 'Updating profile...',
+      success: (res) => {
+        if(dispatch) dispatch({ type: "LOGIN_SUCCESS", payload: { user: res.data, token: localStorage.getItem("token") } });
+        return 'Profile updated successfully!';
+      },
+      error: (err) => err.response?.data?.msg || 'Failed to update profile.',
+    });
   };
 
   const handleChangePassword = async (e) => {
     e.preventDefault();
-    try {
-      const res = await axios.put("/auth/change-password", passData, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-      });
-      setMsg({ text: res.data.msg, type: "success" });
-      setPassData({ currentPassword: "", newPassword: "" });
-    } catch (err) { 
-      setMsg({ text: err.response?.data?.msg || "Failed to change password.", type: "error" }); 
-    }
-    setTimeout(() => setMsg({ text: "", type: "" }), 3000);
+    const passPromise = axios.put("/auth/change-password", passData, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+    });
+
+    toast.promise(passPromise, {
+      loading: 'Updating password...',
+      success: (res) => {
+        setPassData({ currentPassword: "", newPassword: "" });
+        return res.data.msg;
+      },
+      error: (err) => err.response?.data?.msg || 'Failed to change password.',
+    });
   };
 
   const handleSubmitFeedback = async (e) => {
     e.preventDefault();
-    try {
-      const res = await axios.post("/auth/feedback", feedback, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-      });
-      setMsg({ text: res.data.msg, type: "success" });
-      setFeedback({ subject: "", message: "" });
-    } catch (err) { 
-      setMsg({ text: "Failed to submit feedback.", type: "error" }); 
-    }
-    setTimeout(() => setMsg({ text: "", type: "" }), 3000);
+    const feedbackPromise = axios.post("/auth/feedback", feedback, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+    });
+
+    toast.promise(feedbackPromise, {
+      loading: 'Submitting feedback...',
+      success: (res) => {
+        setFeedback({ subject: "", message: "" });
+        return res.data.msg;
+      },
+      error: 'Failed to submit feedback.',
+    });
   };
 
   const toggleTheme = () => {
@@ -113,6 +119,7 @@ const Profile = () => {
     document.documentElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
     setTheme(newTheme);
+    toast.success(`Switched to ${newTheme} mode`);
   };
 
   if (!user) return <div className="profile__login-prompt">Please login to view profile.</div>;
@@ -146,11 +153,7 @@ const Profile = () => {
       </div>
 
       <div className="profile__content">
-        {msg.text && (
-          <div className={`profile__alert ${msg.type}`}>
-            {msg.text}
-          </div>
-        )}
+        {/* Notice we completely removed the inline msg box here! */}
 
         {activeTab === 'personal' && (
           <form onSubmit={handleUpdateProfile}>

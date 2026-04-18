@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+
 import axios from "../../../core/utils/axios";
 import "./ForgotPassword.css";
 
@@ -8,8 +10,6 @@ const ForgotPassword = () => {
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [step, setStep] = useState(1); 
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -18,15 +18,12 @@ const ForgotPassword = () => {
     if (loading) return; 
 
     setLoading(true);
-    setMessage("");
-    setError("");
-
     try {
       const res = await axios.post("/auth/forgot-password/send-otp", { email });
-      setMessage(res.data.msg);
+      toast.success(res.data.msg || "OTP sent successfully!");
       setStep(2);
     } catch (err) {
-      setError(err.response?.data?.msg || "Failed to send OTP");
+      toast.error(err.response?.data?.msg || "Failed to send OTP");
     } finally {
       setLoading(false);
     }
@@ -37,20 +34,17 @@ const ForgotPassword = () => {
     if (loading) return;
 
     setLoading(true);
-    setMessage("");
-    setError("");
-
     try {
-      const res = await axios.post("/auth/forgot-password/reset", {
+      await axios.post("/auth/forgot-password/reset", {
         email,
         otp,
         newPassword,
       });
 
-      setMessage("Password updated successfully! You can now log in.");
+      toast.success("Password updated successfully! You can now log in.");
       setStep(3);
     } catch (err) {
-      setError(err.response?.data?.msg || "Failed to reset password");
+      toast.error(err.response?.data?.msg || "Failed to reset password");
     } finally {
       setLoading(false);
     }
@@ -61,8 +55,7 @@ const ForgotPassword = () => {
       <div className="forgot__card">
         <h2>Trouble logging in?</h2>
         
-        {message && <p className="forgot__msg-success">{message}</p>}
-        {error && <p className="forgot__msg-error">{error}</p>}
+        {/* Removed ugly inline success/error message texts */}
         
         {step === 1 && (
           <form onSubmit={handleSendOTP}>

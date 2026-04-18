@@ -1,5 +1,6 @@
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
+import toast from "react-hot-toast";
 
 import { AuthContext } from "../auth/AuthContext";
 
@@ -46,7 +47,7 @@ function Checkout() {
       if (!product) return;
 
       if (!window.Razorpay) {
-        alert("Payment SDK not loaded");
+        toast.error("Payment SDK not loaded");
         return;
       }
 
@@ -63,11 +64,11 @@ function Checkout() {
 
       if (!data.success) {
         if (res.status === 401) {
-          alert("Session expired. Please login again.");
+          toast.error("Session expired. Please login again.");
           navigate("/login");
           return;
         }
-        return alert(data.error || "Failed to create order");
+        return toast.error(data.error || "Failed to create order");
       }
 
       const order = data.order;
@@ -80,14 +81,13 @@ function Checkout() {
         description: product.title,
         order_id: order.id,
         handler: async function (response) {
+          const loadingToast = toast.loading("Verifying payment...");
           try {
             const verifyRes = await fetch(
               `${API}/api/payment/verify-payment`,
               {
                 method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(response),
               }
             );
@@ -95,7 +95,8 @@ function Checkout() {
             const verifyData = await verifyRes.json();
 
             if (!verifyData.success) {
-              return alert("Payment verification failed ❌");
+              toast.dismiss(loadingToast);
+              return toast.error("Payment verification failed ❌");
             }
 
             const orderRes = await fetch(`${API}/api/orders`, {
@@ -111,36 +112,34 @@ function Checkout() {
             });
 
             const orderData = await orderRes.json();
+            toast.dismiss(loadingToast);
 
             if (orderData.success) {
-              alert("Payment successful 🎉");
+              toast.success("Payment successful 🎉");
               navigate("/my-purchases");
             } else {
-              alert("Order saving failed ❌");
+              toast.error("Order saving failed ❌");
             }
           } catch (err) {
-            alert("Error after payment");
+            toast.dismiss(loadingToast);
+            toast.error("Error after payment");
           }
         },
         modal: {
           ondismiss: function () {
-            alert("Payment cancelled");
+            toast("Payment cancelled", { icon: "ℹ️" });
           },
         },
-        theme: {
-          color: "#3399cc",
-        },
+        theme: { color: "#3399cc" },
       };
 
       const rzp = new window.Razorpay(options);
-
       rzp.on("payment.failed", function () {
-        alert("Payment failed ❌");
+        toast.error("Payment failed ❌");
       });
-
       rzp.open();
     } catch (err) {
-      alert("Payment failed");
+      toast.error("Payment failed");
     }
   };
 

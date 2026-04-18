@@ -1,6 +1,8 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
+import toast from "react-hot-toast";
+
 import { AuthContext } from "../AuthContext";
 import axios from "../../../core/utils/axios";
 import "./Login.css";
@@ -13,7 +15,6 @@ const Login = () => {
 
   const [form, setForm] = useState({ email: "", password: "" });
   const [rememberMe, setRememberMe] = useState(false);
-  const [error, setError] = useState("");
 
   useEffect(() => {
     if (user) {
@@ -23,24 +24,32 @@ const Login = () => {
 
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    try {
-      const res = await axios.post("/auth/login", form);
-      loginSuccess(res.data, rememberMe);
-      navigate(from, { replace: true });
-    } catch (err) {
-      setError(err.response?.data?.msg || "Login failed");
-    }
+    
+    const loginPromise = axios.post("/auth/login", form);
+
+    toast.promise(loginPromise, {
+      loading: 'Logging in...',
+      success: (res) => {
+        loginSuccess(res.data, rememberMe);
+        navigate(from, { replace: true });
+        return 'Welcome back!';
+      },
+      error: (err) => err.response?.data?.msg || "Login failed",
+    });
   };
 
   const handleGoogleSuccess = async (response) => {
-    try {
-      const res = await axios.post("/auth/google", { token: response.credential });
-      loginSuccess(res.data, true);
-      navigate(from, { replace: true });
-    } catch {
-      setError("Google login failed");
-    }
+    const googlePromise = axios.post("/auth/google", { token: response.credential });
+
+    toast.promise(googlePromise, {
+      loading: 'Authenticating...',
+      success: (res) => {
+        loginSuccess(res.data, true);
+        navigate(from, { replace: true });
+        return 'Login successful!';
+      },
+      error: 'Google login failed',
+    });
   };
 
   if (user) return null;
@@ -50,7 +59,7 @@ const Login = () => {
       <div className="login__card">
         <h2>Welcome Back</h2>
 
-        {error && <p className="login__error">{error}</p>}
+        {/* Removed inline error message block for cleaner UI */}
 
         <form onSubmit={handleEmailSubmit}>
           <input
@@ -92,7 +101,7 @@ const Login = () => {
         <div className="login__oauth">
           <GoogleLogin
             onSuccess={handleGoogleSuccess}
-            onError={() => setError("Google Error")}
+            onError={() => toast.error("Google Error")}
           />
         </div>
 
