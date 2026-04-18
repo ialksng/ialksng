@@ -16,27 +16,16 @@ import './Home.css';
 function Home() {
   return (
     <div className="home__wrapper">
-      
       <Hero />
-
       <OfferCards />
-
       <FeaturedProjects />
-
       <ServicesPreview />
-
       <StorePreview />
-
       <Testimonials />
-
       <AboutPreview />
-
       <Updates />
-
       <FinalCTA />
-
       <FunExtras />
-
     </div>
   );
 }

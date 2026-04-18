@@ -14,6 +14,7 @@
   font-weight: 800;
   margin-bottom: 1.5rem;
   line-height: 1.1;
+  color: var(--text-primary);
 }
 
 .hero__title span {
@@ -49,6 +50,7 @@
 .section__header h2 {
   font-size: 2.5rem;
   margin-bottom: 1rem;
+  color: var(--text-primary);
 }
 
 .section__header p {
@@ -161,6 +163,7 @@
 .author__info h4 {
   font-size: 1rem;
   margin-bottom: 0.2rem;
+  color: var(--text-primary);
 }
 
 .author__info p {

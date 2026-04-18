@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Typewriter } from "react-simple-typewriter";
+import toast from "react-hot-toast";
 
 import "./Hero.css";
 
@@ -14,7 +15,10 @@ function Hero() {
 
   useEffect(() => {
     fetch(`${API}/api/public/stats`)
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch stats");
+        return res.json();
+      })
       .then((data) => {
         setStats({
           projects: data.projects || 0,
@@ -22,7 +26,10 @@ function Hero() {
           users: data.users || 0,
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.error(err);
+        toast.error("Failed to load hero statistics.");
+      });
   }, [API]);
 
   return (

@@ -43,7 +43,10 @@ function BlogDetail() {
   };
 
   const handleLike = async () => {
-    if (!user) return toast.error("Please log in to like this post.");
+    if (!user) {
+      toast.error("You must be logged in to like this post.");
+      return;
+    }
     try {
       const res = await axios.post(`/blogs/${id}/like`, {}, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
@@ -54,6 +57,19 @@ function BlogDetail() {
       }));
     } catch (err) {
       toast.error("Failed to like post.");
+    }
+  };
+
+  const handleShare = async () => {
+    if (!user) {
+      toast.error("You must be logged in to share this post.");
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast.success("Link copied to clipboard!");
+    } catch (error) {
+      toast.error("Failed to copy the link.");
     }
   };
 
@@ -172,10 +188,7 @@ function BlogDetail() {
               <span>{blog.likes?.length || 0} Likes</span>
             </button>
             
-            <button className="like-btn" onClick={() => {
-              navigator.clipboard.writeText(window.location.href);
-              toast.success("Link copied to clipboard!");
-            }}>
+            <button className="like-btn" onClick={handleShare}>
               🔗 Share
             </button>
           </div>

@@ -4,10 +4,8 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-
   padding: 0 20px;
-  background: radial-gradient(circle at top, #1e293b, #0f172a);
-
+  background: radial-gradient(circle at top, var(--bg-secondary), var(--bg-primary));
   position: relative;
   overflow: hidden;
 }
@@ -16,7 +14,8 @@
   position: absolute;
   width: 700px;
   height: 700px;
-  background: radial-gradient(circle, rgba(56, 189, 248, 0.35), transparent);
+  /* Replaced rgba with color-mix */
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent-primary) 35%, transparent), transparent);
   filter: blur(140px);
   top: 20%;
   left: 50%;
@@ -28,7 +27,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(#38bdf8 1px, transparent 1px);
+  background-image: radial-gradient(var(--accent-primary) 1px, transparent 1px);
   background-size: 40px 40px;
   opacity: 0.06;
   z-index: 0;
@@ -46,9 +45,9 @@
   display: inline-block;
   padding: 7px 16px;
   border-radius: 999px;
-  background: rgba(56, 189, 248, 0.1);
-  border: 1px solid #38bdf8;
-  color: #38bdf8;
+  background: color-mix(in srgb, var(--accent-primary) 10%, transparent);
+  border: 1px solid var(--accent-primary);
+  color: var(--accent-primary);
   font-size: 13px;
   margin-bottom: 18px;
 }
@@ -58,25 +57,27 @@
   font-weight: 700;
   margin-bottom: 10px;
   line-height: 1.15;
+  color: var(--text-primary);
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+  /* Dynamic gradient using color-mix to avoid needing a secondary accent var if one doesn't exist */
+  background: linear-gradient(135deg, var(--accent-primary), color-mix(in srgb, var(--accent-primary) 60%, var(--text-primary)));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 25px rgba(56, 189, 248, 0.4);
+  text-shadow: 0 0 25px color-mix(in srgb, var(--accent-primary) 40%, transparent);
 }
 
 .hero h2 {
   font-size: clamp(1.2rem, 3vw, 1.6rem);
-  color: #94a3b8;
+  color: var(--text-secondary);
   margin-bottom: 20px;
   min-height: 32px;
 }
 
 .hero__desc {
   font-size: 1rem;
-  color: #cbd5f5;
+  color: var(--text-secondary);
   margin: 0 auto 30px;
   line-height: 1.8;
   max-width: 700px;
@@ -93,12 +94,12 @@
 
 .hero__stats span {
   font-size: 14px;
-  color: #94a3b8;
+  color: var(--text-secondary);
 }
 
 .hero__stats span b {
   font-size: 22px;
-  color: #38bdf8;
+  color: var(--accent-primary);
   margin-right: 4px;
 }
 
@@ -119,29 +120,31 @@
 }
 
 .btn.primary {
-  background: linear-gradient(135deg, #38bdf8, #0ea5e9);
-  color: black;
+  /* Button uses primary accent, text colored via contrast/bg primary */
+  background: linear-gradient(135deg, var(--accent-primary), color-mix(in srgb, var(--accent-primary) 80%, var(--bg-primary)));
+  color: var(--bg-primary); 
 }
 
 .btn.primary:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(56, 189, 248, 0.4);
+  box-shadow: 0 8px 25px color-mix(in srgb, var(--accent-primary) 40%, transparent);
 }
 
 .btn.secondary {
-  border: 1px solid #38bdf8;
-  color: #38bdf8;
+  border: 1px solid var(--accent-primary);
+  color: var(--accent-primary);
+  background: transparent;
 }
 
 .btn.secondary:hover {
-  background: #38bdf8;
-  color: black;
+  background: var(--accent-primary);
+  color: var(--bg-primary);
 }
 
 .hero__scroll {
   margin-top: 40px;
   font-size: 14px;
-  color: #38bdf8;
+  color: var(--accent-primary);
   opacity: 0.9;
 }
 
@@ -162,6 +165,7 @@
   }
 }
 
+/* Responsive Styles */
 @media (max-width: 768px) {
   .hero {
     min-height: calc(100vh - var(--nav-height));
