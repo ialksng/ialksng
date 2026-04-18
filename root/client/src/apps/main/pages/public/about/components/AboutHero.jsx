@@ -29,10 +29,13 @@ export default function AboutHero() {
             </Link>
           </div>
         </div>
+
         <div className="about__hero-image-wrapper">
-          <div className="about__image-placeholder">
-            <span>[ Your Profile Image Here ]</span>
-          </div>
+          <img 
+            src="https://drive.google.com/uc?export=view&id=1pzQPbHLgL_0F5OiEokPi0mmgEhrTyTdX" 
+            alt="Alok Singh"
+            className="about__profile-img"
+          />
         </div>
 
       </div>
