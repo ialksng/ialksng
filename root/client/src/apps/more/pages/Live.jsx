@@ -1,47 +1,81 @@
 import React, { useState, useEffect } from 'react';
+import VideoEmbed from '../components/VideoEmbed';
 import axios from '../../../core/utils/axios';
+import '../More.css';
 
 const Live = () => {
-  const [streamData, setStreamData] = useState(null);
+  const [currentStream, setCurrentStream] = useState(null);
+  const [archives, setArchives] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchStream = async () => {
+    const fetchStreamData = async () => {
       try {
-        const { data } = await axios.get('/api/more/streams/live');
-        setStreamData(data);
+        const liveRes = await axios.get('/api/more/streams/live');
+        setCurrentStream(liveRes.data);
+
+        const archiveRes = await axios.get('/api/more/streams/archive');
+        
+        const filteredArchives = archiveRes.data.filter(
+          (video) => video._id !== liveRes.data?._id
+        );
+        setArchives(filteredArchives);
       } catch (err) {
-        console.error(err);
+        console.error("Failed to load streams", err);
       } finally {
         setLoading(false);
       }
     };
-    fetchStream();
+    fetchStreamData();
   }, []);
 
-  if (loading) return <div className="more-layout container"><p>Loading stream...</p></div>;
+  if (loading) return <div className="more-layout container"><p>Loading player...</p></div>;
 
   return (
-    <div className="more-layout container">
+    <div className="more-layout container animated-fade-in">
       <div className="sub-page-header">
-        <h1>{streamData?.status === 'live' ? "🔴 Live Now" : "Stream Archive"}</h1>
-        <p>{streamData ? streamData.title : "Currently no active streams."}</p>
+        <h1>{currentStream?.status === 'live' ? "🔴 Live Now" : "Stream Archive"}</h1>
+        <p className="subtitle">{currentStream ? currentStream.title : "No streams available."}</p>
       </div>
       
-      {streamData && (
-        <div style={{ marginTop: '2rem' }}>
-          <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden', borderRadius: '12px', background: '#000' }}>
-            <iframe 
-              src={streamData.embedUrl} 
-              style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
-              frameBorder="0" 
-              allowFullScreen 
-              title={streamData.title}
-            ></iframe>
+      {currentStream && (
+        <div className="main-player-section">
+          <VideoEmbed embedUrl={currentStream.embedUrl} title={currentStream.title} />
+          
+          <div className="stream-metadata">
+            <div className="stream-tags">
+              <span className="tag platform-tag">{currentStream.platform}</span>
+              <span className="tag category-tag">{currentStream.category === 'gaming' ? '🎮 Gaming' : '💬 General'}</span>
+              {currentStream.status === 'archived' && <span className="tag archive-tag">Archived</span>}
+            </div>
+            <h2>{currentStream.title}</h2>
           </div>
-          <div style={{ marginTop: '1.5rem', padding: '1.5rem', background: 'rgba(255,255,255,0.03)', borderRadius: '12px' }}>
-            <h3 style={{ margin: '0 0 0.5rem 0' }}>{streamData.category === 'gaming' ? '🎮 Gaming' : '💬 Just Chatting'}</h3>
-            <p style={{ margin: 0, color: '#a0a0a0' }}>Platform: {streamData.platform}</p>
+        </div>
+      )}
+
+      {archives.length > 0 && (
+        <div className="archive-section">
+          <h3 className="section-title">Past Streams</h3>
+          <div className="archive-grid">
+            {archives.map((video) => (
+              <div 
+                key={video._id} 
+                className="archive-card"
+                onClick={() => setCurrentStream(video)}
+              >
+                <div className="archive-thumbnail">
+                   {video.thumbnail ? (
+                     <img src={video.thumbnail} alt={video.title} />
+                   ) : (
+                     <div className="thumbnail-placeholder">▶</div>
+                   )}
+                </div>
+                <div className="archive-info">
+                  <h4>{video.title}</h4>
+                  <p>{new Date(video.createdAt).toLocaleDateString()}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       )}
