@@ -58,8 +58,7 @@ const GameDetail = () => {
             style={{ filter: 'brightness(0.7) contrast(1.2)' }}
           />
         </div>
-        <div className="absolute inset-0 z-10 bg-gradient-to-b from-[#0f172a]/40 via-transparent to-[#0f172a]"></div>
-        <div className="absolute inset-0 z-10 bg-gradient-to-r from-[#0f172a]/90 via-[#0f172a]/50 to-transparent"></div>
+        <div className="absolute inset-0 z-10 game-detail-hero-overlay"></div>
         <div className="absolute bottom-0 left-0 w-full z-20 px-6 pb-12">
           <div className="max-w-7xl mx-auto">
             <Link 
@@ -80,7 +79,7 @@ const GameDetail = () => {
                   </span>
                 </div>
                 
-                <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-4 tracking-tight" style={{ textShadow: '0 4px 20px rgba(0,0,0,0.5)' }}>
+                <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-4 tracking-tight game-detail-title-shadow">
                   {game.name}
                 </h1>
                 
@@ -112,13 +111,13 @@ const GameDetail = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 mt-8">
-        <div className="relative p-8 rounded-2xl bg-gray-800/30 backdrop-blur-xl border border-white/5 shadow-2xl mb-16 overflow-hidden">
-          <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-purple-500 to-cyan-500"></div>
+        <div className="relative p-8 rounded-2xl mb-16 overflow-hidden glass-panel">
+          <div className="glass-panel-accent"></div>
           <h2 className="text-2xl font-bold text-white mb-4 flex items-center">
             <svg className="w-6 h-6 mr-3 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             About The Game
           </h2>
-          <p className="text-gray-300 leading-relaxed text-lg whitespace-pre-wrap max-w-4xl">
+          <p className="text-gray-300 leading-relaxed text-lg whitespace-pre-wrap max-w-4xl relative z-10">
             {game.description || "No description provided for this game yet."}
           </p>
         </div>
@@ -137,7 +136,7 @@ const GameDetail = () => {
         </div>
 
         {archives.length === 0 ? (
-          <div className="text-center py-24 bg-gray-800/20 rounded-3xl border border-gray-800/50 border-dashed relative overflow-hidden group">
+          <div className="text-center py-24 rounded-3xl border border-gray-800/50 border-dashed relative overflow-hidden group empty-archive-state">
             <div className="absolute inset-0 bg-gradient-to-b from-purple-900/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             <div className="relative z-10">
               <span className="text-5xl mb-4 block filter grayscale opacity-50">📼</span>
@@ -150,14 +149,14 @@ const GameDetail = () => {
             {archives.map(video => (
               <div 
                 key={video._id} 
-                className="group flex flex-col bg-[#162032] rounded-2xl overflow-hidden border border-gray-800 hover:border-purple-500/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(168,85,247,0.1)] hover:-translate-y-1"
+                className="group flex flex-col video-archive-card"
               >
                 <div className="w-full relative z-10 bg-black">
                   <VideoEmbed embedUrl={video.embedUrl} title={video.title} />
                 </div>
                 
                 <div className="p-6 flex-grow flex flex-col relative z-0">
-                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-600 to-cyan-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <div className="video-card-glow-bar"></div>
                   <div className="flex items-center justify-between mb-3">
                     <span className={`text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider ${
                       video.platform?.toLowerCase() === 'twitch' 
