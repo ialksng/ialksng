@@ -8,7 +8,6 @@ import Loader from "../../core/components/Loader.jsx";
 import CookieConsent from "../../core/components/CookieConsent.jsx";
 import Chatbot from "../ai/Chatbot.jsx";
 import AdminRoute from "../admin/AdminRoute.jsx";
-import AdminTestimonials from "../../apps/admin/pages/AdminTestimonials.jsx";
 
 const Profile = lazy(() => import("../../features/profile/Profile.jsx"));
 
@@ -50,6 +49,7 @@ const AdminBlog = lazy(() => import("../admin/pages/AdminBlog.jsx"));
 const AdminProducts = lazy(() => import("../admin/pages/AdminProducts.jsx"));
 const AdminCertifications = lazy(() => import("../admin/pages/AdminCertifications.jsx"));
 const AdminNewsletter = lazy(() => import("../admin/pages/AdminNewsletter.jsx"));
+const AdminTestimonials = lazy(() => import("../admin/pages/AdminTestimonials.jsx")); 
 
 
 function MainApp() {
@@ -101,8 +101,8 @@ function MainApp() {
                 <Route path="/admin/about" element={<PageWrapper><AdminAbout /></PageWrapper>} />
                 <Route path="/admin/projects" element={<PageWrapper><AdminProjects /></PageWrapper>} />
                 <Route path="/admin/certifications" element={<PageWrapper><AdminCertifications /></PageWrapper>} />
-                <Route path="/admin/newsletter" element={<AdminNewsletter />} />
-                <Route path="testimonials" element={<AdminTestimonials />} />
+                <Route path="/admin/newsletter" element={<PageWrapper><AdminNewsletter /></PageWrapper>} />
+                <Route path="/admin/testimonials" element={<PageWrapper><AdminTestimonials /></PageWrapper>} />
               </Route>
 
             </Route>

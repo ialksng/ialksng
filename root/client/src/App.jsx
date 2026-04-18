@@ -5,8 +5,12 @@ import MainApp from './apps/main/MainApp';
 
 function App() {
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") || "dark";
-    document.documentElement.setAttribute("data-theme", savedTheme);
+    try {
+      const savedTheme = localStorage.getItem("theme") || "dark";
+      document.documentElement.setAttribute("data-theme", savedTheme);
+    } catch (error) {
+      console.error("Theme toggle error:", error);
+    }
   }, []);
 
   return (
