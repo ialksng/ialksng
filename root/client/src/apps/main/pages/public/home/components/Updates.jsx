@@ -12,14 +12,14 @@ export default function Updates() {
     },
     {
       date: "Feb 2026",
-      title: "Smartsphaere Architecture Upgrades",
+      title: "Smartsphere Architecture Upgrades",
       desc: "Refactored the core dashboard to improve cloud resource aggregation speed by 40% using optimized MongoDB indexing.",
       tag: "Project Update"
     },
     {
       date: "Jan 2026",
-      title: "Open Source & GSoC Prep",
-      desc: "Actively contributing to open-source MERN boilerplate repositories and preparing proposals for Google Summer of Code.",
+      title: "Open Source",
+      desc: "Actively contributing to open-source MERN boilerplate repositories.",
       tag: "Open Source"
     }
   ];
