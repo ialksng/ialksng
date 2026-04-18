@@ -100,3 +100,46 @@ export const deleteProduct = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+export const likeProduct = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).json({ msg: "Product not found" });
+
+    const userId = req.user._id.toString(); 
+
+    if (product.likes.includes(userId)) {
+      product.likes = product.likes.filter(id => id !== userId);
+    } else {
+      product.likes.push(userId);
+    }
+
+    await product.save();
+    res.json(product.likes);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const commentProduct = async (req, res) => {
+  try {
+    const { text } = req.body;
+    if (!text) return res.status(400).json({ msg: "Comment text is required" });
+
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).json({ msg: "Product not found" });
+
+    const newComment = {
+      user: req.user.name || "User", 
+      text,
+      date: new Date()
+    };
+
+    product.comments.push(newComment);
+    await product.save();
+
+    res.json(product.comments);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

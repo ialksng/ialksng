@@ -5,7 +5,9 @@ import {
   getProducts,
   getProduct,
   deleteProduct,
-  updateProduct
+  updateProduct,
+  likeProduct, 
+  commentProduct
 } from "../products/product.controller.js";
 import { protect } from "../../core/middlewares/auth.middleware.js";
 import { adminOnly } from "../../core/middlewares/admin.middleware.js";
@@ -56,6 +58,9 @@ router.get("/:id", getProduct);
 router.post("/", protect, adminOnly, addProduct);
 router.put("/:id", protect, adminOnly, updateProduct);
 router.delete("/:id", protect, adminOnly, deleteProduct);
+
+router.post("/:id/like", protect, likeProduct);
+router.post("/:id/comment", protect, commentProduct);
 
 
 export default router;
