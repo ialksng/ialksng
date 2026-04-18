@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from "react";
-import { Routes, Route, useLocation, Outlet } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
 import MainLayout from "../../core/layouts/MainLayout.jsx";
@@ -55,6 +55,10 @@ const AdminCertifications = lazy(() => import("../admin/pages/AdminCertification
 const AdminNewsletter = lazy(() => import("../admin/pages/AdminNewsletter.jsx"));
 const AdminTestimonials = lazy(() => import("../admin/pages/AdminTestimonials.jsx"));
 
+const AdminStreams = lazy(() => import("../admin/pages/AdminStreams.jsx"));
+const AdminGameZone = lazy(() => import("../admin/pages/AdminGameZone.jsx"));
+const AdminGear = lazy(() => import("../admin/pages/AdminGear.jsx"));
+const AdminLife = lazy(() => import("../admin/pages/AdminLife.jsx"));
 
 function MainApp() {
   const location = useLocation();
@@ -64,6 +68,7 @@ function MainApp() {
       <Suspense fallback={<Loader />}>
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
+
             <Route element={<MainLayout />}>
 
               <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
@@ -94,13 +99,14 @@ function MainApp() {
               <Route path="/more/products" element={<PageWrapper><Products /></PageWrapper>} />
               <Route path="/more/gamezone" element={<PageWrapper><GameZone /></PageWrapper>} />
               <Route path="/more/life" element={<PageWrapper><Life /></PageWrapper>} />
-              
+
               <Route path="/privacy-policy" element={<PageWrapper><PrivacyPolicy /></PageWrapper>} />
               <Route path="/terms-and-conditions" element={<PageWrapper><TermsConditions /></PageWrapper>} />
               <Route path="/refund-policy" element={<PageWrapper><RefundPolicy /></PageWrapper>} />
               <Route path="/cookie-policy" element={<PageWrapper><CookiesPolicy /></PageWrapper>} />
 
               <Route element={<AdminRoute><AdminLayout /></AdminRoute>}>
+
                 <Route path="/admin" element={<PageWrapper><AdminDashboard /></PageWrapper>} />
                 <Route path="/admin/home" element={<PageWrapper><AdminHome /></PageWrapper>} />
                 <Route path="/admin/products" element={<PageWrapper><AdminProducts /></PageWrapper>} />
@@ -112,9 +118,16 @@ function MainApp() {
                 <Route path="/admin/certifications" element={<PageWrapper><AdminCertifications /></PageWrapper>} />
                 <Route path="/admin/newsletter" element={<PageWrapper><AdminNewsletter /></PageWrapper>} />
                 <Route path="/admin/testimonials" element={<PageWrapper><AdminTestimonials /></PageWrapper>} />
+
+                <Route path="/admin/streams" element={<PageWrapper><AdminStreams /></PageWrapper>} />
+                <Route path="/admin/gamezone" element={<PageWrapper><AdminGameZone /></PageWrapper>} />
+                <Route path="/admin/gear" element={<PageWrapper><AdminGear /></PageWrapper>} />
+                <Route path="/admin/life" element={<PageWrapper><AdminLife /></PageWrapper>} />
+
               </Route>
 
             </Route>
+
           </Routes>
         </AnimatePresence>
       </Suspense>
@@ -125,17 +138,15 @@ function MainApp() {
   );
 }
 
-const PageWrapper = ({ children }) => {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.4 }}
-    >
-      {children}
-    </motion.div>
-  );
-};
+const PageWrapper = ({ children }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -20 }}
+    transition={{ duration: 0.4 }}
+  >
+    {children}
+  </motion.div>
+);
 
 export default MainApp;
