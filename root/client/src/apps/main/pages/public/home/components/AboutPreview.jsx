@@ -13,7 +13,7 @@ export default function AboutPreview() {
           <div className="about__preview-text">
             <h2 className="gradient-text">Behind the Code</h2>
             <p>
-              I’m a Full-Stack Architect and CSE student with a passion for building 
+              I'm a Full-Stack Architect and CSE student with a passion for building 
               scalable cloud systems and AI-driven applications. With a 9.0 CGPA 
               and a background in freelance development, I bridge the gap between 
               academic excellence and real-world software engineering.
@@ -33,7 +33,7 @@ export default function AboutPreview() {
               <p>Projects Built</p>
             </div>
             <div className="stat__item">
-              <h3>1800+</h3>
+              <h3>1700+</h3>
               <p>LeetCode Rating</p>
             </div>
             <div className="stat__item">
