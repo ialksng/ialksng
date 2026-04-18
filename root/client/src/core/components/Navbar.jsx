@@ -136,7 +136,9 @@ function Navbar() {
           )}
         </div>
 
-        <NotificationBell /> {/* ✅ now safe */}
+        <div className="desktop-only">
+          <NotificationBell />
+        </div>
 
         {!user ? (
           <button className="nav__btn desktop-only" onClick={() => navigate("/login")}>
@@ -193,6 +195,10 @@ function Navbar() {
       </div>
 
       <nav className={`mobile__menu ${menuOpen ? "active" : ""}`}>
+        <div style={{ padding: "10px" }}>
+          <NotificationBell />
+        </div>
+
         <div className="mobile__search-container">
           <form className="nav__search-wrapper" onSubmit={handleSearchSubmit} style={{ width: "100%" }}>
             <FaSearch className="nav__search-icon" />
@@ -214,6 +220,37 @@ function Navbar() {
           <li onClick={() => setMenuOpen(false)}><NavLink to="/store" className="nav__link">Store</NavLink></li>
           <li onClick={() => setMenuOpen(false)}><NavLink to="/contact" className="nav__link">Contact</NavLink></li>
           <li onClick={() => setMenuOpen(false)}><NavLink to="/more" className="nav__link">More</NavLink></li>
+
+          {!user ? (
+            <li className="mobile__login">
+              <button className="nav__btn" onClick={() => handleNavigate("/login")}>Login</button>
+            </li>
+          ) : (
+            <>
+              {user.role !== "admin" && (
+                <>
+                  <li onClick={() => handleNavigate("/cart")} className="mobile__action">🛒 Cart ({cart?.length || 0})</li>
+                  <li onClick={() => handleNavigate("/profile")} className="mobile__action">👤 Profile</li>
+                </>
+              )}
+
+              {user.role === "admin" && (
+                <li onClick={() => handleNavigate("/admin")} className="mobile__action mobile__admin">👑 Admin Panel</li>
+              )}
+
+              <li
+                onClick={() => {
+                  if (window.confirm("Are you sure you want to logout?")) {
+                    logoutUser();
+                    setMenuOpen(false);
+                  }
+                }}
+                className="mobile__action mobile__logout"
+              >
+                🚪 Logout
+              </li>
+            </>
+          )}
         </ul>
       </nav>
     </header>
