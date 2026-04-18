@@ -18,8 +18,7 @@ function Cart() {
   const token = localStorage.getItem("token");
 
   const removeItem = (id) => {
-    const index = cart.findIndex(item => item._id === id);
-
+    const index = cart.findIndex((item) => item._id === id);
     if (index !== -1) {
       const updated = [...cart];
       updated.splice(index, 1);
@@ -30,7 +29,6 @@ function Cart() {
   const total = cart.reduce((acc, item) => acc + (item.price || 0), 0);
 
   const handleCheckout = async () => {
-
     if (!user) {
       navigate("/login", { state: { from: "/cart" } });
       return;
@@ -44,7 +42,7 @@ function Cart() {
           Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
-          items: cart.map(item => item._id)
+          items: cart.map((item) => item._id)
         })
       });
 
@@ -68,16 +66,18 @@ function Cart() {
         name: "Your Store",
         description: "Cart Purchase",
         order_id: order.id,
-
         handler: async function (response) {
           try {
-            const verifyRes = await fetch(`${API}/api/payment/verify-payment`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify(response)
-            });
+            const verifyRes = await fetch(
+              `${API}/api/payment/verify-payment`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json"
+                },
+                body: JSON.stringify(response)
+              }
+            );
 
             const verifyData = await verifyRes.json();
 
@@ -85,17 +85,20 @@ function Cart() {
               return alert("Payment verification failed ❌");
             }
 
-            const orderRes = await fetch(`${API}/api/orders/checkout-cart`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-              },
-              body: JSON.stringify({
-                items: cart,
-                paymentId: response.razorpay_payment_id
-              })
-            });
+            const orderRes = await fetch(
+              `${API}/api/orders/checkout-cart`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                  items: cart,
+                  paymentId: response.razorpay_payment_id
+                })
+              }
+            );
 
             const orderData = await orderRes.json();
 
@@ -106,19 +109,15 @@ function Cart() {
             } else {
               alert("Order saving failed ❌");
             }
-
           } catch (err) {
-            console.log("Post-payment error:", err);
             alert("Error after payment");
           }
         },
-
         modal: {
           ondismiss: function () {
             alert("Payment cancelled");
           }
         },
-
         theme: {
           color: "#3399cc"
         }
@@ -126,64 +125,100 @@ function Cart() {
 
       const rzp = new window.Razorpay(options);
 
-      rzp.on("payment.failed", function (response) {
-        console.log("Payment Failed:", response);
+      rzp.on("payment.failed", function () {
         alert("Payment failed ❌");
       });
 
       rzp.open();
-
     } catch (err) {
-      console.log("Checkout error:", err);
       alert("Checkout failed ❌");
     }
   };
 
   return (
-    <div className="cart__container">
-      <div className="cart__card">
-        <h2>Your Cart 🛒</h2>
+    <div className="cart__wrapper">
+      <div className="cart__header">
+        <h1>Shopping Cart</h1>
+      </div>
 
-        {cart.length === 0 ? (
-          <div style={{ textAlign: "center" }}>
-            <p>Cart is empty 🛒</p>
-
-            <HashLink smooth to="/#shop">
-              <button className="cart__checkout">
-                Go Shopping
-              </button>
-            </HashLink>
-          </div>
-        ) : (
-          <>
-            {cart.map((item, index) => (
-              <div key={index} className="cart__item">
-                <img src={item.image} alt={item.title} />
-
-                <div>
-                  <h3>{item.title}</h3>
-                  <p>₹{item.price}</p>
+      {cart.length === 0 ? (
+        <div className="empty-cart-msg">
+          <h2
+            style={{
+              color: "var(--text-secondary)",
+              marginBottom: "20px"
+            }}
+          >
+            Your cart is empty.
+          </h2>
+          <HashLink smooth to="/#shop">
+            <button
+              className="cart__checkout-btn"
+              style={{ maxWidth: "250px" }}
+            >
+              Continue Shopping
+            </button>
+          </HashLink>
+        </div>
+      ) : (
+        <div className="cart__grid">
+          <div className="cart__left">
+            <div className="cart__items-container">
+              {cart.map((item, index) => (
+                <div key={index} className="cart__item">
+                  <img src={item.image} alt={item.title} />
+                  <div className="cart__item-info">
+                    <h3>{item.title}</h3>
+                    <p className="cart__item-price">₹{item.price}</p>
+                    <button
+                      className="cart__remove-btn"
+                      onClick={() => removeItem(item._id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
+              ))}
+            </div>
+          </div>
 
-                <button onClick={() => removeItem(item._id)}>
-                  Remove
-                </button>
-              </div>
-            ))}
-
-            <h3 className="cart__total">
-              Total: ₹{total}
-            </h3>
+          <div className="cart__right">
+            <h3>Subtotal ({cart.length} items)</h3>
+            <div className="summary-row">
+              <span>Items Total:</span>
+              <span>₹{total}</span>
+            </div>
+            <div className="summary-row">
+              <span>Delivery:</span>
+              <span style={{ color: "#10b981" }}>
+                Instant Digital
+              </span>
+            </div>
+            <div className="summary-total">
+              <span>Order Total:</span>
+              <span>₹{total}</span>
+            </div>
 
             <button
-              className="cart__checkout"
+              className="cart__checkout-btn"
               onClick={handleCheckout}
             >
-              Checkout All
+              Proceed to Buy
             </button>
-          </>
-        )}
-      </div>
+
+            <p
+              style={{
+                fontSize: "12px",
+                color: "#10b981",
+                textAlign: "center",
+                marginTop: "15px"
+              }}
+            >
+              🔒 Safe and secure payments.
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
