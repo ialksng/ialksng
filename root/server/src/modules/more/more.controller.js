@@ -40,35 +40,6 @@ export const deleteLifePost = async (req, res) => {
   }
 };
 
-export const toggleStreamStatus = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { status } = req.body;
-
-    if (!id || !status) {
-      return res.status(400).json({ message: "Stream ID and status are required" });
-    }
-
-    if (status === 'live') {
-      await Stream.updateMany({ status: 'live' }, { status: 'archived' });
-    }
-
-    const updatedStream = await Stream.findByIdAndUpdate(
-      id,
-      { status },
-      { new: true }
-    );
-
-    if (!updatedStream) {
-      return res.status(404).json({ message: "Stream not found" });
-    }
-
-    res.status(200).json(updatedStream);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
 export const getGames = async (req, res) => {
   try {
     const games = await Game.find().sort({ createdAt: -1 });
@@ -133,6 +104,53 @@ export const getLifePosts = async (req, res) => {
   try {
     const posts = await LifePost.find().sort({ date: -1 });
     res.status(200).json(posts);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const getAllStreams = async (req, res) => {
+  try {
+    const streams = await Stream.find().sort({ createdAt: -1 });
+    res.status(200).json(streams);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const createStream = async (req, res) => {
+  try {
+    const stream = await Stream.create(req.body);
+    res.status(201).json(stream);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const toggleStreamStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    if (!id || !status) {
+      return res.status(400).json({ message: "Stream ID and status are required" });
+    }
+
+    if (status === 'live') {
+      await Stream.updateMany({ status: 'live' }, { status: 'archived' });
+    }
+
+    const updatedStream = await Stream.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true }
+    );
+
+    if (!updatedStream) {
+      return res.status(404).json({ message: "Stream not found" });
+    }
+
+    res.status(200).json(updatedStream);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

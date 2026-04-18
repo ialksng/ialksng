@@ -1,16 +1,9 @@
 import express from 'express';
 import { 
-getGames, 
-  createGame, 
-  deleteGame,          
-  getLiveStream, 
-  getGameStreams, 
-  toggleStreamStatus,
-  deleteStream,         
-  getProducts, 
-  deleteProduct,        
-  getLifePosts, 
-  deleteLifePost
+  getGames, createGame, getLiveStream, getGameStreams, 
+  getProducts, createProduct, getLifePosts, createLifePost, 
+  deleteGame, deleteProduct, deleteLifePost, deleteStream,
+  getAllStreams, createStream, toggleStreamStatus
 } from './more.controller.js';
 import { adminOnly } from '../../core/middlewares/admin.middleware.js'; 
 
@@ -27,5 +20,8 @@ router.delete('/games/:id', adminOnly, deleteGame);
 router.delete('/streams/:id', adminOnly, deleteStream);
 router.delete('/products/:id', adminOnly, deleteProduct);
 router.delete('/life/:id', adminOnly, deleteLifePost);
+router.get('/streams/all', getAllStreams);
+router.post('/streams', adminOnly, createStream);
+router.put('/streams/:id/status', adminOnly, toggleStreamStatus);
 
 export default router;
