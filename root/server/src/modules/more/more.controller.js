@@ -13,7 +13,9 @@ export const createGame = async (req, res) => {
   try {
     const gameData = { ...req.body };
     if (req.file) gameData.coverImage = req.file.path;
+    
     const game = await Game.create(gameData);
+    
     const users = await User.find({}, '_id');
     const notifications = users.map(user => ({
       user: user._id,
