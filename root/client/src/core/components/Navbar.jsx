@@ -1,13 +1,13 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FaShoppingCart, FaUser, FaBars, FaTimes, FaSearch } from "react-icons/fa";
+import toast from "react-hot-toast";
 import axios from "../utils/axios";
 
 import { AuthContext } from "../../features/auth/AuthContext";
 import { CartContext } from "../../features/cart/CartContext";
 
 import NotificationBell from "../components/NotificationBell";
-
 import logo from "../../core/assets/logo.png";
 import "./Navbar.css";
 
@@ -49,7 +49,6 @@ function Navbar() {
       document.documentElement.style.overflow = "";
       document.body.classList.remove("hide-bot");
     }
-
     return () => {
       document.body.style.overflow = "";
       document.documentElement.style.overflow = "";
@@ -73,7 +72,6 @@ function Navbar() {
         setSuggestions([]);
         return;
       }
-
       try {
         const res = await axios.get(`/search/suggestions?q=${encodeURIComponent(searchQuery)}`);
         setSuggestions(res.data);
@@ -81,7 +79,6 @@ function Navbar() {
         console.error(err);
       }
     };
-
     const timer = setTimeout(fetchSuggestions, 300);
     return () => clearTimeout(timer);
   }, [searchQuery]);
@@ -108,14 +105,39 @@ function Navbar() {
     setMenuOpen(false);
   };
 
+  const handleLogoutConfirm = () => {
+    setOpen(false);
+    toast((t) => (
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', padding: '4px' }}>
+        <span style={{ fontSize: '15px', fontWeight: '600', color: 'var(--text-primary)', textAlign: 'center' }}>
+          Are you sure you want to logout?
+        </span>
+        <div style={{ display: 'flex', gap: '12px', width: '100%', justifyContent: 'center' }}>
+          <button
+            onClick={() => {
+              toast.dismiss(t.id);
+              logoutUser();
+              setMenuOpen(false);
+              toast.success("Logged out successfully!");
+            }}
+            style={{ padding: '8px 16px', background: 'var(--danger-color)', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '13px', flex: 1 }}
+          >
+            Logout
+          </button>
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            style={{ padding: '8px 16px', background: 'transparent', color: 'var(--text-secondary)', border: '1px solid var(--border-color)', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '13px', flex: 1 }}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ), { duration: Infinity });
+  };
+
   return (
     <header className={`navbar ${menuOpen ? "menu-open" : ""}`} ref={menuRef}>
-      <img
-        src={logo}
-        alt="Alok Singh Logo"
-        className="navbar__logo"
-        onClick={() => navigate("/")}
-      />
+      <img src={logo} alt="Alok Singh Logo" className="navbar__logo" onClick={() => navigate("/")} />
 
       <nav className="navbar__links desktop-only">
         <ul>
@@ -138,10 +160,7 @@ function Navbar() {
               placeholder="Search..."
               className="nav__search-input"
               value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                setShowSuggestions(true);
-              }}
+              onChange={(e) => { setSearchQuery(e.target.value); setShowSuggestions(true); }}
               onFocus={() => setShowSuggestions(true)}
             />
           </form>
@@ -150,15 +169,9 @@ function Navbar() {
             <div className="search-suggestions__dropdown">
               {suggestions.length > 0 ? (
                 suggestions.map((item) => (
-                  <div
-                    key={item._id}
-                    className="suggestion__item"
-                    onClick={() => handleSuggestionClick(item.url)}
-                  >
+                  <div key={item._id} className="suggestion__item" onClick={() => handleSuggestionClick(item.url)}>
                     <span className="suggestion__title">{item.title}</span>
-                    <span className={`suggestion__badge type-${item.type}`}>
-                      {item.type}
-                    </span>
+                    <span className={`suggestion__badge type-${item.type}`}>{item.type}</span>
                   </div>
                 ))
               ) : (
@@ -178,9 +191,7 @@ function Navbar() {
         )}
 
         {!user ? (
-          <button className="nav__btn desktop-only" onClick={() => navigate("/login")}>
-            Login
-          </button>
+          <button className="nav__btn desktop-only" onClick={() => navigate("/login")}>Login</button>
         ) : (
           <div className="desktop-only navbar__user-area">
             <div className="user__menu" ref={dropdownRef}>
@@ -191,26 +202,12 @@ function Navbar() {
               {open && (
                 <div className="dropdown__menu">
                   {user.role !== "admin" && (
-                    <div className="dropdown__item" onClick={() => handleNavigate("/profile")}>
-                      Profile
-                    </div>
+                    <div className="dropdown__item" onClick={() => handleNavigate("/profile")}>Profile</div>
                   )}
-
                   {user.role === "admin" && (
-                    <div className="dropdown__item" onClick={() => handleNavigate("/admin")}>
-                      Admin Panel
-                    </div>
+                    <div className="dropdown__item" onClick={() => handleNavigate("/admin")}>Admin Panel</div>
                   )}
-
-                  <div
-                    className="dropdown__item logout"
-                    onClick={() => {
-                      if (window.confirm("Are you sure you want to logout?")) {
-                        logoutUser();
-                        setOpen(false);
-                      }
-                    }}
-                  >
+                  <div className="dropdown__item logout" onClick={handleLogoutConfirm}>
                     Logout
                   </div>
                 </div>
@@ -233,10 +230,7 @@ function Navbar() {
               placeholder="Search..."
               className="nav__search-input"
               value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                setShowSuggestions(true);
-              }}
+              onChange={(e) => { setSearchQuery(e.target.value); setShowSuggestions(true); }}
               onFocus={() => setShowSuggestions(true)}
             />
           </form>
@@ -245,15 +239,9 @@ function Navbar() {
             <div className="search-suggestions__dropdown mobile-suggestions">
               {suggestions.length > 0 ? (
                 suggestions.map((item) => (
-                  <div
-                    key={item._id}
-                    className="suggestion__item"
-                    onClick={() => handleSuggestionClick(item.url)}
-                  >
+                  <div key={item._id} className="suggestion__item" onClick={() => handleSuggestionClick(item.url)}>
                     <span className="suggestion__title">{item.title}</span>
-                    <span className={`suggestion__badge type-${item.type}`}>
-                      {item.type}
-                    </span>
+                    <span className={`suggestion__badge type-${item.type}`}>{item.type}</span>
                   </div>
                 ))
               ) : (
@@ -279,23 +267,13 @@ function Navbar() {
           ) : (
             <>
               {user.role !== "admin" && (
-                <li onClick={() => handleNavigate("/profile")} className="mobile__action">Profile</li>
+                <li onClick={() => handleNavigate("/profile")} className="mobile__action">👤 Profile</li>
               )}
-
               {user.role === "admin" && (
-                <li onClick={() => handleNavigate("/admin")} className="mobile__action mobile__admin">Admin Panel</li>
+                <li onClick={() => handleNavigate("/admin")} className="mobile__action mobile__admin">👑 Admin Panel</li>
               )}
-
-              <li
-                onClick={() => {
-                  if (window.confirm("Are you sure you want to logout?")) {
-                    logoutUser();
-                    setMenuOpen(false);
-                  }
-                }}
-                className="mobile__action mobile__logout"
-              >
-                Logout
+              <li onClick={handleLogoutConfirm} className="mobile__action mobile__logout">
+                🚪 Logout
               </li>
             </>
           )}
