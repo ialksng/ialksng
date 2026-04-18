@@ -7,7 +7,9 @@ import {
   deleteProduct,
   updateProduct,
   likeProduct, 
-  commentProduct
+  commentProduct,
+  deleteComment, 
+  editComment
 } from "../products/product.controller.js";
 import { protect } from "../../core/middlewares/auth.middleware.js";
 import { adminOnly } from "../../core/middlewares/admin.middleware.js";
@@ -61,6 +63,7 @@ router.delete("/:id", protect, adminOnly, deleteProduct);
 
 router.post("/:id/like", protect, likeProduct);
 router.post("/:id/comment", protect, commentProduct);
-
+router.delete("/:id/comment/:commentId", protect, deleteComment);
+router.put("/:id/comment/:commentId", protect, editComment);
 
 export default router;

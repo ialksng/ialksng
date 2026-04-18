@@ -19,6 +19,8 @@ function BlogDetail() {
   const [blogData, setBlogData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [commentText, setCommentText] = useState("");
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editText, setEditText] = useState("");
 
   useEffect(() => {
     const fetchBlog = async () => {
@@ -31,29 +33,28 @@ function BlogDetail() {
         setLoading(false);
       }
     };
-
     fetchBlog();
   }, [id]);
 
+  const updateComments = (comments) => {
+    setBlogData((prev) => ({
+      ...prev,
+      blog: { ...prev.blog, comments }
+    }));
+  };
+
   const handleLike = async () => {
-    if (!user) return alert("Please login to like this post.");
+    if (!user) return alert("Login required");
+
     try {
-      const res = await axios.post(
-        `/blogs/${id}/like`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
-          }
-        }
-      );
-
-      const { blog } = blogData;
-
-      setBlogData({
-        ...blogData,
-        blog: { ...blog, likes: res.data }
+      const res = await axios.post(`/blogs/${id}/like`, {}, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
+
+      setBlogData((prev) => ({
+        ...prev,
+        blog: { ...prev.blog, likes: res.data }
+      }));
     } catch (err) {
       console.error(err);
     }
@@ -64,188 +65,154 @@ function BlogDetail() {
     if (!commentText.trim()) return;
 
     try {
-      const res = await axios.post(
-        `/blogs/${id}/comment`,
-        { text: commentText },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
-          }
-        }
-      );
-
-      const { blog } = blogData;
-
-      setBlogData({
-        ...blogData,
-        blog: { ...blog, comments: res.data }
+      const res = await axios.post(`/blogs/${id}/comment`, { text: commentText }, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
 
+      updateComments(res.data);
       setCommentText("");
     } catch (err) {
       console.error(err);
     }
   };
 
-  const handleShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: blogData.blog.title,
-          url: window.location.href
-        });
-      } catch (err) {
-        console.error("Share failed", err);
-      }
-    } else {
-      navigator.clipboard.writeText(window.location.href);
-      alert("Link copied to clipboard!");
+  const handleDeleteComment = async (commentId) => {
+    if (!window.confirm("Delete this comment?")) return;
+
+    try {
+      const res = await axios.delete(`/blogs/${id}/comment/${commentId}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      });
+
+      updateComments(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleEditCommentSubmit = async (e, commentId) => {
+    e.preventDefault();
+    if (!editText.trim()) return;
+
+    try {
+      const res = await axios.put(
+        `/blogs/${id}/comment/${commentId}`,
+        { text: editText },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+        }
+      );
+
+      updateComments(res.data);
+      setEditingCommentId(null);
+      setEditText("");
+    } catch (err) {
+      console.error(err);
     }
   };
 
   if (loading) return <Loader />;
-
-  if (!blogData || !blogData.blog) {
-    return (
-      <div className="blogdetail__loading">
-        <h2>Article not found.</h2>
-        <button
-          onClick={() => navigate("/blog")}
-          className="blogdetail__back-btn"
-        >
-          ← Back to Blogs
-        </button>
-      </div>
-    );
-  }
+  if (!blogData || !blogData.blog) return <h2>Not found</h2>;
 
   const { blog, notionContent } = blogData;
-
-  const formattedDate = blog.createdAt
-    ? new Date(blog.createdAt).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric"
-      })
-    : "Recently Published";
 
   return (
     <div className="blogdetail">
       <div className="blogdetail__container">
-        <button
-          onClick={() => navigate("/blog")}
-          className="blogdetail__back-btn"
-        >
-          ← Back to Blogs
+
+        <button onClick={() => navigate("/blog")} className="blogdetail__back-btn">
+          ← Back
         </button>
 
-        <div className="blogdetail__image-wrapper">
-          <img
-            src={
-              blog.image ||
-              "https://via.placeholder.com/800x400?text=Blog+Post"
-            }
-            alt={blog.title}
-            className="blogdetail__image"
-          />
-        </div>
+        <h1>{blog.title}</h1>
 
-        <div className="blogdetail__header">
-          {blog.category && (
-            <span className="blogdetail__category">{blog.category}</span>
-          )}
-          <h1 className="blogdetail__title">{blog.title}</h1>
-
-          <div className="blogdetail__meta">
-            <div className="meta-item">
-              <span className="meta-label">Written by</span>
-              <span className="meta-value">{blog.author || "Admin"}</span>
-            </div>
-            <div className="meta-item">
-              <span className="meta-label">Published</span>
-              <span className="meta-value">{formattedDate}</span>
-            </div>
-          </div>
-        </div>
-
-        <div
-          className="blogdetail__content"
-          style={{ marginTop: "30px", lineHeight: "1.6" }}
-        >
+        <div className="blogdetail__content">
           {notionContent ? (
             <NotionRenderer content={notionContent} />
           ) : (
-            <ReactMarkdown
-              remarkPlugins={[remarkGfm]}
-              rehypePlugins={[rehypeRaw]}
-            >
-              {blog.content || ""}
+            <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+              {blog.content}
             </ReactMarkdown>
           )}
         </div>
 
         <div className="blogdetail__social">
-          <div className="social-actions">
-            <button
-              className={`action-btn ${
-                blog.likes?.includes(user?._id) ? "liked" : ""
-              }`}
-              onClick={handleLike}
-            >
-              ❤️ {blog.likes?.length || 0} Likes
-            </button>
-            <button className="action-btn" onClick={handleShare}>
-              🔗 Share
-            </button>
-          </div>
+          <button onClick={handleLike}>
+            ❤️ {blog.likes?.length || 0}
+          </button>
+        </div>
 
-          <div className="comments-section">
-            <h3>Comments ({blog.comments?.length || 0})</h3>
+        <div className="comments-section">
+          <h3>Comments ({blog.comments?.length || 0})</h3>
 
-            {user ? (
-              <form className="comment-form" onSubmit={handleComment}>
-                <textarea
-                  placeholder="Share your thoughts..."
-                  value={commentText}
-                  onChange={(e) => setCommentText(e.target.value)}
-                  required
-                  rows="3"
-                />
-                <button type="submit" disabled={!commentText.trim()}>
-                  Post Comment
-                </button>
-              </form>
-            ) : (
-              <div className="login-prompt">
-                <p>
-                  Please{" "}
-                  <Link to="/login" style={{ color: "#38bdf8" }}>
-                    log in
-                  </Link>{" "}
-                  to join the conversation.
-                </p>
-              </div>
-            )}
+          {user ? (
+            <form onSubmit={handleComment} className="comment-form">
+              <textarea
+                placeholder="Write a comment..."
+                value={commentText}
+                onChange={(e) => setCommentText(e.target.value)}
+              />
+              <button type="submit">Post</button>
+            </form>
+          ) : (
+            <p>
+              <Link to="/login">Login</Link> to comment
+            </p>
+          )}
 
-            <div className="comments-list">
-              {blog.comments?.slice().reverse().map((c, idx) => (
-                <div key={idx} className="comment">
-                  <div className="comment-avatar">
-                    {c.user.charAt(0).toUpperCase()}
-                  </div>
-                  <div className="comment-body">
-                    <div className="comment-meta">
-                      <span className="comment-author">{c.user}</span>
-                      <span className="comment-date">
-                        {new Date(c.date).toLocaleDateString()}
-                      </span>
-                    </div>
-                    <p>{c.text}</p>
-                  </div>
+          <div className="comments-list">
+            {blog.comments?.slice().reverse().map((c) => (
+              <div key={c._id} className="comment">
+
+                <div className="comment-avatar">
+                  {c.user?.charAt(0).toUpperCase()}
                 </div>
-              ))}
-            </div>
+
+                <div className="comment-body">
+                  <div className="comment-meta">
+                    <span className="comment-author">
+                      {c.user} {user?._id === c.userId && "(You)"}
+                    </span>
+
+                    {user && user._id === c.userId && (
+                      <div className="comment-actions">
+                        <button
+                          onClick={() => {
+                            setEditingCommentId(c._id);
+                            setEditText(c.text);
+                          }}
+                        >
+                          Edit
+                        </button>
+
+                        <button onClick={() => handleDeleteComment(c._id)}>
+                          Delete
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  {editingCommentId === c._id ? (
+                    <form onSubmit={(e) => handleEditCommentSubmit(e, c._id)}>
+                      <textarea
+                        value={editText}
+                        onChange={(e) => setEditText(e.target.value)}
+                      />
+                      <div>
+                        <button type="submit">Save</button>
+                        <button type="button" onClick={() => setEditingCommentId(null)}>
+                          Cancel
+                        </button>
+                      </div>
+                    </form>
+                  ) : (
+                    <p>{c.text}</p>
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
+
         </div>
       </div>
     </div>

@@ -30,11 +30,59 @@ export const commentBlog = async (req, res) => {
 
     const newComment = {
       user: req.user.name || "User",
+      userId: req.user._id.toString(),
       text,
       date: new Date()
     };
 
     blog.comments.push(newComment);
+    await blog.save();
+
+    res.json(blog.comments);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const deleteBlogComment = async (req, res) => {
+  try {
+    const blog = await Blog.findById(req.params.id);
+    if (!blog) return res.status(404).json({ msg: "Blog not found" });
+
+    const index = blog.comments.findIndex(
+      c => c._id.toString() === req.params.commentId
+    );
+
+    if (index === -1) return res.status(404).json({ msg: "Comment not found" });
+
+    if (blog.comments[index].userId !== req.user._id.toString()) {
+      return res.status(401).json({ msg: "Not authorized" });
+    }
+
+    blog.comments.splice(index, 1);
+    await blog.save();
+
+    res.json(blog.comments);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const editBlogComment = async (req, res) => {
+  try {
+    const { text } = req.body;
+    if (!text) return res.status(400).json({ msg: "Text required" });
+
+    const blog = await Blog.findById(req.params.id);
+
+    const comment = blog.comments.id(req.params.commentId);
+    if (!comment) return res.status(404).json({ msg: "Comment not found" });
+
+    if (comment.userId !== req.user._id.toString()) {
+      return res.status(401).json({ msg: "Not authorized" });
+    }
+
+    comment.text = text;
     await blog.save();
 
     res.json(blog.comments);
@@ -49,21 +97,15 @@ export const createBlog = async (req, res) => {
 
     if (!title || !content) {
       return res.status(400).json({
-        message: "Title and content are required",
+        message: "Title and content are required"
       });
     }
 
-    const blog = new Blog({
-      title,
-      content,
-      category,
-    });
-
+    const blog = new Blog({ title, content, category });
     const saved = await blog.save();
 
     res.status(201).json(saved);
   } catch (err) {
-    console.error("CREATE BLOG ERROR:", err);
     res.status(500).json({ message: err.message });
   }
 };
@@ -72,22 +114,21 @@ export const getBlogs = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 6;
-    const skip = (page - 1) * limit;
 
     const totalBlogs = await Blog.countDocuments();
+
     const blogs = await Blog.find()
       .sort({ createdAt: -1 })
-      .skip(skip)
+      .skip((page - 1) * limit)
       .limit(limit);
 
-    res.status(200).json({
+    res.json({
       blogs,
       currentPage: page,
       totalPages: Math.ceil(totalBlogs / limit),
-      totalBlogs,
+      totalBlogs
     });
   } catch (err) {
-    console.error("GET BLOGS ERROR:", err);
     res.status(500).json({ message: err.message });
   }
 };
@@ -95,14 +136,10 @@ export const getBlogs = async (req, res) => {
 export const getSingleBlog = async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id);
-
-    if (!blog) {
-      return res.status(404).json({ message: "Blog not found" });
-    }
+    if (!blog) return res.status(404).json({ message: "Blog not found" });
 
     res.json(blog);
   } catch (err) {
-    console.error("GET SINGLE BLOG ERROR:", err);
     res.status(500).json({ message: err.message });
   }
 };
@@ -121,7 +158,6 @@ export const updateBlog = async (req, res) => {
 
     res.json(updated);
   } catch (err) {
-    console.error("UPDATE BLOG ERROR:", err);
     res.status(500).json({ message: err.message });
   }
 };
@@ -129,14 +165,12 @@ export const updateBlog = async (req, res) => {
 export const deleteBlog = async (req, res) => {
   try {
     const deleted = await Blog.findByIdAndDelete(req.params.id);
-
     if (!deleted) {
       return res.status(404).json({ message: "Blog not found" });
     }
 
     res.json({ message: "Blog deleted" });
   } catch (err) {
-    console.error("DELETE BLOG ERROR:", err);
     res.status(500).json({ message: err.message });
   }
 };
