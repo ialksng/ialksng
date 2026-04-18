@@ -267,3 +267,42 @@ export const submitFeedback = async (req, res) => {
     res.status(500).json({ msg: err.message });
   }
 };
+
+export const updateProfile = async (req, res) => {
+  try {
+    const { name, username, avatar, mobile, address } = req.body;
+    const user = await User.findById(req.user._id);
+
+    if (!user) return res.status(404).json({ msg: "User not found" });
+
+    if (username && username !== user.username) {
+      if (user.usernameChanged) {
+        return res.status(400).json({ msg: "Username can only be changed once." });
+      }
+
+      const existingUser = await User.findOne({ username });
+      if (existingUser && existingUser._id.toString() !== user._id.toString()) {
+        return res.status(400).json({ msg: "Username is already taken." });
+      }
+      
+      user.username = username;
+      user.usernameChanged = true;
+    }
+
+    user.name = name ?? user.name;
+    user.avatar = avatar ?? user.avatar; 
+    user.mobile = mobile ?? user.mobile;
+    user.address = address ?? user.address;
+
+    const updatedUser = await user.save();
+    
+    res.json({
+      _id: updatedUser._id, name: updatedUser.name, username: updatedUser.username, 
+      usernameChanged: updatedUser.usernameChanged, email: updatedUser.email,
+      role: updatedUser.role, avatar: updatedUser.avatar, mobile: updatedUser.mobile, 
+      address: updatedUser.address
+    });
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+};
