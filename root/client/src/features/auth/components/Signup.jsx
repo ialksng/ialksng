@@ -1,11 +1,9 @@
 import React, { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
-
 import { AuthContext } from "../AuthContext";
 import axios from "../../../core/utils/axios";
-
-import "./auth.css";
+import "./Signup.css";
 
 const Signup = () => {
   const { loginSuccess } = useContext(AuthContext);
@@ -38,18 +36,18 @@ const Signup = () => {
   };
 
   return (
-    <div className="auth__container">
-      <div className="auth__card">
+    <div className="signup__container">
+      <div className="signup__card">
         <h2>Create an Account</h2>
-        <p className="auth__subtitle">Sign up to see projects, buy notes, and access the AI.</p>
+        <p className="signup__subtitle">Sign up to see projects, buy notes, and access the AI.</p>
         
-        {error && <p className="auth__error" style={{ color: "red" }}>{error}</p>}
+        {error && <p className="signup__error">{error}</p>}
 
-        <div className="auth__oauth">
+        <div className="signup__oauth">
           <GoogleLogin onSuccess={handleGoogleSuccess} onError={() => setError("Google Error")} />
         </div>
 
-        <div className="auth__divider"><span>OR</span></div>
+        <div className="signup__divider"><span>OR</span></div>
 
         <form onSubmit={handleSubmit}>
           <input type="text" placeholder="Username" required 
@@ -61,16 +59,16 @@ const Signup = () => {
           <input type="password" placeholder="Password" required 
             onChange={(e) => setForm({ ...form, password: e.target.value })} />
           
-          <p className="auth__legal-text" style={{ fontSize: '11px', color: '#8e8e8e', margin: '15px 0', textAlign: 'center', lineHeight: '1.4' }}>
+          <p className="signup__legal-text">
             People who use our service may have uploaded your contact information to our ecosystem.
             <br /><br />
-            By tapping Submit, you agree to create an account and to our <Link to="/terms-and-conditions" style={{color: '#00376b'}}>Terms</Link>, <Link to="/privacy-policy" style={{color: '#00376b'}}>Privacy Policy</Link> and <Link to="/cookie-policy" style={{color: '#00376b'}}>Cookies Policy</Link>.
+            By tapping Submit, you agree to create an account and to our <Link to="/terms-and-conditions">Terms</Link>, <Link to="/privacy-policy">Privacy Policy</Link> and <Link to="/cookie-policy">Cookies Policy</Link>.
           </p>
 
           <button type="submit">Submit & Sign up</button>
         </form>
 
-        <p className="auth__link">Already have an account? <Link to="/login">Login</Link></p>
+        <p className="signup__link">Already have an account? <Link to="/login">Login</Link></p>
       </div>
     </div>
   );

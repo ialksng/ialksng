@@ -1,11 +1,9 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
-
 import { AuthContext } from "../AuthContext";
 import axios from "../../../core/utils/axios";
-
-import "./auth.css";
+import "./Login.css";
 
 const Login = () => {
   const { user, loginSuccess } = useContext(AuthContext);
@@ -48,11 +46,11 @@ const Login = () => {
   if (user) return null;
 
   return (
-    <div className="auth__container">
-      <div className="auth__card">
+    <div className="login__container">
+      <div className="login__card">
         <h2>Welcome Back</h2>
 
-        {error && <p className="auth__error" style={{ color: "red" }}>{error}</p>}
+        {error && <p className="login__error">{error}</p>}
 
         <form onSubmit={handleEmailSubmit}>
           <input
@@ -69,8 +67,8 @@ const Login = () => {
             onChange={(e) => setForm({ ...form, password: e.target.value })}
           />
 
-          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "13px", margin: "10px 0 20px" }}>
-            <label style={{ display: "flex", alignItems: "center", gap: "5px", color: "#fff", cursor: "pointer" }}>
+          <div className="login__actions">
+            <label className="login__remember">
               <input
                 type="checkbox"
                 checked={rememberMe}
@@ -79,7 +77,7 @@ const Login = () => {
               Remember me
             </label>
 
-            <Link to="/forgot-password" style={{ color: "#0095f6", textDecoration: "none" }}>
+            <Link to="/forgot-password" className="login__forgot">
               Forgot password?
             </Link>
           </div>
@@ -87,18 +85,18 @@ const Login = () => {
           <button type="submit">Login</button>
         </form>
 
-        <div className="auth__divider">
+        <div className="login__divider">
           <span>OR</span>
         </div>
 
-        <div className="auth__oauth">
+        <div className="login__oauth">
           <GoogleLogin
             onSuccess={handleGoogleSuccess}
             onError={() => setError("Google Error")}
           />
         </div>
 
-        <p className="auth__link">
+        <p className="login__link">
           Don't have an account? <Link to="/signup">Sign up</Link>
         </p>
       </div>
