@@ -5,6 +5,8 @@ import { GoogleLogin } from "@react-oauth/google";
 import { AuthContext } from "../AuthContext";
 import axios from "../../../core/utils/axios";
 
+import "./auth.css";
+
 const Login = () => {
   const { user, loginSuccess } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -46,18 +48,17 @@ const Login = () => {
   if (user) return null;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[radial-gradient(circle_at_top,#0f172a,#020617)] p-5">
-      <div className="w-full max-w-[380px] p-8 rounded-[18px] bg-white/5 border border-white/10 backdrop-blur-[18px] shadow-[0_20px_60px_rgba(0,0,0,0.6)] text-center">
-        <h2 className="text-[22px] font-semibold text-white mb-1.5">Welcome Back</h2>
+    <div className="auth__container">
+      <div className="auth__card">
+        <h2>Welcome Back</h2>
 
-        {error && <p className="text-red-500 text-[13px] mb-2.5">{error}</p>}
+        {error && <p className="auth__error" style={{ color: "red" }}>{error}</p>}
 
         <form onSubmit={handleEmailSubmit}>
           <input
             type="email"
             placeholder="Email"
             required
-            className="w-full p-3 my-1.5 rounded-lg border border-slate-800 bg-[#020617] text-white text-sm transition-all focus:border-sky-400 focus:shadow-[0_0_0_2px_rgba(56,189,248,0.2)] focus:outline-none box-border"
             onChange={(e) => setForm({ ...form, email: e.target.value })}
           />
 
@@ -65,49 +66,40 @@ const Login = () => {
             type="password"
             placeholder="Password"
             required
-            className="w-full p-3 my-1.5 rounded-lg border border-slate-800 bg-[#020617] text-white text-sm transition-all focus:border-sky-400 focus:shadow-[0_0_0_2px_rgba(56,189,248,0.2)] focus:outline-none box-border"
             onChange={(e) => setForm({ ...form, password: e.target.value })}
           />
 
-          <div className="flex justify-between text-[13px] my-2.5 mb-5">
-            <label className="flex items-center gap-1.5 text-white cursor-pointer">
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "13px", margin: "10px 0 20px" }}>
+            <label style={{ display: "flex", alignItems: "center", gap: "5px", color: "#fff", cursor: "pointer" }}>
               <input
                 type="checkbox"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
-                className="cursor-pointer"
               />
               Remember me
             </label>
 
-            <Link to="/forgot-password" className="text-[#0095f6] no-underline">
+            <Link to="/forgot-password" style={{ color: "#0095f6", textDecoration: "none" }}>
               Forgot password?
             </Link>
           </div>
 
-          <button 
-            type="submit" 
-            className="block w-full p-3 mt-3 rounded-lg border-none bg-gradient-to-br from-sky-400 to-sky-500 text-black font-semibold cursor-pointer transition-all hover:-translate-y-[1px] hover:shadow-[0_6px_20px_rgba(56,189,248,0.4)] box-border"
-          >
-            Login
-          </button>
+          <button type="submit">Login</button>
         </form>
 
-        <div className="my-[18px] relative text-[12px] text-slate-500 flex justify-center items-center">
-          <div className="absolute w-[42%] h-[1px] bg-slate-800 left-0"></div>
-          <span className="bg-[#020617] px-2.5 z-10">OR</span>
-          <div className="absolute w-[42%] h-[1px] bg-slate-800 right-0"></div>
+        <div className="auth__divider">
+          <span>OR</span>
         </div>
 
-        <div className="flex flex-col items-center gap-2.5">
+        <div className="auth__oauth">
           <GoogleLogin
             onSuccess={handleGoogleSuccess}
             onError={() => setError("Google Error")}
           />
         </div>
 
-        <p className="mt-3.5 text-[13px] text-slate-400">
-          Don't have an account? <Link to="/signup" className="text-sky-400 no-underline">Sign up</Link>
+        <p className="auth__link">
+          Don't have an account? <Link to="/signup">Sign up</Link>
         </p>
       </div>
     </div>
