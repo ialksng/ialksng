@@ -19,7 +19,7 @@ const AdminStreams = () => {
 
   const fetchStreams = async () => {
     try {
-      const { data } = await axios.get('/more/streams/all'); 
+      const { data } = await axios.get('/more/streams/all');
       setStreams(data);
     } catch (err) {
       console.error("Failed to fetch streams", err);
@@ -34,8 +34,17 @@ const AdminStreams = () => {
     e.preventDefault();
     try {
       await axios.post('/more/streams', formData);
-      setFormData({ title: '', platform: 'YouTube', videoUrl: '', embedUrl: '', category: 'gaming', status: 'archived' });
-      fetchStreams(); 
+
+      setFormData({
+        title: '',
+        platform: 'YouTube',
+        videoUrl: '',
+        embedUrl: '',
+        category: 'gaming',
+        status: 'archived'
+      });
+
+      fetchStreams();
       alert("Stream added successfully!");
     } catch (err) {
       console.error(err);
@@ -46,7 +55,7 @@ const AdminStreams = () => {
   const toggleLiveStatus = async (id, currentStatus) => {
     try {
       const newStatus = currentStatus === 'live' ? 'archived' : 'live';
-      await axios.put(`/api/more/streams/${id}/status`, { status: newStatus });
+      await axios.put(`/more/streams/${id}/status`, { status: newStatus });
       fetchStreams();
     } catch (err) {
       console.error(err);
@@ -59,23 +68,39 @@ const AdminStreams = () => {
 
       <div className="admin-card panel-dark">
         <h3>Add New Stream / Video</h3>
+
         <form onSubmit={handleSubmit} className="admin-form">
           <div className="form-group">
             <label>Title</label>
-            <input type="text" name="title" value={formData.title} onChange={handleInputChange} required />
+            <input
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleInputChange}
+              required
+            />
           </div>
-          
+
           <div className="form-row">
             <div className="form-group">
               <label>Platform</label>
-              <select name="platform" value={formData.platform} onChange={handleInputChange}>
+              <select
+                name="platform"
+                value={formData.platform}
+                onChange={handleInputChange}
+              >
                 <option value="YouTube">YouTube</option>
                 <option value="Twitch">Twitch</option>
               </select>
             </div>
+
             <div className="form-group">
               <label>Category</label>
-              <select name="category" value={formData.category} onChange={handleInputChange}>
+              <select
+                name="category"
+                value={formData.category}
+                onChange={handleInputChange}
+              >
                 <option value="gaming">Gaming</option>
                 <option value="general">Just Chatting / General</option>
               </select>
@@ -83,16 +108,38 @@ const AdminStreams = () => {
           </div>
 
           <div className="form-group">
-            <label>Embed URL (for the iframe)</label>
-            <input type="text" name="embedUrl" placeholder="https://www.youtube.com/embed/..." value={formData.embedUrl} onChange={handleInputChange} required />
+            <label>Video/Stream URL</label>
+            <input
+              type="text"
+              name="videoUrl"
+              placeholder="https://www.youtube.com/watch?v=..."
+              value={formData.videoUrl}
+              onChange={handleInputChange}
+              required
+            />
           </div>
 
-          <button type="submit" className="admin-btn primary">Add to Database</button>
+          <div className="form-group">
+            <label>Embed URL</label>
+            <input
+              type="text"
+              name="embedUrl"
+              placeholder="https://www.youtube.com/embed/..."
+              value={formData.embedUrl}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+
+          <button type="submit" className="admin-btn primary">
+            Add to Database
+          </button>
         </form>
       </div>
 
       <div className="admin-card panel-dark" style={{ marginTop: '2rem' }}>
         <h3>Stream Database</h3>
+
         <table className="admin-table">
           <thead>
             <tr>
@@ -103,23 +150,47 @@ const AdminStreams = () => {
               <th>Actions</th>
             </tr>
           </thead>
+
           <tbody>
             {streams.map((stream) => (
-              <tr key={stream._id} className={stream.status === 'live' ? 'row-highlight' : ''}>
+              <tr
+                key={stream._id}
+                className={stream.status === 'live' ? 'row-highlight' : ''}
+              >
                 <td>
-                  <span className={`admin-badge ${stream.status === 'live' ? 'badge-live' : 'badge-offline'}`}>
+                  <span
+                    className={`admin-badge ${
+                      stream.status === 'live'
+                        ? 'badge-live'
+                        : 'badge-offline'
+                    }`}
+                  >
                     {stream.status.toUpperCase()}
                   </span>
                 </td>
+
                 <td>{stream.title}</td>
                 <td>{stream.platform}</td>
-                <td>{new Date(stream.createdAt).toLocaleDateString()}</td>
                 <td>
-                  <button 
-                    onClick={() => toggleLiveStatus(stream._id, stream.status)}
-                    className={`admin-btn ${stream.status === 'live' ? 'btn-danger' : 'btn-success'}`}
+                  {stream.createdAt
+                    ? new Date(stream.createdAt).toLocaleDateString()
+                    : '-'}
+                </td>
+
+                <td>
+                  <button
+                    onClick={() =>
+                      toggleLiveStatus(stream._id, stream.status)
+                    }
+                    className={`admin-btn ${
+                      stream.status === 'live'
+                        ? 'btn-danger'
+                        : 'btn-success'
+                    }`}
                   >
-                    {stream.status === 'live' ? 'End Stream (Archive)' : 'Go Live'}
+                    {stream.status === 'live'
+                      ? 'End Stream (Archive)'
+                      : 'Go Live'}
                   </button>
                 </td>
               </tr>
