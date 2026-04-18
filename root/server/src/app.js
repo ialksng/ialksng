@@ -16,7 +16,7 @@ import aboutRoutes from "./modules/about/about.routes.js";
 import notesRoutes from "./modules/notes/notes.routes.js";
 import certificationRoutes from "./modules/certifications/certification.routes.js";
 import newsletterRoutes from "./modules/newsletter/newsletter.routes.js";
-
+import chatRoutes from "./modules/chat/chat.routes.js";
 
 const app = express();
 
@@ -39,26 +39,22 @@ app.get("/api/health", (req, res) => {
   res.status(200).send("Backend is awake!");
 });
 
-
 app.use("/api/auth", authRoutes);
-
 app.use("/api/products", productRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/blogs", blogRoutes);
 app.use("/api/search", searchRoutes);
-
 app.use("/api/orders", orderRoutes);
 app.use("/api/payment", paymentRoutes);
+app.use("/api/about", aboutRoutes);
+app.use("/api/notes", notesRoutes);
+app.use("/api/certifications", certificationRoutes);
+app.use("/api/newsletter", newsletterRoutes);
+app.use("/api/chat", chatRoutes);
 
 app.use(trackVisitor);
 
 app.use("/api/admin", adminRoutes);
 app.use("/api/public", statsRoutes);
-
-app.use("/api/about", aboutRoutes);
-app.use("/api/notes", notesRoutes);
-app.use("/api/certifications", certificationRoutes);
-app.use("/api/chat", chatRoutes);
-app.use('/api/newsletter', newsletterRoutes);
 
 export default app;
