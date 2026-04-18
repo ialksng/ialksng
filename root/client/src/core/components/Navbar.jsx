@@ -24,12 +24,14 @@ function Navbar() {
 
   const dropdownRef = useRef();
   const searchRef = useRef();
+  const mobileSearchRef = useRef();
   const menuRef = useRef();
 
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) setOpen(false);
       if (searchRef.current && !searchRef.current.contains(e.target)) setShowSuggestions(false);
+      if (mobileSearchRef.current && !mobileSearchRef.current.contains(e.target)) setShowSuggestions(false);
       if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false);
     };
 
@@ -207,17 +209,42 @@ function Navbar() {
       </div>
 
       <nav className={`mobile__menu ${menuOpen ? "active" : ""}`}>
-        <div className="mobile__search-container">
-          <form className="nav__search-wrapper" onSubmit={handleSearchSubmit} style={{ width: "100%" }}>
+        <div className="mobile__search-container" ref={mobileSearchRef}>
+          <form className="nav__search-wrapper mobile-search" onSubmit={handleSearchSubmit}>
             <FaSearch className="nav__search-icon" />
             <input
               type="text"
               placeholder="Search..."
               className="nav__search-input"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setShowSuggestions(true);
+              }}
+              onFocus={() => setShowSuggestions(true)}
             />
           </form>
+
+          {showSuggestions && searchQuery.trim().length >= 2 && (
+            <div className="search-suggestions__dropdown mobile-suggestions">
+              {suggestions.length > 0 ? (
+                suggestions.map((item) => (
+                  <div
+                    key={item._id}
+                    className="suggestion__item"
+                    onClick={() => handleSuggestionClick(item.url)}
+                  >
+                    <span className="suggestion__title">{item.title}</span>
+                    <span className={`suggestion__badge type-${item.type}`}>
+                      {item.type}
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <div className="suggestion__empty">No results found</div>
+              )}
+            </div>
+          )}
         </div>
 
         <ul>
@@ -231,7 +258,7 @@ function Navbar() {
 
           {!user ? (
             <li className="mobile__login">
-              <button className="nav__btn" onClick={() => handleNavigate("/login")}>Login</button>
+              <button className="nav__btn mobile-login-btn" onClick={() => handleNavigate("/login")}>Login</button>
             </li>
           ) : (
             <>
