@@ -1,0 +1,217 @@
+.gamezone-container {
+  min-height: 100vh;
+  background-color: var(--bg-primary, #0f172a);
+  padding-bottom: 8rem;
+}
+
+.gamezone-hero {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(to bottom, rgba(88, 28, 135, 0.2), transparent);
+  padding: 5rem 2rem 4rem;
+  text-align: center;
+}
+
+.gamezone-glow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 75%;
+  height: 8rem;
+  background-color: rgba(147, 51, 234, 0.3);
+  filter: blur(100px);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.gamezone-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: #ffffff;
+  letter-spacing: -0.025em;
+}
+
+.gamezone-title-highlight {
+  background: linear-gradient(to right, #c084fc, #22d3ee);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+.gamezone-subtitle {
+  color: #9ca3af;
+  max-width: 42rem;
+  margin: 0 auto;
+  font-size: 1.125rem;
+  line-height: 1.75;
+}
+
+.gamezone-content {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.gamezone-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .gamezone-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .gamezone-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.gamezone-skeleton {
+  border-radius: 1rem;
+  background-color: rgba(31, 41, 55, 0.5);
+  height: 22rem;
+  border: 1px solid rgba(55, 65, 81, 0.5);
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.gamezone-empty {
+  text-align: center;
+  padding: 5rem 0;
+  background-color: rgba(31, 41, 55, 0.2);
+  border-radius: 1.5rem;
+  border: 1px solid rgba(55, 65, 81, 0.5);
+}
+
+.gamezone-empty h3 { font-size: 1.5rem; font-weight: 700; color: #d1d5db; margin: 1rem 0 0.5rem; }
+.gamezone-empty p { color: #6b7280; margin: 0; }
+
+.game-card {
+  display: flex;
+  flex-direction: column;
+  background-color: #111827;
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid #1f2937;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  position: relative;
+}
+
+.game-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(168, 85, 247, 0.5);
+  box-shadow: 0 0 40px rgba(168, 85, 247, 0.15);
+}
+
+.game-card-img-wrapper {
+  position: relative;
+  height: 14rem;
+  overflow: hidden;
+}
+
+.game-card-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, #111827, transparent);
+  z-index: 10;
+}
+
+.game-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s ease-out;
+}
+
+.game-card:hover .game-card-img {
+  transform: scale(1.1);
+}
+
+.game-card-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 20;
+  padding: 0.25rem 0.75rem;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #67e8f9;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.game-card-body {
+  position: relative;
+  z-index: 20;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  background-color: #111827;
+}
+
+.game-card-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 0.5rem 0;
+  transition: color 0.3s ease;
+}
+
+.game-card:hover .game-card-title {
+  color: #c084fc;
+}
+
+.game-card-desc {
+  color: #9ca3af;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+  flex-grow: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.game-card-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  border-radius: 0.75rem;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.game-card:hover .game-card-btn {
+  background-color: #9333ea;
+  border-color: #a855f7;
+}
+
+.game-card-icon {
+  width: 1rem;
+  height: 1rem;
+  margin-left: 0.5rem;
+  transition: transform 0.3s ease;
+}
+
+.game-card:hover .game-card-icon {
+  transform: translateX(4px);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
