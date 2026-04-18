@@ -1,30 +1,41 @@
 import mongoose from "mongoose";
 
-const serviceSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  description: { type: String, required: true },
-  iconName: { type: String, required: true }
-});
-
-const funExtraSchema = new mongoose.Schema({
-  label: { type: String, required: true },
-  value: { type: String, required: true }, 
-  suffix: { type: String } 
-});
-
 const homeSchema = new mongoose.Schema({
-  heroTitle: { type: String, default: "Crafting Digital Experiences." },
-  heroSubtitle: { type: String, default: "Full-Stack Developer specializing in MERN and AI." },
-  heroPrimaryButtonText: { type: String, default: "View My Work" },
-  heroPrimaryButtonLink: { type: String, default: "/work" },
-  heroSecondaryButtonText: { type: String, default: "Contact Me" },
-  heroSecondaryButtonLink: { type: String, default: "/contact" },
-  servicesHeading: { type: String, default: "What I Do" },
-  services: [serviceSchema],
-  funExtras: [funExtraSchema],
-  ctaTitle: { type: String, default: "Ready to start your next project?" },
-  ctaButtonText: { type: String, default: "Let's Talk" },
-  ctaButtonLink: { type: String, default: "/contact" }
+  heroTitle: { type: String, default: "Welcome" },
+  heroSubtitle: { type: String, default: "Subtitle" },
+  heroPrimaryButtonText: { type: String },
+  heroPrimaryButtonLink: { type: String },
+  heroSecondaryButtonText: { type: String },
+  heroSecondaryButtonLink: { type: String },
+
+  offerCards: [{
+    title: { type: String },
+    description: { type: String },
+    iconName: { type: String },
+    link: { type: String }
+  }],
+
+  servicesHeading: { type: String, default: "Services" },
+  services: [{
+    title: { type: String },
+    description: { type: String },
+    iconName: { type: String }
+  }],
+
+  portfolioHeading: { type: String, default: "Featured Work" },
+  storeHeading: { type: String, default: "Digital Store" },
+  blogHeading: { type: String, default: "Latest Articles" },
+  testimonialsHeading: { type: String, default: "What People Say" },
+
+  ctaTitle: { type: String, default: "Ready to work together?" },
+  ctaButtonText: { type: String },
+  ctaButtonLink: { type: String },
+
+  funExtras: [{
+    label: { type: String },
+    value: { type: String },
+    suffix: { type: String }
+  }]
 }, { timestamps: true });
 
 export default mongoose.model("Home", homeSchema);

@@ -16,14 +16,14 @@ import FunExtras from './components/FunExtras';
 import './Home.css';
 
 function Home() {
-  const [data, setData] = useState(null);
+  const [homeData, setHomeData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchHomeData = async () => {
       try {
         const res = await axios.get('/home'); 
-        setData(res.data);
+        setHomeData(res.data);
       } catch (err) {
         console.error("Failed to load home data", err);
       } finally {
@@ -34,39 +34,35 @@ function Home() {
   }, []);
 
   if (loading) return <Loader />;
-  if (!data) return <div className="home__wrapper"><p style={{color:'white', textAlign:'center', marginTop:'50px'}}>Failed to load data.</p></div>;
+  if (!homeData) return <div className="home__wrapper"><p style={{color:'white', textAlign:'center', marginTop:'50px'}}>Failed to load Home Page data.</p></div>;
 
   return (
     <div className="home__wrapper">
+      
       <Hero 
-        title={data.heroTitle} 
-        subtitle={data.heroSubtitle}
-        btn1Text={data.heroPrimaryButtonText} 
-        btn1Link={data.heroPrimaryButtonLink}
-        btn2Text={data.heroSecondaryButtonText} 
-        btn2Link={data.heroSecondaryButtonLink}
+        title={homeData.heroTitle} subtitle={homeData.heroSubtitle}
+        btn1Text={homeData.heroPrimaryButtonText} btn1Link={homeData.heroPrimaryButtonLink}
+        btn2Text={homeData.heroSecondaryButtonText} btn2Link={homeData.heroSecondaryButtonLink}
       />
       
-      <OfferCards /> 
-      <FeaturedProjects /> 
+      <OfferCards cards={homeData.offerCards || []} /> 
       
-      <ServicesPreview 
-        heading={data.servicesHeading} 
-        services={data.services || []} 
-      />
+      <FeaturedProjects heading={homeData.portfolioHeading} /> 
       
-      <StorePreview /> 
-      <Testimonials /> 
+      <ServicesPreview heading={homeData.servicesHeading} services={homeData.services || []} />
+      
+      <StorePreview heading={homeData.storeHeading} /> 
+      
+      <Testimonials heading={homeData.testimonialsHeading} /> 
+      
       <AboutPreview />
-      <Updates /> 
       
-      <FinalCTA 
-        title={data.ctaTitle} 
-        btnText={data.ctaButtonText} 
-        btnLink={data.ctaButtonLink} 
-      />
+      <Updates heading={homeData.blogHeading} /> 
       
-      <FunExtras stats={data.funExtras || []} />
+      <FinalCTA title={homeData.ctaTitle} btnText={homeData.ctaButtonText} btnLink={homeData.ctaButtonLink} />
+      
+      <FunExtras stats={homeData.funExtras || []} />
+      
     </div>
   );
 }

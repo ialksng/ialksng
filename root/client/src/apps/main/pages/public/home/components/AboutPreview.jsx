@@ -1,49 +1,54 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FaUserAlt, FaArrowRight } from 'react-icons/fa';
-
+import axios from '../../../../../core/utils/axios';
 import './AboutPreview.css';
 
-export default function AboutPreview() {
+const AboutPreview = () => {
+  const [aboutData, setAboutData] = useState(null);
+
+  useEffect(() => {
+    const fetchAboutSnippet = async () => {
+      try {
+        const res = await axios.get('/about');
+        setAboutData(res.data);
+      } catch (err) {
+        console.error("Failed to fetch about data for preview", err);
+      }
+    };
+    fetchAboutSnippet();
+  }, []);
+
+  if (!aboutData) return null;
+
   return (
-    <section className="home__section" style={{ backgroundColor: "var(--bg-secondary)" }}>
-      <div className="container">
-        <div className="about__preview-content">
+    <section className="about-preview" style={{ padding: '60px 0', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)', margin: '40px 0' }}>
+      <div style={{ display: 'flex', gap: '40px', alignItems: 'center', flexWrap: 'wrap' }}>
+        
+        <div style={{ flex: '1', minWidth: '300px' }}>
+          <h2 style={{ fontSize: '28px', marginBottom: '10px' }}>Hi, I'm {aboutData.name?.split(' ')[0] || "Alok"}</h2>
+          <h3 style={{ color: 'var(--accent-primary)', fontSize: '18px', marginBottom: '20px' }}>{aboutData.role}</h3>
           
-          <div className="about__preview-text">
-            <h2 className="gradient-text">Behind the Code</h2>
-            <p>
-              I’m a Full-Stack Architect and CSE student with a passion for building 
-              scalable cloud systems and AI-driven applications. With a 9.0 CGPA 
-              and a background in freelance development, I bridge the gap between 
-              academic excellence and real-world software engineering.
-            </p>
-            <Link to="/about" className="btn btn__primary">
-              Learn More About Me <FaArrowRight style={{marginLeft: '8px'}} />
-            </Link>
-          </div>
-
-          <div className="about__preview-stats">
-            <div className="stat__item">
-              <h3>9.0</h3>
-              <p>Current CGPA</p>
-            </div>
-            <div className="stat__item">
-              <h3>15+</h3>
-              <p>Projects Built</p>
-            </div>
-            <div className="stat__item">
-              <h3>1800+</h3>
-              <p>LeetCode Rating</p>
-            </div>
-            <div className="stat__item">
-              <h3>2+</h3>
-              <p>Years Experience</p>
-            </div>
-          </div>
-
+          {/* Show the first paragraph of the about bio */}
+          <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6', marginBottom: '20px' }}>
+            {aboutData.paragraphs && aboutData.paragraphs.length > 0 
+              ? aboutData.paragraphs[0] 
+              : "I build high-performance digital solutions."}
+          </p>
+          
+          <Link to="/about" className="btn primary">Read Full Story</Link>
         </div>
+
+        {aboutData.imageUrl && (
+          <div style={{ flex: '1', minWidth: '300px', display: 'flex', justifyContent: 'center' }}>
+            <div style={{ width: '250px', height: '250px', borderRadius: '50%', overflow: 'hidden', border: '4px solid var(--border-color)' }}>
+              <img src={aboutData.imageUrl} alt={aboutData.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </div>
+          </div>
+        )}
+        
       </div>
     </section>
   );
-}
+};
+
+export default AboutPreview;
