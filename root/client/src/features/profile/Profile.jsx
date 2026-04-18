@@ -36,16 +36,31 @@ const Profile = () => {
     setTheme(savedTheme);
   }, []);
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
       if (file.size > 2 * 1024 * 1024) {
         setMsg({ text: "Image must be less than 2MB", type: "error" });
+        setTimeout(() => setMsg({ text: "", type: "" }), 3000);
         return;
       }
+      
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfileData((prev) => ({ ...prev, avatar: reader.result }));
+      reader.onloadend = async () => {
+        const base64Image = reader.result;
+        setProfileData((prev) => ({ ...prev, avatar: base64Image }));
+        
+        try {
+          const res = await axios.put("/auth/profile", { ...profileData, avatar: base64Image }, {
+            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+          });
+          if(dispatch) dispatch({ type: "LOGIN_SUCCESS", payload: { user: res.data, token: localStorage.getItem("token") } });
+          setMsg({ text: "Avatar saved successfully!", type: "success" });
+        } catch (err) {
+          console.error(err);
+          setMsg({ text: "Failed to save avatar.", type: "error" });
+        }
+        setTimeout(() => setMsg({ text: "", type: "" }), 3000);
       };
       reader.readAsDataURL(file);
     }
@@ -112,7 +127,7 @@ const Profile = () => {
             title="Click to change avatar"
           >
             {profileData.avatar ? (
-              <img src={profileData.avatar} alt="Avatar" className="profile__avatar" style={{ border: '2px solid var(--accent-primary)' }} />
+              <img src={profileData.avatar} alt="Avatar" className="profile__avatar" style={{ border: '2px solid var(--accent-primary)', objectFit: 'cover' }} />
             ) : (
               <div className="profile__avatar">{user.name?.charAt(0).toUpperCase()}</div>
             )}
