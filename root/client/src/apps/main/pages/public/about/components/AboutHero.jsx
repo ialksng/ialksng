@@ -1,29 +1,41 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { FaDownload, FaEnvelope } from 'react-icons/fa';
 
-const AboutHero = ({ name, role, imageUrl, stats }) => {
+export default function AboutHero() {
   return (
-    <section className="about-hero">
-      <div className="about-hero__content">
+    <section className="about__hero">
+      <div className="container about__hero-container">
 
-        <h1>{name || "Your Name"}</h1>
-        <h2>{role || "Your Role"}</h2>
-        
-        <div className="about-hero__stats">
-          {stats && stats.map((stat, idx) => (
-            <div key={idx} className="stat-item">
-              <h3>{stat.value}</h3>
-              <p>{stat.label}</p>
-            </div>
-          ))}
+        <div className="about__hero-content">
+          <h1 className="about__title">
+            Hi, I'm <span className="gradient-text">Alok Singh</span>
+          </h1>
+          <h2 className="about__subtitle">
+            Computer Science Engineer & Full-Stack Developer
+          </h2>
+          <p className="about__desc">
+            I specialize in the MERN stack and Spring Boot, building scalable web applications, 
+            smart cloud architectures, and robust APIs. With a strong foundation in Data Structures, 
+            Algorithms, and DevOps, I engineer solutions that are both highly performant and user-centric.
+          </p>
+          
+          <div className="hero__cta-group" style={{ justifyContent: 'flex-start' }}>
+            <a href="/Alok_Singh_Resume.pdf" download className="btn btn__primary" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <FaDownload /> Download Resume
+            </a>
+            <Link to="/contact" className="btn btn__outline" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <FaEnvelope /> Contact Me
+            </Link>
+          </div>
         </div>
-      </div>
-      
-      <div className="about-hero__image">
+        <div className="about__hero-image-wrapper">
+          <div className="about__image-placeholder">
+            <span>[ Your Profile Image Here ]</span>
+          </div>
+        </div>
 
-        <img src={imageUrl || "https://via.placeholder.com/300"} alt={name} />
       </div>
     </section>
   );
-};
-
-export default AboutHero;
+}
