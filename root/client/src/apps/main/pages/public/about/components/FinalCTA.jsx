@@ -25,7 +25,7 @@ export default function FinalCTA() {
               <FaPaperPlane /> Get In Touch
             </Link>
             
-            <Link to="/projects" className="btn btn__outline" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <Link to="/work" className="btn btn__outline" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <FaFolderOpen /> View My Work
             </Link>
           </div>
