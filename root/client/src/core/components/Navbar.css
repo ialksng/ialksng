@@ -12,13 +12,29 @@
   top: 0;
   width: 100%;
   z-index: 1000;
-  transition: all 0.3s ease;
+  transition: background 0.3s ease;
   box-sizing: border-box;
+}
+
+.navbar.menu-open {
+  background: #0f172a;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: none;
 }
 
 body {
   padding-top: 80px;
   overscroll-behavior: none;
+}
+
+body.hide-bot .chatbot-container,
+body.hide-bot .chatbot-wrapper,
+body.hide-bot .bot-container,
+body.hide-bot #chatbot {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
 
 .navbar__logo {
@@ -125,6 +141,11 @@ body {
 
 .icon__wrapper:hover {
   color: var(--accent-primary, #38bdf8);
+}
+
+.cart-icon-global {
+  display: flex;
+  align-items: center;
 }
 
 .cart__badge {

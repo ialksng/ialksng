@@ -42,12 +42,18 @@ function Navbar() {
   useEffect(() => {
     if (menuOpen) {
       document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+      document.body.classList.add("hide-bot"); 
     } else {
       document.body.style.overflow = "auto";
+      document.documentElement.style.overflow = "auto";
+      document.body.classList.remove("hide-bot");
     }
 
     return () => {
       document.body.style.overflow = "auto";
+      document.documentElement.style.overflow = "auto";
+      document.body.classList.remove("hide-bot");
     };
   }, [menuOpen]);
 
@@ -154,19 +160,19 @@ function Navbar() {
 
         <NotificationBell />
 
+        {user && user.role !== "admin" && (
+          <div className="icon__wrapper cart-icon-global" onClick={() => handleNavigate("/cart")}>
+            <FaShoppingCart />
+            {cart?.length > 0 && <span className="cart__badge">{cart.length}</span>}
+          </div>
+        )}
+
         {!user ? (
           <button className="nav__btn desktop-only" onClick={() => navigate("/login")}>
             Login
           </button>
         ) : (
           <div className="desktop-only navbar__user-area">
-            {user.role !== "admin" && (
-              <div className="icon__wrapper" onClick={() => navigate("/cart")}>
-                <FaShoppingCart />
-                {cart?.length > 0 && <span className="cart__badge">{cart.length}</span>}
-              </div>
-            )}
-
             <div className="user__menu" ref={dropdownRef}>
               <div className="icon__wrapper" onClick={() => setOpen(!open)}>
                 <FaUser />
@@ -263,10 +269,7 @@ function Navbar() {
           ) : (
             <>
               {user.role !== "admin" && (
-                <>
-                  <li onClick={() => handleNavigate("/cart")} className="mobile__action">🛒 Cart ({cart?.length || 0})</li>
-                  <li onClick={() => handleNavigate("/profile")} className="mobile__action">👤 Profile</li>
-                </>
+                <li onClick={() => handleNavigate("/profile")} className="mobile__action">👤 Profile</li>
               )}
 
               {user.role === "admin" && (
