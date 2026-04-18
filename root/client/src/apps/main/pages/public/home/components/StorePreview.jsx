@@ -1,49 +1,61 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import axios from '../../../../../../core/utils/axios';
+import { FaShoppingCart, FaArrowRight } from 'react-icons/fa';
+
 import './StorePreview.css';
 
-const StorePreview = ({ heading }) => {
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    const fetchLatestProducts = async () => {
-      try {
-        const res = await axios.get('/products'); 
-        setProducts(res.data?.products?.slice(0, 3) || []);
-      } catch (err) {
-        console.error("Failed to fetch products", err);
-      }
-    };
-    fetchLatestProducts();
-  }, []);
-
-  if (!products || products.length === 0) return null;
+export default function StorePreview() {
+  const previewProducts = [
+    {
+      title: "Ultimate MERN Authentication Boilerplate",
+      price: "$15.00",
+      tag: "Source Code",
+      imageText: "Auth Boilerplate"
+    },
+    {
+      title: "Data Structures & Algorithms Notes",
+      price: "Free",
+      tag: "Study Material",
+      imageText: "DSA Notes"
+    },
+    {
+      title: "React UI Components Library",
+      price: "$20.00",
+      tag: "UI Kit",
+      imageText: "Component Library"
+    }
+  ];
 
   return (
-    <section className="store-preview" style={{ padding: '60px 0' }}>
-      <div className="section-header" style={{ textAlign: 'center', marginBottom: '40px' }}>
-        <h2>{heading || "Digital Store"}</h2>
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
-        {products.map(product => (
-          <div key={product._id} style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: '12px', overflow: 'hidden' }}>
-            <img src={product.image || "https://via.placeholder.com/400"} alt={product.title} style={{ width: '100%', height: '200px', objectFit: 'cover' }} />
-            <div style={{ padding: '20px' }}>
-              <h3 style={{ margin: '0 0 10px 0', fontSize: '18px' }}>{product.title}</h3>
-              <p style={{ color: 'var(--accent-primary)', fontSize: '18px', fontWeight: 'bold', margin: '0 0 20px 0' }}>₹{product.price}</p>
-              <Link to={`/store`} className="btn primary" style={{ width: '100%', textAlign: 'center', display: 'block' }}>View Details</Link>
-            </div>
+    <section className="home__section" style={{ backgroundColor: "var(--bg-secondary)" }}>
+      <div className="container">
+        
+        <div className="section__header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+          <div>
+            <h2>Digital Store</h2>
+            <p>Premium developer resources, boilerplates, and study materials.</p>
           </div>
-        ))}
-      </div>
-      
-      <div style={{ textAlign: 'center', margin: '40px auto 0 auto' }}>
-        <Link to="/store" className="btn secondary">Browse Full Store</Link>
+          <Link to="/store" className="view__all-btn" style={{ color: 'var(--success-color)' }}>
+            Visit Store <FaArrowRight />
+          </Link>
+        </div>
+
+        <div className="store__preview-grid">
+          {previewProducts.map((product, index) => (
+            <div className="store__product-card" key={index}>
+              <div className="product__image-dummy">
+                <span>[ {product.imageText} ]</span>
+              </div>
+              <div className="product__info">
+                <span className="product__tag">{product.tag}</span>
+                <h3 className="product__title">{product.title}</h3>
+                <div className="product__price">{product.price}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+
       </div>
     </section>
   );
-};
-
-export default StorePreview;
+}

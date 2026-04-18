@@ -1,26 +1,40 @@
 import React from 'react';
+import { FaHeadphones, FaGamepad, FaMobileAlt, FaLaptop } from 'react-icons/fa';
+
 import './FunExtras.css';
 
-const FunExtras = ({ stats }) => {
-  if (!stats || stats.length === 0) return null;
-
+export default function FunExtras() {
   return (
-    <section className="fun-extras" style={{ padding: '40px 0', borderTop: '1px solid var(--border-color)' }}>
-      <div className="stats-container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', textAlign: 'center' }}>
-        {stats.map((stat, index) => (
-          <div key={index} className="stat-box" style={{ padding: '20px' }}>
-            <h3 className="stat-number" style={{ fontSize: '36px', color: 'var(--text-primary)', margin: '0 0 10px 0' }}>
-              {stat.value}
-              {stat.suffix && <span className="stat-suffix" style={{ color: 'var(--accent-primary)', fontSize: '24px' }}>{stat.suffix}</span>}
-            </h3>
-            <p className="stat-label" style={{ color: 'var(--text-muted)', textTransform: 'uppercase', fontSize: '13px', letterSpacing: '1px', margin: 0 }}>
-              {stat.label}
-            </p>
+    <section className="home__section" style={{ backgroundColor: "var(--bg-secondary)" }}>
+      <div className="container">
+        <div className="section__header">
+          <h2>Beyond the Terminal</h2>
+          <p>A quick look at my daily setup and off-screen activities.</p>
+        </div>
+
+        <div className="bento__grid">
+          <div className="bento__card">
+            <FaHeadphones className="bento__icon" />
+            <h3 className="bento__title">On Repeat</h3>
+            <p className="bento__value">Shubh & Karan Aujla</p>
           </div>
-        ))}
+          
+          <div className="bento__card">
+            <FaGamepad className="bento__icon" />
+            <h3 className="bento__title">Currently Playing</h3>
+            <p className="bento__value">Minecraft & Clash of Clans</p>
+          </div>
+          
+          <div className="bento__card">
+            <div style={{ display: 'flex', gap: '15px' }}>
+              <FaLaptop className="bento__icon" />
+              <FaMobileAlt className="bento__icon" />
+            </div>
+            <h3 className="bento__title">Daily Drivers</h3>
+            <p className="bento__value">Lenovo LOQ & Nothing Phone (1)</p>
+          </div>
+        </div>
       </div>
     </section>
   );
-};
-
-export default FunExtras;
+}

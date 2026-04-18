@@ -1,29 +1,49 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { FaLaptopCode, FaServer, FaInfinity } from 'react-icons/fa';
+
 import './ServicesPreview.css';
 
-const ServicesPreview = ({ heading, services }) => {
-  if (!services || services.length === 0) return null;
+export default function ServicesPreview() {
+  const services = [
+    {
+      title: "Full-Stack Development",
+      description: "End-to-end web application architecture using the MERN stack and Spring Boot. I build responsive, highly interactive frontends paired with secure, scalable backend systems.",
+      icon: <FaLaptopCode />
+    },
+    {
+      title: "API & System Architecture",
+      description: "Designing robust RESTful APIs and optimizing complex database schemas in MongoDB and MySQL. Focused on algorithmic efficiency to ensure lightning-fast data retrieval.",
+      icon: <FaServer />
+    },
+    {
+      title: "Cloud & DevOps Integration",
+      description: "Streamlining deployments with Docker, CI/CD pipelines, and cloud hosting solutions to guarantee high availability and seamless updates for your platforms.",
+      icon: <FaInfinity />
+    }
+  ];
 
   return (
-    <section className="services-preview" style={{ padding: '60px 0' }}>
-      <div className="section-header" style={{ marginBottom: '40px', textAlign: 'center' }}>
-        <h2>{heading || "Services"}</h2>
-      </div>
+    <section className="home__section">
+      <div className="container">
+        
+        <div className="section__header">
+          <h2>Specialized Services</h2>
+          <p>Technical solutions designed for scalability and performance.</p>
+        </div>
 
-      <div className="services-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
-        {services.map((service, index) => (
-          <div key={index} className="service-card" style={{ background: 'var(--bg-card)', padding: '30px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
-            <div className="service-icon" style={{ fontSize: '32px', marginBottom: '15px' }}>
-              {service.iconName || "💻"}
+        <div className="services__grid">
+          {services.map((service, index) => (
+            <div className="service__card" key={index}>
+              <div className="service__icon">
+                {service.icon}
+              </div>
+              <h3 className="service__title">{service.title}</h3>
+              <p className="service__desc">{service.description}</p>
             </div>
-            <h3 style={{ fontSize: '20px', marginBottom: '15px' }}>{service.title}</h3>
-            <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6' }}>{service.description}</p>
-          </div>
-        ))}
+          ))}
+        </div>
+
       </div>
     </section>
   );
-};
-
-export default ServicesPreview;
+}
