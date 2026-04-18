@@ -1,10 +1,10 @@
 import { useState } from "react";
 import emailjs from "@emailjs/browser";
+import toast from "react-hot-toast";
 import { 
   FaEnvelope, 
   FaPhoneAlt, 
   FaMapMarkerAlt, 
-  FaWhatsapp, 
   FaPaperPlane, 
   FaClock 
 } from "react-icons/fa";
@@ -19,38 +19,44 @@ function Contact() {
   });
 
   const [isLoading, setIsLoading] = useState(false);
-  const [status, setStatus] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    setStatus("");
-
-    try {
-      await emailjs.send(
-        "service_booqm6l",
-        "template_ygibhi8",
-        {
-          from_name: formData.name,
-          to_name: "Alok Singh",
-          from_email: formData.email,
-          to_email: "ialksng@gmail.com",
-          message: formData.message,
-        },
-        "51CHuyg4aofMDN1e7"
-      );
-
-      setFormData({ name: "", email: "", message: "" });
-      setStatus("success");
-    } catch (error) {
-      setStatus("error");
+    
+    if (!formData.name || !formData.email || !formData.message) {
+      toast.error("Please fill out all fields.");
+      return;
     }
 
-    setIsLoading(false);
+    setIsLoading(true);
+
+    const emailPromise = emailjs.send(
+      "service_booqm6l",
+      "template_ygibhi8",
+      {
+        from_name: formData.name,
+        to_name: "Alok Singh",
+        from_email: formData.email,
+        to_email: "ialksng@gmail.com",
+        message: formData.message,
+      },
+      "51CHuyg4aofMDN1e7"
+    );
+
+    toast.promise(emailPromise, {
+      loading: 'Sending message...',
+      success: () => {
+        setFormData({ name: "", email: "", message: "" });
+        return "Message sent! I will get back to you shortly.";
+      },
+      error: "Oops! Something went wrong. Please try again.",
+    }).finally(() => {
+      setIsLoading(false);
+    });
   };
 
   return (
@@ -139,19 +145,6 @@ function Contact() {
                 <>Send Message <FaPaperPlane /></>
               )}
             </button>
-
-            {status === "success" && (
-              <div className="form__message success">
-                Message sent successfully! I will get back to you shortly.
-              </div>
-            )}
-
-            {status === "error" && (
-              <div className="form__message error">
-                Oops! Something went wrong. Please try again or email me directly.
-              </div>
-            )}
-
           </form>
         </div>
 

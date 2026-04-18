@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
+import toast from "react-hot-toast";
 import axios from "../../../../../core/utils/axios";
 import Loader from "../../../../../core/components/Loader";
 import "./Search.css";
@@ -10,21 +11,19 @@ const Search = () => {
   
   const [results, setResults] = useState({ blogs: [], products: [], projects: [] });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchResults = async () => {
       if (!query) return;
       
       setLoading(true);
-      setError("");
       
       try {
         const res = await axios.get(`/search?q=${encodeURIComponent(query)}`);
         setResults(res.data);
       } catch (err) {
         console.error(err);
-        setError("Failed to fetch search results.");
+        toast.error("Failed to fetch search results.");
       } finally {
         setLoading(false);
       }
@@ -46,8 +45,6 @@ const Search = () => {
 
       {loading ? (
         <Loader />
-      ) : error ? (
-        <p className="search-page__error">{error}</p>
       ) : !hasResults && query ? (
         <div className="search-page__empty">
           <p>No results found. Try adjusting your keywords.</p>
