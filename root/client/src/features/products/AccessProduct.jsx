@@ -56,6 +56,7 @@ function AccessProduct() {
   const handleDownload = async (e, url, title) => {
     e.preventDefault();
     setDownloading(true);
+    const downloadToast = toast.loading("Preparing download...");
 
     try {
       const response = await fetch(url);
@@ -71,34 +72,40 @@ function AccessProduct() {
       document.body.removeChild(link);
 
       window.URL.revokeObjectURL(blobURL);
+      toast.success("Download started!", { id: downloadToast });
     } catch {
       window.open(url, "_blank");
+      toast.success("Opened in new tab", { id: downloadToast });
     } finally {
       setDownloading(false);
     }
   };
 
   const handleLike = async () => {
-    if (!user) return toast.error("Please login.");
+    if (!user) return toast.error("Please login to like items.");
 
-    const res = await axios.post(
-      `/products/${id}/like`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    );
+    try {
+      const res = await axios.post(
+        `/products/${id}/like`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
 
-    setProduct((prev) => ({ ...prev, likes: res.data }));
+      setProduct((prev) => ({ ...prev, likes: res.data }));
+    } catch (err) {
+      toast.error("Failed to like product");
+    }
   };
 
   const handleComment = async (e) => {
     e.preventDefault();
     if (!commentText.trim()) return;
 
-    const res = await axios.post(
+    const commentPromise = axios.post(
       `/products/${id}/comment`,
       { text: commentText },
       {
@@ -108,30 +115,56 @@ function AccessProduct() {
       }
     );
 
-    updateComments(res.data);
-    setCommentText("");
+    toast.promise(commentPromise, {
+      loading: 'Posting...',
+      success: (res) => {
+        updateComments(res.data);
+        setCommentText("");
+        return "Comment posted!";
+      },
+      error: "Failed to post comment",
+    });
   };
 
-  const handleDeleteComment = async (commentId) => {
-    if (!window.confirm("Delete this comment?")) return;
-
-    const res = await axios.delete(
-      `/products/${id}/comment/${commentId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    );
-
-    updateComments(res.data);
+  const handleDeleteComment = (commentId) => {
+    toast((t) => (
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', padding: '4px' }}>
+        <span style={{ fontSize: '14px', fontWeight: '500', color: 'var(--text-primary)' }}>Delete this comment?</span>
+        <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
+          <button 
+            onClick={async () => {
+              toast.dismiss(t.id);
+              const loadingToast = toast.loading("Deleting...");
+              try {
+                const res = await axios.delete(`/products/${id}/comment/${commentId}`, {
+                  headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+                });
+                updateComments(res.data);
+                toast.success("Comment deleted", { id: loadingToast });
+              } catch (err) {
+                toast.error("Failed to delete", { id: loadingToast });
+              }
+            }} 
+            style={{ flex: 1, padding: '6px 12px', background: 'var(--danger-color)', color: '#fff', border: 'none', borderRadius: '6px', fontSize: '13px', cursor: 'pointer' }}
+          >
+            Delete
+          </button>
+          <button 
+            onClick={() => toast.dismiss(t.id)} 
+            style={{ flex: 1, padding: '6px 12px', background: 'transparent', color: 'var(--text-secondary)', border: '1px solid var(--border-color)', borderRadius: '6px', fontSize: '13px', cursor: 'pointer' }}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ), { duration: Infinity });
   };
 
   const handleEditCommentSubmit = async (e, commentId) => {
     e.preventDefault();
     if (!editText.trim()) return;
 
-    const res = await axios.put(
+    const editPromise = axios.put(
       `/products/${id}/comment/${commentId}`,
       { text: editText },
       {
@@ -141,9 +174,16 @@ function AccessProduct() {
       }
     );
 
-    updateComments(res.data);
-    setEditingCommentId(null);
-    setEditText("");
+    toast.promise(editPromise, {
+      loading: 'Saving edit...',
+      success: (res) => {
+        updateComments(res.data);
+        setEditingCommentId(null);
+        setEditText("");
+        return "Comment updated!";
+      },
+      error: "Failed to update comment",
+    });
   };
 
   if (loading) return <Loader />;
