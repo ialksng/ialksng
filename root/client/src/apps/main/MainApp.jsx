@@ -8,6 +8,7 @@ import Loader from "../../core/components/Loader.jsx";
 import CookieConsent from "../../core/components/CookieConsent.jsx";
 import Chatbot from "../ai/Chatbot.jsx";
 import AdminRoute from "../admin/AdminRoute.jsx";
+const Profile = lazy(() => import("../../features/profile/Profile.jsx"));
 
 const Home = lazy(() => import("./pages/public/home/Home.jsx"));
 const About = lazy(() => import("./pages/public/about/About.jsx"));
@@ -81,6 +82,8 @@ function MainApp() {
               <Route path="/signup" element={<PageWrapper><Signup /></PageWrapper>} />
               <Route path="/forgot-password" element={<PageWrapper><ForgotPassword /></PageWrapper>} />
 
+              <Route path="/profile" element={<PageWrapper><Profile /></PageWrapper>} />
+              
               <Route path="/privacy-policy" element={<PageWrapper><PrivacyPolicy /></PageWrapper>} />
               <Route path="/terms-and-conditions" element={<PageWrapper><TermsConditions /></PageWrapper>} />
               <Route path="/refund-policy" element={<PageWrapper><RefundPolicy /></PageWrapper>} />

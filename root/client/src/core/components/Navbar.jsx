@@ -152,27 +152,30 @@ function Navbar() {
 
               {open && (
                 <div className="dropdown__menu">
-                  {user.role !== "admin" ? (
-                    <>
-                      <div className="dropdown__item" onClick={() => handleNavigate("/my-purchases")}>My Purchases</div>
-                      <div className="dropdown__item" onClick={() => handleNavigate("/profile")}>Profile</div>
-                      <div className="dropdown__item" onClick={() => handleNavigate("/settings")}>Settings</div>
-                    </>
-                  ) : (
-                    <div className="dropdown__item" onClick={() => handleNavigate("/admin")}>Admin Panel</div>
+                  
+                  {/* CONSOLIDATED PROFILE DROPDOWN */}
+                  <div className="dropdown__item" onClick={() => handleNavigate("/profile")}>
+                    👤 Profile Dashboard
+                  </div>
+
+                  {user.role === "admin" && (
+                    <div className="dropdown__item" onClick={() => handleNavigate("/admin")}>
+                      👑 Admin Panel
+                    </div>
                   )}
 
                   <div
                     className="dropdown__item logout"
                     onClick={() => {
-                      if (window.confirm("Logout?")) {
+                      if (window.confirm("Are you sure you want to logout?")) {
                         logoutUser();
                         setOpen(false);
                       }
                     }}
                   >
-                    Logout
+                    🚪 Logout
                   </div>
+
                 </div>
               )}
             </div>
@@ -214,13 +217,11 @@ function Navbar() {
           ) : (
             <>
               {user.role !== "admin" && (
-                <>
-                  <li onClick={() => handleNavigate("/cart")} className="mobile__action">🛒 Cart ({cart?.length || 0})</li>
-                  <li onClick={() => handleNavigate("/my-purchases")} className="mobile__action">📦 My Purchases</li>
-                  <li onClick={() => handleNavigate("/profile")} className="mobile__action">👤 Profile</li>
-                  <li onClick={() => handleNavigate("/settings")} className="mobile__action">⚙️ Settings</li>
-                </>
+                <li onClick={() => handleNavigate("/cart")} className="mobile__action">🛒 Cart ({cart?.length || 0})</li>
               )}
+              
+              {/* CONSOLIDATED MOBILE MENU */}
+              <li onClick={() => handleNavigate("/profile")} className="mobile__action">👤 Profile Dashboard</li>
 
               {user.role === "admin" && (
                 <li onClick={() => handleNavigate("/admin")} className="mobile__action mobile__admin">👑 Admin Panel</li>
@@ -228,7 +229,7 @@ function Navbar() {
 
               <li
                 onClick={() => {
-                  if (window.confirm("Logout?")) {
+                  if (window.confirm("Are you sure you want to logout?")) {
                     logoutUser();
                     setMenuOpen(false);
                   }

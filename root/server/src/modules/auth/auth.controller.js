@@ -9,7 +9,6 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const generateOTP = () =>
   Math.floor(100000 + Math.random() * 900000).toString();
 
-
 export const signup = async (req, res) => {
   try {
     const { username, name, email, password } = req.body;
@@ -36,12 +35,11 @@ export const signup = async (req, res) => {
       name: name.trim(),
       email: normalizedEmail,
       password: hashedPassword,
-      role: "user",
+      role: "user"
     });
 
     res.status(201).json({ msg: "Signup successful" });
   } catch (err) {
-    console.error("Signup Error:", err);
     res.status(500).json({ msg: "Server error during signup" });
   }
 };
@@ -75,10 +73,12 @@ export const login = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
-      },
+        avatar: user.avatar,
+        mobile: user.mobile,
+        address: user.address
+      }
     });
   } catch (err) {
-    console.error("Login Error:", err);
     res.status(500).json({ msg: "Server error during login" });
   }
 };
@@ -89,7 +89,7 @@ export const googleAuth = async (req, res) => {
 
     const ticket = await client.verifyIdToken({
       idToken: token,
-      audience: process.env.GOOGLE_CLIENT_ID,
+      audience: process.env.GOOGLE_CLIENT_ID
     });
 
     const { email, name } = ticket.getPayload();
@@ -99,14 +99,11 @@ export const googleAuth = async (req, res) => {
 
     if (!user) {
       user = await User.create({
-        username:
-          normalizedEmail.split("@")[0] +
-          "_" +
-          Math.random().toString(36).slice(2, 6),
+        username: normalizedEmail.split("@")[0] + "_" + Math.random().toString(36).slice(2, 6),
         name,
         email: normalizedEmail,
         password: null,
-        role: "user",
+        role: "user"
       });
     }
 
@@ -118,10 +115,9 @@ export const googleAuth = async (req, res) => {
 
     res.json({
       token: jwtToken,
-      user,
+      user
     });
-  } catch (error) {
-    console.error("Google Auth Error:", error);
+  } catch {
     res.status(500).json({ msg: "Google authentication failed" });
   }
 };
@@ -135,8 +131,7 @@ export const getMe = async (req, res) => {
     }
 
     res.json({ user });
-  } catch (err) {
-    console.error("Get Me Error:", err);
+  } catch {
     res.status(500).json({ msg: "Server error fetching profile" });
   }
 };
@@ -149,9 +144,7 @@ export const sendForgotPasswordOTP = async (req, res) => {
     const user = await User.findOne({ email: normalizedEmail });
 
     if (!user) {
-      return res.json({
-        msg: "If this email exists, an OTP has been sent.",
-      });
+      return res.json({ msg: "If this email exists, an OTP has been sent." });
     }
 
     const otp = generateOTP();
@@ -166,70 +159,19 @@ export const sendForgotPasswordOTP = async (req, res) => {
       secure: false,
       auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
+        pass: process.env.EMAIL_PASS
+      }
     });
 
-    const info = await transporter.sendMail({
+    await transporter.sendMail({
       from: `"ialksng.me Security" <${process.env.EMAIL_USER}>`,
       to: user.email,
       subject: "Reset your password",
-      html: `
-<!DOCTYPE html>
-<html>
-<body style="margin:0;background:#0b0b0c;font-family:Inter,system-ui;">
-  <table width="100%" style="padding:40px 16px;background:#0b0b0c;">
-    <tr><td align="center">
-      <table style="max-width:560px;background:#111;border-radius:14px;border:1px solid #222;">
-        
-        <tr>
-          <td style="padding:24px;border-bottom:1px solid #1e1e1e;">
-            <strong style="color:#fff;">ialksng.me</strong>
-          </td>
-        </tr>
-
-        <tr>
-          <td style="padding:30px;">
-            <h2 style="color:#fff;margin:0 0 10px;">Reset your password</h2>
-            <p style="color:#aaa;font-size:14px;">
-              Use the code below to continue:
-            </p>
-
-            <div style="text-align:center;margin:30px 0;">
-              <div style="display:inline-block;background:#000;padding:16px 28px;border-radius:8px;
-              font-size:28px;letter-spacing:8px;color:#fff;">
-                ${otp}
-              </div>
-            </div>
-
-            <p style="color:#777;font-size:13px;">
-              Expires in 10 minutes.
-            </p>
-          </td>
-        </tr>
-
-        <tr>
-          <td style="padding:16px;text-align:center;border-top:1px solid #1e1e1e;">
-            <span style="color:#555;font-size:12px;">
-              © ${new Date().getFullYear()} ialksng.me
-            </span>
-          </td>
-        </tr>
-
-      </table>
-    </td></tr>
-  </table>
-</body>
-</html>
-      `,
+      html: `<h2>Your OTP is ${otp}</h2><p>Expires in 10 minutes.</p>`
     });
 
-    console.log("✅ Email sent:", info.response);
-
     res.json({ msg: "OTP sent successfully" });
-
-  } catch (err) {
-    console.error("Send OTP Error:", err);
+  } catch {
     res.status(500).json({ msg: "Failed to send email" });
   }
 };
@@ -246,7 +188,7 @@ export const resetPasswordWithOTP = async (req, res) => {
     const user = await User.findOne({
       email: normalizedEmail,
       otp,
-      otpExpires: { $gt: Date.now() },
+      otpExpires: { $gt: Date.now() }
     });
 
     if (!user) {
@@ -260,8 +202,86 @@ export const resetPasswordWithOTP = async (req, res) => {
     await user.save();
 
     res.json({ msg: "Password reset successful" });
-  } catch (err) {
-    console.error("Reset Error:", err);
+  } catch {
     res.status(500).json({ msg: "Server error" });
+  }
+};
+
+export const updateProfile = async (req, res) => {
+  try {
+    const { name, avatar, mobile, address } = req.body;
+
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    user.name = name || user.name;
+    user.avatar = avatar || user.avatar;
+    user.mobile = mobile || user.mobile;
+    user.address = address || user.address;
+
+    const updatedUser = await user.save();
+
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      role: updatedUser.role,
+      avatar: updatedUser.avatar,
+      mobile: updatedUser.mobile,
+      address: updatedUser.address
+    });
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+};
+
+export const changePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ msg: "All fields are required" });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({ msg: "Password must be at least 6 characters" });
+    }
+
+    const user = await User.findById(req.user.id);
+
+    if (!user || !user.password) {
+      return res.status(400).json({ msg: "User not found or invalid account" });
+    }
+
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ msg: "Incorrect current password" });
+    }
+
+    user.password = await bcrypt.hash(newPassword, 10);
+    await user.save();
+
+    res.json({ msg: "Password updated successfully" });
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+};
+
+export const submitFeedback = async (req, res) => {
+  try {
+    const { subject, message } = req.body;
+
+    if (!message) {
+      return res.status(400).json({ msg: "Message is required" });
+    }
+
+    console.log(`Feedback from ${req.user.email}: [${subject || "No Subject"}] ${message}`);
+
+    res.json({ msg: "Feedback submitted successfully! Thank you." });
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
   }
 };
