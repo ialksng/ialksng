@@ -86,14 +86,12 @@ const AdminGameZone = () => {
 
     try {
       if (editingId) {
-        await axios.put(`/more/games/${editingId}`, submitData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
+        // Removed manual headers, Axios handles FormData automatically
+        await axios.put(`/more/games/${editingId}`, submitData);
         alert('Game updated successfully!');
       } else {
-        await axios.post('/more/games', submitData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
+        // Removed manual headers, Axios handles FormData automatically
+        await axios.post('/more/games', submitData);
         alert('Game added successfully!');
       }
       
@@ -101,7 +99,8 @@ const AdminGameZone = () => {
       fetchGames();
     } catch (error) {
       console.error("Error saving game:", error);
-      alert("Failed to save game.");
+      // Alerts the exact backend error if it fails again
+      alert(error.response?.data?.message || "Failed to save game.");
     }
   };
 
