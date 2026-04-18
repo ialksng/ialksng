@@ -6,8 +6,7 @@ import nodemailer from "nodemailer";
 import User from "./user.model.js";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-const generateOTP = () =>
-  Math.floor(100000 + Math.random() * 900000).toString();
+const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 
 export const signup = async (req, res) => {
   try {
@@ -35,11 +34,12 @@ export const signup = async (req, res) => {
       name: name.trim(),
       email: normalizedEmail,
       password: hashedPassword,
-      role: "user"
+      role: "user",
     });
 
     res.status(201).json({ msg: "Signup successful" });
   } catch (err) {
+    console.error("Signup Error:", err);
     res.status(500).json({ msg: "Server error during signup" });
   }
 };
@@ -76,9 +76,10 @@ export const login = async (req, res) => {
         avatar: user.avatar,
         mobile: user.mobile,
         address: user.address
-      }
+      },
     });
   } catch (err) {
+    console.error("Login Error:", err);
     res.status(500).json({ msg: "Server error during login" });
   }
 };
@@ -89,7 +90,7 @@ export const googleAuth = async (req, res) => {
 
     const ticket = await client.verifyIdToken({
       idToken: token,
-      audience: process.env.GOOGLE_CLIENT_ID
+      audience: process.env.GOOGLE_CLIENT_ID,
     });
 
     const { email, name } = ticket.getPayload();
@@ -103,7 +104,7 @@ export const googleAuth = async (req, res) => {
         name,
         email: normalizedEmail,
         password: null,
-        role: "user"
+        role: "user",
       });
     }
 
@@ -115,9 +116,10 @@ export const googleAuth = async (req, res) => {
 
     res.json({
       token: jwtToken,
-      user
+      user,
     });
-  } catch {
+  } catch (error) {
+    console.error("Google Auth Error:", error);
     res.status(500).json({ msg: "Google authentication failed" });
   }
 };
@@ -131,7 +133,8 @@ export const getMe = async (req, res) => {
     }
 
     res.json({ user });
-  } catch {
+  } catch (err) {
+    console.error("Get Me Error:", err);
     res.status(500).json({ msg: "Server error fetching profile" });
   }
 };
@@ -159,19 +162,20 @@ export const sendForgotPasswordOTP = async (req, res) => {
       secure: false,
       auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-      }
+        pass: process.env.EMAIL_PASS,
+      },
     });
 
     await transporter.sendMail({
       from: `"ialksng.me Security" <${process.env.EMAIL_USER}>`,
       to: user.email,
       subject: "Reset your password",
-      html: `<h2>Your OTP is ${otp}</h2><p>Expires in 10 minutes.</p>`
+      html: `<p>Your OTP is: <strong>${otp}</strong></p>`,
     });
 
     res.json({ msg: "OTP sent successfully" });
-  } catch {
+  } catch (err) {
+    console.error("Send OTP Error:", err);
     res.status(500).json({ msg: "Failed to send email" });
   }
 };
@@ -188,7 +192,7 @@ export const resetPasswordWithOTP = async (req, res) => {
     const user = await User.findOne({
       email: normalizedEmail,
       otp,
-      otpExpires: { $gt: Date.now() }
+      otpExpires: { $gt: Date.now() },
     });
 
     if (!user) {
@@ -202,7 +206,8 @@ export const resetPasswordWithOTP = async (req, res) => {
     await user.save();
 
     res.json({ msg: "Password reset successful" });
-  } catch {
+  } catch (err) {
+    console.error("Reset Error:", err);
     res.status(500).json({ msg: "Server error" });
   }
 };
@@ -210,12 +215,9 @@ export const resetPasswordWithOTP = async (req, res) => {
 export const updateProfile = async (req, res) => {
   try {
     const { name, avatar, mobile, address } = req.body;
+    const user = await User.findById(req.user._id);
 
-    const user = await User.findById(req.user.id);
-
-    if (!user) {
-      return res.status(404).json({ msg: "User not found" });
-    }
+    if (!user) return res.status(404).json({ msg: "User not found" });
 
     user.name = name || user.name;
     user.avatar = avatar || user.avatar;
@@ -223,7 +225,7 @@ export const updateProfile = async (req, res) => {
     user.address = address || user.address;
 
     const updatedUser = await user.save();
-
+    
     res.json({
       _id: updatedUser._id,
       name: updatedUser.name,
@@ -241,27 +243,13 @@ export const updateProfile = async (req, res) => {
 export const changePassword = async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;
-
-    if (!currentPassword || !newPassword) {
-      return res.status(400).json({ msg: "All fields are required" });
-    }
-
-    if (newPassword.length < 6) {
-      return res.status(400).json({ msg: "Password must be at least 6 characters" });
-    }
-
-    const user = await User.findById(req.user.id);
-
-    if (!user || !user.password) {
-      return res.status(400).json({ msg: "User not found or invalid account" });
-    }
+    const user = await User.findById(req.user._id);
 
     const isMatch = await bcrypt.compare(currentPassword, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ msg: "Incorrect current password" });
-    }
+    if (!isMatch) return res.status(400).json({ msg: "Incorrect current password" });
 
-    user.password = await bcrypt.hash(newPassword, 10);
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
     await user.save();
 
     res.json({ msg: "Password updated successfully" });
@@ -273,13 +261,7 @@ export const changePassword = async (req, res) => {
 export const submitFeedback = async (req, res) => {
   try {
     const { subject, message } = req.body;
-
-    if (!message) {
-      return res.status(400).json({ msg: "Message is required" });
-    }
-
-    console.log(`Feedback from ${req.user.email}: [${subject || "No Subject"}] ${message}`);
-
+    console.log(`Feedback from ${req.user.email}: [${subject}] ${message}`);
     res.json({ msg: "Feedback submitted successfully! Thank you." });
   } catch (err) {
     res.status(500).json({ msg: err.message });
