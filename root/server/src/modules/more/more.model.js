@@ -11,13 +11,21 @@ const gameSchema = new mongoose.Schema({
 
 const streamSchema = new mongoose.Schema({
   title: { type: String, required: true },
-  platform: { type: String, enum: ['YouTube', 'Twitch'], required: true },
-  videoUrl: { type: String, required: true },
+  platform: {
+    type: String,
+    enum: ['youtube', 'twitch', 'facebook', 'other'],
+    required: true
+  },
+  url: { type: String, required: true },
   embedUrl: { type: String, required: true },
   thumbnail: { type: String },
-  status: { type: String, enum: ['live', 'archived'], default: 'archived' },
+  status: {
+    type: String,
+    enum: ['planned', 'live', 'archived'],
+    default: 'archived'
+  },
   category: { type: String, enum: ['gaming', 'general'], default: 'gaming' },
-  gameId: { type: mongoose.Schema.Types.ObjectId, ref: 'Game', required: false },
+  gameId: { type: mongoose.Schema.Types.ObjectId, ref: 'Game' }
 }, { timestamps: true });
 
 const recommendationSchema = new mongoose.Schema({
@@ -25,15 +33,19 @@ const recommendationSchema = new mongoose.Schema({
   description: { type: String, required: true },
   category: { type: String, required: true },
   externalLink: { type: String, required: true },
-  image: { type: String },
+  image: { type: String }
 }, { timestamps: true });
 
 const lifePostSchema = new mongoose.Schema({
   title: { type: String, required: true },
   content: { type: String, required: true },
-  category: { type: String, enum: ['Fitness', 'Life updates', 'Tips'], required: true },
+  category: {
+    type: String,
+    enum: ['Fitness', 'Life updates', 'Tips'],
+    required: true
+  },
   image: { type: String },
-  date: { type: Date, default: Date.now },
+  date: { type: Date, default: Date.now }
 }, { timestamps: true });
 
 export const Game = mongoose.model('Game', gameSchema);
