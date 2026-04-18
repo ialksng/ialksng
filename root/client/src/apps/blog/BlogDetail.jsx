@@ -43,10 +43,7 @@ function BlogDetail() {
   };
 
   const handleLike = async () => {
-    if (!user) {
-      toast.error("You must be logged in to like this post.");
-      return;
-    }
+    if (!user) return toast.error("Please log in to like this post.");
     try {
       const res = await axios.post(`/blogs/${id}/like`, {}, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
@@ -60,24 +57,8 @@ function BlogDetail() {
     }
   };
 
-  const handleShare = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      toast.success("Copied to clipboard", { id: "share-toast" });
-    } catch (error) {
-      toast.error("Failed to copy the link.", { id: "share-error" });
-    }
-  };
-
   const handleComment = async (e) => {
     e.preventDefault();
-    
-    if (!user) {
-      toast.error("You must be logged in to join the conversation.");
-      navigate("/login", { state: { from: `/blog/${id}` } });
-      return;
-    }
-
     if (!commentText.trim()) return;
 
     const commentPromise = axios.post(`/blogs/${id}/comment`, { text: commentText }, {
@@ -184,7 +165,10 @@ function BlogDetail() {
               <span>{blog.likes?.length || 0} Likes</span>
             </button>
             
-            <button className="like-btn" onClick={handleShare}>
+            <button className="like-btn" onClick={() => {
+              navigator.clipboard.writeText(window.location.href);
+              toast.success("Link copied to clipboard!");
+            }}>
               🔗 Share
             </button>
           </div>
@@ -192,26 +176,29 @@ function BlogDetail() {
           <div className="comments-wrapper">
             <h2 className="comments-header">Discussion ({blog.comments?.length || 0})</h2>
 
-            <form onSubmit={handleComment} className="comment-input-area">
-              <textarea 
-                className="comment-textarea"
-                placeholder={user ? "Share your thoughts..." : "Please log in to join the conversation..."} 
-                value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
-                rows="3"
-                readOnly={!user}
-                onClick={() => !user && toast.error("Please log in to comment.")}
-              />
-              <button 
-                type="submit" 
-                className="btn-primary" 
-                style={{ alignSelf: "flex-end", padding: "10px 20px" }}
-              >
-                Post Comment
-              </button>
-            </form>
+            {user ? (
+              <form onSubmit={handleComment} className="comment-input-area">
+                <textarea 
+                  className="comment-textarea"
+                  placeholder="Share your thoughts..." 
+                  value={commentText}
+                  onChange={(e) => setCommentText(e.target.value)}
+                  required
+                  rows="3"
+                />
+                <button type="submit" disabled={!commentText.trim()} className="btn-primary" style={{ alignSelf: "flex-end", padding: "10px 20px" }}>
+                  Post Comment
+                </button>
+              </form>
+            ) : (
+              <div className="blogdetail__login-prompt">
+                <p>
+                  Please <span className="blogdetail__login-link" onClick={() => navigate("/login")}>log in</span> to join the conversation.
+                </p>
+              </div>
+            )}
 
-            <div className="comment-list">
+            <div>
               {(!blog.comments || blog.comments.length === 0) ? (
                 <p className="blogdetail__empty-comments">
                   Be the first to leave a comment!
