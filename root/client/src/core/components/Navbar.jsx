@@ -24,11 +24,13 @@ function Navbar() {
 
   const dropdownRef = useRef();
   const searchRef = useRef();
+  const menuRef = useRef();
 
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) setOpen(false);
       if (searchRef.current && !searchRef.current.contains(e.target)) setShowSuggestions(false);
+      if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false);
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -77,7 +79,7 @@ function Navbar() {
   };
 
   return (
-    <header className={`navbar ${menuOpen ? "menu-open" : ""}`}>
+    <header className={`navbar ${menuOpen ? "menu-open" : ""}`} ref={menuRef}>
       <img
         src={logo}
         alt="Alok Singh Logo"
@@ -136,9 +138,7 @@ function Navbar() {
           )}
         </div>
 
-        <div className="desktop-only">
-          <NotificationBell />
-        </div>
+        <NotificationBell />
 
         {!user ? (
           <button className="nav__btn desktop-only" onClick={() => navigate("/login")}>
@@ -195,10 +195,6 @@ function Navbar() {
       </div>
 
       <nav className={`mobile__menu ${menuOpen ? "active" : ""}`}>
-        <div style={{ padding: "10px" }}>
-          <NotificationBell />
-        </div>
-
         <div className="mobile__search-container">
           <form className="nav__search-wrapper" onSubmit={handleSearchSubmit} style={{ width: "100%" }}>
             <FaSearch className="nav__search-icon" />
