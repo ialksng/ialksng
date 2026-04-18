@@ -10,10 +10,10 @@ export default function Achievements() {
   const cardsPerPage = 6;
   const achievementsData = [
     {
-      title: "LeetCode 1800+ Rating",
+      title: "LeetCode 1700+ Rating",
       platform: "Competitive Programming",
       icon: <FaTrophy />,
-      description: "Achieved a contest rating of 1800+ by consistently solving complex algorithmic and data structure challenges globally."
+      description: "Achieved a contest rating of 1700+ by consistently solving complex algorithmic and data structure challenges globally."
     },
     {
       title: "CodeChef 2-Star Coder",
@@ -35,7 +35,7 @@ export default function Achievements() {
     },
     {
       title: "Open Source Contributor",
-      platform: "GitHub / GSoC Prep",
+      platform: "GitHub",
       icon: <FaStar />,
       description: "Actively contributing to open-source repositories and building full-stack boilerplates used by other developers."
     }

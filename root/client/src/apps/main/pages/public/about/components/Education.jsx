@@ -7,7 +7,7 @@ export default function Education() {
   const educationData = [
     {
       degree: "B.Tech in Computer Science Engineering (CSE)",
-      institute: "Your College/University Name, Greater Noida", 
+      institute: "Sharda University, Greater Noida", 
       duration: "2023 - 2027 (Expected)",
       score: "9.0 CGPA",
       status: "3rd Year Student",
@@ -22,9 +22,8 @@ export default function Education() {
     },
     {
       degree: "Higher Secondary (Class XII)",
-      institute: "Your High School Name",
-      duration: "Completed in 2023",
-      score: "XX% / XX CGPA",
+      institute: "Government Sarvodaya Bal Vidyalaya",
+      duration: "Completed in 2022",
       status: "Science Stream (PCM)",
       coursework: [
         "Physics", 

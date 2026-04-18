@@ -1,5 +1,5 @@
 import React from 'react';
-import { SiLeetcode, SiCodechef, SiGithub, SiHackerrank } from 'react-icons/si';
+import { SiLeetcode, SiCodechef, SiGeeksforgeeks, SiKaggle } from 'react-icons/si';
 
 import './CodingProfiles.css';
 
@@ -7,35 +7,35 @@ export default function CodingProfiles() {
   const profiles = [
     {
       platform: "LeetCode",
-      username: "aloksingh",
-      stat: "1800+ Rating",
+      username: "ialksng",
+      stat: "1700+ Rating",
       icon: <SiLeetcode />,
       color: "#fb923c",
       link: "https://leetcode.com/ialksng"
     },
     {
       platform: "CodeChef",
-      username: "aloksingh",
+      username: "ialksng",
       stat: "2-Star Coder",
       icon: <SiCodechef />,
       color: "#5b4638", 
       link: "https://codechef.com/users/ialksng"
     },
     {
-      platform: "GitHub",
-      username: "aloksingh",
-      stat: "Open Source LLMs & DevOps",
-      icon: <SiGithub />,
-      color: "var(--text-primary)",
-      link: "https://github.com/ialksng"
+      platform: "GeeksforGeeks",
+      username: "ialksng",
+      stat: "DSA Practice",
+      icon: <SiGeeksforgeeks />,
+      color: "#2f8d46", 
+      link: "https://www.geeksforgeeks.org/profile/ialksng"
     },
     {
-      platform: "HackerRank",
-      username: "aloksingh",
-      stat: "Problem Solving",
-      icon: <SiHackerrank />,
-      color: "#22c55e", 
-      link: "https://hackerrank.com/ialksng"
+      platform: "Kaggle",
+      username: "ialksng",
+      stat: "ML & Data Science",
+      icon: <SiKaggle />,
+      color: "#20beff", 
+      link: "https://www.kaggle.com/ialksng"
     }
   ];
 
@@ -45,7 +45,7 @@ export default function CodingProfiles() {
         
         <div className="section__header">
           <h2>Coding Profiles & Online Presence</h2>
-          <p>My competitive programming journey and open-source contributions.</p>
+          <p>My competitive programming journey and machine learning contributions.</p>
         </div>
 
         <div className="profiles__grid">
