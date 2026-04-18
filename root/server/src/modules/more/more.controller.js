@@ -1,4 +1,6 @@
 import { Game, Stream, Product, LifePost } from './more.model.js';
+import User from '../auth/user.model.js';
+import Notification from '../notifications/notification.model.js';
 
 export const getGames = async (req, res) => {
   try {
@@ -54,6 +56,17 @@ export const createLifePost = async (req, res) => {
     const postData = { ...req.body };
     if (req.file) postData.image = req.file.path;
     const post = await LifePost.create(postData);
+
+    const users = await User.find({}, '_id');
+    const notifications = users.map(user => ({
+      user: user._id,
+      title: '🌱 New Update',
+      message: post.title,
+      link: '/more/life',
+      type: 'update'
+    }));
+    await Notification.insertMany(notifications);
+
     res.status(201).json(post);
   } catch (error) { res.status(500).json({ message: error.message }); }
 };
@@ -103,12 +116,25 @@ export const toggleStreamStatus = async (req, res) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
-    
+
     if (status === 'live') {
       await Stream.updateMany({ status: 'live' }, { status: 'archived' });
     }
-    
+
     const updatedStream = await Stream.findByIdAndUpdate(id, { status }, { new: true });
+
+    if (status === 'live' && updatedStream) {
+      const users = await User.find({}, '_id');
+      const notifications = users.map(user => ({
+        user: user._id,
+        title: '🔴 LIVE NOW',
+        message: `Alok is live: ${updatedStream.title}`,
+        link: '/more/live',
+        type: 'live'
+      }));
+      await Notification.insertMany(notifications);
+    }
+
     res.status(200).json(updatedStream);
   } catch (error) { res.status(500).json({ message: error.message }); }
 };

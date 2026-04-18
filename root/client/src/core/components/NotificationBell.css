@@ -1,0 +1,88 @@
+.notification-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.bell-icon {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  position: relative;
+  padding: 0.5rem;
+  transition: transform 0.2s ease;
+}
+
+.bell-icon:hover { transform: scale(1.1); }
+
+.notification-badge {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  background: #ff4757;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: bold;
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(255, 71, 87, 0.5);
+  animation: pulse 2s infinite;
+}
+
+.notification-dropdown {
+  position: absolute;
+  top: 120%;
+  right: -10px;
+  width: 320px;
+  background: rgba(10, 25, 47, 0.95);
+  border: 1px solid rgba(100, 255, 218, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.dropdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-header h4 { margin: 0; color: #fff; }
+.dropdown-header button {
+  background: none; border: none; color: #64ffda; font-size: 0.8rem; cursor: pointer;
+}
+
+.notification-list {
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.no-notifications {
+  padding: 2rem; text-align: center; color: #8892b0; margin: 0;
+}
+
+.notification-item {
+  display: flex;
+  padding: 1rem;
+  gap: 12px;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background 0.2s ease;
+}
+
+.notification-item:hover { background: rgba(255, 255, 255, 0.05); }
+.notification-item.unread { background: rgba(100, 255, 218, 0.05); }
+
+.notif-content { flex: 1; }
+.notif-content strong { display: block; color: #e2e8f0; font-size: 0.95rem; margin-bottom: 0.25rem; }
+.notif-content p { margin: 0; color: #8892b0; font-size: 0.85rem; line-height: 1.4; }
+.notif-time { display: block; margin-top: 0.5rem; font-size: 0.75rem; color: #64ffda; }
