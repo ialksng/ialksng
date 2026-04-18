@@ -9,7 +9,7 @@ const AdminLife = () => {
   useEffect(() => { fetchPosts(); }, []);
 
   const fetchPosts = async () => {
-    const { data } = await axios.get('/api/more/life');
+    const { data } = await axios.get('/more/life');
     setPosts(data);
   };
 
@@ -22,7 +22,7 @@ const AdminLife = () => {
 
   const handleDelete = async (id) => {
     if (window.confirm("Delete this post?")) {
-      await axios.delete(`/api/more/life/${id}`);
+      await axios.delete(`/more/life/${id}`);
       fetchPosts();
     }
   };

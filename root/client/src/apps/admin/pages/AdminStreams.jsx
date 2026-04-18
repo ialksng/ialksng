@@ -19,7 +19,7 @@ const AdminStreams = () => {
 
   const fetchStreams = async () => {
     try {
-      const { data } = await axios.get('/api/more/streams/all'); 
+      const { data } = await axios.get('/more/streams/all'); 
       setStreams(data);
     } catch (err) {
       console.error("Failed to fetch streams", err);
@@ -33,7 +33,7 @@ const AdminStreams = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('/api/more/streams', formData);
+      await axios.post('/more/streams', formData);
       setFormData({ title: '', platform: 'YouTube', videoUrl: '', embedUrl: '', category: 'gaming', status: 'archived' });
       fetchStreams(); 
       alert("Stream added successfully!");
