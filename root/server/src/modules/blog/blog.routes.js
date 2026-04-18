@@ -8,11 +8,11 @@ import {
   deleteBlog,
   likeBlog,
   commentBlog,
-  deleteComment, 
+  deleteComment,
   editComment
 } from "./blog.controller.js";
+
 import { protect, admin } from "../../core/middlewares/auth.middleware.js";
-import { likeBlog, commentBlog } from './blog.controller.js';
 
 const router = express.Router();
 
