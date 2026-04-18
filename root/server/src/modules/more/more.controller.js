@@ -14,8 +14,21 @@ export const createGame = async (req, res) => {
     const gameData = { ...req.body };
     if (req.file) gameData.coverImage = req.file.path;
     const game = await Game.create(gameData);
+    const users = await User.find({}, '_id');
+    const notifications = users.map(user => ({
+      user: user._id,
+      title: '🎮 New Game Added',
+      message: `I just added ${game.name} to the GameZone!`,
+      link: '/more/gamezone',
+      type: 'update'
+    }));
+    
+    await Notification.insertMany(notifications);
+
     res.status(201).json(game);
-  } catch (error) { res.status(500).json({ message: error.message }); }
+  } catch (error) { 
+    res.status(500).json({ message: error.message }); 
+  }
 };
 
 export const deleteGame = async (req, res) => {
