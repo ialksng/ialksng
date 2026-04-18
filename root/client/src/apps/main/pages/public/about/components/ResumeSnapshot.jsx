@@ -54,7 +54,7 @@ export default function ResumeSnapshot() {
               <div>
                 <h4>Current Focus</h4>
                 <p>MERN Stack, Data Science, & DevOps</p>
-                <span className="highlight-text">Preparing for GATE CS/IT & GSoC</span>
+                <span className="highlight-text">Preparing for GATE CS/IT</span>
               </div>
             </div>
           </div>

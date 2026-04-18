@@ -7,19 +7,19 @@ import './FeaturedProjects.css';
 export default function FeaturedProjects() {
   const projects = [
     {
-      title: "Smartsphaere",
+      title: "Smartsphere",
       description: "A comprehensive smart cloud aggregator dashboard designed to centralize, manage, and monitor cloud resources efficiently across multiple providers.",
       techStack: ["React.js", "Node.js", "Express", "MongoDB", "Docker"],
       githubLink: "https://github.com/ialksng/smartsphere",
-      liveLink: "#", 
+      liveLink: "https://www.ialksng.me/projects/smartsphere", 
       imagePlaceholder: "Cloud Architecture Dashboard"
     },
     {
       title: "BuddyBot",
-      description: "A highly interactive, MERN-based ChatGPT clone featuring real-time AI streaming, robust conversation history, and local open-source LLM integration.",
+      description: "A highly interactive, MERN-based chatbot featuring real-time AI streaming, robust conversation history, and local open-source LLM integration.",
       techStack: ["MERN Stack", "Ollama", "Mistral/Llama", "Tailwind CSS"],
       githubLink: "https://github.com/ialksng/buddybot",
-      liveLink: "#",
+      liveLink: "https://www.ialksng.me/projects/buddybot",
       imagePlaceholder: "AI Chat Interface"
     }
   ];
