@@ -4,6 +4,7 @@ import { OAuth2Client } from "google-auth-library";
 import nodemailer from "nodemailer";
 
 import User from "./user.model.js";
+import Feedback from "./feedback.model.js";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
@@ -278,7 +279,11 @@ export const changePassword = async (req, res) => {
 export const submitFeedback = async (req, res) => {
   try {
     const { subject, message } = req.body;
-    console.log(`Feedback from ${req.user.email}: [${subject}] ${message}`);
+    await Feedback.create({
+      email: req.user.email,
+      subject,
+      message
+    });
     res.json({ msg: "Feedback submitted successfully! Thank you." });
   } catch (err) {
     res.status(500).json({ msg: err.message });
