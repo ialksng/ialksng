@@ -15,7 +15,7 @@ const NotificationBell = () => {
 
   const fetchNotifications = async () => {
     try {
-      const { data } = await axios.get('/notifications'); // Remember, no /api needed here!
+      const { data } = await axios.get('/notifications');
       setNotifications(data);
     } catch (err) { console.error("Failed to fetch notifications"); }
   };

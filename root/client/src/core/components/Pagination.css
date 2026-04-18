@@ -24,7 +24,7 @@
 }
 
 .pagination__btn:hover:not(:disabled) {
-  background-color: rgba(56, 189, 248, 0.1);
+  background-color: color-mix(in srgb, var(--accent-primary) 10%, transparent);
   color: var(--accent-primary);
   border-color: var(--accent-primary);
 }
@@ -33,7 +33,7 @@
   background-color: var(--accent-primary);
   color: #0f172a;
   border-color: var(--accent-primary);
-  box-shadow: 0 4px 10px rgba(56, 189, 248, 0.3);
+  box-shadow: 0 4px 10px color-mix(in srgb, var(--accent-primary) 30%, transparent);
 }
 
 .pagination__btn:disabled {

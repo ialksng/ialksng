@@ -3,7 +3,6 @@ import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 import './Pagination.css';
 
-
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
 
   if (totalPages <= 1) return null;
