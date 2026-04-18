@@ -31,9 +31,40 @@ export const createGame = async (req, res) => {
   }
 };
 
+export const updateGame = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateData = { ...req.body };
+    
+    if (req.file) {
+      updateData.coverImage = req.file.path;
+    }
+    
+    const updatedGame = await Game.findByIdAndUpdate(id, updateData, { new: true });
+    
+    if (!updatedGame) {
+      return res.status(404).json({ message: "Game not found" });
+    }
+    
+    res.status(200).json(updatedGame);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 export const deleteGame = async (req, res) => {
-  try { await Game.findByIdAndDelete(req.params.id); res.status(200).json({ message: 'Deleted' }); }
-  catch (error) { res.status(500).json({ message: error.message }); }
+  try {
+    const { id } = req.params;
+    const deletedGame = await Game.findByIdAndDelete(id);
+    
+    if (!deletedGame) {
+      return res.status(404).json({ message: "Game not found" });
+    }
+    
+    res.status(200).json({ message: "Game deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 export const getProducts = async (req, res) => {
