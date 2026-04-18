@@ -28,14 +28,14 @@ export default function ProfessionalSummary() {
             </div>
 
             <p>
-              Beyond building applications, I am an avid competitive programmer. With a <strong>LeetCode rating of over 1800</strong> and a 
+              Beyond building applications, I am an avid competitive programmer. With a <strong>LeetCode rating of over 1700</strong> and a 
               <strong> 2-Star rating on CodeChef</strong>, I thrive on tackling complex algorithmic challenges. This problem-solving mindset 
               directly translates into my development work, allowing me to design optimized database schemas and efficient API architectures.
             </p>
 
             <p>
               Currently, I am expanding my expertise into <strong>DevOps, Data Science, and open-source LLMs</strong> (experimenting locally with Mistral and Llama via Ollama). 
-              Alongside my freelance work and personal projects like BuddyBot and Smartsphaere, I am actively preparing for the GATE CS/IT exam and gearing up to contribute to Google Summer of Code (GSoC).
+              Alongside my freelance work and personal projects like BuddyBot and Smartsphere, I am actively preparing for the GATE CS/IT exam.
             </p>
           </div>
 

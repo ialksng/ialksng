@@ -6,28 +6,28 @@ import './Experience.css';
 export default function Experience() {
   const experiences = [
     {
-      role: "Freelance Full-Stack Developer",
-      company: "Independent / Client Projects",
-      duration: "Jan 2025 - Present",
+      role: "Web Developer",
+      company: "Coincent.ai",
+      duration: "Jun 2024 - Aug 2024",
       description: [
-        "Designed and developed full-stack web applications for various clients using the MERN stack and Spring Boot.",
-        "Engineered custom cloud solutions and integrated DevOps pipelines to ensure highly available and scalable architectures.",
-        "Optimized database queries and API endpoints, resulting in significantly faster load times and improved user experiences.",
-        "Provided technical consultation on system architecture, database design (MongoDB/MySQL), and cloud deployment."
+        "Built and maintained responsive web applications using React.js, Node.js, and MongoDB.",
+        "Enhanced UI/UX and optimized application performance for faster load times and better usability.",
+        "Designed and integrated RESTful APIs, implementing secure backend logic and data handling.",
+        "Collaborated in an Agile environment using Git for version control and Render for deployment."
       ],
-      techStack: ["React.js", "Node.js", "Spring Boot", "MongoDB", "Docker"]
+      techStack: ["React.js", "Node.js", "MongoDB", "Firebase"]
     },
     {
-      role: "Lead Developer & Architect",
-      company: "Smartsphaere & BuddyBot (Projects)",
-      duration: "Oct 2025 - Present",
+      role: "Data Analyst",
+      company: "Modulation Digital Private Limited",
+      duration: "May 2025 - Jul 2025",
       description: [
-        "Architected Smartsphaere, a comprehensive smart cloud aggregator dashboard designed to centralize and manage cloud resources efficiently.",
-        "Built BuddyBot, a highly interactive ChatGPT clone utilizing the MERN stack with seamless conversation history and real-time AI responses.",
-        "Integrated local, open-source LLMs (Mistral, Llama) using Ollama for advanced, secure data processing.",
-        "Managed the complete CI/CD lifecycle and deployment strategies for these platforms."
+        "Analyzed and processed large datasets using Python (Pandas, NumPy) and SQL, performing data wrangling, aggregation, and exploratory data analysis (EDA).",
+        "Built interactive Power BI dashboards with optimized data models, DAX measures, and visualizations to track key business metrics.",
+        "Automated data cleaning, transformation, and reporting pipelines using Python scripts, reducing manual effort and improving data consistency.",
+        "Applied statistical analysis and trend identification to derive actionable insights supporting data-driven decision-making."
       ],
-      techStack: ["MERN Stack", "Ollama (LLMs)", "DevOps", "Tailwind CSS"]
+      techStack: ["Microsoft Excel", "MySQL", "Microsoft Power BI", "Python"]
     }
   ];
 
