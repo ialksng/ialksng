@@ -20,8 +20,6 @@ const Search = lazy(() => import("./pages/public/search/Search.jsx"));
 
 const Blog = lazy(() => import("../blog/Blog.jsx"));
 const BlogDetail = lazy(() => import("../blog/BlogDetail.jsx"));
-const CreateBlog = lazy(() => import("../blog/CreateBlog.jsx"));
-const EditBlog = lazy(() => import("../blog/EditBlog.jsx"));
 
 const Store = lazy(() => import("../store/Store.jsx"));
 const Cart = lazy(() => import("../../features/cart/Cart.jsx"));
@@ -113,8 +111,6 @@ function MainApp() {
                 <Route path="/admin/home" element={<PageWrapper><AdminHome /></PageWrapper>} />
                 <Route path="/admin/products" element={<PageWrapper><AdminProducts /></PageWrapper>} />
                 <Route path="/admin/blog" element={<PageWrapper><AdminBlog /></PageWrapper>} />
-                <Route path="/admin/blog/create" element={<PageWrapper><CreateBlog /></PageWrapper>} />
-                <Route path="/admin/blog/edit/:id" element={<PageWrapper><EditBlog /></PageWrapper>} />
                 <Route path="/admin/about" element={<PageWrapper><AdminAbout /></PageWrapper>} />
                 <Route path="/admin/projects" element={<PageWrapper><AdminProjects /></PageWrapper>} />
                 <Route path="/admin/certifications" element={<PageWrapper><AdminCertifications /></PageWrapper>} />
