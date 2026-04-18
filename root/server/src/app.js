@@ -18,6 +18,7 @@ import certificationRoutes from "./modules/certifications/certification.routes.j
 import newsletterRoutes from "./modules/newsletter/newsletter.routes.js";
 import chatRoutes from "./modules/chat/chat.routes.js";
 import testimonialRoutes from "./modules/testimonials/testimonial.routes.js";
+import moreRoutes from './modules/more/more.routes.js';
 
 const app = express();
 
@@ -54,6 +55,7 @@ app.use("/api/certifications", certificationRoutes);
 app.use("/api/newsletter", newsletterRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/testimonials", testimonialRoutes);
+app.use('/api/more', moreRoutes);
 
 app.use(trackVisitor);
 

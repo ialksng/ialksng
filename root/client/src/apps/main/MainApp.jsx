@@ -35,6 +35,10 @@ const Signup = lazy(() => import("../../features/auth/components/Signup.jsx"));
 const ForgotPassword = lazy(() => import("../../features/auth/components/ForgotPassword.jsx"));
 
 const More = lazy(() => import("../more/More.jsx"));
+const Live = lazy(() => import("../more/pages/Live.jsx"));
+const Products = lazy(() => import("../more/pages/Products.jsx"));
+const GameZone = lazy(() => import("../more/pages/GameZone.jsx"));
+const Life = lazy(() => import("../more/pages/Life.jsx"));
 
 const PrivacyPolicy = lazy(() => import("./pages/legal/PrivacyPolicy.jsx"));
 const TermsConditions = lazy(() => import("./pages/legal/TermsConditions.jsx"));
@@ -85,6 +89,11 @@ function MainApp() {
               <Route path="/forgot-password" element={<PageWrapper><ForgotPassword /></PageWrapper>} />
 
               <Route path="/profile" element={<PageWrapper><Profile /></PageWrapper>} />
+
+              <Route path="/more/live" element={<PageWrapper><Live /></PageWrapper>} />
+              <Route path="/more/products" element={<PageWrapper><Products /></PageWrapper>} />
+              <Route path="/more/gamezone" element={<PageWrapper><GameZone /></PageWrapper>} />
+              <Route path="/more/life" element={<PageWrapper><Life /></PageWrapper>} />
               
               <Route path="/privacy-policy" element={<PageWrapper><PrivacyPolicy /></PageWrapper>} />
               <Route path="/terms-and-conditions" element={<PageWrapper><TermsConditions /></PageWrapper>} />
