@@ -44,7 +44,7 @@ const Blog = () => {
       loading: 'Subscribing...',
       success: (res) => {
         setEmail("");
-        return res.data?.msg || "Success!";
+        return res.data?.msg || "Success! Welcome to the newsletter.";
       },
       error: (err) => err.response?.data?.msg || "Subscription failed."
     }).finally(() => {
@@ -73,7 +73,6 @@ const Blog = () => {
               {nlLoading ? "Subscribing..." : "Subscribe"}
             </button>
           </form>
-          {/* Removed the inline message blocks. Toast handles everything now! */}
         </div>
       </section>
 
@@ -83,9 +82,9 @@ const Blog = () => {
         {loading ? (
           <Loader />
         ) : blogs.length === 0 ? (
-          <p className="empty-msg">
-            No blog posts available right now. Check back soon!
-          </p>
+          <div className="empty-state">
+            <p className="empty-msg">No blog posts available right now. Check back soon!</p>
+          </div>
         ) : (
           <>
             <div className="blog-grid">
@@ -94,7 +93,7 @@ const Blog = () => {
 
                 const safeTitle = blog?.title || "Untitled Post";
                 const safeDate = blog?.createdAt
-                  ? new Date(blog.createdAt).toLocaleDateString()
+                  ? new Date(blog.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
                   : "Recent";
                 const safeImage = blog?.coverImage || blog?.image || null;
                 const safeExcerpt =
@@ -102,25 +101,26 @@ const Blog = () => {
                   (blog?.content
                     ? blog.content.substring(0, 100) + "..."
                     : "No preview available.");
+                const category = blog?.category || "General";
 
                 return (
                   <div key={blog._id} className="blog-card">
-                    {safeImage && (
-                      <img
-                        src={safeImage}
-                        alt={safeTitle}
-                        className="blog-image"
-                      />
+                    {safeImage ? (
+                      <div className="blog-image-wrapper">
+                        <img src={safeImage} alt={safeTitle} className="blog-image" />
+                        <span className="blog-category-badge">{category}</span>
+                      </div>
+                    ) : (
+                      <div className="blog-image-placeholder">
+                        <span className="blog-category-badge">{category}</span>
+                      </div>
                     )}
                     <div className="blog-content">
                       <span className="blog-date">{safeDate}</span>
                       <h3>{safeTitle}</h3>
                       <p className="blog-excerpt">{safeExcerpt}</p>
-                      <Link
-                        to={`/blog/${blog._id}`}
-                        className="read-more"
-                      >
-                        Read Article →
+                      <Link to={`/blog/${blog._id}`} className="read-more">
+                        Read Article <span>→</span>
                       </Link>
                     </div>
                   </div>
