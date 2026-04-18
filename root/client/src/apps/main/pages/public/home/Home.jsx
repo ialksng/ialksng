@@ -39,11 +39,7 @@ function Home() {
   return (
     <div className="home__wrapper">
       
-      <Hero 
-        title={homeData.heroTitle} subtitle={homeData.heroSubtitle}
-        btn1Text={homeData.heroPrimaryButtonText} btn1Link={homeData.heroPrimaryButtonLink}
-        btn2Text={homeData.heroSecondaryButtonText} btn2Link={homeData.heroSecondaryButtonLink}
-      />
+      <Hero />
       
       <OfferCards cards={homeData.offerCards || []} /> 
       
