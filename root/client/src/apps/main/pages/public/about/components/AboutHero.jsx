@@ -32,7 +32,7 @@ export default function AboutHero() {
 
         <div className="about__hero-image-wrapper">
           <img 
-            src="https://drive.google.com/uc?export=view&id=1pzQPbHLgL_0F5OiEokPi0mmgEhrTyTdX" 
+            src="https://lh3.googleusercontent.com/d/1pzQPbHLgL_0F5OiEokPi0mmgEhrTyTdX"
             alt="Alok Singh"
             className="about__profile-img"
           />
