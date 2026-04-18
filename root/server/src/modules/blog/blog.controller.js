@@ -1,5 +1,48 @@
 import Blog from "./blog.model.js";
 
+export const likeBlog = async (req, res) => {
+  try {
+    const blog = await Blog.findById(req.params.id);
+    if (!blog) return res.status(404).json({ msg: "Blog not found" });
+
+    const userId = req.user._id.toString();
+
+    if (blog.likes.includes(userId)) {
+      blog.likes = blog.likes.filter(id => id !== userId);
+    } else {
+      blog.likes.push(userId);
+    }
+
+    await blog.save();
+    res.json(blog.likes);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const commentBlog = async (req, res) => {
+  try {
+    const { text } = req.body;
+    if (!text) return res.status(400).json({ msg: "Comment text is required" });
+
+    const blog = await Blog.findById(req.params.id);
+    if (!blog) return res.status(404).json({ msg: "Blog not found" });
+
+    const newComment = {
+      user: req.user.name || "User",
+      text,
+      date: new Date()
+    };
+
+    blog.comments.push(newComment);
+    await blog.save();
+
+    res.json(blog.comments);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 export const createBlog = async (req, res) => {
   try {
     const { title, content, category } = req.body;
