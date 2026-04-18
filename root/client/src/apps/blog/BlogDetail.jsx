@@ -59,6 +59,13 @@ function BlogDetail() {
 
   const handleComment = async (e) => {
     e.preventDefault();
+    
+    if (!user) {
+      toast.error("You must be logged in to join the conversation.");
+      navigate("/login", { state: { from: `/blog/${id}` } });
+      return;
+    }
+
     if (!commentText.trim()) return;
 
     const commentPromise = axios.post(`/blogs/${id}/comment`, { text: commentText }, {
@@ -176,29 +183,26 @@ function BlogDetail() {
           <div className="comments-wrapper">
             <h2 className="comments-header">Discussion ({blog.comments?.length || 0})</h2>
 
-            {user ? (
-              <form onSubmit={handleComment} className="comment-input-area">
-                <textarea 
-                  className="comment-textarea"
-                  placeholder="Share your thoughts..." 
-                  value={commentText}
-                  onChange={(e) => setCommentText(e.target.value)}
-                  required
-                  rows="3"
-                />
-                <button type="submit" disabled={!commentText.trim()} className="btn-primary" style={{ alignSelf: "flex-end", padding: "10px 20px" }}>
-                  Post Comment
-                </button>
-              </form>
-            ) : (
-              <div className="blogdetail__login-prompt">
-                <p>
-                  Please <span className="blogdetail__login-link" onClick={() => navigate("/login")}>log in</span> to join the conversation.
-                </p>
-              </div>
-            )}
+            <form onSubmit={handleComment} className="comment-input-area">
+              <textarea 
+                className="comment-textarea"
+                placeholder={user ? "Share your thoughts..." : "Please log in to join the conversation..."} 
+                value={commentText}
+                onChange={(e) => setCommentText(e.target.value)}
+                rows="3"
+                readOnly={!user}
+                onClick={() => !user && toast.error("Please log in to comment.")}
+              />
+              <button 
+                type="submit" 
+                className="btn-primary" 
+                style={{ alignSelf: "flex-end", padding: "10px 20px" }}
+              >
+                Post Comment
+              </button>
+            </form>
 
-            <div>
+            <div className="comment-list">
               {(!blog.comments || blog.comments.length === 0) ? (
                 <p className="blogdetail__empty-comments">
                   Be the first to leave a comment!
