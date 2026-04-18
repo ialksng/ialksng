@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
 import AppProviders from './app/AppProviders';
 import MainApp from './apps/main/MainApp';
 
@@ -14,11 +13,9 @@ function App() {
   }, []);
 
   return (
-    <Router>
-      <AppProviders>
-        <MainApp />
-      </AppProviders>
-    </Router>
+    <AppProviders>
+      <MainApp />
+    </AppProviders>
   );
 }
 
