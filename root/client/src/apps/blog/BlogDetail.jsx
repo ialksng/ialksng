@@ -3,6 +3,7 @@ import { useEffect, useState, useContext } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
+import toast from "react-hot-toast";
 import axios from "../../core/utils/axios";
 import Loader from "../../core/components/Loader";
 import NotionRenderer from "../lms/NotionRenderer";
@@ -25,7 +26,8 @@ function BlogDetail() {
       try {
         const { data } = await axios.get(`/blogs/${id}`);
         setBlogData(data.blog ? data : { blog: data, notionContent: null });
-      } catch {
+      } catch (err) {
+        toast.error("Failed to load blog.");
       } finally {
         setLoading(false);
       }
@@ -41,53 +43,95 @@ function BlogDetail() {
   };
 
   const handleLike = async () => {
-    if (!user) return alert("Login required");
-    const res = await axios.post(`/blogs/${id}/like`, {}, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-    });
-    setBlogData((prev) => ({
-      ...prev,
-      blog: { ...prev.blog, likes: res.data }
-    }));
+    if (!user) return toast.error("Please log in to like this post.");
+    try {
+      const res = await axios.post(`/blogs/${id}/like`, {}, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      });
+      setBlogData((prev) => ({
+        ...prev,
+        blog: { ...prev.blog, likes: res.data }
+      }));
+    } catch (err) {
+      toast.error("Failed to like post.");
+    }
   };
 
   const handleComment = async (e) => {
     e.preventDefault();
     if (!commentText.trim()) return;
 
-    const res = await axios.post(`/blogs/${id}/comment`, { text: commentText }, {
+    const commentPromise = axios.post(`/blogs/${id}/comment`, { text: commentText }, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     });
 
-    updateComments(res.data);
-    setCommentText("");
+    toast.promise(commentPromise, {
+      loading: 'Posting...',
+      success: (res) => {
+        updateComments(res.data);
+        setCommentText("");
+        return "Comment posted!";
+      },
+      error: "Failed to post comment",
+    });
   };
 
-  const handleDeleteComment = async (commentId) => {
-    if (!window.confirm("Delete this comment?")) return;
-
-    const res = await axios.delete(`/blogs/${id}/comment/${commentId}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-    });
-
-    updateComments(res.data);
+  const handleDeleteComment = (commentId) => {
+    toast((t) => (
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', padding: '4px' }}>
+        <span style={{ fontSize: '14px', fontWeight: '500', color: 'var(--text-primary)' }}>Delete this comment?</span>
+        <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
+          <button 
+            onClick={async () => {
+              toast.dismiss(t.id);
+              const loadingToast = toast.loading("Deleting...");
+              try {
+                const res = await axios.delete(`/blogs/${id}/comment/${commentId}`, {
+                  headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+                });
+                updateComments(res.data);
+                toast.success("Comment deleted", { id: loadingToast });
+              } catch (err) {
+                toast.error("Failed to delete", { id: loadingToast });
+              }
+            }} 
+            style={{ flex: 1, padding: '6px 12px', background: 'var(--danger-color)', color: '#fff', border: 'none', borderRadius: '6px', fontSize: '13px', cursor: 'pointer' }}
+          >
+            Delete
+          </button>
+          <button 
+            onClick={() => toast.dismiss(t.id)} 
+            style={{ flex: 1, padding: '6px 12px', background: 'transparent', color: 'var(--text-secondary)', border: '1px solid var(--border-color)', borderRadius: '6px', fontSize: '13px', cursor: 'pointer' }}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ), { duration: Infinity });
   };
 
   const handleEditCommentSubmit = async (e, commentId) => {
     e.preventDefault();
     if (!editText.trim()) return;
 
-    const res = await axios.put(`/blogs/${id}/comment/${commentId}`, { text: editText }, {
+    const editPromise = axios.put(`/blogs/${id}/comment/${commentId}`, { text: editText }, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     });
 
-    updateComments(res.data);
-    setEditingCommentId(null);
-    setEditText("");
+    toast.promise(editPromise, {
+      loading: 'Saving edit...',
+      success: (res) => {
+        updateComments(res.data);
+        setEditingCommentId(null);
+        setEditText("");
+        return "Comment updated!";
+      },
+      error: "Failed to update comment",
+    });
   };
 
   if (loading) return <Loader />;
-  if (!blogData || !blogData.blog) return <h2>Not found</h2>;
+  if (!blogData || !blogData.blog) return <h2 style={{textAlign: "center", color: "var(--text-muted)", marginTop: "5rem"}}>Blog Not found</h2>;
 
   const { blog, notionContent } = blogData;
 
@@ -96,10 +140,10 @@ function BlogDetail() {
       <div className="blogdetail__container">
 
         <button onClick={() => navigate("/blog")} className="blogdetail__back-btn">
-          ← Back
+          ← Back to Blogs
         </button>
 
-        <h1>{blog.title}</h1>
+        <h1 className="blogdetail__title">{blog.title}</h1>
 
         <div className="blogdetail__content">
           {notionContent ? (
@@ -123,7 +167,7 @@ function BlogDetail() {
             
             <button className="like-btn" onClick={() => {
               navigator.clipboard.writeText(window.location.href);
-              alert("Link copied to clipboard!");
+              toast.success("Link copied to clipboard!");
             }}>
               🔗 Share
             </button>
@@ -142,21 +186,21 @@ function BlogDetail() {
                   required
                   rows="3"
                 />
-                <button type="submit" disabled={!commentText.trim()} className="btn primary" style={{ alignSelf: "flex-end" }}>
+                <button type="submit" disabled={!commentText.trim()} className="btn-primary" style={{ alignSelf: "flex-end", padding: "10px 20px" }}>
                   Post Comment
                 </button>
               </form>
             ) : (
-              <div style={{ marginBottom: "30px", padding: "16px", background: "rgba(56, 189, 248, 0.1)", borderRadius: "8px", border: "1px solid rgba(56, 189, 248, 0.2)" }}>
-                <p style={{ margin: 0, color: "#e2e8f0" }}>
-                  Please <span onClick={() => navigate("/login")} style={{color: '#38bdf8', cursor: 'pointer', fontWeight: 'bold'}}>log in</span> to join the conversation.
+              <div className="blogdetail__login-prompt">
+                <p>
+                  Please <span className="blogdetail__login-link" onClick={() => navigate("/login")}>log in</span> to join the conversation.
                 </p>
               </div>
             )}
 
             <div>
               {(!blog.comments || blog.comments.length === 0) ? (
-                <p style={{ color: "var(--text-muted)", textAlign: "center", padding: "20px 0", fontStyle: "italic" }}>
+                <p className="blogdetail__empty-comments">
                   Be the first to leave a comment!
                 </p>
               ) : (
@@ -195,8 +239,8 @@ function BlogDetail() {
                             style={{ marginBottom: "10px" }}
                           />
                           <div style={{ display: "flex", gap: "10px" }}>
-                            <button type="submit" className="btn primary" style={{ padding: "8px 16px", fontSize: "13px" }}>Save</button>
-                            <button type="button" onClick={() => setEditingCommentId(null)} className="btn secondary" style={{ padding: "8px 16px", fontSize: "13px" }}>Cancel</button>
+                            <button type="submit" className="btn-primary" style={{ padding: "8px 16px", fontSize: "13px" }}>Save</button>
+                            <button type="button" onClick={() => setEditingCommentId(null)} className="btn-secondary" style={{ padding: "8px 16px", fontSize: "13px" }}>Cancel</button>
                           </div>
                         </form>
                       ) : (

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 import axios from "../../core/utils/axios";
 import Loader from "../../core/components/Loader";
 import Pagination from "../../core/components/Pagination";
@@ -8,26 +9,23 @@ import "./Blog.css";
 const Blog = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
   const [email, setEmail] = useState("");
-  const [nlMessage, setNlMessage] = useState("");
   const [nlLoading, setNlLoading] = useState(false);
 
   useEffect(() => {
     const fetchBlogs = async () => {
       setLoading(true);
-      setError("");
       try {
         const res = await axios.get(`/blogs?page=${currentPage}&limit=6`);
         setBlogs(res.data?.blogs || []);
         setTotalPages(res.data?.totalPages || 1);
       } catch (err) {
         console.error("Error fetching blogs", err);
-        setError("Failed to load blog posts. Please try again later.");
+        toast.error("Failed to load blog posts.");
       } finally {
         setLoading(false);
       }
@@ -39,19 +37,19 @@ const Blog = () => {
     e.preventDefault();
     if (!email) return;
     setNlLoading(true);
-    setNlMessage("");
-    try {
-      const res = await axios.post("/newsletter/subscribe", { email });
-      setNlMessage({ type: "success", text: res.data?.msg || "Success!" });
-      setEmail("");
-    } catch (err) {
-      setNlMessage({
-        type: "error",
-        text: err.response?.data?.msg || "Subscription failed."
-      });
-    } finally {
+    
+    const subPromise = axios.post("/newsletter/subscribe", { email });
+
+    toast.promise(subPromise, {
+      loading: 'Subscribing...',
+      success: (res) => {
+        setEmail("");
+        return res.data?.msg || "Success!";
+      },
+      error: (err) => err.response?.data?.msg || "Subscription failed."
+    }).finally(() => {
       setNlLoading(false);
-    }
+    });
   };
 
   return (
@@ -75,11 +73,7 @@ const Blog = () => {
               {nlLoading ? "Subscribing..." : "Subscribe"}
             </button>
           </form>
-          {nlMessage && (
-            <p className={`newsletter-msg ${nlMessage.type}`}>
-              {nlMessage.text}
-            </p>
-          )}
+          {/* Removed the inline message blocks. Toast handles everything now! */}
         </div>
       </section>
 
@@ -88,10 +82,6 @@ const Blog = () => {
 
         {loading ? (
           <Loader />
-        ) : error ? (
-          <p className="empty-msg" style={{ color: "red" }}>
-            {error}
-          </p>
         ) : blogs.length === 0 ? (
           <p className="empty-msg">
             No blog posts available right now. Check back soon!
@@ -106,8 +96,7 @@ const Blog = () => {
                 const safeDate = blog?.createdAt
                   ? new Date(blog.createdAt).toLocaleDateString()
                   : "Recent";
-                const safeImage =
-                  blog?.coverImage || blog?.image || null;
+                const safeImage = blog?.coverImage || blog?.image || null;
                 const safeExcerpt =
                   blog?.excerpt ||
                   (blog?.content
