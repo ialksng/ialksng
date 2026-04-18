@@ -25,7 +25,9 @@ export const likeBlog = async (req, res) => {
 export const commentBlog = async (req, res) => {
   try {
     const { text } = req.body;
-    if (!text) return res.status(400).json({ msg: "Comment text is required" });
+    if (!text) {
+      return res.status(400).json({ msg: "Comment text is required" });
+    }
 
     const blog = await Blog.findById(req.params.id);
     if (!blog) return res.status(404).json({ msg: "Blog not found" });
@@ -55,7 +57,9 @@ export const deleteBlogComment = async (req, res) => {
       c => c._id.toString() === req.params.commentId
     );
 
-    if (index === -1) return res.status(404).json({ msg: "Comment not found" });
+    if (index === -1) {
+      return res.status(404).json({ msg: "Comment not found" });
+    }
 
     if (blog.comments[index].userId !== req.user._id.toString()) {
       return res.status(401).json({ msg: "Not authorized" });
@@ -76,6 +80,7 @@ export const editBlogComment = async (req, res) => {
     if (!text) return res.status(400).json({ msg: "Text required" });
 
     const blog = await Blog.findById(req.params.id);
+    if (!blog) return res.status(404).json({ msg: "Blog not found" });
 
     const comment = blog.comments.id(req.params.commentId);
     if (!comment) return res.status(404).json({ msg: "Comment not found" });
@@ -95,7 +100,7 @@ export const editBlogComment = async (req, res) => {
 
 export const createBlog = async (req, res) => {
   try {
-    const { title, content, category } = req.body;
+    const { title, content, category, image, excerpt } = req.body;
 
     if (!title || !content) {
       return res.status(400).json({
@@ -103,9 +108,15 @@ export const createBlog = async (req, res) => {
       });
     }
 
-    const blog = new Blog({ title, content, category });
-    const saved = await blog.save();
+    const blog = new Blog({
+      title,
+      content,
+      category,
+      image,
+      excerpt
+    });
 
+    const saved = await blog.save();
     res.status(201).json(saved);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -167,6 +178,7 @@ export const updateBlog = async (req, res) => {
 export const deleteBlog = async (req, res) => {
   try {
     const deleted = await Blog.findByIdAndDelete(req.params.id);
+
     if (!deleted) {
       return res.status(404).json({ message: "Blog not found" });
     }

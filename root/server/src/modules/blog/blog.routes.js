@@ -8,8 +8,8 @@ import {
   deleteBlog,
   likeBlog,
   commentBlog,
-  deleteComment,
-  editComment
+  deleteBlogComment,
+  editBlogComment
 } from "./blog.controller.js";
 
 import { protect, admin } from "../../core/middlewares/auth.middleware.js";
@@ -25,7 +25,7 @@ router.delete("/:id", protect, admin, deleteBlog);
 
 router.post("/:id/like", protect, likeBlog);
 router.post("/:id/comment", protect, commentBlog);
-router.delete("/:id/comment/:commentId", protect, deleteComment);
-router.put("/:id/comment/:commentId", protect, editComment);
+router.delete("/:id/comment/:commentId", protect, deleteBlogComment);
+router.put("/:id/comment/:commentId", protect, editBlogComment);
 
 export default router;
