@@ -32,7 +32,6 @@ function Checkout() {
       try {
         const res = await fetch(`${API}/api/products/${id}`);
         const data = await res.json();
-
         setProduct(data.product || null);
       } catch (err) {
         setProduct(null);
@@ -80,7 +79,6 @@ function Checkout() {
         name: "Your Store",
         description: product.title,
         order_id: order.id,
-
         handler: async function (response) {
           try {
             const verifyRes = await fetch(
@@ -124,13 +122,11 @@ function Checkout() {
             alert("Error after payment");
           }
         },
-
         modal: {
           ondismiss: function () {
             alert("Payment cancelled");
           },
         },
-
         theme: {
           color: "#3399cc",
         },
@@ -157,53 +153,62 @@ function Checkout() {
   }
 
   return (
-    <div className="checkout__container">
-      <div className="checkout__card">
-        <div className="checkout__header">
-          <h2>Complete Your Purchase</h2>
-        </div>
+    <div className="checkout__wrapper">
+      <div className="checkout__header">
+        <h1>Secure Checkout</h1>
+      </div>
 
-        <div className="checkout__product-preview">
-          <img src={product.image} alt={product.title} />
-          <div className="checkout__info">
-            <h3>{product.title}</h3>
-            <p>{product.description}</p>
+      <div className="checkout__grid">
+        <div className="checkout__left">
+          <div className="checkout__section">
+            <h3>1. Digital Delivery Address</h3>
+            <p style={{ color: "var(--text-secondary)", fontSize: "14px" }}>
+              Access will be granted immediately to your account:{" "}
+              <strong>{user?.email}</strong>
+            </p>
+          </div>
+
+          <div className="checkout__section">
+            <h3>2. Review Item</h3>
+            <div className="checkout__product">
+              <img src={product.image} alt={product.title} />
+              <div className="checkout__product-info">
+                <h4>{product.title}</h4>
+                <p>{product.description}</p>
+                <p
+                  style={{
+                    marginTop: "10px",
+                    color: "var(--accent-primary)",
+                    fontWeight: "bold",
+                  }}
+                >
+                  ₹{product.price}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="checkout__summary">
-          <span>Total Due</span>
-          <span className="checkout__price">₹{product.price}</span>
-        </div>
+        <div className="checkout__right">
+          <h3>Order Summary</h3>
+          <div className="summary-row">
+            <span>Items:</span>
+            <span>₹{product.price}</span>
+          </div>
+          <div className="summary-row">
+            <span>Platform Fee:</span>
+            <span>₹0.00</span>
+          </div>
+          <div className="summary-total">
+            <span>Order Total:</span>
+            <span>₹{product.price}</span>
+          </div>
 
-        <button className="checkout__btn" onClick={handlePayment}>
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-          </svg>
-          Pay Securely
-        </button>
+          <button className="checkout__btn" onClick={handlePayment}>
+            Place Your Order
+          </button>
 
-        <div className="checkout__trust">
-          <p
-            style={{
-              fontSize: "12px",
-              color: "#10b981",
-              margin: 0,
-              fontWeight: 500,
-            }}
-          >
-            🔒 Secured by Razorpay. Instant Access upon payment.
-          </p>
+          <div className="trust-badge">🔒 Secured by Razorpay.</div>
         </div>
       </div>
     </div>

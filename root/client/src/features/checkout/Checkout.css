@@ -1,113 +1,146 @@
-.checkout__container {
-  min-height: 80vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.checkout__wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 40px 20px;
-}
-
-.checkout__card {
-  background: rgba(30, 41, 59, 0.6);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  padding: 40px;
-  border-radius: 24px;
-  width: 100%;
-  max-width: 480px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: #fff;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  color: var(--text-primary);
 }
 
 .checkout__header {
-  text-align: center;
-  margin-bottom: 24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  padding-bottom: 20px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 15px;
 }
 
-.checkout__header h2 {
-  font-size: 24px;
+.checkout__header h1 {
+  font-size: 28px;
   font-weight: 600;
-  color: #f8fafc;
 }
 
-.checkout__product-preview {
+.checkout__grid {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 30px;
+  align-items: start;
+}
+
+.checkout__left {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.checkout__section {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.checkout__section h3 {
+  font-size: 18px;
+  margin-bottom: 16px;
+  color: var(--accent-primary);
+}
+
+.checkout__product {
   display: flex;
   gap: 20px;
-  align-items: center;
-  margin-bottom: 24px;
-  background: rgba(15, 23, 42, 0.5);
-  padding: 16px;
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,0.03);
 }
 
-.checkout__product-preview img {
-  width: 80px;
-  height: 80px;
+.checkout__product img {
+  width: 120px;
+  height: 120px;
   object-fit: cover;
-  border-radius: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
 }
 
-.checkout__info h3 {
-  font-size: 16px;
+.checkout__product-info h4 {
+  font-size: 18px;
   margin: 0 0 8px 0;
-  color: #f8fafc;
 }
 
-.checkout__info p {
-  margin: 0;
-  font-size: 13px;
-  color: #94a3b8;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.checkout__product-info p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
 }
 
-.checkout__summary {
+.checkout__right {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+  position: sticky;
+  top: 100px;
+}
+
+.checkout__right h3 {
+  font-size: 18px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 10px;
+}
+
+.summary-row {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
-  font-size: 18px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: var(--text-secondary);
 }
 
-.checkout__price {
-  font-size: 28px;
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--border-color);
+  font-size: 20px;
   font-weight: 700;
-  color: #38bdf8;
+  color: #fff;
+}
+
+.summary-total span:last-child {
+  color: var(--accent-primary);
 }
 
 .checkout__btn {
   width: 100%;
   padding: 16px;
-  background: linear-gradient(135deg, #38bdf8, #0ea5e9);
-  color: #0f172a;
+  background: #f59e0b;
+  color: #000;
   border: none;
-  border-radius: 12px;
+  border-radius: 8px;
   font-weight: 600;
   font-size: 16px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
+  margin-top: 24px;
+  transition: background 0.2s ease, transform 0.1s ease;
 }
 
 .checkout__btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(56, 189, 248, 0.5);
+  background: #d97706;
 }
 
-.checkout__trust {
-  margin-top: 24px;
+.checkout__btn:active {
+  transform: scale(0.98);
+}
+
+.trust-badge {
+  margin-top: 16px;
   text-align: center;
-  background: rgba(16, 185, 129, 0.1);
-  border: 1px solid rgba(16, 185, 129, 0.2);
-  padding: 16px;
-  border-radius: 12px;
+  font-size: 12px;
+  color: #10b981;
+}
+
+@media (max-width: 968px) {
+  .checkout__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .checkout__right {
+    position: static;
+    top: auto;
+  }
 }
