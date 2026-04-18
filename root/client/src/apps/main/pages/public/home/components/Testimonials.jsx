@@ -22,7 +22,6 @@ const Testimonials = ({ heading }) => {
   return (
     <section className="testimonials-preview" style={{ padding: '60px 0' }}>
       <div className="section-header" style={{ textAlign: 'center', marginBottom: '40px' }}>
-        {/* Dynamic Heading from Admin Panel */}
         <h2>{heading || "What People Say"}</h2>
       </div>
 
