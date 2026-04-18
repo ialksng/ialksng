@@ -1,5 +1,17 @@
 import express from 'express';
-import { getGames, createGame, getLiveStream, getGameStreams, getProducts, getLifePosts } from './more.controller.js';
+import { 
+getGames, 
+  createGame, 
+  deleteGame,          
+  getLiveStream, 
+  getGameStreams, 
+  toggleStreamStatus,
+  deleteStream,         
+  getProducts, 
+  deleteProduct,        
+  getLifePosts, 
+  deleteLifePost
+} from './more.controller.js';
 import { adminOnly } from '../../core/middlewares/admin.middleware.js'; 
 
 const router = express.Router();
