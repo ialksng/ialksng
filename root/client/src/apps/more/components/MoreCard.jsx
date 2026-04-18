@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './More.css';
+import '../More.css';
 
 const MoreCard = ({ 
   title, 
