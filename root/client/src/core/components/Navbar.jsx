@@ -38,6 +38,18 @@ function Navbar() {
   }, []);
 
   useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [menuOpen]);
+
+  useEffect(() => {
     const fetchSuggestions = async () => {
       if (searchQuery.trim().length < 2) {
         setSuggestions([]);
