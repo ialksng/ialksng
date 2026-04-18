@@ -1,8 +1,5 @@
-import { useState, useEffect } from "react";
-
+import React, { useState, useEffect } from "react";
 import axios from "../../../core/utils/axios";
-import Loader from "../../../core/components/Loader";
-
 import "./admin.css";
 
 const AdminHome = () => {
@@ -14,7 +11,6 @@ const AdminHome = () => {
   
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const fetchHomeData = async () => {
@@ -43,32 +39,37 @@ const AdminHome = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSaving(true); setMessage("");
+    setSaving(true);
     try {
       await axios.put("/admin/home", formData, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
-      setMessage("Home section updated successfully!");
+      alert("Home Page updated successfully!");
     } catch (error) {
-      setMessage("Failed to update. Check console.");
+      alert("Failed to update.");
     } finally {
       setSaving(false);
     }
   };
 
-  if (loading) return <div className="admin-container"><Loader /></div>;
+  if (loading) return (
+    <div className="admin-container p-6">
+      <div className="admin-header"><h2>Loading Home Data...</h2></div>
+    </div>
+  );
 
   return (
-    <div className="admin-container p-6">
-      <h2>Manage Home Page</h2>
-      {message && <div className="alert">{message}</div>}
+    <div className="admin-container">
+      <div className="admin-header">
+        <h2>Manage Home Page</h2>
+      </div>
 
-      <form onSubmit={handleSubmit} className="admin-form">
-
+      <form onSubmit={handleSubmit} className="admin-form" style={{ maxWidth: '1000px' }}>
+        
         <div className="form-section">
           <h3>Hero Section</h3>
           <div className="form-group"><label>Hero Title</label><input type="text" name="heroTitle" value={formData.heroTitle} onChange={handleChange} /></div>
-          <div className="form-group"><label>Hero Subtitle</label><textarea name="heroSubtitle" value={formData.heroSubtitle} onChange={handleChange} className="w-full p-2 border" rows="2" /></div>
+          <div className="form-group"><label>Hero Subtitle</label><textarea name="heroSubtitle" value={formData.heroSubtitle} onChange={handleChange} rows="2" /></div>
           
           <div className="flex gap-4">
             <div className="form-group w-1/2"><label>Primary Button Text</label><input type="text" name="heroPrimaryButtonText" value={formData.heroPrimaryButtonText} onChange={handleChange} /></div>
@@ -80,35 +81,37 @@ const AdminHome = () => {
           </div>
         </div>
 
-        <div className="form-section mt-4">
+        <div className="form-section">
           <h3>Services Preview</h3>
-          <div className="form-group"><label>Services Section Heading</label><input type="text" name="servicesHeading" value={formData.servicesHeading} onChange={handleChange} /></div>
+          <div className="form-group"><label>Section Heading</label><input type="text" name="servicesHeading" value={formData.servicesHeading} onChange={handleChange} /></div>
           
           {formData.services.map((srv, index) => (
-            <div key={index} className="border p-4 mb-2 relative">
-              <button type="button" onClick={() => removeArrayItem("services", index)} className="btn danger absolute top-2 right-2">X</button>
-              <input type="text" placeholder="Service Title" value={srv.title} onChange={(e) => handleArrayChange("services", index, "title", e.target.value)} className="w-full p-2 mb-2 border" />
-              <input type="text" placeholder="Icon Name (e.g., FaCode)" value={srv.iconName} onChange={(e) => handleArrayChange("services", index, "iconName", e.target.value)} className="w-full p-2 mb-2 border" />
-              <textarea placeholder="Description" value={srv.description} onChange={(e) => handleArrayChange("services", index, "description", e.target.value)} className="w-full p-2 border" rows="2" />
+            <div key={index} className="relative mb-4 p-4 border" style={{ borderColor: 'var(--border-color)', borderRadius: '8px' }}>
+              <button type="button" onClick={() => removeArrayItem("services", index)} className="btn danger absolute top-2 right-2" style={{position:'absolute', top:'10px', right:'10px'}}>X</button>
+              <div className="flex gap-4 mb-2">
+                <div className="form-group w-1/2"><label>Service Title</label><input type="text" value={srv.title} onChange={(e) => handleArrayChange("services", index, "title", e.target.value)} /></div>
+                <div className="form-group w-1/2"><label>Icon Name (e.g. FaCode)</label><input type="text" value={srv.iconName} onChange={(e) => handleArrayChange("services", index, "iconName", e.target.value)} /></div>
+              </div>
+              <div className="form-group"><label>Description</label><textarea value={srv.description} onChange={(e) => handleArrayChange("services", index, "description", e.target.value)} rows="2" /></div>
             </div>
           ))}
           <button type="button" onClick={() => addArrayItem("services", { title: "", description: "", iconName: "" })} className="btn secondary mt-2">+ Add Service</button>
         </div>
 
-        <div className="form-section mt-4">
-          <h3>Fun Extras (Stats)</h3>
+        <div className="form-section">
+          <h3>Fun Extras (Stats Bottom Row)</h3>
           {formData.funExtras.map((stat, index) => (
             <div key={index} className="flex gap-2 mb-2">
-              <input type="text" placeholder="Value (e.g., 100K+)" value={stat.value} onChange={(e) => handleArrayChange("funExtras", index, "value", e.target.value)} className="p-2 border w-1/4" />
-              <input type="text" placeholder="Label (e.g., Lines of Code)" value={stat.label} onChange={(e) => handleArrayChange("funExtras", index, "label", e.target.value)} className="p-2 border w-1/2" />
-              <input type="text" placeholder="Suffix / Icon" value={stat.suffix} onChange={(e) => handleArrayChange("funExtras", index, "suffix", e.target.value)} className="p-2 border w-1/4" />
+              <input type="text" placeholder="Value (e.g., 100K+)" value={stat.value} onChange={(e) => handleArrayChange("funExtras", index, "value", e.target.value)} className="w-1/4" />
+              <input type="text" placeholder="Label (e.g., Lines of Code)" value={stat.label} onChange={(e) => handleArrayChange("funExtras", index, "label", e.target.value)} className="w-1/2" />
+              <input type="text" placeholder="Suffix (Optional)" value={stat.suffix} onChange={(e) => handleArrayChange("funExtras", index, "suffix", e.target.value)} className="w-1/4" />
               <button type="button" onClick={() => removeArrayItem("funExtras", index)} className="btn danger">X</button>
             </div>
           ))}
           <button type="button" onClick={() => addArrayItem("funExtras", { label: "", value: "", suffix: "" })} className="btn secondary mt-2">+ Add Fun Stat</button>
         </div>
 
-        <div className="form-section mt-4">
+        <div className="form-section">
           <h3>Final Call To Action</h3>
           <div className="form-group"><label>CTA Title</label><input type="text" name="ctaTitle" value={formData.ctaTitle} onChange={handleChange} /></div>
           <div className="flex gap-4">
@@ -117,8 +120,8 @@ const AdminHome = () => {
           </div>
         </div>
 
-        <button type="submit" className="btn primary mt-6 w-full" disabled={saving}>
-          {saving ? "Saving..." : "Save Changes"}
+        <button type="submit" className="btn primary w-full mt-4" disabled={saving}>
+          {saving ? "Saving Changes..." : "Publish Changes"}
         </button>
       </form>
     </div>
