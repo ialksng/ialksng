@@ -26,7 +26,6 @@ function Checkout() {
   }, [user, token, navigate, id]);
 
   useEffect(() => {
-
     if (!user) return;
 
     const fetchProduct = async () => {
@@ -34,11 +33,8 @@ function Checkout() {
         const res = await fetch(`${API}/api/products/${id}`);
         const data = await res.json();
 
-        console.log("PRODUCT DATA:", data);
-
         setProduct(data.product || null);
       } catch (err) {
-        console.log("Product fetch error:", err);
         setProduct(null);
       }
     };
@@ -59,13 +55,12 @@ function Checkout() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ productId: id })
+        body: JSON.stringify({ productId: id }),
       });
 
       const data = await res.json();
-      console.log("CREATE ORDER RESPONSE:", data);
 
       if (!data.success) {
         if (res.status === 401) {
@@ -88,14 +83,16 @@ function Checkout() {
 
         handler: async function (response) {
           try {
-
-            const verifyRes = await fetch(`${API}/api/payment/verify-payment`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify(response)
-            });
+            const verifyRes = await fetch(
+              `${API}/api/payment/verify-payment`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(response),
+              }
+            );
 
             const verifyData = await verifyRes.json();
 
@@ -107,12 +104,12 @@ function Checkout() {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${token}`,
               },
               body: JSON.stringify({
                 product: id,
-                paymentId: response.razorpay_payment_id
-              })
+                paymentId: response.razorpay_payment_id,
+              }),
             });
 
             const orderData = await orderRes.json();
@@ -123,9 +120,7 @@ function Checkout() {
             } else {
               alert("Order saving failed ❌");
             }
-
           } catch (err) {
-            console.log("Post-payment error:", err);
             alert("Error after payment");
           }
         },
@@ -133,63 +128,81 @@ function Checkout() {
         modal: {
           ondismiss: function () {
             alert("Payment cancelled");
-          }
+          },
         },
 
         theme: {
-          color: "#3399cc"
-        }
+          color: "#3399cc",
+        },
       };
 
       const rzp = new window.Razorpay(options);
 
-      rzp.on("payment.failed", function (response) {
-        console.log("PAYMENT FAILED:", response);
+      rzp.on("payment.failed", function () {
         alert("Payment failed ❌");
       });
 
       rzp.open();
-
     } catch (err) {
-      console.log("Payment error:", err);
       alert("Payment failed");
     }
   };
 
   if (!user || !product) {
-    return <h2 style={{ color: "white", textAlign: "center", marginTop: "5rem" }}>Loading...</h2>;
+    return (
+      <h2 style={{ color: "white", textAlign: "center", marginTop: "5rem" }}>
+        Loading...
+      </h2>
+    );
   }
 
   return (
     <div className="checkout__container">
       <div className="checkout__card">
-        <h2>Checkout</h2>
-
-        <img
-          src={product.image}
-          alt={product.title}
-          style={{ width: "100%", borderRadius: "10px" }}
-        />
-
-        <div className="checkout__info">
-          <p><strong>{product.title}</strong></p>
-          <p>{product.description}</p>
+        <div className="checkout__header">
+          <h2>Complete Your Purchase</h2>
         </div>
 
-        <div className="checkout__price">
-          ₹{product.price}
+        <div className="checkout__product-preview">
+          <img src={product.image} alt={product.title} />
+          <div className="checkout__info">
+            <h3>{product.title}</h3>
+            <p>{product.description}</p>
+          </div>
+        </div>
+
+        <div className="checkout__summary">
+          <span>Total Due</span>
+          <span className="checkout__price">₹{product.price}</span>
         </div>
 
         <button className="checkout__btn" onClick={handlePayment}>
-          Pay Now
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          Pay Securely
         </button>
-        
-        <div style={{ textAlign: "center", marginTop: "15px" }}>
-          <p style={{ fontSize: "12px", color: "#cbd5f5", marginBottom: "5px" }}>
-            ⚡ Upon successful payment, you will receive <strong>instant access</strong> to the digital product/service in your dashboard.
-          </p>
-          <p style={{ fontSize: "12px", color: "#94a3b8" }}>
-            🔒 All payments are secured and processed via Razorpay.
+
+        <div className="checkout__trust">
+          <p
+            style={{
+              fontSize: "12px",
+              color: "#10b981",
+              margin: 0,
+              fontWeight: 500,
+            }}
+          >
+            🔒 Secured by Razorpay. Instant Access upon payment.
           </p>
         </div>
       </div>

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import "./MyPurchases.css";
+
 function MyPurchases() {
   const [orders, setOrders] = useState([]);
   const navigate = useNavigate();
@@ -18,11 +20,9 @@ function MyPurchases() {
         });
 
         const data = await res.json();
-
         setOrders(data.orders || []);
       } catch (err) {
-        console.log("Orders fetch error:", err);
-        setOrders([]); 
+        setOrders([]);
       }
     };
 
@@ -30,83 +30,101 @@ function MyPurchases() {
   }, [API]);
 
   return (
-    <div style={{ padding: "20px", color: "white" }}>
-
-      <button
-        onClick={() => navigate(-1)}
-        style={{
-          marginBottom: "15px",
-          padding: "8px 14px",
-          cursor: "pointer",
-          borderRadius: "6px",
-          border: "none",
-          background: "#444"
-        }}
-      >
-        ⬅ Back
-      </button>
-
-      <h2>My Purchases</h2>
+    <div className="purchases__container">
+      <div className="purchases__header">
+        <button className="btn secondary" onClick={() => navigate(-1)}>
+          ⬅ Back
+        </button>
+        <h2>My Library</h2>
+      </div>
 
       {orders.length === 0 ? (
-        <p>No purchases yet</p>
-      ) : (
-        orders.map(order => (
-          <div
-            key={order._id}
-            style={{
-              border: "1px solid #555",
-              margin: "15px 0",
-              padding: "15px",
-              borderRadius: "12px",
-              display: "flex",
-              gap: "15px",
-              alignItems: "center"
-            }}
+        <div
+          style={{
+            textAlign: "center",
+            padding: "60px 20px",
+            background: "var(--bg-card)",
+            borderRadius: "16px",
+            border: "1px dashed var(--border-color)"
+          }}
+        >
+          <h3 style={{ color: "var(--text-secondary)" }}>
+            Your library is empty
+          </h3>
+          <p style={{ color: "var(--text-muted)" }}>
+            Products you purchase will appear here securely.
+          </p>
+          <button
+            className="btn primary mt-4"
+            onClick={() => navigate("/store")}
           >
-            <img
-              src={order.product?.image}
-              alt=""
-              width="100"
-              style={{ borderRadius: "8px" }}
-            />
+            Browse Store
+          </button>
+        </div>
+      ) : (
+        <div className="purchases__grid">
+          {orders.map(order => (
+            <div key={order._id} className="purchase__card">
+              <img
+                src={
+                  order.product?.image ||
+                  "https://via.placeholder.com/400x200"
+                }
+                alt=""
+                className="purchase__img"
+              />
 
-            <div>
-              <p><strong>{order.product?.title}</strong></p>
+              <div className="purchase__content">
+                <h3 className="purchase__title">
+                  {order.product?.title || "Product Removed"}
+                </h3>
 
-              <p>
-                Status:{" "}
-                <span style={{
-                  color: order.status === "Paid" ? "limegreen" : "orange",
-                  fontWeight: "bold"
-                }}>
-                  {order.status}
-                </span>
-              </p>
+                <div className="purchase__meta">
+                  <span>Status:</span>
+                  <span
+                    className={`status-badge ${
+                      order.status === "Paid"
+                        ? "status-paid"
+                        : "status-pending"
+                    }`}
+                  >
+                    {order.status}
+                  </span>
+                </div>
 
-              <p style={{ fontSize: "12px", opacity: 0.7 }}>
-                Payment ID: {order.paymentId || "N/A"}
-              </p>
+                <div className="purchase__meta">
+                  <span>Order ID:</span>
+                  <span style={{ fontFamily: "monospace" }}>
+                    {order.paymentId
+                      ? order.paymentId.substring(0, 10) + "..."
+                      : "N/A"}
+                  </span>
+                </div>
 
-              {order.status === "Paid" && order.product?._id && (
-                <button
-                  onClick={() => navigate(`/access/${order.product._id}`)}
-                  style={{
-                    marginTop: "8px",
-                    padding: "6px 12px",
-                    cursor: "pointer",
-                    borderRadius: "6px",
-                    border: "none",
-                    background: "#3399cc",
-                    color: "white"
-                  }}
-                >
-                  View Product
-                </button>
-              )}
+                <div className="purchase__action">
+                  {order.status === "Paid" && order.product?._id ? (
+                    <button
+                      className="btn-access"
+                      onClick={() =>
+                        navigate(`/access/${order.product._id}`)
+                      }
+                    >
+                      Access Content
+                    </button>
+                  ) : (
+                    <button
+                      className="btn-access"
+                      disabled
+                      style={{ opacity: 0.5, cursor: "not-allowed" }}
+                    >
+                      Processing...
+                    </button>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
-        ))
+          ))}
+        </div>
       )}
     </div>
   );
