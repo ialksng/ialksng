@@ -24,7 +24,6 @@ const Updates = ({ heading }) => {
     <section className="updates-preview" style={{ padding: '60px 0' }}>
       <div className="section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '30px' }}>
         <div>
-          {/* Dynamic Heading from Admin Panel */}
           <h2>{heading || "Latest Articles"}</h2>
         </div>
         <Link to="/blog" className="btn secondary" style={{ fontSize: '13px' }}>View All →</Link>
