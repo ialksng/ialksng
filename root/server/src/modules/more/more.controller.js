@@ -67,6 +67,18 @@ export const deleteGame = async (req, res) => {
   }
 };
 
+export const getGameById = async (req, res) => {
+  try {
+    const game = await Game.findById(req.params.id);
+    if (!game) {
+      return res.status(404).json({ message: 'Game not found' });
+    }
+    res.status(200).json(game);
+  } catch (error) { 
+    res.status(500).json({ message: error.message }); 
+  }
+};
+
 export const getProducts = async (req, res) => {
   try {
     const products = await Product.find().sort({ createdAt: -1 });

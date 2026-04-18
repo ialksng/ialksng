@@ -1,10 +1,22 @@
 import express from 'express';
 import {
-  getGames, createGame, updateGame, deleteGame,
-  getProducts, createProduct, deleteProduct,
-  getLifePosts, createLifePost, deleteLifePost,
-  getLiveStream, getGameStreams, getAllStreams, 
-  createStream, deleteStream, toggleStreamStatus
+  getGames,
+  getGameById,
+  createGame,
+  updateGame,
+  deleteGame,
+  getProducts,
+  createProduct,
+  deleteProduct,
+  getLifePosts,
+  createLifePost,
+  deleteLifePost,
+  getLiveStream,
+  getGameStreams,
+  getAllStreams,
+  createStream,
+  deleteStream,
+  toggleStreamStatus
 } from './more.controller.js';
 
 import { adminOnly } from '../../core/middlewares/admin.middleware.js';
@@ -14,6 +26,7 @@ import { upload } from '../../core/middlewares/upload.middleware.js';
 const router = express.Router();
 
 router.get('/games', getGames);
+router.get('/games/:id', getGameById);
 router.get('/products', getProducts);
 router.get('/life', getLifePosts);
 router.get('/streams/live', getLiveStream);

@@ -8,6 +8,7 @@ import Loader from "../../core/components/Loader.jsx";
 import CookieConsent from "../../core/components/CookieConsent.jsx";
 import Chatbot from "../ai/Chatbot.jsx";
 import AdminRoute from "../admin/AdminRoute.jsx";
+import GameDetail from '../more/pages/GameDetail';
 
 const Profile = lazy(() => import("../../features/profile/Profile.jsx"));
 
@@ -99,6 +100,7 @@ function MainApp() {
               <Route path="/more/products" element={<PageWrapper><Products /></PageWrapper>} />
               <Route path="/more/gamezone" element={<PageWrapper><GameZone /></PageWrapper>} />
               <Route path="/more/life" element={<PageWrapper><Life /></PageWrapper>} />
+              <Route path="/more/gamezone/:id" element={<PageWrapper><GameDetail /></PageWrapper>} />
 
               <Route path="/privacy-policy" element={<PageWrapper><PrivacyPolicy /></PageWrapper>} />
               <Route path="/terms-and-conditions" element={<PageWrapper><TermsConditions /></PageWrapper>} />
