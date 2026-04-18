@@ -9,20 +9,20 @@ const AdminGameZone = () => {
   useEffect(() => { fetchGames(); }, []);
 
   const fetchGames = async () => {
-    const { data } = await axios.get('/api/more/games');
+    const { data } = await axios.get('/more/games');
     setGames(data);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post('/api/more/games', formData);
+    await axios.post('/more/games', formData);
     setFormData({ name: '', description: '', username: '', joinLink: '' });
     fetchGames();
   };
 
   const handleDelete = async (id) => {
     if (window.confirm("Delete this game?")) {
-      await axios.delete(`/api/more/games/${id}`);
+      await axios.delete(`/more/games/${id}`);
       fetchGames();
     }
   };
@@ -36,7 +36,7 @@ const AdminGameZone = () => {
           <input type="text" placeholder="Username / ID" value={formData.username} onChange={e => setFormData({...formData, username: e.target.value})} className="form-control" />
           <input type="text" placeholder="Description" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="form-control" />
           <input type="text" placeholder="Join/Friend Link" value={formData.joinLink} onChange={e => setFormData({...formData, joinLink: e.target.value})} className="form-control" />
-          <button type="submit" className="admin-btn primary" style={{marginTop: '1rem'}}>Add Game</button>
+          <button type="submit" className="btn-premium" style={{marginTop: '1rem'}}>Add Game</button>
         </form>
       </div>
 
