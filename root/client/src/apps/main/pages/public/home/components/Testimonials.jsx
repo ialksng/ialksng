@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from '../../../../../core/utils/axios';
+import axios from '../../../../../../core/utils/axios';
 import './Testimonials.css';
 
 const Testimonials = ({ heading }) => {

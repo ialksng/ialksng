@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from '../../../../../core/utils/axios';
+import axios from '../../../../../../core/utils/axios';
 import './FeaturedProjects.css';
 
 const FeaturedProjects = ({ heading }) => {
@@ -23,7 +23,6 @@ const FeaturedProjects = ({ heading }) => {
   return (
     <section className="featured-projects" style={{ padding: '60px 0' }}>
       <div className="section-header" style={{ marginBottom: '40px' }}>
-        {/* Dynamic Heading from Admin Panel */}
         <h2>{heading || "Featured Work"}</h2>
       </div>
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from '../../../../../core/utils/axios';
+import axios from '../../../../../../core/utils/axios';
 import './AboutPreview.css';
 
 const AboutPreview = () => {
