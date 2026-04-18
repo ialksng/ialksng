@@ -43,20 +43,29 @@ function Navbar() {
     if (menuOpen) {
       document.body.style.overflow = "hidden";
       document.documentElement.style.overflow = "hidden";
-      document.body.classList.add("hide-bot"); 
+      document.body.classList.add("hide-bot");
     } else {
-      document.body.style.overflow = "auto";
-      document.documentElement.style.overflow = "auto";
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
       document.body.classList.remove("hide-bot");
     }
 
     return () => {
-      document.body.style.overflow = "auto";
-      document.documentElement.style.overflow = "auto";
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
       document.body.classList.remove("hide-bot");
     };
   }, [menuOpen]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 968 && menuOpen) {
+        setMenuOpen(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [menuOpen]);
   useEffect(() => {
     const fetchSuggestions = async () => {
       if (searchQuery.trim().length < 2) {
@@ -182,13 +191,13 @@ function Navbar() {
                 <div className="dropdown__menu">
                   {user.role !== "admin" && (
                     <div className="dropdown__item" onClick={() => handleNavigate("/profile")}>
-                      👤 Profile
+                      Profile
                     </div>
                   )}
 
                   {user.role === "admin" && (
                     <div className="dropdown__item" onClick={() => handleNavigate("/admin")}>
-                      👑 Admin Panel
+                      Admin Panel
                     </div>
                   )}
 
@@ -201,7 +210,7 @@ function Navbar() {
                       }
                     }}
                   >
-                    🚪 Logout
+                    Logout
                   </div>
                 </div>
               )}
