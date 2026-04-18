@@ -6,6 +6,7 @@ import {
   getLiveStream, getGameStreams, getAllStreams, createStream, deleteStream, toggleStreamStatus
 } from './more.controller.js';
 import { adminOnly } from '../../core/middlewares/admin.middleware.js';
+import { protect } from '../../core/middlewares/auth.middleware.js'; // <-- ADDED THIS
 import { upload } from '../../core/middlewares/upload.middleware.js';
 
 const router = express.Router();
@@ -15,18 +16,18 @@ router.get('/products', getProducts);
 router.get('/life', getLifePosts);
 router.get('/streams/live', getLiveStream);
 router.get('/games/:gameId/streams', getGameStreams);
-
-router.post('/games', adminOnly, upload.single('image'), createGame);
-router.post('/products', adminOnly, upload.single('image'), createProduct);
-router.post('/life', adminOnly, upload.single('image'), createLifePost);
-
 router.get('/streams/all', getAllStreams);
-router.post('/streams', adminOnly, createStream);
-router.put('/streams/:id/status', adminOnly, toggleStreamStatus);
 
-router.delete('/games/:id', adminOnly, deleteGame);
-router.delete('/products/:id', adminOnly, deleteProduct);
-router.delete('/life/:id', adminOnly, deleteLifePost);
-router.delete('/streams/:id', adminOnly, deleteStream);
+router.post('/games', protect, adminOnly, upload.single('image'), createGame);
+router.post('/products', protect, adminOnly, upload.single('image'), createProduct);
+router.post('/life', protect, adminOnly, upload.single('image'), createLifePost);
+
+router.post('/streams', protect, adminOnly, createStream);
+router.put('/streams/:id/status', protect, adminOnly, toggleStreamStatus);
+
+router.delete('/games/:id', protect, adminOnly, deleteGame);
+router.delete('/products/:id', protect, adminOnly, deleteProduct);
+router.delete('/life/:id', protect, adminOnly, deleteLifePost);
+router.delete('/streams/:id', protect, adminOnly, deleteStream);
 
 export default router;
