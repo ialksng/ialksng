@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { FaHome, FaUserTie, FaBox, FaPenNib, FaBriefcase, FaCertificate, FaSignOutAlt } from 'react-icons/fa';
+import { FaHome, FaUserTie, FaBox, FaPenNib, FaBriefcase, FaCertificate, FaSignOutAlt, FaStar } from 'react-icons/fa';
 import './AdminLayout.css';
 
 const AdminSidebar = () => {
@@ -33,6 +33,10 @@ const AdminSidebar = () => {
 
         <NavLink to="/admin/blog" className={({ isActive }) => isActive ? "admin-nav__link active" : "admin-nav__link"}>
           <FaPenNib className="admin-nav__icon" /> Blog Posts
+        </NavLink>
+
+        <NavLink to="/admin/testimonials" className={({ isActive }) => `admin-nav__link ${isActive ? 'active' : ''}`}>
+          <FaStar className="admin-nav__icon" /> Manage Testimonials
         </NavLink>
 
         <NavLink to="/admin/newsletter" className={({ isActive }) => isActive ? "admin-nav__link active" : "admin-nav__link"}>

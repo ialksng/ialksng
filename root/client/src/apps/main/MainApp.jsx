@@ -8,6 +8,8 @@ import Loader from "../../core/components/Loader.jsx";
 import CookieConsent from "../../core/components/CookieConsent.jsx";
 import Chatbot from "../ai/Chatbot.jsx";
 import AdminRoute from "../admin/AdminRoute.jsx";
+import AdminTestimonials from "../../apps/admin/pages/AdminTestimonials.jsx";
+
 const Profile = lazy(() => import("../../features/profile/Profile.jsx"));
 
 const Home = lazy(() => import("./pages/public/home/Home.jsx"));
@@ -99,7 +101,8 @@ function MainApp() {
                 <Route path="/admin/about" element={<PageWrapper><AdminAbout /></PageWrapper>} />
                 <Route path="/admin/projects" element={<PageWrapper><AdminProjects /></PageWrapper>} />
                 <Route path="/admin/certifications" element={<PageWrapper><AdminCertifications /></PageWrapper>} />
-                <Route path="/admin/newsletter" element={<PageWrapper><AdminNewsletter /></PageWrapper>} />
+                <Route path="/admin/newsletter" element={<AdminNewsletter />} />
+                <Route path="testimonials" element={<AdminTestimonials />} />
               </Route>
 
             </Route>

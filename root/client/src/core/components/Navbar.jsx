@@ -152,10 +152,11 @@ function Navbar() {
 
               {open && (
                 <div className="dropdown__menu">
-                  
-                  <div className="dropdown__item" onClick={() => handleNavigate("/profile")}>
-                    👤 Profile
-                  </div>
+                  {user.role !== "admin" && (
+                    <div className="dropdown__item" onClick={() => handleNavigate("/profile")}>
+                      👤 Profile
+                    </div>
+                  )}
 
                   {user.role === "admin" && (
                     <div className="dropdown__item" onClick={() => handleNavigate("/admin")}>
@@ -174,7 +175,6 @@ function Navbar() {
                   >
                     🚪 Logout
                   </div>
-
                 </div>
               )}
             </div>
@@ -216,10 +216,11 @@ function Navbar() {
           ) : (
             <>
               {user.role !== "admin" && (
-                <li onClick={() => handleNavigate("/cart")} className="mobile__action">🛒 Cart ({cart?.length || 0})</li>
+                <>
+                  <li onClick={() => handleNavigate("/cart")} className="mobile__action">🛒 Cart ({cart?.length || 0})</li>
+                  <li onClick={() => handleNavigate("/profile")} className="mobile__action">👤 Profile Dashboard</li>
+                </>
               )}
-              
-              <li onClick={() => handleNavigate("/profile")} className="mobile__action">👤 Profile Dashboard</li>
 
               {user.role === "admin" && (
                 <li onClick={() => handleNavigate("/admin")} className="mobile__action mobile__admin">👑 Admin Panel</li>

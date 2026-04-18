@@ -9,17 +9,16 @@
   flex: 1;
   margin-left: 260px;
   padding: 40px;
-  min-height: calc(100vh - 70px);
+  min-height: calc(100vh - 80px);
   background: var(--bg-primary, #0f172a);
-  box-shadow: inset 10px 0 30px -10px rgba(0, 0, 0, 0.3);
 }
 
 .admin-sidebar {
   width: 260px;
+  top: 80px; 
+  height: calc(100vh - 80px); 
   position: fixed;
-  top: 70px;
   left: 0;
-  height: calc(100vh - 70px);
   background: #020617;
   border-right: 1px solid var(--border-color, #334155);
   display: flex;
