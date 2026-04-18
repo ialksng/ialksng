@@ -6,6 +6,7 @@ const gameSchema = new mongoose.Schema({
   username: { type: String },
   joinLink: { type: String },
   coverImage: { type: String },
+  category: { type: String, default: 'Game' },
 }, { timestamps: true });
 
 const streamSchema = new mongoose.Schema({
