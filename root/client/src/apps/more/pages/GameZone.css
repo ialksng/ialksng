@@ -85,17 +85,8 @@
   border: 1px solid rgba(55, 65, 81, 0.5);
 }
 
-.gamezone-empty h3 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #d1d5db;
-  margin: 1rem 0 0.5rem;
-}
-
-.gamezone-empty p {
-  color: #6b7280;
-  margin: 0;
-}
+.gamezone-empty h3 { font-size: 1.5rem; font-weight: 700; color: #d1d5db; margin: 1rem 0 0.5rem; }
+.gamezone-empty p { color: #6b7280; margin: 0; }
 
 .game-card {
   display: flex;
@@ -223,105 +214,4 @@
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
-}
-
-.game-detail-hero-overlay {
-  background: linear-gradient(to bottom, rgba(15, 23, 42, 0.4), #0f172a),
-              linear-gradient(to right, rgba(15, 23, 42, 0.95) 20%, transparent 80%);
-}
-
-.game-detail-title-shadow {
-  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.8);
-}
-
-.glass-panel {
-  background-color: rgba(31, 41, 55, 0.35);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-}
-
-.glass-panel-accent {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 100%;
-  background: linear-gradient(to bottom, #a855f7, #06b6d4);
-}
-
-.video-archive-card {
-  background-color: #162032;
-  border-radius: 1rem;
-  overflow: hidden;
-  border: 1px solid #1f2937;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-}
-
-.video-archive-card:hover {
-  transform: translateY(-6px);
-  border-color: rgba(168, 85, 247, 0.4);
-  box-shadow: 0 15px 35px -5px rgba(168, 85, 247, 0.15);
-}
-
-.video-card-glow-bar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  background: linear-gradient(90deg, #a855f7, #06b6d4);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: 20;
-}
-
-.video-archive-card:hover .video-card-glow-bar {
-  opacity: 1;
-}
-
-.empty-archive-state {
-  background: repeating-linear-gradient(
-    -45deg,
-    rgba(31, 41, 55, 0.1),
-    rgba(31, 41, 55, 0.1) 10px,
-    rgba(31, 41, 55, 0.2) 10px,
-    rgba(31, 41, 55, 0.2) 20px
-  );
-}
-
-.center-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 60vh;
-  text-align: center;
-}
-
-.loader {
-  width: 60px;
-  height: 60px;
-  border: 4px solid purple;
-  border-top: transparent;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-.loading-text {
-  color: #c084fc;
-  margin-top: 10px;
-}
-
-.error-box {
-  background: #111827;
-  padding: 30px;
-  border-radius: 10px;
-  color: white;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
 }
