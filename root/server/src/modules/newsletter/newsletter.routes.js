@@ -1,6 +1,6 @@
 import express from 'express';
 import { subscribe, getSubscribers } from './newsletter.controller.js';
-import { protect, admin } from '../../core/middleware/auth.middleware.js';
+import { protect, admin } from '../../core/middlewares/admin.middleware.js';
 
 const router = express.Router();
 
