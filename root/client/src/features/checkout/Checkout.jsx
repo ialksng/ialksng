@@ -145,11 +145,7 @@ function Checkout() {
   };
 
   if (!user || !product) {
-    return (
-      <h2 style={{ color: "white", textAlign: "center", marginTop: "5rem" }}>
-        Loading...
-      </h2>
-    );
+    return <h2 className="checkout__loading">Loading...</h2>;
   }
 
   return (
@@ -162,7 +158,7 @@ function Checkout() {
         <div className="checkout__left">
           <div className="checkout__section">
             <h3>1. Digital Delivery Address</h3>
-            <p style={{ color: "var(--text-secondary)", fontSize: "14px" }}>
+            <p className="checkout__delivery-text">
               Access will be granted immediately to your account:{" "}
               <strong>{user?.email}</strong>
             </p>
@@ -175,15 +171,7 @@ function Checkout() {
               <div className="checkout__product-info">
                 <h4>{product.title}</h4>
                 <p>{product.description}</p>
-                <p
-                  style={{
-                    marginTop: "10px",
-                    color: "var(--accent-primary)",
-                    fontWeight: "bold",
-                  }}
-                >
-                  ₹{product.price}
-                </p>
+                <p className="checkout__product-price">₹{product.price}</p>
               </div>
             </div>
           </div>

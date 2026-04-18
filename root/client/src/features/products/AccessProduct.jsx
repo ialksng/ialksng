@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { AuthContext } from "../auth/AuthContext";
 import Loader from "../../core/components/Loader";
 import axios from "../../core/utils/axios";
+import "./AccessProduct.css";
 
 function AccessProduct() {
   const { id } = useParams();
@@ -121,29 +122,29 @@ function AccessProduct() {
 
   if (denied) {
     return (
-      <div style={{ color: "white", padding: "100px 20px", textAlign: "center" }}>
-        <h2 style={{ color: "#ef4444" }}>Access Denied 🔒</h2>
-        <button onClick={() => navigate("/store")} className="btn primary">
+      <div className="access__denied">
+        <h2>Access Denied 🔒</h2>
+        <button onClick={() => navigate("/store")} className="btn-primary">
           Browse Store
         </button>
       </div>
     );
   }
 
-  if (!product) return <div style={{ color: "white" }}>Product not found</div>;
+  if (!product) return <div>Product not found</div>;
 
   return (
-    <div style={{ maxWidth: "1000px", margin: "0 auto", padding: "40px 20px" }}>
+    <div className="access__wrapper">
       
-      <button className="btn secondary" onClick={() => navigate("/my-purchases")}>
+      <button className="access__back-btn" onClick={() => navigate("/my-purchases")}>
         ⬅ Back
       </button>
 
-      <h1>{product.title}</h1>
-      <p>{product.description}</p>
+      <h1 className="access__title">{product.title}</h1>
+      <p className="access__desc">{product.description}</p>
 
       {product.fileUrl && (
-        <button onClick={(e) => handleDownload(e, product.fileUrl, product.title)}>
+        <button className="access__download-btn" onClick={(e) => handleDownload(e, product.fileUrl, product.title)}>
           {downloading ? "Downloading..." : "Download"}
         </button>
       )}
@@ -179,21 +180,21 @@ function AccessProduct() {
                 required
                 rows="3"
               />
-              <button type="submit" disabled={!commentText.trim()} className="btn primary" style={{ alignSelf: "flex-end" }}>
+              <button type="submit" disabled={!commentText.trim()} className="btn-primary" style={{ alignSelf: "flex-end" }}>
                 Post Comment
               </button>
             </form>
           ) : (
-            <div style={{ marginBottom: "30px", padding: "16px", background: "rgba(56, 189, 248, 0.1)", borderRadius: "8px", border: "1px solid rgba(56, 189, 248, 0.2)" }}>
-              <p style={{ margin: 0, color: "#e2e8f0" }}>
-                Please <span onClick={() => navigate("/login")} style={{color: '#38bdf8', cursor: 'pointer', fontWeight: 'bold'}}>log in</span> to join the conversation.
+            <div className="access__login-prompt">
+              <p style={{ margin: 0 }}>
+                Please <span className="access__login-link" onClick={() => navigate("/login")}>log in</span> to join the conversation.
               </p>
             </div>
           )}
 
           <div>
             {(!product.comments || product.comments.length === 0) ? (
-              <p style={{ color: "var(--text-muted)", textAlign: "center", padding: "20px 0", fontStyle: "italic" }}>
+              <p className="access__empty-comments">
                 Be the first to leave a comment!
               </p>
             ) : (
@@ -223,7 +224,7 @@ function AccessProduct() {
                     </div>
 
                     {editingCommentId === c._id ? (
-                      <form onSubmit={(e) => handleEditCommentSubmit(e, c._id)} style={{ marginTop: "10px" }}>
+                      <form onSubmit={(e) => handleEditCommentSubmit(e, c._id)} className="comment-edit-form">
                         <textarea 
                           value={editText}
                           onChange={(e) => setEditText(e.target.value)}
@@ -231,9 +232,9 @@ function AccessProduct() {
                           rows="2"
                           style={{ marginBottom: "10px" }}
                         />
-                        <div style={{ display: "flex", gap: "10px" }}>
-                          <button type="submit" className="btn primary" style={{ padding: "8px 16px", fontSize: "13px" }}>Save</button>
-                          <button type="button" onClick={() => setEditingCommentId(null)} className="btn secondary" style={{ padding: "8px 16px", fontSize: "13px" }}>Cancel</button>
+                        <div className="comment-edit-actions">
+                          <button type="submit" className="btn-primary" style={{ padding: "8px 16px", fontSize: "13px" }}>Save</button>
+                          <button type="button" onClick={() => setEditingCommentId(null)} className="btn-secondary" style={{ padding: "8px 16px", fontSize: "13px" }}>Cancel</button>
                         </div>
                       </form>
                     ) : (

@@ -143,19 +143,9 @@ function Cart() {
 
       {cart.length === 0 ? (
         <div className="empty-cart-msg">
-          <h2
-            style={{
-              color: "var(--text-secondary)",
-              marginBottom: "20px"
-            }}
-          >
-            Your cart is empty.
-          </h2>
+          <h2>Your cart is empty.</h2>
           <HashLink smooth to="/#shop">
-            <button
-              className="cart__checkout-btn"
-              style={{ maxWidth: "250px" }}
-            >
+            <button className="cart__checkout-btn continue-btn">
               Continue Shopping
             </button>
           </HashLink>
@@ -190,32 +180,18 @@ function Cart() {
             </div>
             <div className="summary-row">
               <span>Delivery:</span>
-              <span style={{ color: "#10b981" }}>
-                Instant Digital
-              </span>
+              <span className="delivery-status">Instant Digital</span>
             </div>
             <div className="summary-total">
               <span>Order Total:</span>
               <span>₹{total}</span>
             </div>
 
-            <button
-              className="cart__checkout-btn"
-              onClick={handleCheckout}
-            >
+            <button className="cart__checkout-btn" onClick={handleCheckout}>
               Proceed to Buy
             </button>
 
-            <p
-              style={{
-                fontSize: "12px",
-                color: "#10b981",
-                textAlign: "center",
-                marginTop: "15px"
-              }}
-            >
-              🔒 Safe and secure payments.
-            </p>
+            <p className="cart__secure-msg">🔒 Safe and secure payments.</p>
           </div>
         </div>
       )}

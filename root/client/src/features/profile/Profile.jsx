@@ -115,7 +115,7 @@ const Profile = () => {
     setTheme(newTheme);
   };
 
-  if (!user) return <div style={{padding:'100px', textAlign:'center', color:'white'}}>Please login to view profile.</div>;
+  if (!user) return <div className="profile__login-prompt">Please login to view profile.</div>;
 
   return (
     <div className="profile__wrapper">
@@ -123,19 +123,19 @@ const Profile = () => {
         <div className="profile__user-card">
           <div 
             onClick={() => fileInputRef.current.click()} 
-            style={{ cursor: "pointer", position: "relative", display: "inline-block" }}
+            className="profile__avatar-container"
             title="Click to change avatar"
           >
             {profileData.avatar ? (
-              <img src={profileData.avatar} alt="Avatar" className="profile__avatar" style={{ border: '2px solid var(--accent-primary)', objectFit: 'cover' }} />
+              <img src={profileData.avatar} alt="Avatar" className="profile__avatar" style={{ border: '2px solid var(--accent-primary)' }} />
             ) : (
               <div className="profile__avatar">{user.name?.charAt(0).toUpperCase()}</div>
             )}
-            <div style={{ position: "absolute", bottom: "10px", right: "0", background: "var(--accent-primary)", borderRadius: "50%", padding: "4px 6px", fontSize: "12px", color: "#000" }}>📷</div>
+            <div className="profile__avatar-icon">📷</div>
             <input type="file" ref={fileInputRef} hidden onChange={handleFileChange} accept="image/*" />
           </div>
-          <h3 style={{ margin: "10px 0 5px 0" }}>{user.name}</h3>
-          <p style={{ margin: 0, fontSize: "13px", color: "var(--text-muted)" }}>@{user.username || "user"}</p>
+          <h3 className="profile__username-display">{user.name}</h3>
+          <p className="profile__handle-display">@{user.username || "user"}</p>
         </div>
 
         <button className={`profile__nav-btn ${activeTab === 'personal' ? 'active' : ''}`} onClick={() => setActiveTab('personal')}>👤 Personal Info</button>
@@ -147,7 +147,7 @@ const Profile = () => {
 
       <div className="profile__content">
         {msg.text && (
-          <div style={{ background: msg.type === "success" ? "rgba(16,185,129,0.1)" : "rgba(239,68,68,0.1)", color: msg.type === "success" ? "#10b981" : "#ef4444", padding: "12px", borderRadius: "8px", marginBottom: "20px", textAlign: "center", border: `1px solid ${msg.type === "success" ? "rgba(16,185,129,0.3)" : "rgba(239,68,68,0.3)"}` }}>
+          <div className={`profile__alert ${msg.type}`}>
             {msg.text}
           </div>
         )}
@@ -156,7 +156,7 @@ const Profile = () => {
           <form onSubmit={handleUpdateProfile}>
             <h2>Personal Information</h2>
             
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+            <div className="profile__grid-2">
               <div className="profile__form-group">
                 <label>Full Name</label>
                 <input type="text" value={profileData.name} onChange={e => setProfileData({...profileData, name: e.target.value})} required />
@@ -167,8 +167,8 @@ const Profile = () => {
               </div>
             </div>
 
-            <div className="profile__form-group" style={{ background: "rgba(245, 158, 11, 0.05)", padding: "16px", borderRadius: "8px", border: "1px dashed rgba(245, 158, 11, 0.3)" }}>
-              <label style={{ color: "#f59e0b", fontWeight: "bold" }}>Username (Can only be changed ONCE)</label>
+            <div className="profile__form-group profile__username-warning">
+              <label className="profile__username-label">Username (Can only be changed ONCE)</label>
               <input 
                 type="text" 
                 value={profileData.username} 
@@ -176,12 +176,12 @@ const Profile = () => {
                 disabled={user.usernameChanged}
                 style={{ opacity: user.usernameChanged ? 0.6 : 1, cursor: user.usernameChanged ? 'not-allowed' : 'text' }}
               />
-              {user.usernameChanged && <p style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "8px" }}>You have already changed your username and cannot change it again.</p>}
+              {user.usernameChanged && <p className="profile__username-note">You have already changed your username and cannot change it again.</p>}
             </div>
 
-            <h3 style={{ marginTop: "30px", marginBottom: "15px", borderBottom: "1px solid var(--border-color)", paddingBottom: "10px" }}>Detailed Address</h3>
+            <h3 className="profile__section-title">Detailed Address</h3>
             
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+            <div className="profile__grid-2">
               <div className="profile__form-group"><label>Street / House No.</label><input type="text" value={profileData.address.street} onChange={e => setProfileData({...profileData, address: {...profileData.address, street: e.target.value}})} /></div>
               <div className="profile__form-group"><label>Landmark</label><input type="text" value={profileData.address.landmark} onChange={e => setProfileData({...profileData, address: {...profileData.address, landmark: e.target.value}})} /></div>
               <div className="profile__form-group"><label>City</label><input type="text" value={profileData.address.city} onChange={e => setProfileData({...profileData, address: {...profileData.address, city: e.target.value}})} /></div>
@@ -190,7 +190,7 @@ const Profile = () => {
               <div className="profile__form-group"><label>Country</label><input type="text" value={profileData.address.country} onChange={e => setProfileData({...profileData, address: {...profileData.address, country: e.target.value}})} /></div>
             </div>
 
-            <button type="submit" className="btn primary w-full mt-4">Save Changes</button>
+            <button type="submit" className="btn-primary" style={{width: '100%', marginTop: '1rem'}}>Save Changes</button>
           </form>
         )}
 
@@ -201,12 +201,12 @@ const Profile = () => {
         {activeTab === 'settings' && (
           <div>
             <h2>App Settings</h2>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "24px", background: "var(--bg-card)", borderRadius: "12px", border: "1px solid var(--border-color)" }}>
+            <div className="profile__settings-box">
               <div>
-                <h4 style={{ margin: "0 0 8px 0", fontSize: "16px", color: "var(--text-primary)" }}>Theme Preference</h4>
-                <p style={{ margin: 0, fontSize: "14px", color: "var(--text-muted)" }}>Current Theme: <strong style={{ textTransform: 'capitalize' }}>{theme}</strong></p>
+                <h4 className="profile__settings-title">Theme Preference</h4>
+                <p className="profile__settings-desc">Current Theme: <strong style={{ textTransform: 'capitalize' }}>{theme}</strong></p>
               </div>
-              <button onClick={toggleTheme} className="btn secondary" style={{ padding: "10px 20px" }}>
+              <button onClick={toggleTheme} className="btn-secondary" style={{ padding: "10px 20px" }}>
                 Switch to {theme === 'light' ? 'Dark' : 'Light'} Mode
               </button>
             </div>
@@ -218,17 +218,17 @@ const Profile = () => {
             <h2>Change Password</h2>
             <div className="profile__form-group"><label>Current Password</label><input type="password" value={passData.currentPassword} onChange={e => setPassData({...passData, currentPassword: e.target.value})} required /></div>
             <div className="profile__form-group"><label>New Password</label><input type="password" value={passData.newPassword} onChange={e => setPassData({...passData, newPassword: e.target.value})} required minLength="6" /></div>
-            <button type="submit" className="btn primary w-full">Update Password</button>
+            <button type="submit" className="btn-primary" style={{width: '100%'}}>Update Password</button>
           </form>
         )}
 
         {activeTab === 'feedback' && (
           <form onSubmit={handleSubmitFeedback}>
             <h2>Feedback & Bug Reports</h2>
-            <p style={{ color: "var(--text-secondary)", marginBottom: "20px" }}>Help us improve! Let us know if you found a bug or have a suggestion.</p>
+            <p className="profile__feedback-desc">Help us improve! Let us know if you found a bug or have a suggestion.</p>
             <div className="profile__form-group"><label>Subject</label><input type="text" value={feedback.subject} onChange={e => setFeedback({...feedback, subject: e.target.value})} required /></div>
             <div className="profile__form-group"><label>Message</label><textarea value={feedback.message} onChange={e => setFeedback({...feedback, message: e.target.value})} rows="5" required /></div>
-            <button type="submit" className="btn primary w-full">Submit Feedback</button>
+            <button type="submit" className="btn-primary" style={{width: '100%'}}>Submit Feedback</button>
           </form>
         )}
       </div>

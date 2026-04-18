@@ -160,19 +160,10 @@ function MyPurchases() {
       </div>
 
       {orders.length === 0 ? (
-        <div
-          style={{
-            textAlign: "center",
-            padding: "60px 20px",
-            background: "var(--bg-card)",
-            borderRadius: "16px"
-          }}
-        >
-          <h3 style={{ color: "var(--text-secondary)" }}>
-            Your library is empty
-          </h3>
+        <div className="purchases__empty">
+          <h3>Your library is empty</h3>
           <button
-            className="btn primary mt-4"
+            className="btn-primary"
             onClick={() => navigate("/store")}
           >
             Browse Store
@@ -212,26 +203,17 @@ function MyPurchases() {
 
                   <div className="purchase__meta">
                     <span>Ref:</span>
-                    <span style={{ fontFamily: "monospace" }}>
+                    <span className="purchase__ref">
                       {order.paymentId
                         ? order.paymentId.substring(0, 10) + "..."
                         : "N/A"}
                     </span>
                   </div>
 
-                  <div
-                    className="purchase__action"
-                    style={{
-                      display: "flex",
-                      gap: "10px",
-                      marginTop: "auto",
-                      paddingTop: "20px"
-                    }}
-                  >
+                  <div className="purchase__action">
                     {order.status === "Paid" && order.product?._id && (
                       <button
                         className="btn-access"
-                        style={{ flex: 2 }}
                         onClick={() =>
                           navigate(`/access/${order.product._id}`)
                         }
@@ -241,14 +223,9 @@ function MyPurchases() {
                     )}
 
                     <button
-                      className="btn-access"
-                      style={{
-                        flex: 1,
-                        background: "transparent",
-                        borderColor: "var(--border-color)",
-                        color: "var(--text-muted)"
-                      }}
+                      className="btn-invoice"
                       onClick={() => handleDownloadInvoice(order)}
+                      title="Download Invoice"
                     >
                       📄
                     </button>
@@ -259,7 +236,7 @@ function MyPurchases() {
           </div>
 
           {totalPages > 1 && (
-            <div style={{ marginTop: "40px" }}>
+            <div className="pagination-container">
               <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}
