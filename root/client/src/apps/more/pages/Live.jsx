@@ -11,12 +11,12 @@ const Live = () => {
   useEffect(() => {
     const fetchStreamData = async () => {
       try {
-        const liveRes = await axios.get('/api/more/streams/live');
+        const liveRes = await axios.get('/more/streams/live');
         setCurrentStream(liveRes.data);
 
-        const archiveRes = await axios.get('/api/more/streams/archive');
-        
-        const filteredArchives = archiveRes.data.filter(
+        const allRes = await axios.get('/more/streams/all');
+
+        const filteredArchives = allRes.data.filter(
           (video) => video._id !== liveRes.data?._id
         );
         setArchives(filteredArchives);
@@ -37,16 +37,20 @@ const Live = () => {
         <h1>{currentStream?.status === 'live' ? "🔴 Live Now" : "Stream Archive"}</h1>
         <p className="subtitle">{currentStream ? currentStream.title : "No streams available."}</p>
       </div>
-      
+
       {currentStream && (
         <div className="main-player-section">
           <VideoEmbed embedUrl={currentStream.embedUrl} title={currentStream.title} />
-          
+
           <div className="stream-metadata">
             <div className="stream-tags">
               <span className="tag platform-tag">{currentStream.platform}</span>
-              <span className="tag category-tag">{currentStream.category === 'gaming' ? '🎮 Gaming' : '💬 General'}</span>
-              {currentStream.status === 'archived' && <span className="tag archive-tag">Archived</span>}
+              <span className="tag category-tag">
+                {currentStream.category === 'gaming' ? '🎮 Gaming' : '💬 General'}
+              </span>
+              {currentStream.status === 'archived' && (
+                <span className="tag archive-tag">Archived</span>
+              )}
             </div>
             <h2>{currentStream.title}</h2>
           </div>
@@ -58,17 +62,17 @@ const Live = () => {
           <h3 className="section-title">Past Streams</h3>
           <div className="archive-grid">
             {archives.map((video) => (
-              <div 
-                key={video._id} 
+              <div
+                key={video._id}
                 className="archive-card"
                 onClick={() => setCurrentStream(video)}
               >
                 <div className="archive-thumbnail">
-                   {video.thumbnail ? (
-                     <img src={video.thumbnail} alt={video.title} />
-                   ) : (
-                     <div className="thumbnail-placeholder">▶</div>
-                   )}
+                  {video.thumbnail ? (
+                    <img src={video.thumbnail} alt={video.title} />
+                  ) : (
+                    <div className="thumbnail-placeholder">▶</div>
+                  )}
                 </div>
                 <div className="archive-info">
                   <h4>{video.title}</h4>

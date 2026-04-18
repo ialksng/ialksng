@@ -1,9 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import MoreCard from './components/MoreCard';
+import axios from '../../core/utils/axios';
 import './More.css';
 
 const More = () => {
-  const [liveData, setLiveData] = useState({ isLive: true, title: "Building the new portfolio 🚀" });
+  const [liveData, setLiveData] = useState({ isLive: false, title: "" });
+
+  useEffect(() => {
+    const checkLiveStatus = async () => {
+      try {
+        const { data } = await axios.get('/more/streams/live');
+        if (data && data.status === 'live') {
+          setLiveData({ isLive: true, title: data.title });
+        }
+      } catch (err) {
+        console.error("Failed to fetch live status");
+      }
+    };
+    checkLiveStatus();
+  }, []);
 
   return (
     <div className="more-layout container">
@@ -34,7 +49,9 @@ const More = () => {
           to="/more/gamezone"
           delayIndex={2}
           dynamicContent={
-            <p className="dynamic-text">Minecraft <span className="dot-separator">•</span> Valorant <span className="dot-separator">•</span> Chess</p>
+            <p className="dynamic-text">
+              Minecraft <span className="dot-separator">•</span> Valorant <span className="dot-separator">•</span> Chess
+            </p>
           }
           cta="Explore Games"
         />
@@ -46,8 +63,8 @@ const More = () => {
           delayIndex={3}
           dynamicContent={
             <div className="gear-preview">
-              <span className="label">Currently testing:</span>
-              <p className="dynamic-text highlight-text">Keychron Q1 Pro</p>
+              <span className="label">Curated Setup:</span>
+              <p className="dynamic-text highlight-text">Tools I use daily</p>
             </div>
           }
           cta="See Setup"
@@ -60,7 +77,7 @@ const More = () => {
           delayIndex={4}
           dynamicContent={
             <p className="dynamic-text">
-              <span className="update-dot"></span> Gym Day 12 • Staying consistent
+              <span className="update-dot"></span> Personal updates & progress
             </p>
           }
           cta="View Updates"
