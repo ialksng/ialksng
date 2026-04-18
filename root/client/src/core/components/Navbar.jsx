@@ -181,14 +181,18 @@ function Navbar() {
           )}
         </div>
 
-        <NotificationBell />
-
-        {user && user.role !== "admin" && (
-          <div className="icon__wrapper cart-icon-global" onClick={() => handleNavigate("/cart")}>
-            <FaShoppingCart />
-            {cart?.length > 0 && <span className="cart__badge">{cart.length}</span>}
+        <div className="nav__icons">
+          <div className="icon__wrapper">
+            <NotificationBell />
           </div>
-        )}
+
+          {user && user.role !== "admin" && (
+            <div className="icon__wrapper cart-icon-global" onClick={() => handleNavigate("/cart")}>
+              <FaShoppingCart />
+              {cart?.length > 0 && <span className="cart__badge">{cart.length}</span>}
+            </div>
+          )}
+        </div>
 
         {!user ? (
           <button className="nav__btn desktop-only" onClick={() => navigate("/login")}>Login</button>
@@ -267,13 +271,13 @@ function Navbar() {
           ) : (
             <>
               {user.role !== "admin" && (
-                <li onClick={() => handleNavigate("/profile")} className="mobile__action">👤 Profile</li>
+                <li onClick={() => handleNavigate("/profile")} className="mobile__action">Profile</li>
               )}
               {user.role === "admin" && (
-                <li onClick={() => handleNavigate("/admin")} className="mobile__action mobile__admin">👑 Admin Panel</li>
+                <li onClick={() => handleNavigate("/admin")} className="mobile__action mobile__admin">Admin Panel</li>
               )}
               <li onClick={handleLogoutConfirm} className="mobile__action mobile__logout">
-                🚪 Logout
+                Logout
               </li>
             </>
           )}
