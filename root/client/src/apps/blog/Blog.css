@@ -214,10 +214,6 @@
   transition: gap 0.3s ease;
 }
 
-.read-more span {
-  transition: transform 0.3s ease;
-}
-
 .read-more:hover {
   gap: 12px;
 }
@@ -233,6 +229,114 @@
 .empty-msg {
   color: var(--text-muted);
   font-size: 1.1rem;
+}
+
+.search-page__container {
+  padding: 40px 20px;
+  min-height: 80vh;
+}
+
+.search-page__title {
+  font-size: 28px;
+  color: var(--text-primary);
+  margin-bottom: 40px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 20px;
+}
+
+.search-page__title span {
+  color: var(--accent-primary);
+}
+
+.search-page__empty {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 60px 20px;
+  background: var(--bg-card);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+}
+
+.search-page__section {
+  margin-bottom: 40px;
+}
+
+.search-page__section h2 {
+  font-size: 20px;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+
+.search-page__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.search-card {
+  background: color-mix(in srgb, var(--bg-secondary) 50%, transparent);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.search-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-primary);
+  box-shadow: 0 10px 20px color-mix(in srgb, var(--text-primary) 10%, transparent);
+  background: var(--bg-card);
+}
+
+.search-card__content h3 {
+  color: var(--text-primary);
+  font-size: 16px;
+  margin: 0 0 12px 0;
+  line-height: 1.4;
+}
+
+.search-card__type {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--accent-primary) 10%, transparent);
+  color: var(--accent-primary);
+  align-self: flex-start;
+}
+
+.store-type {
+  background: color-mix(in srgb, var(--success-color) 10%, transparent);
+  color: var(--success-color);
+}
+
+.project-type {
+  background: color-mix(in srgb, var(--accent-primary) 15%, transparent);
+  color: color-mix(in srgb, var(--accent-primary) 60%, var(--text-primary));
+}
+
+.game-type {
+  background: color-mix(in srgb, #f59e0b 15%, transparent);
+  color: #f59e0b;
+}
+
+.stream-type {
+  background: color-mix(in srgb, var(--danger-color) 15%, transparent);
+  color: var(--danger-color);
+}
+
+.gear-type {
+  background: color-mix(in srgb, #8b5cf6 15%, transparent);
+  color: #8b5cf6;
+}
+
+.life-type {
+  background: color-mix(in srgb, #06b6d4 15%, transparent);
+  color: #06b6d4;
 }
 
 @media (max-width: 768px) {

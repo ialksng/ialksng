@@ -9,7 +9,10 @@ const Search = () => {
   const [searchParams] = useSearchParams();
   const query = searchParams.get("q") || "";
   
-  const [results, setResults] = useState({ blogs: [], products: [], projects: [] });
+  const [results, setResults] = useState({ 
+    blogs: [], products: [], projects: [], 
+    games: [], streams: [], recommendations: [], lifePosts: [] 
+  });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -20,7 +23,15 @@ const Search = () => {
       
       try {
         const res = await axios.get(`/search?q=${encodeURIComponent(query)}`);
-        setResults(res.data);
+        setResults({
+          blogs: res.data.blogs || [],
+          products: res.data.products || [],
+          projects: res.data.projects || [],
+          games: res.data.games || [],
+          streams: res.data.streams || [],
+          recommendations: res.data.recommendations || [],
+          lifePosts: res.data.lifePosts || []
+        });
       } catch (err) {
         console.error(err);
         toast.error("Failed to fetch search results.");
@@ -35,7 +46,11 @@ const Search = () => {
   const hasResults = 
     results.blogs.length > 0 || 
     results.products.length > 0 || 
-    results.projects.length > 0;
+    results.projects.length > 0 ||
+    results.games.length > 0 ||
+    results.streams.length > 0 ||
+    results.recommendations.length > 0 ||
+    results.lifePosts.length > 0;
 
   return (
     <div className="search-page__container container">
@@ -93,6 +108,70 @@ const Search = () => {
                     <div className="search-card__content">
                       <h3>{project.title}</h3>
                       <span className="search-card__type project-type">Project</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {results.games.length > 0 && (
+            <section className="search-page__section">
+              <h2>GameZone</h2>
+              <div className="search-page__grid">
+                {results.games.map(game => (
+                  <Link to={`/more/gamezone/${game._id}`} key={game._id} className="search-card">
+                    <div className="search-card__content">
+                      <h3>{game.name}</h3>
+                      <span className="search-card__type game-type">Game</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {results.streams.length > 0 && (
+            <section className="search-page__section">
+              <h2>Live Streams</h2>
+              <div className="search-page__grid">
+                {results.streams.map(stream => (
+                  <Link to={`/more/live`} key={stream._id} className="search-card">
+                    <div className="search-card__content">
+                      <h3>{stream.title}</h3>
+                      <span className="search-card__type stream-type">Stream</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {results.recommendations.length > 0 && (
+            <section className="search-page__section">
+              <h2>Gear & Recommendations</h2>
+              <div className="search-page__grid">
+                {results.recommendations.map(rec => (
+                  <Link to={`/more/products`} key={rec._id} className="search-card">
+                    <div className="search-card__content">
+                      <h3>{rec.name}</h3>
+                      <span className="search-card__type gear-type">Gear</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {results.lifePosts.length > 0 && (
+            <section className="search-page__section">
+              <h2>Life Updates</h2>
+              <div className="search-page__grid">
+                {results.lifePosts.map(post => (
+                  <Link to={`/more/life`} key={post._id} className="search-card">
+                    <div className="search-card__content">
+                      <h3>{post.title}</h3>
+                      <span className="search-card__type life-type">Life</span>
                     </div>
                   </Link>
                 ))}
