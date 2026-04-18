@@ -57,6 +57,15 @@ function BlogDetail() {
     }
   };
 
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast.success("Copied to clipboard", { id: "share-toast" });
+    } catch (error) {
+      toast.error("Failed to copy", { id: "share-error" });
+    }
+  };
+
   const handleComment = async (e) => {
     e.preventDefault();
     if (!commentText.trim()) return;
@@ -165,10 +174,7 @@ function BlogDetail() {
               <span>{blog.likes?.length || 0} Likes</span>
             </button>
             
-            <button className="like-btn" onClick={() => {
-              navigator.clipboard.writeText(window.location.href);
-              toast.success("Link copied to clipboard!");
-            }}>
+            <button className="like-btn" onClick={handleShare}>
               🔗 Share
             </button>
           </div>
