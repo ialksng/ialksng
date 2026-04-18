@@ -13,7 +13,6 @@ function AccessProduct() {
   const [loading, setLoading] = useState(true);
   const [denied, setDenied] = useState(false);
   const [downloading, setDownloading] = useState(false);
-
   const [commentText, setCommentText] = useState("");
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editText, setEditText] = useState("");
@@ -76,54 +75,46 @@ function AccessProduct() {
   const handleLike = async () => {
     if (!user) return alert("Please login.");
 
-    try {
-      const res = await axios.post(`/products/${id}/like`, {}, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-      });
+    const res = await axios.post(`/products/${id}/like`, {}, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+    });
 
-      setProduct((prev) => ({ ...prev, likes: res.data }));
-    } catch {}
+    setProduct((prev) => ({ ...prev, likes: res.data }));
   };
 
   const handleComment = async (e) => {
     e.preventDefault();
     if (!commentText.trim()) return;
 
-    try {
-      const res = await axios.post(`/products/${id}/comment`, { text: commentText }, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-      });
+    const res = await axios.post(`/products/${id}/comment`, { text: commentText }, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+    });
 
-      updateComments(res.data);
-      setCommentText("");
-    } catch {}
+    updateComments(res.data);
+    setCommentText("");
   };
 
   const handleDeleteComment = async (commentId) => {
     if (!window.confirm("Delete this comment?")) return;
 
-    try {
-      const res = await axios.delete(`/products/${id}/comment/${commentId}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-      });
+    const res = await axios.delete(`/products/${id}/comment/${commentId}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+    });
 
-      updateComments(res.data);
-    } catch {}
+    updateComments(res.data);
   };
 
   const handleEditCommentSubmit = async (e, commentId) => {
     e.preventDefault();
     if (!editText.trim()) return;
 
-    try {
-      const res = await axios.put(`/products/${id}/comment/${commentId}`, { text: editText }, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-      });
+    const res = await axios.put(`/products/${id}/comment/${commentId}`, { text: editText }, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+    });
 
-      updateComments(res.data);
-      setEditingCommentId(null);
-      setEditText("");
-    } catch {}
+    updateComments(res.data);
+    setEditingCommentId(null);
+    setEditText("");
   };
 
   if (loading) return <Loader />;
@@ -157,57 +148,104 @@ function AccessProduct() {
         </button>
       )}
 
-      <hr />
+      <div className="social-container">
+        <div className="social-actions-bar">
+          <button 
+            className={`like-btn ${product.likes?.includes(user?._id) ? 'liked' : ''}`} 
+            onClick={handleLike}
+          >
+            {product.likes?.includes(user?._id) ? '❤️' : '🤍'} 
+            <span>{product.likes?.length || 0} Likes</span>
+          </button>
+          
+          <button className="like-btn" onClick={() => {
+            navigator.clipboard.writeText(window.location.href);
+            alert("Link copied to clipboard!");
+          }}>
+            🔗 Share
+          </button>
+        </div>
 
-      <h2>Discussion</h2>
+        <div className="comments-wrapper">
+          <h2 className="comments-header">Discussion ({product.comments?.length || 0})</h2>
 
-      <button onClick={handleLike}>
-        {product.likes?.includes(user?._id) ? "❤️" : "🤍"} {product.likes?.length || 0}
-      </button>
-
-      <form onSubmit={handleComment}>
-        <textarea
-          value={commentText}
-          onChange={(e) => setCommentText(e.target.value)}
-        />
-        <button type="submit">Post</button>
-      </form>
-
-      {product.comments?.slice().reverse().map((c) => (
-        <div key={c._id} style={{ marginTop: "15px" }}>
-
-          <strong>
-            {c.user} {user?._id === c.userId && "(You)"}
-          </strong>
-
-          {editingCommentId === c._id ? (
-            <form onSubmit={(e) => handleEditCommentSubmit(e, c._id)}>
-              <textarea value={editText} onChange={(e) => setEditText(e.target.value)} />
-              <button>Save</button>
-              <button type="button" onClick={() => setEditingCommentId(null)}>
-                Cancel
+          {user ? (
+            <form onSubmit={handleComment} className="comment-input-area">
+              <textarea 
+                className="comment-textarea"
+                placeholder="Share your thoughts..." 
+                value={commentText}
+                onChange={(e) => setCommentText(e.target.value)}
+                required
+                rows="3"
+              />
+              <button type="submit" disabled={!commentText.trim()} className="btn primary" style={{ alignSelf: "flex-end" }}>
+                Post Comment
               </button>
             </form>
           ) : (
-            <p>{c.text}</p>
+            <div style={{ marginBottom: "30px", padding: "16px", background: "rgba(56, 189, 248, 0.1)", borderRadius: "8px", border: "1px solid rgba(56, 189, 248, 0.2)" }}>
+              <p style={{ margin: 0, color: "#e2e8f0" }}>
+                Please <span onClick={() => navigate("/login")} style={{color: '#38bdf8', cursor: 'pointer', fontWeight: 'bold'}}>log in</span> to join the conversation.
+              </p>
+            </div>
           )}
 
-          {user && user._id === c.userId && (
-            <>
-              <button onClick={() => {
-                setEditingCommentId(c._id);
-                setEditText(c.text);
-              }}>
-                Edit
-              </button>
+          <div>
+            {(!product.comments || product.comments.length === 0) ? (
+              <p style={{ color: "var(--text-muted)", textAlign: "center", padding: "20px 0", fontStyle: "italic" }}>
+                Be the first to leave a comment!
+              </p>
+            ) : (
+              product.comments.slice().reverse().map((c) => (
+                <div key={c._id} className="comment-card">
+                  <div className="comment-avatar">
+                    {c.user.charAt(0).toUpperCase()}
+                  </div>
+                  
+                  <div style={{ flex: 1 }}>
+                    <div className="comment-meta">
+                      <div>
+                        <span className="comment-author">{c.user}</span>
+                        <span className="comment-date">{new Date(c.date).toLocaleDateString()}</span>
+                      </div>
+                      
+                      {user && user._id === c.userId && (
+                        <div className="comment-actions">
+                          <button onClick={() => { setEditingCommentId(c._id); setEditText(c.text); }} className="comment-action-btn edit">
+                            Edit
+                          </button>
+                          <button onClick={() => handleDeleteComment(c._id)} className="comment-action-btn delete">
+                            Delete
+                          </button>
+                        </div>
+                      )}
+                    </div>
 
-              <button onClick={() => handleDeleteComment(c._id)}>
-                Delete
-              </button>
-            </>
-          )}
+                    {editingCommentId === c._id ? (
+                      <form onSubmit={(e) => handleEditCommentSubmit(e, c._id)} style={{ marginTop: "10px" }}>
+                        <textarea 
+                          value={editText}
+                          onChange={(e) => setEditText(e.target.value)}
+                          className="comment-textarea"
+                          rows="2"
+                          style={{ marginBottom: "10px" }}
+                        />
+                        <div style={{ display: "flex", gap: "10px" }}>
+                          <button type="submit" className="btn primary" style={{ padding: "8px 16px", fontSize: "13px" }}>Save</button>
+                          <button type="button" onClick={() => setEditingCommentId(null)} className="btn secondary" style={{ padding: "8px 16px", fontSize: "13px" }}>Cancel</button>
+                        </div>
+                      </form>
+                    ) : (
+                      <p className="comment-text">{c.text}</p>
+                    )}
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
         </div>
-      ))}
+      </div>
     </div>
   );
 }

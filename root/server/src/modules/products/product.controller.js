@@ -7,6 +7,8 @@ export const likeProduct = async (req, res) => {
 
     const userId = req.user._id.toString();
 
+    product.likes = product.likes || [];
+
     if (product.likes.includes(userId)) {
       product.likes = product.likes.filter(id => id !== userId);
     } else {

@@ -1,14 +1,12 @@
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
-
 import axios from "../../core/utils/axios";
 import Loader from "../../core/components/Loader";
 import NotionRenderer from "../lms/NotionRenderer";
 import { AuthContext } from "../../features/auth/AuthContext";
-
 import "./BlogDetail.css";
 
 function BlogDetail() {
@@ -27,8 +25,7 @@ function BlogDetail() {
       try {
         const { data } = await axios.get(`/blogs/${id}`);
         setBlogData(data.blog ? data : { blog: data, notionContent: null });
-      } catch (err) {
-        console.error(err);
+      } catch {
       } finally {
         setLoading(false);
       }
@@ -45,70 +42,48 @@ function BlogDetail() {
 
   const handleLike = async () => {
     if (!user) return alert("Login required");
-
-    try {
-      const res = await axios.post(`/blogs/${id}/like`, {}, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-      });
-
-      setBlogData((prev) => ({
-        ...prev,
-        blog: { ...prev.blog, likes: res.data }
-      }));
-    } catch (err) {
-      console.error(err);
-    }
+    const res = await axios.post(`/blogs/${id}/like`, {}, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+    });
+    setBlogData((prev) => ({
+      ...prev,
+      blog: { ...prev.blog, likes: res.data }
+    }));
   };
 
   const handleComment = async (e) => {
     e.preventDefault();
     if (!commentText.trim()) return;
 
-    try {
-      const res = await axios.post(`/blogs/${id}/comment`, { text: commentText }, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-      });
+    const res = await axios.post(`/blogs/${id}/comment`, { text: commentText }, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+    });
 
-      updateComments(res.data);
-      setCommentText("");
-    } catch (err) {
-      console.error(err);
-    }
+    updateComments(res.data);
+    setCommentText("");
   };
 
   const handleDeleteComment = async (commentId) => {
     if (!window.confirm("Delete this comment?")) return;
 
-    try {
-      const res = await axios.delete(`/blogs/${id}/comment/${commentId}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-      });
+    const res = await axios.delete(`/blogs/${id}/comment/${commentId}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+    });
 
-      updateComments(res.data);
-    } catch (err) {
-      console.error(err);
-    }
+    updateComments(res.data);
   };
 
   const handleEditCommentSubmit = async (e, commentId) => {
     e.preventDefault();
     if (!editText.trim()) return;
 
-    try {
-      const res = await axios.put(
-        `/blogs/${id}/comment/${commentId}`,
-        { text: editText },
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-        }
-      );
+    const res = await axios.put(`/blogs/${id}/comment/${commentId}`, { text: editText }, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+    });
 
-      updateComments(res.data);
-      setEditingCommentId(null);
-      setEditText("");
-    } catch (err) {
-      console.error(err);
-    }
+    updateComments(res.data);
+    setEditingCommentId(null);
+    setEditText("");
   };
 
   if (loading) return <Loader />;
@@ -136,84 +111,105 @@ function BlogDetail() {
           )}
         </div>
 
-        <div className="blogdetail__social">
-          <button onClick={handleLike}>
-            ❤️ {blog.likes?.length || 0}
-          </button>
-        </div>
-
-        <div className="comments-section">
-          <h3>Comments ({blog.comments?.length || 0})</h3>
-
-          {user ? (
-            <form onSubmit={handleComment} className="comment-form">
-              <textarea
-                placeholder="Write a comment..."
-                value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
-              />
-              <button type="submit">Post</button>
-            </form>
-          ) : (
-            <p>
-              <Link to="/login">Login</Link> to comment
-            </p>
-          )}
-
-          <div className="comments-list">
-            {blog.comments?.slice().reverse().map((c) => (
-              <div key={c._id} className="comment">
-
-                <div className="comment-avatar">
-                  {c.user?.charAt(0).toUpperCase()}
-                </div>
-
-                <div className="comment-body">
-                  <div className="comment-meta">
-                    <span className="comment-author">
-                      {c.user} {user?._id === c.userId && "(You)"}
-                    </span>
-
-                    {user && user._id === c.userId && (
-                      <div className="comment-actions">
-                        <button
-                          onClick={() => {
-                            setEditingCommentId(c._id);
-                            setEditText(c.text);
-                          }}
-                        >
-                          Edit
-                        </button>
-
-                        <button onClick={() => handleDeleteComment(c._id)}>
-                          Delete
-                        </button>
-                      </div>
-                    )}
-                  </div>
-
-                  {editingCommentId === c._id ? (
-                    <form onSubmit={(e) => handleEditCommentSubmit(e, c._id)}>
-                      <textarea
-                        value={editText}
-                        onChange={(e) => setEditText(e.target.value)}
-                      />
-                      <div>
-                        <button type="submit">Save</button>
-                        <button type="button" onClick={() => setEditingCommentId(null)}>
-                          Cancel
-                        </button>
-                      </div>
-                    </form>
-                  ) : (
-                    <p>{c.text}</p>
-                  )}
-                </div>
-              </div>
-            ))}
+        <div className="social-container">
+          <div className="social-actions-bar">
+            <button 
+              className={`like-btn ${blog.likes?.includes(user?._id) ? 'liked' : ''}`} 
+              onClick={handleLike}
+            >
+              {blog.likes?.includes(user?._id) ? '❤️' : '🤍'} 
+              <span>{blog.likes?.length || 0} Likes</span>
+            </button>
+            
+            <button className="like-btn" onClick={() => {
+              navigator.clipboard.writeText(window.location.href);
+              alert("Link copied to clipboard!");
+            }}>
+              🔗 Share
+            </button>
           </div>
 
+          <div className="comments-wrapper">
+            <h2 className="comments-header">Discussion ({blog.comments?.length || 0})</h2>
+
+            {user ? (
+              <form onSubmit={handleComment} className="comment-input-area">
+                <textarea 
+                  className="comment-textarea"
+                  placeholder="Share your thoughts..." 
+                  value={commentText}
+                  onChange={(e) => setCommentText(e.target.value)}
+                  required
+                  rows="3"
+                />
+                <button type="submit" disabled={!commentText.trim()} className="btn primary" style={{ alignSelf: "flex-end" }}>
+                  Post Comment
+                </button>
+              </form>
+            ) : (
+              <div style={{ marginBottom: "30px", padding: "16px", background: "rgba(56, 189, 248, 0.1)", borderRadius: "8px", border: "1px solid rgba(56, 189, 248, 0.2)" }}>
+                <p style={{ margin: 0, color: "#e2e8f0" }}>
+                  Please <span onClick={() => navigate("/login")} style={{color: '#38bdf8', cursor: 'pointer', fontWeight: 'bold'}}>log in</span> to join the conversation.
+                </p>
+              </div>
+            )}
+
+            <div>
+              {(!blog.comments || blog.comments.length === 0) ? (
+                <p style={{ color: "var(--text-muted)", textAlign: "center", padding: "20px 0", fontStyle: "italic" }}>
+                  Be the first to leave a comment!
+                </p>
+              ) : (
+                blog.comments.slice().reverse().map((c) => (
+                  <div key={c._id} className="comment-card">
+                    <div className="comment-avatar">
+                      {c.user.charAt(0).toUpperCase()}
+                    </div>
+                    
+                    <div style={{ flex: 1 }}>
+                      <div className="comment-meta">
+                        <div>
+                          <span className="comment-author">{c.user}</span>
+                          <span className="comment-date">{new Date(c.date).toLocaleDateString()}</span>
+                        </div>
+                        
+                        {user && user._id === c.userId && (
+                          <div className="comment-actions">
+                            <button onClick={() => { setEditingCommentId(c._id); setEditText(c.text); }} className="comment-action-btn edit">
+                              Edit
+                            </button>
+                            <button onClick={() => handleDeleteComment(c._id)} className="comment-action-btn delete">
+                              Delete
+                            </button>
+                          </div>
+                        )}
+                      </div>
+
+                      {editingCommentId === c._id ? (
+                        <form onSubmit={(e) => handleEditCommentSubmit(e, c._id)} style={{ marginTop: "10px" }}>
+                          <textarea 
+                            value={editText}
+                            onChange={(e) => setEditText(e.target.value)}
+                            className="comment-textarea"
+                            rows="2"
+                            style={{ marginBottom: "10px" }}
+                          />
+                          <div style={{ display: "flex", gap: "10px" }}>
+                            <button type="submit" className="btn primary" style={{ padding: "8px 16px", fontSize: "13px" }}>Save</button>
+                            <button type="button" onClick={() => setEditingCommentId(null)} className="btn secondary" style={{ padding: "8px 16px", fontSize: "13px" }}>Cancel</button>
+                          </div>
+                        </form>
+                      ) : (
+                        <p className="comment-text">{c.text}</p>
+                      )}
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
         </div>
+
       </div>
     </div>
   );
