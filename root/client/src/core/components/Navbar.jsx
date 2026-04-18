@@ -153,9 +153,8 @@ function Navbar() {
               {open && (
                 <div className="dropdown__menu">
                   
-                  {/* CONSOLIDATED PROFILE DROPDOWN */}
                   <div className="dropdown__item" onClick={() => handleNavigate("/profile")}>
-                    👤 Profile Dashboard
+                    👤 Profile
                   </div>
 
                   {user.role === "admin" && (
@@ -220,7 +219,6 @@ function Navbar() {
                 <li onClick={() => handleNavigate("/cart")} className="mobile__action">🛒 Cart ({cart?.length || 0})</li>
               )}
               
-              {/* CONSOLIDATED MOBILE MENU */}
               <li onClick={() => handleNavigate("/profile")} className="mobile__action">👤 Profile Dashboard</li>
 
               {user.role === "admin" && (
