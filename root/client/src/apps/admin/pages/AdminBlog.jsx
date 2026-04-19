@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { FaEdit, FaTrash, FaPlus, FaTimes } from "react-icons/fa"; 
 import toast from "react-hot-toast";
+
 import axios from "../../../core/utils/axios";
 import Loader from "../../../core/components/Loader";
 import Editor from "../../blog/Editor"; 
+
 import "./admin.css";
 
 const AdminBlog = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
+  
   const [view, setView] = useState("list"); 
   const [currentBlogId, setCurrentBlogId] = useState(null);
+  
   const [formData, setFormData] = useState({ title: "", category: "", coverImage: "", excerpt: "", content: "" });
   const [saving, setSaving] = useState(false);
 
@@ -24,6 +28,7 @@ const AdminBlog = () => {
       const res = await axios.get("/blogs?limit=50"); 
       setBlogs(res.data.blogs || []);
     } catch (err) {
+      console.error(err);
       toast.error("Failed to load blogs.");
     } finally {
       setLoading(false);
@@ -37,7 +42,7 @@ const AdminBlog = () => {
         category: blog.category || "", 
         coverImage: blog.coverImage || "", 
         excerpt: blog.excerpt || "", 
-        content: blog.content 
+        content: blog.content || ""
       });
       setCurrentBlogId(blog._id);
     } else {
@@ -50,20 +55,18 @@ const AdminBlog = () => {
   const handleDelete = (id) => {
     toast((t) => (
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', padding: '4px' }}>
-        <span style={{ fontSize: '14px', fontWeight: '500', color: 'var(--text-primary)' }}>Delete this post permanently?</span>
+        <span style={{ fontSize: '14px', fontWeight: '500', color: 'var(--text-primary)' }}>Delete this post?</span>
         <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
           <button 
             onClick={async () => {
               toast.dismiss(t.id);
-              const deletePromise = axios.delete(`/blogs/${id}`, {
-                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-              });
+              const deletePromise = axios.delete(`/blogs/${id}`);
               
               toast.promise(deletePromise, {
                 loading: 'Deleting...',
                 success: () => {
                   setBlogs(blogs.filter(b => b._id !== id));
-                  return "Post deleted successfully.";
+                  return "Post deleted.";
                 },
                 error: "Failed to delete post."
               });
@@ -90,27 +93,24 @@ const AdminBlog = () => {
     }
 
     setSaving(true);
-    const config = { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } };
-    
-    const savePromise = currentBlogId 
-      ? axios.put(`/blogs/${currentBlogId}`, formData, config)
-      : axios.post("/blogs", formData, config);
-
-    toast.promise(savePromise, {
-      loading: saving ? 'Saving Post...' : 'Publishing Post...',
-      success: () => {
-        fetchBlogs();
-        setView("list");
-        return currentBlogId ? "Post updated!" : "Post published!";
-      },
-      error: "Failed to save post."
-    }).finally(() => {
+    try {
+      if (currentBlogId) {
+        await axios.put(`/blogs/${currentBlogId}`, formData);
+      } else {
+        await axios.post("/blogs", formData);
+      }
+      toast.success(currentBlogId ? "Post updated!" : "Post published!");
+      await fetchBlogs();
+      setView("list");
+    } catch (err) {
+      toast.error("Failed to save post.");
+    } finally {
       setSaving(false);
-    });
+    }
   };
 
   if (loading && view === "list") return <div className="admin-container"><Loader /></div>;
-
+  
   return (
     <div className="admin-container">
       {view === "list" ? (
@@ -144,15 +144,8 @@ const AdminBlog = () => {
                     <tr key={blog._id}>
                       <td style={{ fontWeight: 500, color: "var(--text-primary)" }}>{blog.title}</td>
                       <td>
-                        <span style={{ 
-                          background: 'color-mix(in srgb, var(--accent-primary) 15%, transparent)', 
-                          color: 'var(--accent-primary)', 
-                          padding: '4px 10px', 
-                          borderRadius: '20px', 
-                          fontSize: '12px', 
-                          fontWeight: '600' 
-                        }}>
-                          {blog.category || "General"}
+                        <span style={{ background: 'color-mix(in srgb, var(--accent-primary) 15%, transparent)', color: 'var(--accent-primary)', padding: '4px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: '600' }}>
+                          {blog.category || "Uncategorized"}
                         </span>
                       </td>
                       <td>{new Date(blog.createdAt).toLocaleDateString()}</td>
@@ -201,7 +194,7 @@ const AdminBlog = () => {
                   <input 
                     type="text" 
                     value={formData.category} 
-                    placeholder="e.g. Technology, Lifestyle"
+                    placeholder="e.g., Technology"
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })} 
                   />
                 </div>
@@ -227,7 +220,6 @@ const AdminBlog = () => {
                 <textarea 
                   rows="2"
                   value={formData.excerpt} 
-                  placeholder="A brief summary of the post..."
                   onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })} 
                 />
               </div>

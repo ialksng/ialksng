@@ -42,6 +42,7 @@ const MenuBar = ({ editor }) => {
 
   return (
     <div className="editor__toolbar">
+
       <div className="toolbar-group">
         <button type="button" onClick={() => editor.chain().focus().undo().run()} disabled={!editor.can().undo()} title="Undo"><FaUndo /></button>
         <button type="button" onClick={() => editor.chain().focus().redo().run()} disabled={!editor.can().redo()} title="Redo"><FaRedo /></button>
@@ -112,7 +113,7 @@ function Editor({ content, setContent }) {
   const editor = useEditor({
     extensions: [
       StarterKit, 
-      Markdown.configure({ html: true }),
+      Markdown.configure({ html: true }), 
       Underline,
       TextStyle,
       Color,
@@ -125,14 +126,16 @@ function Editor({ content, setContent }) {
     ],
     content: content || "",
     onUpdate: ({ editor }) => {
-      const markdown = editor.storage.markdown.getMarkdown();
-      setContent(markdown);
+      const markdown = editor.storage.markdown?.getMarkdown();
+      if (markdown !== undefined) {
+        setContent(markdown);
+      }
     },
   });
 
   useEffect(() => {
     if (editor && content !== undefined) {
-      const currentContent = editor.storage.markdown.getMarkdown();
+      const currentContent = editor.storage.markdown?.getMarkdown();
       if (content !== currentContent) {
         editor.commands.setContent(content, false); 
       }
