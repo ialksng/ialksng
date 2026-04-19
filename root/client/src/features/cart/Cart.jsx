@@ -16,7 +16,7 @@ function Cart() {
   const API =
     import.meta.env.VITE_API_URL || "https://ialksng-backend.onrender.com";
 
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token") || sessionStorage.getItem("token");
 
   const removeItem = (id) => {
     const index = cart.findIndex((item) => item._id === id);

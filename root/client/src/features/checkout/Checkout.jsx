@@ -13,7 +13,7 @@ function Checkout() {
   const location = useLocation();
 
   const { user } = useContext(AuthContext);
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token") || sessionStorage.getItem("token");
 
   const API =
     import.meta.env.VITE_API_URL || "https://ialksng-backend.onrender.com";
