@@ -97,7 +97,7 @@ function Shop() {
 
   const handleAddToCart = (product) => {
     if (!user) {
-      navigate("/login", { state: { from: "/shop" } });
+      navigate("/login", { state: { from: "/store" } });
       return;
     }
 
