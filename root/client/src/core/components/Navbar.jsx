@@ -105,7 +105,7 @@ function Navbar() {
     setMenuOpen(false);
   };
 
-  const handleLogoutConfirm = () => {
+const handleLogoutConfirm = () => {
     setOpen(false);
     toast((t) => (
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', padding: '4px' }}>
@@ -118,7 +118,7 @@ function Navbar() {
               toast.dismiss(t.id);
               logoutUser();
               setMenuOpen(false);
-              toast.success("Logged out successfully!");
+              toast.success("Logged out successfully!", { id: "logout-success-toast" });
             }}
             style={{ padding: '8px 16px', background: 'var(--danger-color)', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '13px', flex: 1 }}
           >
@@ -132,7 +132,7 @@ function Navbar() {
           </button>
         </div>
       </div>
-    ), { duration: Infinity });
+    ), { duration: Infinity, id: 'logout-confirmation-toast' }); 
   };
 
   return (
