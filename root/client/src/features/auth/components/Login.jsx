@@ -95,6 +95,8 @@ const handleEmailSubmit = async (e) => {
           <GoogleLogin
             onSuccess={handleGoogleSuccess}
             onError={() => toast.error("Google Error")}
+            size="large"
+            theme="outline"
           />
         </div>
 
