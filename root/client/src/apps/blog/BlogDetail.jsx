@@ -8,9 +8,7 @@ import axios from "../../core/utils/axios";
 import Loader from "../../core/components/Loader";
 import NotionRenderer from "../lms/NotionRenderer";
 import { AuthContext } from "../../features/auth/AuthContext";
-
 import AdBanner from "../../core/components/AdBanner";
-
 import "./BlogDetail.css";
 
 function BlogDetail() {
@@ -157,6 +155,8 @@ function BlogDetail() {
 
   const { blog, notionContent } = blogData;
 
+  const isHtmlContent = typeof blog.content === 'string' && blog.content.trim().startsWith('<');
+
   return (
     <div className="blogdetail">
       <div className="blogdetail__container">
@@ -166,28 +166,20 @@ function BlogDetail() {
 
         <h1 className="blogdetail__title">{blog.title}</h1>
 
-        {/* --- AD BANNER: TOP OF POST --- */}
         <AdBanner dataAdSlot="4143392198" />
 
-        <div className="blogdetail__content">
+        <div className="blogdetail__content tiptap-html-content">
           {notionContent ? (
             <NotionRenderer content={notionContent} />
+          ) : isHtmlContent ? (
+            <div dangerouslySetInnerHTML={{ __html: blog.content }} />
           ) : (
-            blog.content?.includes("</") ? (
-              <div 
-                className="tiptap-html-content" 
-                dangerouslySetInnerHTML={{ __html: blog.content }} 
-              />
-            ) : (
-              <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
-                {blog.content}
-              </ReactMarkdown>
-            )
+            <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+              {blog.content || ""}
+            </ReactMarkdown>
           )}
         </div>
 
-        {/* --- AD BANNER: BOTTOM OF POST --- */}
-        {/* Note: If you create a second ad unit in AdSense, put its ID here. Otherwise, reusing the same one is fine for now. */}
         <AdBanner dataAdSlot="4143392198" />
 
         <div className="social-container">
