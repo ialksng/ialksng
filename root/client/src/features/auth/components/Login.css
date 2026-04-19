@@ -5,6 +5,7 @@
   justify-content: center;
   background: radial-gradient(circle at top, var(--bg-secondary), var(--bg-primary));
   padding: 20px;
+  box-sizing: border-box; 
 }
 
 .login__card {
@@ -18,6 +19,7 @@
   -webkit-backdrop-filter: blur(18px);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
   text-align: center;
+  box-sizing: border-box; 
 }
 
 .login__card h2 {
@@ -50,8 +52,11 @@
 .login__actions {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   font-size: 13px;
   margin: 10px 0 20px;
+  flex-wrap: wrap; 
+  gap: 10px;
 }
 
 .login__remember {
@@ -126,6 +131,8 @@
 .login__divider span {
   background: var(--bg-primary);
   padding: 0 10px;
+  position: relative;
+  z-index: 1;
 }
 
 .login__oauth {
@@ -143,4 +150,19 @@
   width: 100%;
   display: flex;
   justify-content: center;
+}
+
+@media screen and (max-width: 480px) {
+  .login__container {
+    padding: 16px;
+  }
+  
+  .login__card {
+    padding: 24px 20px;
+  }
+
+  .login__oauth {
+    transform: scale(0.95);
+    transform-origin: center center;
+  }
 }
