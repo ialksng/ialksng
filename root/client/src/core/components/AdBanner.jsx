@@ -1,16 +1,50 @@
 import React, { useEffect } from 'react';
 
-const AdBanner = () => {
+const AdBanner = ({
+  dataAdSlot,
+  dataAdFormat = "auto",
+  fullWidthResponsive = "true"
+}) => {
+
   useEffect(() => {
     try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (err) {
-      console.error("AdSense Error:", err);
+      if (window.adsbygoogle && typeof window.adsbygoogle.push === "function") {
+        window.adsbygoogle.push({});
+      }
+    } catch (error) {
+      console.error("AdSense Error:", error);
     }
-  }, []);
+  }, [dataAdSlot]);
 
   return (
-    <div style={{ margin: '20px 0', textAlign: 'center', overflow: 'hidden' }}>
+    <div 
+      className="ad-banner-wrapper" 
+      style={{ 
+        margin: '2rem auto', 
+        minHeight: '120px', 
+        width: '100%',
+        backgroundColor: 'color-mix(in srgb, var(--text-muted) 10%, transparent)',
+        border: '1px dashed color-mix(in srgb, var(--text-muted) 30%, transparent)',
+        borderRadius: '12px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        overflow: 'hidden'
+      }}
+    >
+      <span style={{ 
+        position: 'absolute', 
+        color: 'var(--text-muted)', 
+        fontSize: '0.85rem', 
+        fontWeight: '600',
+        letterSpacing: '1px',
+        textTransform: 'uppercase',
+        zIndex: 0 
+      }}>
+        Advertisement
+      </span>
+
       <ins 
         className="adsbygoogle"
         style={{ display: 'block' }}
