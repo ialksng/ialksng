@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaPlus, FaTimes, FaTrash, FaEdit, FaImage, FaVideo, FaMusic, FaHeart, FaComment } from "react-icons/fa";
+import { FaPlus, FaTimes, FaTrash, FaEdit, FaImage, FaVideo, FaMusic, FaHeart, FaComment, FaLink } from "react-icons/fa";
 import toast from "react-hot-toast";
 import axios from '../../../core/utils/axios';
 import Loader from '../../../core/components/Loader';
@@ -188,6 +188,7 @@ const AdminLife = () => {
                         {p.mediaType === 'image' && <FaImage title="Image Attached" color="var(--text-secondary)" />}
                         {p.mediaType === 'video' && <FaVideo title="Video Attached" color="var(--text-secondary)" />}
                         {p.mediaType === 'audio' && <FaMusic title="Audio Attached" color="var(--text-secondary)" />}
+                        {p.mediaType === 'link' && <FaLink title="Link Attached" color="var(--text-secondary)" />}
                         {(!p.mediaType || p.mediaType === 'none') && <span style={{color: 'var(--text-muted)', fontSize: '12px'}}>None</span>}
                       </td>
                       <td>
