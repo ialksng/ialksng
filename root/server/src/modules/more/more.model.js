@@ -44,7 +44,7 @@ const lifePostSchema = new mongoose.Schema({
     enum: ['Fitness', 'Life updates', 'Tips', 'Dev Log'],
     default: 'Life updates'
   },
-  mediaType: { type: String, enum: ['none', 'image', 'video', 'audio'], default: 'none' },
+  mediaType: { type: String, enum: ['none', 'image', 'video', 'audio', 'link'], default: 'none' },
   mediaUrl: { type: String },
   reactions: [{
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
