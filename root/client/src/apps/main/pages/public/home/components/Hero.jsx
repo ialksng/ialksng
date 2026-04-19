@@ -70,7 +70,7 @@ function Hero() {
             <b>{stats.projects}+</b> Projects
           </span>
           <span>
-            <b>{stats.clients}+</b> Clients
+            <b>3+</b> Clients
           </span>
           <span>
             <b>{stats.users}+</b> Users
