@@ -397,16 +397,25 @@ body.hide-bot #chatbot {
 
   .nav__icons {
     margin-left: auto;
-    gap: 12px;
+    gap: 16px;
   }
 
   .icon__wrapper {
-    font-size: 18px;
+    font-size: 22px;
   }
 
   .cart__badge {
     top: -6px;
     right: -8px;
-    font-size: 9px;
+    font-size: 10px;
+  }
+
+  .mobile__search-container {
+    box-sizing: border-box;
+  }
+
+  .nav__search-wrapper {
+    width: 100%; 
   }
 }
+

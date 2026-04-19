@@ -234,3 +234,39 @@ a {
 .comment-action-btn.edit:hover { color: var(--accent-hover); }
 .comment-action-btn.delete { color: var(--danger-color); }
 .comment-action-btn.delete:hover { color: #f87171; }
+
+@media screen and (max-width: 768px) {
+  .container {
+    padding: 0 16px;
+  }
+
+  .social-actions-bar {
+    flex-wrap: wrap; 
+    justify-content: center;
+  }
+
+  .comments-wrapper {
+    padding: 20px 16px; 
+  }
+
+  .comment-card {
+    flex-direction: column; 
+    gap: 12px;
+  }
+
+  .comment-avatar {
+    width: 36px; 
+    height: 36px;
+    font-size: 16px;
+  }
+
+  .comment-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .comment-date {
+    margin-left: 0; 
+  }
+}
