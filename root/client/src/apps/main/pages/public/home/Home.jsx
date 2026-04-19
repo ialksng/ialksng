@@ -9,7 +9,6 @@ import Testimonials from './components/Testimonials';
 import AboutPreview from './components/AboutPreview';
 import Updates from './components/Updates';
 import FinalCTA from './components/FinalCTA';
-import FunExtras from './components/FunExtras';
 
 import './Home.css';
 
@@ -25,7 +24,6 @@ function Home() {
       <AboutPreview />
       <Updates />
       <FinalCTA />
-      <FunExtras />
     </div>
   );
 }

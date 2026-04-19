@@ -72,19 +72,70 @@ export default function Updates() {
     setExpandedComments(prev => ({ ...prev, [postId]: !prev[postId] }));
   };
 
-  const renderMedia = (post) => {
-    if (!post.mediaUrl || post.mediaType === 'none') return null;
+  // Helper to turn raw text URLs into clickable hyperlinks
+  const formatContent = (text) => {
+    if (!text) return null;
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const parts = text.split(urlRegex);
+    
+    return parts.map((part, i) => {
+      if (part.match(urlRegex)) {
+        return (
+          <a key={i} href={part} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-primary)', textDecoration: 'underline' }}>
+            {part}
+          </a>
+        );
+      }
+      return part;
+    });
+  };
 
-    switch(post.mediaType) {
-      case 'image':
-        return <img src={post.mediaUrl} alt="Update media" className="update__media-embed" loading="lazy" />;
-      case 'video':
-        return <video src={post.mediaUrl} controls preload="metadata" className="update__media-embed" />;
-      case 'audio':
-        return <audio src={post.mediaUrl} controls className="update__audio-embed" />;
-      default:
-        return null;
+  // Smart Media Renderer (Handles Explicit URLs and Auto-Extracted Text URLs)
+  const renderMedia = (post) => {
+    let url = post.mediaUrl;
+    let type = post.mediaType;
+
+    // Magic Auto-Embed: If no media is explicitly attached, scan the text content for a link
+    if (!url || type === 'none') {
+      const urlRegex = /(https?:\/\/[^\s]+)/;
+      const match = post.content?.match(urlRegex);
+      if (match) {
+        url = match[0];
+        if (url.match(/\.(jpeg|jpg|gif|png|webp|svg)(\?.*)?$/i)) type = 'image';
+        else if (url.match(/\.(mp4|webm|ogg)(\?.*)?$/i) || url.includes('youtube.com') || url.includes('youtu.be')) type = 'video';
+        else if (url.match(/\.(mp3|wav|m4a)(\?.*)?$/i)) type = 'audio';
+      }
     }
+
+    if (!url || type === 'none') return null;
+
+    if (type === 'image') {
+      return <img src={url} alt="Update media" className="update__media-embed" loading="lazy" />;
+    }
+
+    if (type === 'video') {
+      // Intelligent YouTube Iframe Embedder
+      const ytMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})/);
+      if (ytMatch && ytMatch[1]) {
+        return (
+          <iframe 
+            style={{ width: '100%', aspectRatio: '16/9', borderRadius: '12px', border: '1px solid var(--border-color)', marginTop: '0.8rem' }}
+            src={`https://www.youtube.com/embed/${ytMatch[1]}`} 
+            frameBorder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowFullScreen
+            title="YouTube video"
+          ></iframe>
+        );
+      }
+      return <video src={url} controls preload="metadata" className="update__media-embed" />;
+    }
+
+    if (type === 'audio') {
+      return <audio src={url} controls className="update__audio-embed" />;
+    }
+
+    return null;
   };
 
   return (
@@ -114,14 +165,18 @@ export default function Updates() {
                     <div className="update__author-avatar">A</div>
                     <div className="update__author-info">
                       <h4>Alok Singh</h4>
-                      <span>{new Date(post.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute:'2-digit' })} • {post.category || 'Update'}</span>
+                      <span>{new Date(post.createdAt || post.date || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute:'2-digit' })} • {post.category || 'Update'}</span>
                     </div>
                   </div>
 
                   {/* Content Body */}
                   <div className="update__body">
                     {post.title && <h3 className="update__title">{post.title}</h3>}
-                    <p className="update__text">{post.content}</p>
+                    
+                    {/* Formatted Text Content */}
+                    <p className="update__text">{formatContent(post.content)}</p>
+                    
+                    {/* Auto-Embed Media */}
                     {renderMedia(post)}
                   </div>
 

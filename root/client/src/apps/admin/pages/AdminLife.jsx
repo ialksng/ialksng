@@ -10,7 +10,7 @@ const AdminLife = () => {
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState("list");
   const [saving, setSaving] = useState(false);
-  const [currentId, setCurrentId] = useState(null); // Tracks if we are editing
+  const [currentId, setCurrentId] = useState(null);
 
   const [formData, setFormData] = useState({ 
     title: '', 
@@ -20,7 +20,7 @@ const AdminLife = () => {
     mediaUrl: ''
   });
   
-  const [mediaFile, setMediaFile] = useState(null); // Holds the actual uploaded file
+  const [mediaFile, setMediaFile] = useState(null); 
 
   useEffect(() => { 
     fetchPosts(); 
@@ -56,13 +56,25 @@ const AdminLife = () => {
     setView("form");
   };
 
+  const handleUrlPaste = (e) => {
+    const url = e.target.value;
+    let type = formData.mediaType;
+
+    // Auto-detect media type from URL
+    if (url.match(/\.(jpeg|jpg|gif|png|webp|svg)(\?.*)?$/i)) type = 'image';
+    else if (url.match(/\.(mp4|webm|ogg)(\?.*)?$/i) || url.includes('youtube.com') || url.includes('youtu.be')) type = 'video';
+    else if (url.match(/\.(mp3|wav|m4a)(\?.*)?$/i)) type = 'audio';
+    else if (url.length > 0 && type === 'none') type = 'image'; // Fallback
+
+    setFormData({ ...formData, mediaUrl: url, mediaType: type });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.title || !formData.content) return toast.error("Title and Content are required.");
 
     setSaving(true);
 
-    // Use FormData to support actual File Uploads
     const submitData = new FormData();
     submitData.append('title', formData.title);
     submitData.append('content', formData.content);
@@ -70,7 +82,7 @@ const AdminLife = () => {
     submitData.append('mediaType', formData.mediaType);
     
     if (formData.mediaUrl) submitData.append('mediaUrl', formData.mediaUrl);
-    if (mediaFile) submitData.append('image', mediaFile); // 'image' matches backend upload.single('image')
+    if (mediaFile) submitData.append('image', mediaFile); 
 
     const requestPromise = currentId 
       ? axios.put(`/more/life/${currentId}`, submitData)
@@ -173,7 +185,6 @@ const AdminLife = () => {
                       <td>{new Date(p.createdAt || p.date || Date.now()).toLocaleDateString()}</td>
                       <td>
                         <div className="table-actions">
-                          {/* Restored the Edit Button */}
                           <button className="btn-icon edit" onClick={() => handleOpenForm(p)} title="Edit">
                             <FaEdit />
                           </button>
@@ -231,7 +242,7 @@ const AdminLife = () => {
               <div className="form-group">
                 <label>Text Content</label>
                 <textarea 
-                  placeholder="What's on your mind?" 
+                  placeholder="What's on your mind? (Paste a YouTube link here and it will auto-embed!)" 
                   value={formData.content} 
                   onChange={e => setFormData({...formData, content: e.target.value})} 
                   required 
@@ -249,7 +260,7 @@ const AdminLife = () => {
                   <label>Media Type</label>
                   <select 
                     value={formData.mediaType} 
-                    onChange={e => setFormData({...formData, mediaType: e.target.value, mediaUrl: ''})}
+                    onChange={e => setFormData({...formData, mediaType: e.target.value})}
                     style={{ width: '100%', padding: '12px', borderRadius: '8px', background: 'color-mix(in srgb, var(--bg-primary) 50%, transparent)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', outline: 'none' }}
                   >
                     <option value="none">None</option>
@@ -259,27 +270,24 @@ const AdminLife = () => {
                   </select>
                 </div>
                 
-                {formData.mediaType !== 'none' && (
-                  <div className="form-group">
-                    <label>Upload File OR Paste URL</label>
-                    <div style={{ display: 'flex', gap: '10px' }}>
-                      {/* ADDED FILE UPLOAD BACK IN */}
-                      <input 
-                        type="file" 
-                        onChange={e => setMediaFile(e.target.files[0])}
-                        style={{ flex: 1, padding: '10px', background: 'color-mix(in srgb, var(--bg-primary) 50%, transparent)', border: '1px solid var(--border-color)', borderRadius: '8px', color: 'var(--text-secondary)' }}
-                      />
-                      <input 
-                        type="url" 
-                        placeholder="Or paste external URL..."
-                        value={formData.mediaUrl} 
-                        onChange={e => setFormData({...formData, mediaUrl: e.target.value})} 
-                        style={{ flex: 1 }}
-                        disabled={!!mediaFile} // Disable URL input if a file is selected
-                      />
-                    </div>
+                <div className="form-group">
+                  <label>Upload File OR Paste URL</label>
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    <input 
+                      type="file" 
+                      onChange={e => setMediaFile(e.target.files[0])}
+                      style={{ flex: 1, padding: '10px', background: 'color-mix(in srgb, var(--bg-primary) 50%, transparent)', border: '1px solid var(--border-color)', borderRadius: '8px', color: 'var(--text-secondary)' }}
+                    />
+                    <input 
+                      type="url" 
+                      placeholder="Paste URL (Auto-detects type)..."
+                      value={formData.mediaUrl} 
+                      onChange={handleUrlPaste} 
+                      style={{ flex: 1, padding: '10px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'color-mix(in srgb, var(--bg-primary) 50%, transparent)', color: 'var(--text-primary)' }}
+                      disabled={!!mediaFile} 
+                    />
                   </div>
-                )}
+                </div>
               </div>
             </div>
 
