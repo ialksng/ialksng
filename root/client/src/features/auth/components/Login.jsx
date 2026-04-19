@@ -22,34 +22,29 @@ const Login = () => {
     }
   }, [user, navigate, from]);
 
-  const handleEmailSubmit = async (e) => {
+const handleEmailSubmit = async (e) => {
     e.preventDefault();
+    const toastId = toast.loading('Logging in...');
     
-    const loginPromise = axios.post("/auth/login", form);
-
-    toast.promise(loginPromise, {
-      loading: 'Logging in...',
-      success: (res) => {
-        loginSuccess(res.data, rememberMe);
-        navigate(from, { replace: true });
-        return 'Welcome back!';
-      },
-      error: (err) => err.response?.data?.msg || "Login failed",
-    });
+    try {
+      const res = await axios.post("/auth/login", form);
+      loginSuccess(res.data, rememberMe);
+      toast.success('Welcome back!', { id: toastId });
+    } catch (err) {
+      toast.error(err.response?.data?.msg || "Login failed", { id: toastId });
+    }
   };
 
   const handleGoogleSuccess = async (response) => {
-    const googlePromise = axios.post("/auth/google", { token: response.credential });
-
-    toast.promise(googlePromise, {
-      loading: 'Authenticating...',
-      success: (res) => {
-        loginSuccess(res.data, true);
-        navigate(from, { replace: true });
-        return 'Login successful!';
-      },
-      error: 'Google login failed',
-    });
+    const toastId = toast.loading('Authenticating...');
+    
+    try {
+      const res = await axios.post("/auth/google", { token: response.credential });
+      loginSuccess(res.data, true);
+      toast.success('Login successful!', { id: toastId });
+    } catch (err) {
+      toast.error('Google login failed', { id: toastId });
+    }
   };
 
   if (user) return null;
@@ -58,8 +53,6 @@ const Login = () => {
     <div className="login__container">
       <div className="login__card">
         <h2>Welcome Back</h2>
-
-        {/* Removed inline error message block for cleaner UI */}
 
         <form onSubmit={handleEmailSubmit}>
           <input

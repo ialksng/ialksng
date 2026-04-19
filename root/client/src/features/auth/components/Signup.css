@@ -116,13 +116,6 @@
   padding: 0 10px;
 }
 
-.signup__oauth {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-
 .signup__legal-text {
   font-size: 11px;
   color: var(--text-muted);
@@ -134,4 +127,21 @@
 .signup__legal-text a {
   color: var(--accent-primary);
   text-decoration: none;
+}
+
+.signup__oauth {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 44px; 
+  overflow: visible;
+}
+
+.signup__oauth > div {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }

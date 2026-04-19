@@ -43,7 +43,7 @@ router.delete('/games/:id', protect, adminOnly, deleteGame);
 router.post('/products', protect, adminOnly, upload.single('image'), createProduct);
 router.delete('/products/:id', protect, adminOnly, deleteProduct);
 
-router.post('/life', protect, adminOnly, createLifePost);
+router.post('/life', protect, adminOnly, upload.single('image'), createLifePost);
 router.put('/life/:id', protect, adminOnly, upload.single('image'), updateLifePost);
 router.delete('/life/:id', protect, adminOnly, deleteLifePost);
 
