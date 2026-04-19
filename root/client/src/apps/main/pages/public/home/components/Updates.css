@@ -280,3 +280,34 @@
     font-size: 0.85rem;
   }
 }
+
+.update__link-preview {
+  text-decoration: none;
+  display: block;
+  margin-top: 0.8rem;
+}
+
+.update__link-card {
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 0.8rem;
+  transition: 0.2s;
+  background: rgba(255,255,255,0.02);
+}
+
+.update__link-card:hover {
+  border-color: var(--accent-primary);
+  transform: translateY(-2px);
+}
+
+.update__link-url {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  word-break: break-all;
+}
+
+.update__link-cta {
+  margin-top: 0.4rem;
+  font-weight: 600;
+  color: var(--accent-primary);
+}

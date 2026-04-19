@@ -99,6 +99,7 @@ export default function Updates() {
         if (url.match(/\.(jpeg|jpg|gif|png|webp|svg)(\?.*)?$/i)) type = 'image';
         else if (url.match(/\.(mp4|webm|ogg)(\?.*)?$/i) || url.includes('youtube.com') || url.includes('youtu.be')) type = 'video';
         else if (url.match(/\.(mp3|wav|m4a)(\?.*)?$/i)) type = 'audio';
+        else type = 'link';
       }
     }
 
@@ -127,6 +128,22 @@ export default function Updates() {
 
     if (type === 'audio') {
       return <audio src={url} controls className="update__audio-embed" />;
+    }
+
+    if (type === 'link') {
+      return (
+        <a 
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="update__link-preview"
+        >
+          <div className="update__link-card">
+            <div className="update__link-url">{url}</div>
+            <div className="update__link-cta">Open Link ↗</div>
+          </div>
+        </a>
+      );
     }
 
     return null;
