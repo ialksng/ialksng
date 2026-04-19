@@ -35,37 +35,35 @@ export default function Updates() {
   };
 
   const handleReaction = async (postId, type) => {
-    if (!user) return toast.error("Please log in to react.");
+    if (!user) return toast.error("Please log in to react.", { id: 'react-auth-error' });
+    
     try {
-      const res = await axios.post(`/more/life/${postId}/react`, { type }, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-      });
+      const res = await axios.post(`/more/life/${postId}/react`, { type });
       setUpdates(updates.map(p => p._id === postId ? { ...p, reactions: res.data } : p));
     } catch (err) {
-      toast.error("Failed to apply reaction.");
+      toast.error("Failed to apply reaction.", { id: 'react-fail-error' });
     }
   };
 
   const handleComment = async (e, postId) => {
     e.preventDefault();
-    if (!user) return toast.error("Please log in to comment.");
+    if (!user) return toast.error("Please log in to comment.", { id: 'comment-auth-error' });
     
     const text = commentInputs[postId];
     if (!text || !text.trim()) return;
 
-    const commentPromise = axios.post(`/more/life/${postId}/comment`, { text }, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-    });
+    const toastId = toast.loading('Posting...', { id: `posting-${postId}` });
 
-    toast.promise(commentPromise, {
-      loading: 'Posting...',
-      success: (res) => {
-        setUpdates(updates.map(p => p._id === postId ? { ...p, comments: res.data } : p));
-        setCommentInputs({ ...commentInputs, [postId]: "" });
-        return "Comment posted!";
-      },
-      error: "Failed to post comment."
-    });
+    try {
+      const res = await axios.post(`/more/life/${postId}/comment`, { text });
+      
+      setUpdates(updates.map(p => p._id === postId ? { ...p, comments: res.data } : p));
+      setCommentInputs({ ...commentInputs, [postId]: "" });
+      
+      toast.success("Comment posted!", { id: toastId });
+    } catch (err) {
+      toast.error("Failed to post comment.", { id: toastId });
+    }
   };
 
   const toggleComments = (postId) => {
