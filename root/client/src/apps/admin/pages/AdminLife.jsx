@@ -57,16 +57,30 @@ const AdminLife = () => {
   };
 
   const handleUrlPaste = (e) => {
-    const url = e.target.value;
+    const url = e.target.value.trim();
     let type = formData.mediaType;
 
-    // Auto-detect media type from URL
-    if (url.match(/\.(jpeg|jpg|gif|png|webp|svg)(\?.*)?$/i)) type = 'image';
-    else if (url.match(/\.(mp4|webm|ogg)(\?.*)?$/i) || url.includes('youtube.com') || url.includes('youtu.be')) type = 'video';
-    else if (url.match(/\.(mp3|wav|m4a)(\?.*)?$/i)) type = 'audio';
-    else if (url.length > 0 && type === 'none') type = 'image'; // Fallback
+    if (/\.(jpeg|jpg|gif|png|webp|svg)(\?.*)?$/i.test(url)) {
+      type = 'image';
+    } 
+    else if (
+      /\.(mp4|webm|ogg)(\?.*)?$/i.test(url) ||
+      /(youtube\.com|youtu\.be)/i.test(url)
+    ) {
+      type = 'video';
+    } 
+    else if (/\.(mp3|wav|m4a)(\?.*)?$/i.test(url)) {
+      type = 'audio';
+    } 
+    else if (url) {
+      type = 'link';
+    }
 
-    setFormData({ ...formData, mediaUrl: url, mediaType: type });
+    setFormData({ 
+      ...formData, 
+      mediaUrl: url, 
+      mediaType: type 
+    });
   };
 
   const handleSubmit = async (e) => {
