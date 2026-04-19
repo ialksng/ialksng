@@ -13,7 +13,7 @@ export default function Testimonials() {
     },
     {
       text: "Working with him on BuddyBot was seamless. His deep understanding of LLMs and Ollama integration helped us build a cutting-edge AI interface in weeks.",
-      name: "Jessica Chen",
+      name: "Amrita Jain",
       role: "Founder, AI Solutions",
       initials: "JC"
     },

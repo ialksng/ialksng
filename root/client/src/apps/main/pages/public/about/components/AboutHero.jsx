@@ -5,6 +5,9 @@ import { FaDownload, FaEnvelope } from 'react-icons/fa';
 import "./AboutHero.css";
 
 export default function AboutHero() {
+  const driveFileId = "1RncZCzY-fZBqLkT_UtHpZw1RdW2ajCEv"; 
+  const driveDownloadLink = `https://drive.google.com/uc?export=download&id=${driveFileId}`;
+
   return (
     <section className="about__hero">
       <div className="container about__hero-container">
@@ -26,8 +29,9 @@ export default function AboutHero() {
 
           <div className="hero__cta-group">
             <a
-              href="/Alok_Singh_Resume.pdf"
-              download
+              href={driveDownloadLink}
+              target="_blank"
+              rel="noopener noreferrer"
               className="btn btn__primary btn-flex"
             >
               <FaDownload /> Download Resume

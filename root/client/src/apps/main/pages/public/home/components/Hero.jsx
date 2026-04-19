@@ -7,7 +7,7 @@ import "./Hero.css";
 function Hero() {
   const [stats, setStats] = useState({
     projects: 0,
-    clients: 0,
+    clients: 3,
     users: 0,
   });
 

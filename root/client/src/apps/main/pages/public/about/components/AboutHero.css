@@ -19,7 +19,6 @@
   gap: 20px;
 }
 
-/* ✅ FIXED: stronger specificity so styles always apply */
 .about__hero .about__title {
   font-size: 42px;
   font-weight: 700;
@@ -33,7 +32,6 @@
   -webkit-text-fill-color: transparent;
 }
 
-/* ✅ FIXED: stronger specificity */
 .about__hero .about__subtitle {
   font-size: 20px;
   color: var(--text-secondary, #cbd5e1);
