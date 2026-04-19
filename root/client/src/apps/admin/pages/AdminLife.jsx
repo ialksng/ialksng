@@ -60,20 +60,22 @@ const AdminLife = () => {
     const url = e.target.value.trim();
     let type = formData.mediaType;
 
-    if (/\.(jpeg|jpg|gif|png|webp|svg)(\?.*)?$/i.test(url)) {
-      type = 'image';
-    } 
-    else if (
-      /\.(mp4|webm|ogg)(\?.*)?$/i.test(url) ||
-      /(youtube\.com|youtu\.be)/i.test(url)
-    ) {
-      type = 'video';
-    } 
-    else if (/\.(mp3|wav|m4a)(\?.*)?$/i.test(url)) {
-      type = 'audio';
-    } 
-    else if (url) {
-      type = 'link';
+    if (formData.mediaType === "none") {
+      if (/\.(jpeg|jpg|gif|png|webp|svg)(\?.*)?$/i.test(url)) {
+        type = 'image';
+      } 
+      else if (
+        /\.(mp4|webm|ogg)(\?.*)?$/i.test(url) ||
+        /(youtube\.com|youtu\.be)/i.test(url)
+      ) {
+        type = 'video';
+      } 
+      else if (/\.(mp3|wav|m4a)(\?.*)?$/i.test(url)) {
+        type = 'audio';
+      } 
+      else if (url) {
+        type = 'link';
+      }
     }
 
     setFormData({ 
@@ -86,6 +88,8 @@ const AdminLife = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.title || !formData.content) return toast.error("Title and Content are required.");
+    if (formData.mediaType === "link" && !formData.mediaUrl) return toast.error("Please provide a valid link.");
+    if (mediaFile && formData.mediaType === "link") return toast.error("Link posts cannot include uploaded files.");
 
     setSaving(true);
 
@@ -282,20 +286,22 @@ const AdminLife = () => {
                     <option value="image">Image</option>
                     <option value="video">Video</option>
                     <option value="audio">Audio</option>
+                    <option value="link">Link</option>
                   </select>
                 </div>
                 
                 <div className="form-group">
-                  <label>Upload File OR Paste URL</label>
+                  <label>{formData.mediaType === "link" ? "Paste Link URL" : "Upload File OR Paste URL"}</label>
                   <div style={{ display: 'flex', gap: '10px' }}>
                     <input 
                       type="file" 
                       onChange={e => setMediaFile(e.target.files[0])}
-                      style={{ flex: 1, padding: '10px', background: 'color-mix(in srgb, var(--bg-primary) 50%, transparent)', border: '1px solid var(--border-color)', borderRadius: '8px', color: 'var(--text-secondary)' }}
+                      disabled={formData.mediaType === "link"}
+                      style={{ flex: 1, padding: '10px', background: 'color-mix(in srgb, var(--bg-primary) 50%, transparent)', border: '1px solid var(--border-color)', borderRadius: '8px', color: 'var(--text-secondary)', opacity: formData.mediaType === "link" ? 0.5 : 1 }}
                     />
                     <input 
                       type="url" 
-                      placeholder="Paste URL (Auto-detects type)..."
+                      placeholder="Paste URL..."
                       value={formData.mediaUrl} 
                       onChange={handleUrlPaste} 
                       style={{ flex: 1, padding: '10px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'color-mix(in srgb, var(--bg-primary) 50%, transparent)', color: 'var(--text-primary)' }}
