@@ -17,11 +17,11 @@ function Home() {
     <div className="home__wrapper">
       <Hero />
       <OfferCards />
+      <AboutPreview />
       <FeaturedProjects />
       <ServicesPreview />
       <StorePreview />
       <Testimonials />
-      <AboutPreview />
       <Updates />
       <FinalCTA />
     </div>

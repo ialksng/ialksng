@@ -238,3 +238,20 @@
     gap: 1rem;
   }
 }
+
+.tiptap-html-content iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  margin: 1.5rem 0;
+  border: none;
+}
+.tiptap-html-content img {
+  max-width: 100%;
+  border-radius: 12px;
+  margin: 1rem 0;
+}
+.tiptap-html-content p {
+  margin-bottom: 1.2rem;
+  line-height: 1.7;
+}

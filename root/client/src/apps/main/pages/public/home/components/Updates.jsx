@@ -72,7 +72,6 @@ export default function Updates() {
     setExpandedComments(prev => ({ ...prev, [postId]: !prev[postId] }));
   };
 
-  // Helper to turn raw text URLs into clickable hyperlinks
   const formatContent = (text) => {
     if (!text) return null;
     const urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -90,12 +89,10 @@ export default function Updates() {
     });
   };
 
-  // Smart Media Renderer (Handles Explicit URLs and Auto-Extracted Text URLs)
   const renderMedia = (post) => {
     let url = post.mediaUrl;
     let type = post.mediaType;
 
-    // Magic Auto-Embed: If no media is explicitly attached, scan the text content for a link
     if (!url || type === 'none') {
       const urlRegex = /(https?:\/\/[^\s]+)/;
       const match = post.content?.match(urlRegex);
@@ -114,7 +111,6 @@ export default function Updates() {
     }
 
     if (type === 'video') {
-      // Intelligent YouTube Iframe Embedder
       const ytMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})/);
       if (ytMatch && ytMatch[1]) {
         return (
@@ -142,8 +138,8 @@ export default function Updates() {
     <section className="home__section updates__section">
       <div className="container">
         <div className="section__header text-center">
-          <h2>Social Feed & Dev Log</h2>
-          <p>Real-time updates on what I am building, learning, and doing.</p>
+          <h2>Updates</h2>
+          <p>Real-time updates from everything I’m building, learning, and sharing—across all sections.</p>
         </div>
 
         {loading ? (
@@ -160,7 +156,6 @@ export default function Updates() {
 
               return (
                 <div className="update__feed-card" key={post._id}>
-                  {/* Author Header */}
                   <div className="update__author-header">
                     <div className="update__author-avatar">A</div>
                     <div className="update__author-info">
@@ -169,24 +164,17 @@ export default function Updates() {
                     </div>
                   </div>
 
-                  {/* Content Body */}
                   <div className="update__body">
                     {post.title && <h3 className="update__title">{post.title}</h3>}
-                    
-                    {/* Formatted Text Content */}
                     <p className="update__text">{formatContent(post.content)}</p>
-                    
-                    {/* Auto-Embed Media */}
                     {renderMedia(post)}
                   </div>
 
-                  {/* Stats Bar */}
                   <div className="update__stats">
                     <span>{reactions.length} Reactions</span>
                     <span>{comments.length} Comments</span>
                   </div>
 
-                  {/* Action Bar */}
                   <div className="update__actions">
                     <div className="reaction-wrapper">
                       <button 
@@ -198,7 +186,6 @@ export default function Updates() {
                         <span>{activeReactionObj ? activeReactionObj.label : 'React'}</span>
                       </button>
 
-                      {/* Hover Reaction Picker */}
                       <div className="reaction-picker">
                         {Object.entries(REACTION_TYPES).map(([type, config]) => (
                           <button 
@@ -220,7 +207,6 @@ export default function Updates() {
                     </button>
                   </div>
 
-                  {/* Comments Section */}
                   {expandedComments[post._id] && (
                     <div className="update__comments-section">
                       <form onSubmit={(e) => handleComment(e, post._id)} className="update__comment-form">

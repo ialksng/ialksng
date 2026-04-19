@@ -152,3 +152,10 @@
 .editor__content .ProseMirror p[style*="text-align: left"] {
   text-align: left;
 }
+
+.editor__content iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+}

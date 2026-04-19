@@ -167,9 +167,16 @@ function BlogDetail() {
           {notionContent ? (
             <NotionRenderer content={notionContent} />
           ) : (
-            <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
-              {blog.content}
-            </ReactMarkdown>
+            blog.content?.includes("</") ? (
+              <div 
+                className="tiptap-html-content" 
+                dangerouslySetInnerHTML={{ __html: blog.content }} 
+              />
+            ) : (
+              <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+                {blog.content}
+              </ReactMarkdown>
+            )
           )}
         </div>
 
