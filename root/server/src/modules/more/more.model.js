@@ -41,11 +41,21 @@ const lifePostSchema = new mongoose.Schema({
   content: { type: String, required: true },
   category: {
     type: String,
-    enum: ['Fitness', 'Life updates', 'Tips'],
-    required: true
+    enum: ['Fitness', 'Life updates', 'Tips', 'Dev Log'],
+    default: 'Life updates'
   },
-  image: { type: String },
-  date: { type: Date, default: Date.now }
+  mediaType: { type: String, enum: ['none', 'image', 'video', 'audio'], default: 'none' },
+  mediaUrl: { type: String },
+  reactions: [{
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    type: { type: String, enum: ['like', 'love', 'laugh', 'shock', 'sad'] }
+  }],
+  comments: [{
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    user: { type: String },
+    text: { type: String },
+    date: { type: Date, default: Date.now }
+  }]
 }, { timestamps: true });
 
 export const Game = mongoose.model('Game', gameSchema);

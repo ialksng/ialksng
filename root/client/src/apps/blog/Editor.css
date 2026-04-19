@@ -14,10 +14,16 @@
 .editor__toolbar {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  padding: 10px;
+  gap: 8px;
+  padding: 10px 14px;
   background: color-mix(in srgb, var(--bg-primary) 50%, transparent);
   border-bottom: 1px solid var(--border-color);
+  align-items: center;
+}
+
+.toolbar-group {
+  display: flex;
+  gap: 4px;
   align-items: center;
 }
 
@@ -58,6 +64,32 @@
   margin: 0 4px;
 }
 
+.color-picker-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.color-picker-label:hover {
+  background: color-mix(in srgb, var(--accent-primary) 10%, transparent);
+}
+
+.color-picker-label input[type="color"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+}
+
 .editor__content {
   padding: 20px;
   min-height: 400px;
@@ -86,6 +118,19 @@
   color: var(--accent-primary);
   text-decoration: underline;
   cursor: pointer;
+}
+
+.editor__content mark {
+  background-color: color-mix(in srgb, var(--accent-primary) 30%, transparent);
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+.editor__content hr {
+  border: none;
+  border-top: 2px solid var(--border-color);
+  margin: 2rem 0;
 }
 
 .editor__content .ProseMirror p.is-editor-empty:first-child::before {

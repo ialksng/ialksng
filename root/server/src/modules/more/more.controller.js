@@ -147,7 +147,7 @@ export const deleteProduct = async (req, res) => {
 
 export const getLifePosts = async (req, res) => {
   try {
-    const posts = await LifePost.find().sort({ date: -1 });
+    const posts = await LifePost.find().sort({ createdAt: -1 });
     res.status(200).json(posts);
   } catch (error) {
     console.error("GET LIFE POSTS ERROR:", error);
@@ -160,7 +160,8 @@ export const createLifePost = async (req, res) => {
     const postData = { ...req.body };
 
     if (req.file) {
-      postData.image = req.file.path;
+      postData.mediaUrl = req.file.path;
+      if (!postData.mediaType) postData.mediaType = 'image';
     }
 
     const post = await LifePost.create(postData);
@@ -286,5 +287,52 @@ export const toggleStreamStatus = async (req, res) => {
   } catch (error) {
     console.error("TOGGLE STREAM ERROR:", error);
     res.status(500).json({ message: error.message });
+  }
+};
+
+export const reactToLifePost = async (req, res) => {
+  try {
+    const { type } = req.body;
+    const post = await LifePost.findById(req.params.id);
+
+    if (!post) return res.status(404).json({ msg: 'Post not found' });
+
+    const existingIndex = post.reactions.findIndex(r => r.userId.toString() === req.user._id.toString());
+
+    if (existingIndex >= 0) {
+      if (post.reactions[existingIndex].type === type) {
+        post.reactions.splice(existingIndex, 1);
+      } else {
+        post.reactions[existingIndex].type = type;
+      }
+    } else {
+      post.reactions.push({ userId: req.user._id, type });
+    }
+
+    await post.save();
+    res.json(post.reactions);
+  } catch (error) {
+    console.error("REACT ERROR:", error);
+    res.status(500).json({ message: "Server error applying reaction" });
+  }
+};
+
+export const commentOnLifePost = async (req, res) => {
+  try {
+    const post = await LifePost.findById(req.params.id);
+    if (!post) return res.status(404).json({ msg: 'Post not found' });
+
+    const newComment = {
+      userId: req.user._id,
+      user: req.user.name,
+      text: req.body.text
+    };
+
+    post.comments.push(newComment);
+    await post.save();
+    res.json(post.comments);
+  } catch (error) {
+    console.error("COMMENT ERROR:", error);
+    res.status(500).json({ message: "Server error posting comment" });
   }
 };
