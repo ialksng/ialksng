@@ -186,6 +186,32 @@ export const createLifePost = async (req, res) => {
   }
 };
 
+export const updateLifePost = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateData = { ...req.body };
+
+    if (req.file) {
+      updateData.mediaUrl = req.file.path;
+    }
+
+    const updatedPost = await LifePost.findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true }
+    );
+
+    if (!updatedPost) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    res.status(200).json(updatedPost);
+  } catch (error) {
+    console.error("UPDATE LIFE POST ERROR:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 export const deleteLifePost = async (req, res) => {
   try {
     await LifePost.findByIdAndDelete(req.params.id);

@@ -10,9 +10,10 @@ import {
   deleteProduct,
   getLifePosts,
   createLifePost,
+  updateLifePost,
   deleteLifePost,
-  reactToLifePost, // NEW
-  commentOnLifePost, // NEW
+  reactToLifePost, 
+  commentOnLifePost,
   getLiveStream,
   getGameStreams,
   getAllStreams,
@@ -43,6 +44,7 @@ router.post('/products', protect, adminOnly, upload.single('image'), createProdu
 router.delete('/products/:id', protect, adminOnly, deleteProduct);
 
 router.post('/life', protect, adminOnly, createLifePost);
+router.put('/life/:id', protect, adminOnly, upload.single('image'), updateLifePost);
 router.delete('/life/:id', protect, adminOnly, deleteLifePost);
 
 router.post('/life/:id/react', protect, reactToLifePost);
