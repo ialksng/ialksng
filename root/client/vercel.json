@@ -22,7 +22,7 @@
     },
     {
       "source": "/projects/buddybot/:path*",
-      "destination": "https://buddybot-8bcc.onrender.com/:path*"
+      "destination": "https://https://buddybot-5829.onrender.com/:path*"
     },
     {
       "source": "/(.*)",
