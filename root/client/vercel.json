@@ -21,6 +21,10 @@
       "destination": "https://truthlens-3r4q.onrender.com/:path*"
     },
     {
+      "source": "/projects/buddybot/:path*",
+      "destination": "https://buddybot-8bcc.onrender.com/:path*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
