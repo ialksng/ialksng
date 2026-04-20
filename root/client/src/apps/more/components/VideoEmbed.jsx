@@ -1,46 +1,28 @@
-import React from 'react';
-import './VideoEmbed.css';
-
-const VideoEmbed = ({ embedUrl, title }) => {
-  return (
-    <div className="video-container">
-      <iframe
-        src={embedUrl}
-        title={title}
-        frameBorder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-        className="video-iframe"
-      ></iframe>
-    </div>
-  );
-};
-
-export default VideoEmbed;import React, { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import './VideoEmbed.css';
 
 const VideoEmbed = ({ embedUrl, title }) => {
   
-  // This hook automatically formats the URL based on the platform
+  // Automatically formats the URL based on the platform
   const processedUrl = useMemo(() => {
     if (!embedUrl) return '';
 
     // Twitch requires the current domain as a parent parameter to allow embedding
     const hostname = window.location.hostname; 
     
-    // 1. Check for YouTube (Matches: watch?v=, youtu.be/, embed/)
+    // 1. Check for YouTube
     const ytMatch = embedUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})/);
     if (ytMatch && ytMatch[1]) {
-      return `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1`; // Added autoplay
+      return `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1`;
     }
 
-    // 2. Check for Twitch Live Channel (e.g., twitch.tv/ninja)
+    // 2. Check for Twitch Live Channel
     const twitchChannelMatch = embedUrl.match(/twitch\.tv\/([a-zA-Z0-9_]+)$/);
     if (twitchChannelMatch && twitchChannelMatch[1] && !embedUrl.includes('/videos/')) {
       return `https://player.twitch.tv/?channel=${twitchChannelMatch[1]}&parent=${hostname}&autoplay=true`;
     }
 
-    // 3. Check for Twitch VOD/Video (e.g., twitch.tv/videos/123456789)
+    // 3. Check for Twitch VOD/Video
     const twitchVideoMatch = embedUrl.match(/twitch\.tv\/videos\/([0-9]+)/);
     if (twitchVideoMatch && twitchVideoMatch[1]) {
       return `https://player.twitch.tv/?video=${twitchVideoMatch[1]}&parent=${hostname}&autoplay=true`;
