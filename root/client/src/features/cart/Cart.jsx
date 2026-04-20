@@ -144,7 +144,7 @@ function Cart() {
       {cart.length === 0 ? (
         <div className="empty-cart-msg">
           <h2>Your cart is empty.</h2>
-          <HashLink smooth to="/#shop">
+          <HashLink smooth to="/store">
             <button className="cart__checkout-btn continue-btn">
               Continue Shopping
             </button>
