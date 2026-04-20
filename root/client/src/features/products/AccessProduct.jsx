@@ -4,7 +4,7 @@ import { AuthContext } from "../auth/AuthContext";
 import Loader from "../../core/components/Loader";
 import axios from "../../core/utils/axios";
 import toast from "react-hot-toast";
-import "./AccessProduct.css"; // Using your custom CSS
+import "./AccessProduct.css";
 
 function AccessProduct() {
   const { id } = useParams();
@@ -14,7 +14,6 @@ function AccessProduct() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [denied, setDenied] = useState(false);
-  const [downloading, setDownloading] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editText, setEditText] = useState("");
@@ -58,34 +57,6 @@ function AccessProduct() {
 
   const updateComments = (comments) => {
     setProduct((prev) => ({ ...prev, comments }));
-  };
-
-  const handleDownload = async (e, url, title) => {
-    e.preventDefault();
-    setDownloading(true);
-    const downloadToast = toast.loading("Preparing download...");
-
-    try {
-      const response = await fetch(url);
-      const blob = await response.blob();
-      const blobURL = window.URL.createObjectURL(blob);
-
-      const link = document.createElement("a");
-      link.href = blobURL;
-      link.download = `${title.replace(/\s+/g, "_")}_Download`;
-
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      window.URL.revokeObjectURL(blobURL);
-      toast.success("Download started!", { id: downloadToast });
-    } catch {
-      window.open(url, "_blank");
-      toast.success("Opened in new tab", { id: downloadToast });
-    } finally {
-      setDownloading(false);
-    }
   };
 
   const handleLike = async () => {
@@ -223,36 +194,25 @@ function AccessProduct() {
       <h1 className="access__title">{product.title}</h1>
       <p className="access__desc">{product.description}</p>
 
-      {/* THE NEW ACTION BRIDGE BUTTONS */}
-      <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", margin: "1.5rem 0" }}>
-        
-        {product.fileUrl && (
-          <button
-            className="access__download-btn"
-            onClick={(e) => handleDownload(e, product.fileUrl, product.title)}
-            style={{ margin: 0, flex: 1, minWidth: "220px" }}
-          >
-            {downloading ? "Downloading..." : "Download Resource"}
-          </button>
-        )}
-
-        {/* Gurukul Bridge Button */}
-        <button
-          className="access__download-btn"
-          onClick={() => window.location.href = "https://gurukul.ialksng.me/"}
-          style={{ 
-            margin: 0, 
-            flex: 1, 
-            minWidth: "220px", 
-            background: "#0ea5e9", // Custom blue pop for the course button
-            borderColor: "#0ea5e9", 
-            color: "#fff" 
-          }}
-        >
-          Open Course
-        </button>
-        
-      </div>
+      {/* SINGLE GURUKUL BRIDGE BUTTON */}
+      <button
+        className="access__download-btn"
+        onClick={() => window.location.href = "https://gurukul.ialksng.me"}
+        style={{ 
+          backgroundColor: "#0ea5e9", 
+          borderColor: "#0ea5e9", 
+          color: "#fff",
+          display: "block",
+          width: "100%",
+          maxWidth: "400px",
+          margin: "30px 0",
+          textAlign: "center",
+          fontWeight: "bold",
+          fontSize: "16px"
+        }}
+      >
+        🎓 Open Course
+      </button>
 
       <div className="social-container">
         <div className="social-actions-bar">
