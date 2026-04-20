@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "../../../core/utils/axios";
 import Loader from "../../../core/components/Loader";
+import toast from "react-hot-toast";
 import "./admin.css";
 
 const AdminNewsletter = () => {
@@ -17,42 +18,63 @@ const AdminNewsletter = () => {
         const res = await axios.get("/newsletter/subscribers", {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
         });
+
         setSubscribers(res.data);
       } catch (err) {
         console.error(err);
+        toast.error("Failed to load subscribers");
       } finally {
         setLoading(false);
       }
     };
+
     fetchSubscribers();
   }, []);
 
   const handleSendEmail = async (e) => {
     e.preventDefault();
-    if (!subject || !content) return alert("Please fill out subject and content.");
 
-    if (window.confirm(`Are you sure you want to send this to ${subscribers.length} subscribers?`)) {
-      setSending(true);
-      try {
-        const res = await axios.post(
-          "/newsletter/send",
-          { subject, content },
-          { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
-        );
-        
-        alert(res.data.msg || "Newsletter sent successfully!");
-        setSubject("");
-        setContent("");
-      } catch (err) {
-        console.error(err);
-        alert(err.response?.data?.msg || "Failed to send.");
-      } finally {
-        setSending(false);
-      }
+    if (!subject || !content) {
+      return toast.error("Please fill out subject and content");
+    }
+
+    if (!window.confirm(`Send to ${subscribers.length} subscribers?`)) return;
+
+    setSending(true);
+
+    const toastId = toast.loading("Sending newsletter...");
+
+    try {
+      const res = await axios.post(
+        "/newsletter/send",
+        { subject, content },
+        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+      );
+
+      toast.success(res.data.msg || "Newsletter sent!", { id: toastId });
+
+      setSubject("");
+      setContent("");
+
+    } catch (err) {
+      console.error(err);
+
+      toast.error(
+        err.response?.data?.msg || "Failed to send newsletter",
+        { id: toastId }
+      );
+    } finally {
+      setSending(false);
     }
   };
 
-  if (loading) return <div className="admin-container"><Loader /></div>;
+  if (loading) {
+    return (
+      <div className="admin-container">
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <div className="admin-container p-6">
@@ -74,7 +96,6 @@ const AdminNewsletter = () => {
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
                   placeholder="New Blog Post: How to Master React..."
-                  required
                 />
               </div>
 
@@ -85,7 +106,6 @@ const AdminNewsletter = () => {
                   onChange={(e) => setContent(e.target.value)}
                   placeholder="Write your newsletter here..."
                   rows="8"
-                  required
                 />
               </div>
 
@@ -95,7 +115,7 @@ const AdminNewsletter = () => {
                 disabled={sending || subscribers.length === 0}
               >
                 {sending
-                  ? "Sending Broadcast..."
+                  ? "Sending..."
                   : `Send to ${subscribers.length} Subscribers`}
               </button>
             </form>
