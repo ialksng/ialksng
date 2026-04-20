@@ -1,23 +1,25 @@
 .admin {
   display: flex;
-  min-height: 100vh;
+  align-items: flex-start;
+  min-height: calc(100vh - 80px);
   background-color: var(--bg-primary, #0f172a);
   font-family: 'Poppins', sans-serif;
 }
 
 .admin__main {
   flex: 1;
-  margin-left: 260px;
   padding: 40px;
   min-height: calc(100vh - 80px);
   background: var(--bg-primary, #0f172a);
+  min-width: 0; 
 }
 
 .admin-sidebar {
   width: 260px;
+  min-width: 260px; 
   top: 80px; 
   height: calc(100vh - 80px); 
-  position: fixed;
+  position: sticky; 
   left: 0;
   background: #020617;
   border-right: 1px solid var(--border-color, #334155);
