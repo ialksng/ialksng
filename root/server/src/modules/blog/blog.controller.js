@@ -7,10 +7,13 @@ export const likeBlog = async (req, res) => {
 
     const userId = req.user._id ? req.user._id.toString() : req.user.id.toString();
 
-    // Fix: Modify the Mongoose array directly
-    const index = blog.likes.indexOf(userId);
-    if (index !== -1) {
-      blog.likes.splice(index, 1); // Remove the like
+    // Safety check: ensure likes array exists for older documents
+    if (!blog.likes) {
+      blog.likes = [];
+    }
+
+    if (blog.likes.includes(userId)) {
+      blog.likes.pull(userId); // Use Mongoose .pull() to remove the like safely
     } else {
       blog.likes.push(userId); // Add the like
     }
@@ -36,7 +39,11 @@ export const commentBlog = async (req, res) => {
     const userId = req.user._id ? req.user._id.toString() : req.user.id.toString();
     const userName = req.user.name || req.user.username || "User";
 
-    // Fix: Push directly to the Mongoose subdocument array
+    // Safety check: ensure comments array exists for older documents
+    if (!blog.comments) {
+      blog.comments = [];
+    }
+
     blog.comments.push({
       user: userName,
       userId: userId,
@@ -59,7 +66,11 @@ export const deleteBlogComment = async (req, res) => {
 
     const userId = req.user._id ? req.user._id.toString() : req.user.id.toString();
     
-    // Fix: Use Mongoose's .id() method to find the subdocument
+    // Safety check
+    if (!blog.comments) {
+      blog.comments = [];
+    }
+
     const comment = blog.comments.id(req.params.commentId);
 
     if (!comment) {
@@ -70,7 +81,6 @@ export const deleteBlogComment = async (req, res) => {
       return res.status(401).json({ msg: "Not authorized to delete this comment" });
     }
 
-    // Fix: Use Mongoose's .pull() method to remove the subdocument safely
     blog.comments.pull(req.params.commentId);
 
     await blog.save();
@@ -91,7 +101,11 @@ export const editBlogComment = async (req, res) => {
 
     const userId = req.user._id ? req.user._id.toString() : req.user.id.toString();
     
-    // Fix: Use Mongoose's .id() method to find the subdocument
+    // Safety check
+    if (!blog.comments) {
+      blog.comments = [];
+    }
+
     const comment = blog.comments.id(req.params.commentId);
 
     if (!comment) {
@@ -102,7 +116,6 @@ export const editBlogComment = async (req, res) => {
       return res.status(401).json({ msg: "Not authorized to edit this comment" });
     }
     
-    // Fix: Update the text directly on the found subdocument
     comment.text = text.trim();
 
     await blog.save();
