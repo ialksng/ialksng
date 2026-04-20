@@ -45,11 +45,13 @@ export const getProducts = async (req, res) => {
 
 export const getProduct = async (req, res) => {
   try {
-    if (!isValidObjectId(req.params.id)) {
+    const { id } = req.params;
+
+    if (!isValidObjectId(id)) {
       return res.status(400).json({ error: "Invalid Product ID" });
     }
 
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(id);
 
     if (!product) {
       return res.status(404).json({ error: "Product not found" });
@@ -63,27 +65,25 @@ export const getProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
   try {
-    if (!isValidObjectId(req.params.id)) {
+    const { id } = req.params;
+
+    if (!isValidObjectId(id)) {
       return res.status(400).json({ error: "Invalid Product ID" });
     }
 
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(id);
 
     if (!product) {
       return res.status(404).json({ error: "Product not found" });
     }
 
-    const fields = ['title', 'description', 'price', 'category', 'image', 'previewImage', 'previewUrl', 'fileUrl', 'notionUrl'];
-
-    fields.forEach(field => {
-      if (req.body[field] !== undefined) {
-        product[field] = req.body[field];
-      }
+    Object.keys(req.body).forEach((key) => {
+      product[key] = req.body[key];
     });
 
-    const updatedProduct = await product.save();
+    await product.save();
 
-    res.json({ success: true, product: updatedProduct });
+    res.json({ success: true, product });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -91,11 +91,13 @@ export const updateProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
   try {
-    if (!isValidObjectId(req.params.id)) {
+    const { id } = req.params;
+
+    if (!isValidObjectId(id)) {
       return res.status(400).json({ error: "Invalid Product ID" });
     }
 
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(id);
 
     if (!product) {
       return res.status(404).json({ error: "Product not found" });
@@ -120,7 +122,7 @@ export const likeProduct = async (req, res) => {
     const userId = req.user._id.toString();
 
     if (product.likes.includes(userId)) {
-      product.likes = product.likes.filter(id => id !== userId);
+      product.likes = product.likes.filter((id) => id !== userId);
     } else {
       product.likes.push(userId);
     }
@@ -195,12 +197,16 @@ export const deleteComment = async (req, res) => {
     if (!product) return res.status(404).json({ msg: "Product not found" });
 
     const index = product.comments.findIndex(
-      c => c._id.toString() === req.params.commentId
+      (c) => c._id.toString() === req.params.commentId
     );
 
     if (index === -1) return res.status(404).json({ msg: "Comment not found" });
 
-    if (!req.user || (product.comments[index].userId !== req.user._id.toString() && req.user.role !== "admin")) {
+    if (
+      !req.user ||
+      (product.comments[index].userId !== req.user._id.toString() &&
+        req.user.role !== "admin")
+    ) {
       return res.status(401).json({ msg: "Not authorized" });
     }
 
@@ -218,11 +224,17 @@ export const getSecuredProductContent = async (req, res) => {
     const productId = req.params.id;
 
     if (!isValidObjectId(productId)) {
-      return res.status(400).json({ success: false, message: "Invalid Product ID" });
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Product ID"
+      });
     }
 
     if (!req.user) {
-      return res.status(401).json({ success: false, message: "Login required" });
+      return res.status(401).json({
+        success: false,
+        message: "Login required"
+      });
     }
 
     const userId = req.user._id || req.user.id;
@@ -231,7 +243,10 @@ export const getSecuredProductContent = async (req, res) => {
     const product = await Product.findById(productId);
 
     if (!product) {
-      return res.status(404).json({ success: false, message: "Product not found" });
+      return res.status(404).json({
+        success: false,
+        message: "Product not found"
+      });
     }
 
     if (product.price === 0) {
@@ -248,13 +263,19 @@ export const getSecuredProductContent = async (req, res) => {
     });
 
     if (!order && !isAdmin) {
-      return res.status(403).json({ success: false, message: "Access Denied" });
+      return res.status(403).json({
+        success: false,
+        message: "Access Denied"
+      });
     }
 
     res.json({ success: true, data: product });
 
   } catch (error) {
     console.error("SECURE ERROR:", error);
-    res.status(500).json({ success: false, message: error.message });
+    res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    });
   }
 };

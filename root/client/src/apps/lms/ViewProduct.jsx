@@ -195,7 +195,7 @@ function ViewProduct() {
               {hasAccess ? (
                 <button 
                   className="vp-btn-course"
-                  onClick={() => window.location.href = "https://gurukul.ialksng.me"}
+                  onClick={() => window.location.href = `https://gurukul.ialksng.me/learn/${product._id}`}
                 >
                   View
                 </button>

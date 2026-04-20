@@ -149,7 +149,7 @@ function Checkout() {
               toast.success("Payment successful 🎉 Redirecting...");
               
               // Local redirect restored here
-              navigate(`/access/${product._id}`);
+              navigate(`/product/${product._id}`);
               
             } else {
               toast.error("Order saving failed ❌");
