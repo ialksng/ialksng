@@ -197,7 +197,7 @@ function ViewProduct() {
                   className="vp-btn-course"
                   onClick={() => window.location.href = "https://gurukul.ialksng.me"}
                 >
-                  <FaGraduationCap /> View
+                  View
                 </button>
               ) : (
                 <button 
