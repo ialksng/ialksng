@@ -148,16 +148,9 @@ function Checkout() {
             if (orderData.success) {
               toast.success("Payment successful 🎉 Redirecting...");
               
-              // SECURE REDIRECT LOGIC FOR GURUKUL
-              const category = (product.category || "").toLowerCase();
-              if (category === "course" || category === "roadmap" || category === "notes") {
-                  const redirectUrl = `https://gurukul.ialksng.me/auth-bridge?token=${token}&productId=${product._id}`;
-                  console.log("Redirecting to Gurukul:", redirectUrl);
-                  window.location.href = redirectUrl;
-              } else {
-                  // Fallback for physical items or other apps
-                  navigate(`/access/${product._id}`);
-              }
+              // Local redirect restored here
+              navigate(`/access/${product._id}`);
+              
             } else {
               toast.error("Order saving failed ❌");
             }
