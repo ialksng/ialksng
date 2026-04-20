@@ -262,3 +262,20 @@
     grid-column: span 1;
   }
 }
+
+.btn-end {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border-right: 1px solid #334155;
+  transition: all 0.2s ease;
+}
+
+.btn-end:hover {
+  background: #ef4444;
+  color: #fff;
+}

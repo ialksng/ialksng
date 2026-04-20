@@ -36,13 +36,12 @@ const AdminStreams = () => {
       return `https://player.twitch.tv/?channel=${twitchMatch[1]}&parent=${window.location.hostname}`;
     }
 
-    return url; // Return original if no specific match
+    return url; 
   };
 
   const fetchData = async () => {
     try {
       setLoading(true);
-      // Fetching from /all to match your backend route correctly
       const [streamsRes, gamesRes] = await Promise.all([
         axios.get('/more/streams/all'),
         axios.get('/more/games')
@@ -66,6 +65,19 @@ const AdminStreams = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  // NEW: Function to stop a live stream and move it to archives
+  const handleEndStream = async (id) => {
+    const toastId = toast.loading("Ending stream and archiving...");
+    try {
+      // Calls the toggleStatus route on the backend
+      await axios.put(`/more/streams/${id}/status`, { status: 'archived' });
+      toast.success("Stream ended and moved to archives! 📁", { id: toastId });
+      fetchData(); 
+    } catch (error) {
+      toast.error("Failed to end stream.", { id: toastId });
+    }
   };
 
   const handleEdit = (stream) => {
@@ -101,8 +113,6 @@ const AdminStreams = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Automatically generate the embed link from the source URL if embedUrl is empty
     const finalEmbedUrl = formData.embedUrl || getEmbedUrl(formData.url);
     
     let submitData = { 
@@ -110,7 +120,6 @@ const AdminStreams = () => {
       embedUrl: finalEmbedUrl 
     };
 
-    // BUG FIX: Prevent Mongoose CastError by removing empty gameId string
     if (!submitData.gameId) {
       delete submitData.gameId;
     }
@@ -129,7 +138,6 @@ const AdminStreams = () => {
       cancelEdit();
       fetchData();
     } catch (error) {
-      console.error("Error saving stream:", error);
       toast.error(error.response?.data?.message || "Failed to save stream.", { id: toastId });
     }
   };
@@ -150,14 +158,7 @@ const AdminStreams = () => {
           <div className="form-grid">
             <div className="form-group full-width">
               <label>Stream Title *</label>
-              <input 
-                type="text" 
-                name="title" 
-                value={formData.title} 
-                onChange={handleInputChange} 
-                required 
-                placeholder="e.g., Building a Saas App Live" 
-              />
+              <input type="text" name="title" value={formData.title} onChange={handleInputChange} required placeholder="e.g., Grinding Ranked Valorant" />
             </div>
             
             <div className="form-group">
@@ -181,26 +182,13 @@ const AdminStreams = () => {
             </div>
 
             <div className="form-group">
-              <label>Source URL (Paste YouTube/Twitch link here) *</label>
-              <input 
-                type="url" 
-                name="url" 
-                value={formData.url} 
-                onChange={handleInputChange} 
-                required 
-                placeholder="e.g. https://youtube.com/watch?v=..." 
-              />
+              <label>Source URL *</label>
+              <input type="url" name="url" value={formData.url} onChange={handleInputChange} required placeholder="e.g. https://youtube.com/watch?v=..." />
             </div>
 
             <div className="form-group">
               <label>Embed URL (Optional)</label>
-              <input 
-                type="url" 
-                name="embedUrl" 
-                value={formData.embedUrl} 
-                onChange={handleInputChange} 
-                placeholder="Leave blank to auto-generate from URL" 
-              />
+              <input type="url" name="embedUrl" value={formData.embedUrl} onChange={handleInputChange} placeholder="Leave blank to auto-generate from URL" />
             </div>
 
             <div className="form-group">
@@ -231,8 +219,6 @@ const AdminStreams = () => {
         
         {loading ? (
           <div className="admin-loading">Loading streams...</div>
-        ) : streams.length === 0 ? (
-          <div className="admin-empty">No streams found. Add one above.</div>
         ) : (
           <div className="stream-grid">
             {streams.map(stream => (
@@ -243,7 +229,6 @@ const AdminStreams = () => {
 
                 <div className="stream-card-content">
                   <h3 className="stream-card-title">{stream.title}</h3>
-                  
                   <div className="stream-tags">
                     <span className="tag platform-tag">{stream.platform}</span>
                     {stream.gameId && (
@@ -255,6 +240,10 @@ const AdminStreams = () => {
                 </div>
 
                 <div className="stream-card-actions">
+                  {/* END STREAM BUTTON: Only visible if the stream is currently LIVE */}
+                  {stream.status === 'live' && (
+                    <button onClick={() => handleEndStream(stream._id)} className="btn-end">End Stream</button>
+                  )}
                   <button onClick={() => handleEdit(stream)} className="btn-edit">Edit</button>
                   <button onClick={() => handleDelete(stream._id)} className="btn-delete">Delete</button>
                 </div>
