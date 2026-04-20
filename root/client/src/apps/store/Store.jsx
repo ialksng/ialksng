@@ -116,7 +116,7 @@ function Shop() {
   };
 
   const handleAccess = () => {
-    window.location.href = "https://gurukul.ialksng.com";
+    window.location.href = "https://gurukul.ialksng.me/";
   };
 
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
