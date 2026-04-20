@@ -1,5 +1,5 @@
 import Product from "./product.model.js";
-import Order from "../orders/order.model.js"; // Needed for checking ownership
+import Order from "../orders/order.model.js"; 
 
 export const addProduct = async (req, res) => {
   try {
@@ -161,29 +161,40 @@ export const deleteComment = async (req, res) => {
   }
 };
 
-// NEW SECURE ROUTE FOR LMS
+// NEW SECURE ROUTE FOR LMS - WITH FOOLPROOF MATCHING
 export const getSecuredProductContent = async (req, res) => {
   try {
       const productId = req.params.id;
+      
+      // Grab both string and object versions of the user ID just in case
+      const userIdString = req.user.id || req.user._id?.toString();
+      const userIdObject = req.user._id;
 
-      // 1. Check if user purchased this product (matches order.controller.js logic exactly)
+      // 1. Broad Search: Check for ANY successful order matching this user and product
       const hasPurchased = await Order.findOne({
-          user: req.user.id,
+          $or: [{ user: userIdString }, { user: userIdObject }],
           product: productId,
-          isPaid: true
+          $or: [
+              { status: "Paid" }, 
+              { status: "Completed" }, 
+              { status: "Success" },
+              { isPaid: true }
+          ] 
       });
 
-      // 2. Deny if not purchased and not admin
-      if (!hasPurchased && req.user.role !== 'admin') {
+      // 2. Admin Check
+      const isAdmin = req.user.role === 'admin';
+
+      if (!hasPurchased && !isAdmin) {
           return res.status(403).json({ 
               success: false, 
               message: "Access Denied. Purchase required." 
           });
       }
 
-      // 3. Fetch product WITH secure fields (Add any hidden fields your LMS needs here)
+      // 3. Fetch product WITH secure fields
       const product = await Product.findById(productId);
-          // .select('+notionUrl +videoLinks'); // Uncomment if you use hidden fields in Mongoose schema
+          // .select('+notionUrl +fileUrl'); // Uncomment if you hid these in your schema
 
       if (!product) {
           return res.status(404).json({ success: false, message: "Product not found" });
@@ -192,7 +203,7 @@ export const getSecuredProductContent = async (req, res) => {
       res.status(200).json({ success: true, data: product });
 
   } catch (error) {
-      console.error("Secure Content Error:", error);
+      console.error("[LMS Auth] Server Error:", error);
       res.status(500).json({ success: false, message: error.message });
   }
 };
