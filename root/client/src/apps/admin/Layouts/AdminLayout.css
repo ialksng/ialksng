@@ -12,6 +12,7 @@
   min-height: calc(100vh - 80px);
   background: var(--bg-primary, #0f172a);
   min-width: 0; 
+  align-self: stretch;
 }
 
 .admin-sidebar {
