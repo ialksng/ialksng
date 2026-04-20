@@ -141,22 +141,22 @@ const More = () => {
           </div>
         </Link>
 
-        {/* CARD 4: Products & Gear */}
+        {/* CARD 4: Ecosystem (Previously Gear) */}
         <Link to="/more/products" className="bento-card card-gear animated-fade-in delay-4">
           <div className="card-glow"></div>
           <div className="bento-content">
             <div className="bento-header">
-              <div className="icon-wrapper gear-icon"><FaLaptopCode /></div>
-              <span className="tiny-label">Workspace</span>
+              <div className="icon-wrapper gear-icon"><FaCode /></div>
+              <span className="tiny-label">Platforms</span>
             </div>
             
             <div className="bento-body">
-              <h2>My Setup</h2>
-              <p>The tech, tools, and hardware I use to build every day.</p>
+              <h2>My Ecosystem</h2>
+              <p>Explore the applications, platforms, and digital experiences I've built from scratch.</p>
             </div>
             
             <div className="bento-footer">
-              <span className="action-text">See Inventory <FaArrowRight /></span>
+              <span className="action-text">Launch Apps <FaArrowRight /></span>
             </div>
           </div>
         </Link>
