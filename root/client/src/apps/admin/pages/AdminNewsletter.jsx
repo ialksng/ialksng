@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "../../../core/utils/axios";
 import Loader from "../../../core/components/Loader";
 import toast from "react-hot-toast";
-import Editor from "../../../apps/blog/Editor";
+import Editor from "../../../core/components/Editor";
 import "./admin.css";
 
 const AdminNewsletter = () => {

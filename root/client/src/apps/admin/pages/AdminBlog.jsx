@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 
 import axios from "../../../core/utils/axios";
 import Loader from "../../../core/components/Loader";
-import Editor from "../../blog/Editor"; 
+import Editor from "../../../core/components/Editor"; 
 
 import "./admin.css";
 
