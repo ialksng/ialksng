@@ -13,8 +13,13 @@ export default function StorePreview() {
     const fetchProducts = async () => {
       try {
         const { data } = await axios.get('/products');
-        // Show the top 3 most recent products
-        setProducts(data.slice(0, 3));
+        
+        // Fix: Access the 'products' array from inside the returned data object
+        if (data.success && data.products) {
+          setProducts(data.products.slice(0, 3));
+        } else {
+          setProducts([]);
+        }
       } catch (err) {
         console.error("Failed to fetch products", err);
       } finally {
@@ -46,22 +51,26 @@ export default function StorePreview() {
         ) : (
           <div className="store__preview-grid">
             {products.map((product) => (
-              <div className="store__product-card" key={product._id || product.id}>
-                {product.imageUrl || product.thumbnail ? (
-                  <img src={product.imageUrl || product.thumbnail} alt={product.title || product.name} style={{width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px 8px 0 0'}} />
+              <div className="store__product-card" key={product._id}>
+                
+                {/* Fix: use product.image as defined in your Mongoose model */}
+                {product.image ? (
+                  <img 
+                    src={product.image} 
+                    alt={product.title} 
+                    style={{width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px 8px 0 0'}} 
+                  />
                 ) : (
                   <div className="product__image-dummy">
-                    <span>[ {product.title || product.name} ]</span>
+                    <span>[ {product.title} ]</span>
                   </div>
                 )}
                 
                 <div className="product__info">
-                  <span className="product__tag">{product.tag || product.category || 'Digital'}</span>
-                  {/* Handle if your DB uses "name" instead of "title" */}
-                  <h3 className="product__title">{product.title || product.name}</h3>
+                  <span className="product__tag">{product.category || 'Digital'}</span>
+                  <h3 className="product__title">{product.title}</h3>
                   <div className="product__price">
-                    {/* Handle free vs paid formatting dynamically based on your backend logic */}
-                    {product.price === 0 || product.price === "0" ? "Free" : `$${product.price}`}
+                    {product.price === 0 ? "Free" : `$${product.price}`}
                   </div>
                 </div>
               </div>
