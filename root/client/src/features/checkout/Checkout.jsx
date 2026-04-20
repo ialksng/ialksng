@@ -8,6 +8,7 @@ import "./Checkout.css";
 function Checkout() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
+  const [isCheckingAccess, setIsCheckingAccess] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -16,6 +17,7 @@ function Checkout() {
 
   const API = import.meta.env.VITE_API_URL || "https://ialksng-backend.onrender.com";
 
+  // 1. Check Auth and Redirect to Login if needed
   useEffect(() => {
     if (!user || !token) {
       navigate("/login", {
@@ -24,21 +26,46 @@ function Checkout() {
     }
   }, [user, token, navigate, id]);
 
+  // 2. Check Ownership OR Fetch Product for Purchase
   useEffect(() => {
-    if (!user) return;
+    if (!user || !token) return;
 
-    const fetchProduct = async () => {
+    const verifyAndFetch = async () => {
       try {
-        const res = await fetch(`${API}/api/products/${id}`);
-        const data = await res.json();
-        setProduct(data.product || null);
+        // A. Admin Bypass
+        if (user.role === "admin") {
+          toast.success("Admin access granted.");
+          navigate(`/access/${id}`, { replace: true });
+          return;
+        }
+
+        // B. Check if user already purchased the item
+        const accessRes = await fetch(`${API}/api/orders/check/${id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const accessData = await accessRes.json();
+
+        if (accessData.msg === "Access granted") {
+          toast.success("You already have access to this course!");
+          navigate(`/access/${id}`, { replace: true });
+          return;
+        }
+
+        // C. If not owned, fetch product details to display the Checkout page
+        const productRes = await fetch(`${API}/api/products/${id}`);
+        const productData = await productRes.json();
+        setProduct(productData.product || null);
+
       } catch (err) {
         setProduct(null);
+        toast.error("Failed to load product information.");
+      } finally {
+        setIsCheckingAccess(false);
       }
     };
 
-    fetchProduct();
-  }, [id, API, user]);
+    verifyAndFetch();
+  }, [id, API, user, token, navigate]);
 
   const handlePayment = async () => {
     try {
@@ -148,7 +175,7 @@ function Checkout() {
     }
   };
 
-  if (!user || !product) {
+  if (!user || isCheckingAccess || !product) {
     return (
       <div className="checkout-loader">
         <h2 className="loading-text">Loading secure checkout...</h2>
