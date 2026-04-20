@@ -1,16 +1,20 @@
 import React, { useEffect } from 'react';
 
 const AdBanner = ({
-  dataAdSlot,
+  dataAdSlot = "4143392198", // Added default fallback
   dataAdFormat = "auto",
   fullWidthResponsive = "true"
 }) => {
 
   useEffect(() => {
     try {
-      if (window.adsbygoogle && typeof window.adsbygoogle.push === "function") {
-        window.adsbygoogle.push({});
-      }
+      // Small timeout helps ensure the ins tag is mounted before pushing
+      const timeout = setTimeout(() => {
+        if (window.adsbygoogle && typeof window.adsbygoogle.push === "function") {
+          window.adsbygoogle.push({});
+        }
+      }, 100);
+      return () => clearTimeout(timeout);
     } catch (error) {
       console.error("AdSense Error:", error);
     }
@@ -45,14 +49,14 @@ const AdBanner = ({
         Advertisement
       </span>
 
-      <ins 
-        className="adsbygoogle"
-        style={{ display: 'block' }}
-        data-ad-client="ca-pub-4303485576958542"
-        data-ad-slot="4143392198"
-        data-ad-format="auto"
-        data-full-width-responsive="true"
-      ></ins>
+        <ins 
+          className="adsbygoogle"
+          style={{ display: 'block' }}
+          data-ad-client="ca-pub-4303485576958542"
+          data-ad-slot="4143392198"
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+        ></ins>
     </div>
   );
 };
