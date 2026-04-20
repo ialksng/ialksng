@@ -7,16 +7,13 @@ export const likeBlog = async (req, res) => {
 
     const userId = req.user._id ? req.user._id.toString() : req.user.id.toString();
 
-    let likes = Array.isArray(blog.likes) ? [...blog.likes] : [];
-
-    if (likes.includes(userId)) {
-      likes = likes.filter(id => id !== userId);
+    // Fix: Modify the Mongoose array directly
+    const index = blog.likes.indexOf(userId);
+    if (index !== -1) {
+      blog.likes.splice(index, 1); // Remove the like
     } else {
-      likes.push(userId); 
+      blog.likes.push(userId); // Add the like
     }
-
-    blog.likes = likes;
-    blog.markModified('likes');
 
     await blog.save();
     res.json(blog.likes);
@@ -39,19 +36,14 @@ export const commentBlog = async (req, res) => {
     const userId = req.user._id ? req.user._id.toString() : req.user.id.toString();
     const userName = req.user.name || req.user.username || "User";
 
-    const newComment = {
+    // Fix: Push directly to the Mongoose subdocument array
+    blog.comments.push({
       user: userName,
       userId: userId,
       text: text.trim(),
       date: new Date()
-    };
+    });
 
-    const comments = Array.isArray(blog.comments) ? [...blog.comments] : [];
-    comments.push(newComment);
-
-    blog.comments = comments;
-    blog.markModified('comments');
-    
     await blog.save();
     res.json(blog.comments);
   } catch (err) {
@@ -67,22 +59,19 @@ export const deleteBlogComment = async (req, res) => {
 
     const userId = req.user._id ? req.user._id.toString() : req.user.id.toString();
     
-    let comments = Array.isArray(blog.comments) ? [...blog.comments] : [];
+    // Fix: Use Mongoose's .id() method to find the subdocument
+    const comment = blog.comments.id(req.params.commentId);
 
-    const index = comments.findIndex(c => c._id.toString() === req.params.commentId);
-
-    if (index === -1) {
+    if (!comment) {
       return res.status(404).json({ msg: "Comment not found" });
     }
 
-    if (comments[index].userId !== userId) {
+    if (comment.userId !== userId) {
       return res.status(401).json({ msg: "Not authorized to delete this comment" });
     }
 
-    comments.splice(index, 1);
-
-    blog.comments = comments;
-    blog.markModified('comments');
+    // Fix: Use Mongoose's .pull() method to remove the subdocument safely
+    blog.comments.pull(req.params.commentId);
 
     await blog.save();
     res.json(blog.comments);
@@ -102,20 +91,19 @@ export const editBlogComment = async (req, res) => {
 
     const userId = req.user._id ? req.user._id.toString() : req.user.id.toString();
     
-    let comments = Array.isArray(blog.comments) ? [...blog.comments] : [];
-    const index = comments.findIndex(c => c._id.toString() === req.params.commentId);
+    // Fix: Use Mongoose's .id() method to find the subdocument
+    const comment = blog.comments.id(req.params.commentId);
 
-    if (index === -1) {
+    if (!comment) {
       return res.status(404).json({ msg: "Comment not found" });
     }
 
-    if (comments[index].userId !== userId) {
+    if (comment.userId !== userId) {
       return res.status(401).json({ msg: "Not authorized to edit this comment" });
     }
-    comments[index].text = text.trim();
-
-    blog.comments = comments;
-    blog.markModified('comments');
+    
+    // Fix: Update the text directly on the found subdocument
+    comment.text = text.trim();
 
     await blog.save();
     res.json(blog.comments);
