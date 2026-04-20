@@ -112,36 +112,75 @@ function Editor({ content, setContent }) {
       </SafeBubbleMenu>
 
       <div className="premium-toolbar">
+        {/* Undo / Redo */}
         <button onClick={() => editor.chain().focus().undo().run()}>Undo</button>
         <button onClick={() => editor.chain().focus().redo().run()}>Redo</button>
+        
+        <div className="toolbar-divider"></div>
+
+        {/* The New Dropdown Menu */}
+        <select 
+          className="editor-dropdown"
+          value={
+            editor.isActive('heading', { level: 1 }) ? 'h1' :
+            editor.isActive('heading', { level: 2 }) ? 'h2' :
+            editor.isActive('blockquote') ? 'quote' :
+            editor.isActive('codeBlock') ? 'code' : 'p'
+          }
+          onChange={(e) => {
+            const val = e.target.value;
+            if (val === 'p') editor.chain().focus().setParagraph().run();
+            else if (val === 'h1') editor.chain().focus().toggleHeading({ level: 1 }).run();
+            else if (val === 'h2') editor.chain().focus().toggleHeading({ level: 2 }).run();
+            else if (val === 'quote') editor.chain().focus().toggleBlockquote().run();
+            else if (val === 'code') editor.chain().focus().toggleCodeBlock().run();
+          }}
+        >
+          <option value="p">Paragraph</option>
+          <option value="h1">Heading 1</option>
+          <option value="h2">Heading 2</option>
+          <option value="quote">Quote Block</option>
+          <option value="code">Code Block</option>
+        </select>
+
+        <div className="toolbar-divider"></div>
+        
+        {/* Basic Text Formatting */}
         <button onClick={() => editor.chain().focus().toggleBold().run()} className={editor.isActive('bold') ? 'is-active' : ''}>Bold</button>
         <button onClick={() => editor.chain().focus().toggleItalic().run()} className={editor.isActive('italic') ? 'is-active' : ''}>Italic</button>
         <button onClick={() => editor.chain().focus().toggleUnderline().run()} className={editor.isActive('underline') ? 'is-active' : ''}>Underline</button>
         <button onClick={() => editor.chain().focus().toggleStrike().run()} className={editor.isActive('strike') ? 'is-active' : ''}>Strike</button>
-        <button onClick={() => editor.chain().focus().toggleSubscript().run()} className={editor.isActive('subscript') ? 'is-active' : ''}>Sub</button>
-        <button onClick={() => editor.chain().focus().toggleSuperscript().run()} className={editor.isActive('superscript') ? 'is-active' : ''}>Super</button>
-        <button onClick={() => editor.chain().focus().toggleCode().run()} className={editor.isActive('code') ? 'is-active' : ''}>Inline Code</button>
-        <button onClick={() => editor.chain().focus().toggleCodeBlock().run()} className={editor.isActive('codeBlock') ? 'is-active' : ''}>Code Block</button>
-        <button onClick={() => editor.chain().focus().toggleBlockquote().run()} className={editor.isActive('blockquote') ? 'is-active' : ''}>Quote</button>
+        
+        <div className="toolbar-divider"></div>
+
+        {/* Lists & Alignment */}
         <button onClick={() => editor.chain().focus().toggleBulletList().run()} className={editor.isActive('bulletList') ? 'is-active' : ''}>Bullet</button>
         <button onClick={() => editor.chain().focus().toggleOrderedList().run()} className={editor.isActive('orderedList') ? 'is-active' : ''}>Numbered</button>
         <button onClick={() => editor.chain().focus().toggleTaskList().run()} className={editor.isActive('taskList') ? 'is-active' : ''}>Task List</button>
+        
         <button onClick={() => editor.chain().focus().setTextAlign("left").run()} className={editor.isActive({ textAlign: 'left' }) ? 'is-active' : ''}>Left</button>
         <button onClick={() => editor.chain().focus().setTextAlign("center").run()} className={editor.isActive({ textAlign: 'center' }) ? 'is-active' : ''}>Center</button>
         <button onClick={() => editor.chain().focus().setTextAlign("right").run()} className={editor.isActive({ textAlign: 'right' }) ? 'is-active' : ''}>Right</button>
+        
+        <div className="toolbar-divider"></div>
+
+        {/* Inserts */}
         <button onClick={() => editor.chain().focus().setHorizontalRule().run()}>Divider</button>
         <button onClick={insertImage}>Image</button>
-        <label>🎨<input type="color" onInput={(e) => editor.chain().focus().setColor(e.target.value).run()} /></label>
+        <label className="color-picker-label">🎨<input type="color" onInput={(e) => editor.chain().focus().setColor(e.target.value).run()} /></label>
         <button onClick={() => editor.chain().focus().toggleHighlight().run()} className={editor.isActive('highlight') ? 'is-active' : ''}>Highlight</button>
-        <button onClick={() => editor.chain().focus().unsetAllMarks().clearNodes().run()}>Clear Format</button>
+        <button onClick={() => editor.chain().focus().unsetAllMarks().clearNodes().run()}>Clear</button>
+
+        {/* Dynamic Table Controls */}
         {editor.isActive('table') && (
-          <div style={{ display: 'flex', gap: '4px', paddingLeft: '8px', borderLeft: '2px solid var(--border-color)' }}>
+          <>
+            <div className="toolbar-divider"></div>
             <button onClick={() => editor.chain().focus().addColumnAfter().run()}>+Col</button>
             <button onClick={() => editor.chain().focus().addRowAfter().run()}>+Row</button>
             <button onClick={() => editor.chain().focus().deleteColumn().run()}>-Col</button>
             <button onClick={() => editor.chain().focus().deleteRow().run()}>-Row</button>
-            <button onClick={() => editor.chain().focus().deleteTable().run()} style={{ color: 'var(--danger-color)' }}>Del Table</button>
-          </div>
+            <button onClick={() => editor.chain().focus().deleteTable().run()} style={{ color: 'var(--danger-color, #ef4444)' }}>Del Table</button>
+          </>
         )}
 
       </div>
