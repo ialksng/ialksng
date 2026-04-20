@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FaGithub, FaExternalLinkAlt, FaArrowRight } from 'react-icons/fa';
+import { FaArrowRight } from 'react-icons/fa';
 import axios from '../../../../../../core/utils/axios';
 
+// Import exact same CSS used in your projects page
+import '../../work/components/Projects.css';
 import './FeaturedProjects.css';
 
 export default function FeaturedProjects() {
@@ -13,9 +15,7 @@ export default function FeaturedProjects() {
     const fetchProjects = async () => {
       try {
         const { data } = await axios.get('/projects');
-        // If your DB has a featured flag, use: data.filter(p => p.isFeatured).slice(0, 2)
-        // Otherwise, this just grabs the 2 most recent projects:
-        setProjects(data.slice(0, 2)); 
+        setProjects(data.slice(0, 3)); 
       } catch (err) {
         console.error("Failed to fetch projects", err);
       } finally {
@@ -27,10 +27,10 @@ export default function FeaturedProjects() {
   }, []);
 
   return (
-    <section className="home__section" style={{ backgroundColor: "var(--bg-secondary)" }}>
+    <section className="home__section projects" id="projects" style={{ backgroundColor: "var(--bg-secondary)" }}>
       <div className="container">
         
-        <div className="section__header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+        <div className="section__header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2rem' }}>
           <div>
             <h2>Featured Architecture</h2>
             <p>A glimpse into the scalable platforms and tools I am building.</p>
@@ -45,44 +45,25 @@ export default function FeaturedProjects() {
         ) : projects.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '2rem' }}>No projects found.</div>
         ) : (
-          <div className="featured__projects-grid">
-            {projects.map((project) => (
-              <div className="project__card" key={project._id || project.id}>
-                <div className="project__image-container">
-                  {project.imageUrl || project.image ? (
-                     <img src={project.imageUrl || project.image} alt={project.title} style={{width: '100%', height: '100%', objectFit: 'cover'}} />
-                  ) : (
-                    <div className="project__image-placeholder">
-                      <span>[ {project.title} Image ]</span>
-                    </div>
-                  )}
+          <div className="projects__grid">
+            {projects.map((project, index) => (
+              <div className="project__card" key={project._id || index}>
+                {/* IMAGE WITH OVERLAY - Matching Projects.jsx */}
+                <div className="project__image">
+                  <img src={project.imageUrl || "/projects/project1.jpg"} alt={project.title} />
+
+                  <div className="project__overlay">
+                    {project.liveUrl && <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">Live</a>}
+                    {project.githubUrl && <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">GitHub</a>}
+                  </div>
                 </div>
 
+                {/* CONTENT */}
                 <div className="project__content">
                   <h3>{project.title}</h3>
                   <p>{project.description}</p>
-                  
-                  <div className="project__tech">
-                    {/* Add fallback to empty array if techStack is undefined */}
-                    {(project.techStack || []).map((tech, idx) => (
-                      <span key={idx}>{typeof tech === 'object' ? tech.name : tech}</span>
-                    ))}
-                  </div>
-
-                  <div className="project__links">
-                    {project.githubLink && (
-                      <a href={project.githubLink} target="_blank" rel="noreferrer" className="btn btn__outline btn__small">
-                        <FaGithub /> Source Code
-                      </a>
-                    )}
-                    {project.liveLink && (
-                      <a href={project.liveLink} target="_blank" rel="noreferrer" className="btn btn__primary btn__small">
-                        <FaExternalLinkAlt /> Live Demo
-                      </a>
-                    )}
-                  </div>
+                  <span>{project.tools ? project.tools.join(" • ") : ""}</span>
                 </div>
-
               </div>
             ))}
           </div>

@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { CartContext } from "../../features/cart/CartContext";
 import { AuthContext } from "../../features/auth/AuthContext";
 import Loader from "../../core/components/Loader";
+import Pagination from "../../core/components/Pagination";
 
 import "./Store.css";
 
@@ -18,6 +19,10 @@ function Shop() {
 
   const [activeCategory, setActiveCategory] = useState("all");
   const [search, setSearch] = useState("");
+  
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6; 
 
   const { addToCart, cart } = useContext(CartContext);
   const { user } = useContext(AuthContext);
@@ -30,13 +35,7 @@ function Shop() {
       try {
         const res = await fetch(`${API}/api/products`);
         const data = await res.json();
-
-        const list = Array.isArray(data.products)
-          ? data.products
-          : Array.isArray(data)
-          ? data
-          : [];
-
+        const list = Array.isArray(data.products) ? data.products : Array.isArray(data) ? data : [];
         setProducts(list);
         setFiltered(list);
       } catch (err) {
@@ -53,27 +52,18 @@ function Shop() {
 
   useEffect(() => {
     if (!user) return;
-
     const fetchOrders = async () => {
       try {
         const res = await fetch(`${API}/api/orders/my-orders`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
-          }
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
         });
-
         const data = await res.json();
-
-        const ids = Array.isArray(data.orders)
-          ? data.orders.map(o => o.product?._id).filter(Boolean)
-          : [];
-
+        const ids = Array.isArray(data.orders) ? data.orders.map(o => o.product?._id).filter(Boolean) : [];
         setOwnedProducts(ids);
       } catch (err) {
         console.log("Orders fetch error:", err);
       }
     };
-
     fetchOrders();
   }, [user, API]);
 
@@ -81,18 +71,15 @@ function Shop() {
     let temp = Array.isArray(products) ? [...products] : [];
 
     if (activeCategory !== "all") {
-      temp = temp.filter(
-        p => (p.category || "").toLowerCase() === activeCategory
-      );
+      temp = temp.filter(p => (p.category || "").toLowerCase() === activeCategory);
     }
 
     if (search.trim() !== "") {
-      temp = temp.filter(p =>
-        (p.title || "").toLowerCase().includes(search.toLowerCase())
-      );
+      temp = temp.filter(p => (p.title || "").toLowerCase().includes(search.toLowerCase()));
     }
 
     setFiltered(temp);
+    setCurrentPage(1); // Reset to page 1 when filters change
   }, [search, activeCategory, products]);
 
   const handleAddToCart = (product) => {
@@ -110,13 +97,14 @@ function Shop() {
     addToCart(product);
     setAddedId(product._id);
     toast.success("Added to cart 🛒");
-
     setTimeout(() => setAddedId(null), 1500);
   };
 
-  if (loading) {
-    return <Loader />;
-  }
+  // Pagination Logic
+  const totalPages = Math.ceil(filtered.length / itemsPerPage);
+  const displayedProducts = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  if (loading) return <Loader />;
 
   return (
     <section className="shop-section">
@@ -149,14 +137,11 @@ function Shop() {
         </div>
 
         <div className="shop-grid">
-          {Array.isArray(filtered) && filtered.length > 0 ? (
-            filtered.map(product => (
+          {Array.isArray(displayedProducts) && displayedProducts.length > 0 ? (
+            displayedProducts.map(product => (
               <div className="shop-card" key={product._id}>
                 <div className="card-left">
-                  <img
-                    src={product.image || "/default-product.png"}
-                    alt={product.title || "product"}
-                  />
+                  <img src={product.image || "/default-product.png"} alt={product.title || "product"} />
                 </div>
                 <div className="card-right">
                   <h3>{product.title || "Untitled"}</h3>
@@ -168,94 +153,60 @@ function Shop() {
                   </div>
 
                   <div className="card-actions">
-                    <button
-                      className="btn preview-btn"
-                      onClick={() => setPreviewProduct(product)}
-                    >
+                    <button className="btn preview-btn" onClick={() => setPreviewProduct(product)}>
                       Preview
                     </button>
 
                     {ownedProducts.includes(product._id) ? (
-                      <button
-                        className="btn view-btn"
-                        onClick={() => navigate(`/access/${product._id}`)}
-                      >
+                      <button className="btn view-btn" onClick={() => navigate(`/access/${product._id}`)}>
                         View
                       </button>
                     ) : product.price === 0 ? (
-                      <button
-                        className="btn view-btn"
-                        onClick={() => navigate(`/access/${product._id}`)}
-                      >
+                      <button className="btn view-btn" onClick={() => navigate(`/access/${product._id}`)}>
                         View
                       </button>
                     ) : (
                       <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
                         <button
-                          className={`btn buy-btn ${
-                            addedId === product._id ? "added" : ""
-                          }`}
+                          className={`btn buy-btn ${addedId === product._id ? "added" : ""}`}
                           onClick={() => handleAddToCart(product)}
                           disabled={addedId === product._id}
                         >
-                          {addedId === product._id
-                            ? "Added ✓"
-                            : `Buy ₹${product.price || 0}`}
+                          {addedId === product._id ? "Added ✓" : `Buy ₹${product.price || 0}`}
                         </button>
                         <span style={{ fontSize: "11px", color: "#94a3b8", textAlign: "center" }}>
                           ⚡ Instant delivery to your account
                         </span>
                       </div>
                     )}
-
                   </div>
                 </div>
-
               </div>
             ))
           ) : (
-            <div className="empty-state">
-              No products found.
-            </div>
+            <div className="empty-state">No products found.</div>
           )}
         </div>
 
+        {totalPages > 1 && (
+          <div style={{ marginTop: "2rem" }}>
+            <Pagination 
+              currentPage={currentPage} 
+              totalPages={totalPages} 
+              onPageChange={setCurrentPage} 
+            />
+          </div>
+        )}
+
         {previewProduct && (
-          <div
-            className="preview-modal"
-            onClick={() => setPreviewProduct(null)}
-          >
-            <div
-              className="preview-box"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
-                className="close-btn"
-                onClick={() => setPreviewProduct(null)}
-              >
-                ✕
-              </button>
-
-              <img
-                src={
-                  previewProduct.previewImage ||
-                  previewProduct.image ||
-                  "/default-product.png"
-                }
-                alt=""
-              />
-
+          <div className="preview-modal" onClick={() => setPreviewProduct(null)}>
+            <div className="preview-box" onClick={(e) => e.stopPropagation()}>
+              <button className="close-btn" onClick={() => setPreviewProduct(null)}>✕</button>
+              <img src={previewProduct.previewImage || previewProduct.image || "/default-product.png"} alt="" />
               <h3>{previewProduct.title}</h3>
               <p>{previewProduct.description}</p>
-
               {previewProduct.previewUrl && (
-                <a
-                  href={previewProduct.previewUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Open Preview →
-                </a>
+                <a href={previewProduct.previewUrl} target="_blank" rel="noreferrer">Open Preview →</a>
               )}
             </div>
           </div>
