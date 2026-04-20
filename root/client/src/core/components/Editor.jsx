@@ -31,7 +31,7 @@ function Editor({ content, setContent }) {
       Color,
       Highlight,
       Placeholder.configure({
-        placeholder: "Start writing..."
+        placeholder: "Start writing your content..."
       }),
       CharacterCount,
       TaskList,
@@ -57,12 +57,43 @@ function Editor({ content, setContent }) {
   }
 
   const insertImage = () => {
-    const url = prompt("Image URL");
+    const url = prompt("Enter Image URL");
     if (url) editor.chain().focus().setImage({ src: url }).run();
   };
 
+  const insertLink = () => {
+    const url = prompt("Enter Link URL");
+    if (url) editor.chain().focus().setLink({ href: url }).run();
+  };
+
+  const handleDrop = (e) => {
+    const file = e.dataTransfer.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      editor.chain().focus().setImage({ src: reader.result }).run();
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handlePaste = (e) => {
+    const file = e.clipboardData.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      editor.chain().focus().setImage({ src: reader.result }).run();
+    };
+    reader.readAsDataURL(file);
+  };
+
   return (
-    <div className="premium-editor-container">
+    <div
+      className="premium-editor-container"
+      onDrop={handleDrop}
+      onPaste={handlePaste}
+    >
 
       <FloatingMenu editor={editor}>
         <button onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}>
@@ -76,6 +107,7 @@ function Editor({ content, setContent }) {
       <BubbleMenu editor={editor}>
         <button onClick={() => editor.chain().focus().toggleBold().run()}>B</button>
         <button onClick={() => editor.chain().focus().toggleItalic().run()}>I</button>
+        <button onClick={insertLink}>Link</button>
       </BubbleMenu>
 
       <div className="premium-toolbar">
