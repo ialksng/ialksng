@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import crypto from "crypto";
 
 const commentSchema = new mongoose.Schema({
   user: { type: String, required: true },
@@ -8,18 +9,23 @@ const commentSchema = new mongoose.Schema({
 });
 
 const productSchema = new mongoose.Schema({
+  publicId: {
+    type: String,
+    unique: true,
+    default: () => crypto.randomBytes(16).toString("hex")
+  },
+
   title: { type: String, required: true },
   description: { type: String, required: true },
   price: { type: Number, required: true },
-  category: { type: String, required: true }, // Added missing field
+  category: { type: String, required: true },
   image: { type: String, required: true },
-  previewImage: { type: String }, // Added missing field
-  previewUrl: { type: String }, // Added missing field
-  
-  // Secure Content Links
+  previewImage: { type: String },
+  previewUrl: { type: String },
+
   fileUrl: { type: String, default: "" },
-  notionUrl: { type: String, default: "" }, // Added missing field for LMS notes
-  
+  notionUrl: { type: String, default: "" },
+
   likes: { type: [String], default: [] },
   comments: { type: [commentSchema], default: [] }
 }, { timestamps: true });
