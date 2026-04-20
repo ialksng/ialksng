@@ -1,4 +1,5 @@
-import { useEditor, EditorContent, BubbleMenu, FloatingMenu } from "@tiptap/react";
+import * as TiptapReact from "@tiptap/react";
+const { useEditor, EditorContent, BubbleMenu, FloatingMenu } = TiptapReact;
 
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";

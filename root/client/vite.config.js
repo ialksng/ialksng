@@ -11,5 +11,10 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: ['@tiptap/react', '@tiptap/core', '@tiptap/pm', '@tiptap/starter-kit']
+  },
+  build: {
+    commonjsOptions: {
+      transformMixedEsModules: true,
+    }
   }
 })
