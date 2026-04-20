@@ -88,7 +88,10 @@ const AdminBlog = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.title || !formData.content) {
+    
+    // Check for empty Tiptap output
+    const cleanContent = formData.content.replace(/<p><\/p>/g, '').trim();
+    if (!formData.title || !cleanContent) {
       return toast.error("Title and Content are required.");
     }
 

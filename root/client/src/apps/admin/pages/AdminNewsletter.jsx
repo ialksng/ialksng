@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
+import toast from "react-hot-toast";
+
 import axios from "../../../core/utils/axios";
 import Loader from "../../../core/components/Loader";
+import Editor from "../../../core/components/Editor";
+
 import "./admin.css";
 
 const AdminNewsletter = () => {
@@ -17,13 +21,9 @@ const AdminNewsletter = () => {
         const res = await axios.get("/newsletter/subscribers", {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
         });
-        
-        // Bulletproof array check
-        const subList = Array.isArray(res.data) ? res.data : (res.data?.subscribers || []);
-        setSubscribers(subList);
+        setSubscribers(res.data);
       } catch (err) {
         console.error(err);
-        setSubscribers([]);
       } finally {
         setLoading(false);
       }
@@ -33,24 +33,28 @@ const AdminNewsletter = () => {
 
   const handleSendEmail = async (e) => {
     e.preventDefault();
-    if (!subject || !content) return alert("Please fill out subject and content.");
+
+    // Prevent submitting if the editor is completely empty or just contains an empty tag
+    const cleanContent = content.replace(/<p><\/p>/g, '').trim();
+    if (!subject || !cleanContent) {
+      return toast.error("Please fill out subject and content.");
+    }
 
     if (window.confirm(`Are you sure you want to send this to ${subscribers.length} subscribers?`)) {
       setSending(true);
       try {
-        // ACTUAL BACKEND CALL (Replaced the fake alert)
+        // Calls the actual backend NodeMailer route
         const res = await axios.post(
-          "/newsletter/send",
+          "/newsletter/send", 
           { subject, content },
           { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
         );
-        
-        alert(res.data?.msg || "Newsletter sent successfully!");
+
+        toast.success(res.data.msg || "Newsletter sent successfully!");
         setSubject("");
         setContent("");
       } catch (err) {
-        console.error(err);
-        alert(err.response?.data?.msg || "Failed to send.");
+        toast.error(err.response?.data?.msg || "Failed to send.");
       } finally {
         setSending(false);
       }
@@ -83,20 +87,18 @@ const AdminNewsletter = () => {
                 />
               </div>
 
-              <div className="form-group">
-                <label>Email Content (HTML allowed)</label>
-                <textarea
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  placeholder="Write your newsletter here..."
-                  rows="8"
-                  required
+              <div className="form-group mt-4">
+                <label>Email Content (Rich Text HTML)</label>
+                {/* Replaced Textarea with Editor */}
+                <Editor 
+                  content={content} 
+                  setContent={setContent} 
                 />
               </div>
 
               <button
                 type="submit"
-                className="btn primary w-full"
+                className="btn primary w-full mt-4"
                 disabled={sending || subscribers.length === 0}
               >
                 {sending
@@ -112,34 +114,26 @@ const AdminNewsletter = () => {
             <h3>Subscriber List ({subscribers.length})</h3>
 
             <div style={{ maxHeight: "400px", overflowY: "auto", marginTop: "15px" }}>
-              {subscribers.map((sub, idx) => {
-                // Bulletproof date formatting
-                let displayDate = "N/A";
-                try {
-                  if (sub.createdAt) displayDate = new Date(sub.createdAt).toLocaleDateString();
-                } catch(e) {}
+              {subscribers.map((sub, idx) => (
+                <div
+                  key={sub._id}
+                  style={{
+                    padding: "12px",
+                    borderBottom: "1px solid var(--border-color)",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center"
+                  }}
+                >
+                  <span style={{ fontSize: "14px" }}>
+                    {idx + 1}. {sub.email}
+                  </span>
 
-                return (
-                  <div
-                    key={sub._id || idx}
-                    style={{
-                      padding: "12px",
-                      borderBottom: "1px solid var(--border-color)",
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center"
-                    }}
-                  >
-                    <span style={{ fontSize: "14px" }}>
-                      {idx + 1}. {sub.email}
-                    </span>
-
-                    <span style={{ fontSize: "11px", color: "var(--text-muted)" }}>
-                      {displayDate}
-                    </span>
-                  </div>
-                );
-              })}
+                  <span style={{ fontSize: "11px", color: "var(--text-muted)" }}>
+                    {new Date(sub.createdAt).toLocaleDateString()}
+                  </span>
+                </div>
+              ))}
 
               {subscribers.length === 0 && <p>No subscribers yet.</p>}
             </div>
