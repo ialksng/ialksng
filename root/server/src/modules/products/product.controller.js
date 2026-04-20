@@ -4,18 +4,16 @@ import Order from "../orders/order.model.js";
 import User from "../auth/user.model.js"; 
 import Notification from "../notifications/notification.model.js"; 
 
-// Helper to prevent server crashes on invalid IDs
-const isValidId = (id) => mongoose.Types.ObjectId.isValid(id);
+const isValidId = (id) => typeof id === "string" && id.length >= 10;
 
 export const addProduct = async (req, res) => {
   try {
     const product = await Product.create({
-        ...req.body,
-        fileUrl: req.body.fileUrl || "",
-        notionUrl: req.body.notionUrl || ""
+      ...req.body,
+      fileUrl: req.body.fileUrl || "",
+      notionUrl: req.body.notionUrl || ""
     });
 
-    // Create notifications for all users
     const users = await User.find({}, "_id");
     const notifications = users.map((user) => ({
       user: user._id,
@@ -46,10 +44,7 @@ export const getProducts = async (req, res) => {
 
 export const getProduct = async (req, res) => {
   try {
-    if (!isValidId(req.params.id)) {
-        return res.status(400).json({ error: "Invalid Product ID format" });
-    }
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findOne({ _id: req.params.id });
     if (!product) return res.status(404).json({ error: "Product not found" });
     res.json({ success: true, product });
   } catch (err) {
@@ -59,16 +54,12 @@ export const getProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
   try {
-    if (!isValidId(req.params.id)) {
-        return res.status(400).json({ error: "Invalid Product ID format" });
-    }
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findOne({ _id: req.params.id });
     if (!product) return res.status(404).json({ error: "Product not found" });
 
-    // Update fields conditionally
     const fields = ['title', 'description', 'price', 'category', 'image', 'previewImage', 'previewUrl', 'fileUrl', 'notionUrl'];
     fields.forEach(field => {
-        if (req.body[field] !== undefined) product[field] = req.body[field];
+      if (req.body[field] !== undefined) product[field] = req.body[field];
     });
 
     const updatedProduct = await product.save();
@@ -80,10 +71,7 @@ export const updateProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
   try {
-    if (!isValidId(req.params.id)) {
-        return res.status(400).json({ error: "Invalid Product ID format" });
-    }
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findOne({ _id: req.params.id });
     if (!product) return res.status(404).json({ error: "Product not found" });
 
     await product.deleteOne();
@@ -95,8 +83,7 @@ export const deleteProduct = async (req, res) => {
 
 export const likeProduct = async (req, res) => {
   try {
-    if (!isValidId(req.params.id)) return res.status(400).json({ msg: "Invalid ID" });
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findOne({ _id: req.params.id });
     if (!product) return res.status(404).json({ msg: "Product not found" });
 
     const userId = req.user._id.toString();
@@ -119,9 +106,8 @@ export const commentProduct = async (req, res) => {
   try {
     const { text } = req.body;
     if (!text) return res.status(400).json({ msg: "Comment text is required" });
-    if (!isValidId(req.params.id)) return res.status(400).json({ msg: "Invalid ID" });
 
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findOne({ _id: req.params.id });
     if (!product) return res.status(404).json({ msg: "Product not found" });
 
     const newComment = {
@@ -146,7 +132,7 @@ export const editComment = async (req, res) => {
     const { text } = req.body;
     if (!text) return res.status(400).json({ msg: "Text is required" });
 
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findOne({ _id: req.params.id });
     if (!product) return res.status(404).json({ msg: "Product not found" });
 
     const comment = product.comments.id(req.params.commentId);
@@ -166,7 +152,7 @@ export const editComment = async (req, res) => {
 
 export const deleteComment = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findOne({ _id: req.params.id });
     if (!product) return res.status(404).json({ msg: "Product not found" });
 
     const commentIndex = product.comments.findIndex(
@@ -187,19 +173,16 @@ export const deleteComment = async (req, res) => {
   }
 };
 
-// SECURE ROUTE FOR LMS - FINAL AIRTIGHT VERSION
 export const getSecuredProductContent = async (req, res) => {
   try {
     const productId = req.params.id;
 
-    // 1. Validation: Prevent crash on bad ID format
     if (!isValidId(productId)) {
-        return res.status(400).json({ success: false, message: "Invalid Database ID format." });
+      return res.status(400).json({ success: false, message: "Invalid Product ID." });
     }
 
     const userId = req.user.id || req.user._id;
 
-    // 2. Search for ANY matching paid order
     const order = await Order.findOne({
       user: userId,
       product: productId,
@@ -211,7 +194,6 @@ export const getSecuredProductContent = async (req, res) => {
 
     const isAdmin = req.user.role === "admin";
 
-    // 3. Check access rights
     if (!order && !isAdmin) {
       return res.status(403).json({
         success: false,
@@ -219,8 +201,8 @@ export const getSecuredProductContent = async (req, res) => {
       });
     }
 
-    // 4. Fetch the full product data
-    const product = await Product.findById(productId);
+    const product = await Product.findOne({ _id: productId });
+
     if (!product) {
       return res.status(404).json({ success: false, message: "Product not found in database." });
     }
