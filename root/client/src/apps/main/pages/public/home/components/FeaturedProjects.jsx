@@ -45,7 +45,7 @@ export default function FeaturedProjects() {
             <h2>Featured Architecture</h2>
             <p>A glimpse into the scalable platforms and tools I am building.</p>
           </div>
-          <Link to="/projects" className="view__all-btn">
+          <Link to="/work" className="view__all-btn">
             View All Projects <FaArrowRight />
           </Link>
         </div>
