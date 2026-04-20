@@ -18,12 +18,13 @@ function AccessProduct() {
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editText, setEditText] = useState("");
 
-  const API = import.meta.env.VITE_API_URL || "https://ialksng-backend.onrender.com";
+  const API =
+    import.meta.env.VITE_API_URL ||
+    "https://ialksng-backend.onrender.com";
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        // ADMIN BYPASS LOGIC
         if (user && user.role === "admin") {
           const res = await axios.get(`/products/${id}`);
           setProduct(res.data.product || res.data);
@@ -31,7 +32,6 @@ function AccessProduct() {
           return;
         }
 
-        // Regular User Order Validation
         const res = await fetch(`${API}/api/products/access/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -74,7 +74,7 @@ function AccessProduct() {
       );
 
       setProduct((prev) => ({ ...prev, likes: res.data }));
-    } catch (err) {
+    } catch {
       toast.error("Failed to like product");
     }
   };
@@ -94,7 +94,7 @@ function AccessProduct() {
     );
 
     toast.promise(commentPromise, {
-      loading: 'Posting...',
+      loading: "Posting...",
       success: (res) => {
         updateComments(res.data);
         setCommentText("");
@@ -106,36 +106,52 @@ function AccessProduct() {
 
   const handleDeleteComment = (commentId) => {
     toast((t) => (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', padding: '4px' }}>
-        <span style={{ fontSize: '14px', fontWeight: '500', color: 'var(--text-primary)' }}>Delete this comment?</span>
-        <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
-          <button 
+      <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+        <span>Delete this comment?</span>
+        <div style={{ display: "flex", gap: "10px" }}>
+          <button
             onClick={async () => {
               toast.dismiss(t.id);
               const loadingToast = toast.loading("Deleting...");
               try {
-                const res = await axios.delete(`/products/${id}/comment/${commentId}`, {
-                  headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-                });
+                const res = await axios.delete(
+                  `/products/${id}/comment/${commentId}`,
+                  {
+                    headers: {
+                      Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                  }
+                );
                 updateComments(res.data);
-                toast.success("Comment deleted", { id: loadingToast });
-              } catch (err) {
-                toast.error("Failed to delete", { id: loadingToast });
+                toast.success("Deleted", { id: loadingToast });
+              } catch {
+                toast.error("Failed", { id: loadingToast });
               }
-            }} 
-            style={{ flex: 1, padding: '6px 12px', background: 'var(--danger-color)', color: '#fff', border: 'none', borderRadius: '6px', fontSize: '13px', cursor: 'pointer' }}
+            }}
+            style={{
+              flex: 1,
+              padding: "6px",
+              background: "red",
+              color: "#fff",
+              border: "none",
+              borderRadius: "6px",
+            }}
           >
             Delete
           </button>
-          <button 
-            onClick={() => toast.dismiss(t.id)} 
-            style={{ flex: 1, padding: '6px 12px', background: 'transparent', color: 'var(--text-secondary)', border: '1px solid var(--border-color)', borderRadius: '6px', fontSize: '13px', cursor: 'pointer' }}
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            style={{
+              flex: 1,
+              padding: "6px",
+              borderRadius: "6px",
+            }}
           >
             Cancel
           </button>
         </div>
       </div>
-    ), { duration: Infinity });
+    ));
   };
 
   const handleEditCommentSubmit = async (e, commentId) => {
@@ -153,14 +169,14 @@ function AccessProduct() {
     );
 
     toast.promise(editPromise, {
-      loading: 'Saving edit...',
+      loading: "Saving...",
       success: (res) => {
         updateComments(res.data);
         setEditingCommentId(null);
         setEditText("");
-        return "Comment updated!";
+        return "Updated!";
       },
-      error: "Failed to update comment",
+      error: "Failed",
     });
   };
 
@@ -170,10 +186,7 @@ function AccessProduct() {
     return (
       <div className="access__denied">
         <h2>Access Denied 🔒</h2>
-        <button
-          onClick={() => navigate("/store")}
-          className="btn-primary"
-        >
+        <button onClick={() => navigate("/store")} className="btn-primary">
           Browse Store
         </button>
       </div>
@@ -188,27 +201,21 @@ function AccessProduct() {
         className="access__back-btn"
         onClick={() => navigate("/store")}
       >
-        ⬅ Back to Store
+        ⬅ Back
       </button>
 
       <h1 className="access__title">{product.title}</h1>
       <p className="access__desc">{product.description}</p>
 
-      {/* SINGLE GURUKUL BRIDGE BUTTON */}
       <button
-        className="access__download-btn"
-        onClick={() => window.location.href = "https://gurukul.ialksng.me"}
-        style={{ 
-          backgroundColor: "#0ea5e9", 
-          borderColor: "#0ea5e9", 
-          color: "#fff",
-          display: "block",
+        className="btn-primary"
+        onClick={() => window.open("https://gurukul.ialksng.me", "_self")}
+        style={{
           width: "100%",
-          maxWidth: "400px",
-          margin: "30px 0",
-          textAlign: "center",
+          padding: "14px",
+          margin: "20px 0",
+          fontSize: "16px",
           fontWeight: "bold",
-          fontSize: "16px"
         }}
       >
         🎓 Open Course
@@ -222,15 +229,15 @@ function AccessProduct() {
             }`}
             onClick={handleLike}
           >
-            {product.likes?.includes(user?._id) ? "❤️" : "🤍"}
-            <span>{product.likes?.length || 0} Likes</span>
+            {product.likes?.includes(user?._id) ? "❤️" : "🤍"}{" "}
+            {product.likes?.length || 0}
           </button>
 
           <button
             className="like-btn"
             onClick={() => {
               navigator.clipboard.writeText(window.location.href);
-              toast.success("Link copied to clipboard!");
+              toast.success("Link copied!");
             }}
           >
             🔗 Share
@@ -238,158 +245,74 @@ function AccessProduct() {
         </div>
 
         <div className="comments-wrapper">
-          <h2 className="comments-header">
-            Discussion ({product.comments?.length || 0})
-          </h2>
+          <h2>Discussion ({product.comments?.length || 0})</h2>
 
           {user ? (
-            <form
-              onSubmit={handleComment}
-              className="comment-input-area"
-            >
+            <form onSubmit={handleComment}>
               <textarea
-                className="comment-textarea"
-                placeholder="Share your thoughts..."
                 value={commentText}
-                onChange={(e) =>
-                  setCommentText(e.target.value)
-                }
+                onChange={(e) => setCommentText(e.target.value)}
+                placeholder="Write something..."
                 required
-                rows="3"
               />
-              <button
-                type="submit"
-                disabled={!commentText.trim()}
-                className="btn-primary"
-                style={{ alignSelf: "flex-end" }}
-              >
-                Post Comment
+              <button type="submit" className="btn-primary">
+                Post
               </button>
             </form>
           ) : (
-            <div className="access__login-prompt">
-              <p style={{ margin: 0 }}>
-                Please{" "}
-                <span
-                  className="access__login-link"
-                  onClick={() => navigate("/login")}
-                >
-                  log in
-                </span>{" "}
-                to join the conversation.
-              </p>
-            </div>
+            <p onClick={() => navigate("/login")}>Login to comment</p>
           )}
 
-          <div>
-            {!product.comments || product.comments.length === 0 ? (
-              <p className="access__empty-comments">
-                Be the first to leave a comment!
-              </p>
-            ) : (
-              product.comments
-                .slice()
-                .reverse()
-                .map((c) => (
-                  <div key={c._id} className="comment-card">
-                    <div className="comment-avatar">
-                      {c.user.charAt(0).toUpperCase()}
-                    </div>
+          {!product.comments?.length ? (
+            <p>No comments yet</p>
+          ) : (
+            product.comments
+              .slice()
+              .reverse()
+              .map((c) => (
+                <div key={c._id}>
+                  <b>{c.user}</b>
 
-                    <div style={{ flex: 1 }}>
-                      <div className="comment-meta">
-                        <div>
-                          <span className="comment-author">
-                            {c.user}
-                          </span>
-                          <span className="comment-date">
-                            {new Date(c.date).toLocaleDateString()}
-                          </span>
-                        </div>
-
-                        {user &&
-                          user._id === c.userId && (
-                            <div className="comment-actions">
-                              <button
-                                onClick={() => {
-                                  setEditingCommentId(
-                                    c._id
-                                  );
-                                  setEditText(c.text);
-                                }}
-                                className="comment-action-btn edit"
-                              >
-                                Edit
-                              </button>
-                              <button
-                                onClick={() =>
-                                  handleDeleteComment(c._id)
-                                }
-                                className="comment-action-btn delete"
-                              >
-                                Delete
-                              </button>
-                            </div>
-                          )}
-                      </div>
-
-                      {editingCommentId === c._id ? (
-                        <form
-                          onSubmit={(e) =>
-                            handleEditCommentSubmit(
-                              e,
-                              c._id
-                            )
-                          }
-                          className="comment-edit-form"
-                        >
-                          <textarea
-                            value={editText}
-                            onChange={(e) =>
-                              setEditText(e.target.value)
-                            }
-                            className="comment-textarea"
-                            rows="2"
-                            style={{
-                              marginBottom: "10px",
+                  {editingCommentId === c._id ? (
+                    <form
+                      onSubmit={(e) =>
+                        handleEditCommentSubmit(e, c._id)
+                      }
+                    >
+                      <textarea
+                        value={editText}
+                        onChange={(e) => setEditText(e.target.value)}
+                      />
+                      <button type="submit">Save</button>
+                      <button onClick={() => setEditingCommentId(null)}>
+                        Cancel
+                      </button>
+                    </form>
+                  ) : (
+                    <>
+                      <p>{c.text}</p>
+                      {user && user._id === c.userId && (
+                        <>
+                          <button
+                            onClick={() => {
+                              setEditingCommentId(c._id);
+                              setEditText(c.text);
                             }}
-                          />
-                          <div className="comment-edit-actions">
-                            <button
-                              type="submit"
-                              className="btn-primary"
-                              style={{
-                                padding: "8px 16px",
-                                fontSize: "13px",
-                              }}
-                            >
-                              Save
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() =>
-                                setEditingCommentId(null)
-                              }
-                              className="btn-secondary"
-                              style={{
-                                padding: "8px 16px",
-                                fontSize: "13px",
-                              }}
-                            >
-                              Cancel
-                            </button>
-                          </div>
-                        </form>
-                      ) : (
-                        <p className="comment-text">
-                          {c.text}
-                        </p>
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => handleDeleteComment(c._id)}
+                          >
+                            Delete
+                          </button>
+                        </>
                       )}
-                    </div>
-                  </div>
-                ))
-            )}
-          </div>
+                    </>
+                  )}
+                </div>
+              ))
+          )}
         </div>
       </div>
     </div>
