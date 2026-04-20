@@ -27,7 +27,9 @@ app.use(cors({
   origin: [
     "https://ialksng.me",
     "https://www.ialksng.me",
-    "http://localhost:5173"
+    "https://gurukul.ialksng.me",
+    "http://localhost:5173",
+    "http://localhost:3000"
   ],
   credentials: true
 }));
