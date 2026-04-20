@@ -62,10 +62,6 @@ export const getProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
   try {
-    if (!isValidId(req.params.id)) {
-      return res.status(400).json({ error: "Invalid Product ID" });
-    }
-
     const product = await Product.findOne({ publicId: req.params.id });
 
     if (!product) {
@@ -90,10 +86,6 @@ export const updateProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
   try {
-    if (!isValidId(req.params.id)) {
-      return res.status(400).json({ error: "Invalid Product ID" });
-    }
-
     const product = await Product.findOne({ publicId: req.params.id });
 
     if (!product) {
@@ -110,22 +102,16 @@ export const deleteProduct = async (req, res) => {
 
 export const likeProduct = async (req, res) => {
   try {
-    if (!req.user) {
-      return res.status(401).json({ msg: "Unauthorized" });
-    }
+    if (!req.user) return res.status(401).json({ msg: "Unauthorized" });
 
     const product = await Product.findOne({ publicId: req.params.id });
 
-    if (!product) {
-      return res.status(404).json({ msg: "Product not found" });
-    }
+    if (!product) return res.status(404).json({ msg: "Product not found" });
 
     const userId = req.user._id.toString();
 
-    product.likes = product.likes || [];
-
     if (product.likes.includes(userId)) {
-      product.likes = product.likes.filter((id) => id !== userId);
+      product.likes = product.likes.filter(id => id !== userId);
     } else {
       product.likes.push(userId);
     }
@@ -140,21 +126,14 @@ export const likeProduct = async (req, res) => {
 
 export const commentProduct = async (req, res) => {
   try {
-    if (!req.user) {
-      return res.status(401).json({ msg: "Unauthorized" });
-    }
+    if (!req.user) return res.status(401).json({ msg: "Unauthorized" });
 
     const { text } = req.body;
-
-    if (!text) {
-      return res.status(400).json({ msg: "Comment text is required" });
-    }
+    if (!text) return res.status(400).json({ msg: "Comment text required" });
 
     const product = await Product.findOne({ publicId: req.params.id });
 
-    if (!product) {
-      return res.status(404).json({ msg: "Product not found" });
-    }
+    if (!product) return res.status(404).json({ msg: "Product not found" });
 
     const newComment = {
       user: req.user.name || "User",
@@ -163,9 +142,35 @@ export const commentProduct = async (req, res) => {
       date: new Date(),
     };
 
-    product.comments = product.comments || [];
     product.comments.push(newComment);
+    await product.save();
 
+    res.json(product.comments);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const editComment = async (req, res) => {
+  try {
+    if (!req.user) return res.status(401).json({ msg: "Unauthorized" });
+
+    const { text } = req.body;
+    if (!text) return res.status(400).json({ msg: "Text required" });
+
+    const product = await Product.findOne({ publicId: req.params.id });
+
+    if (!product) return res.status(404).json({ msg: "Product not found" });
+
+    const comment = product.comments.id(req.params.commentId);
+
+    if (!comment) return res.status(404).json({ msg: "Comment not found" });
+
+    if (comment.userId !== req.user._id.toString()) {
+      return res.status(401).json({ msg: "Not authorized" });
+    }
+
+    comment.text = text;
     await product.save();
 
     res.json(product.comments);
@@ -178,24 +183,19 @@ export const deleteComment = async (req, res) => {
   try {
     const product = await Product.findOne({ publicId: req.params.id });
 
-    if (!product) {
-      return res.status(404).json({ msg: "Product not found" });
-    }
+    if (!product) return res.status(404).json({ msg: "Product not found" });
 
-    const commentIndex = product.comments.findIndex(
-      (c) => c._id.toString() === req.params.commentId
+    const index = product.comments.findIndex(
+      c => c._id.toString() === req.params.commentId
     );
 
-    if (commentIndex === -1) {
-      return res.status(404).json({ msg: "Comment not found" });
-    }
+    if (index === -1) return res.status(404).json({ msg: "Comment not found" });
 
-    if (!req.user || (product.comments[commentIndex].userId !== req.user._id.toString() && req.user.role !== "admin")) {
+    if (!req.user || (product.comments[index].userId !== req.user._id.toString() && req.user.role !== "admin")) {
       return res.status(401).json({ msg: "Not authorized" });
     }
 
-    product.comments.splice(commentIndex, 1);
-
+    product.comments.splice(index, 1);
     await product.save();
 
     res.json(product.comments);
@@ -208,15 +208,8 @@ export const getSecuredProductContent = async (req, res) => {
   try {
     const productId = req.params.id;
 
-    if (!isValidId(productId)) {
-      return res.status(400).json({ success: false, message: "Invalid Product ID." });
-    }
-
     if (!req.user) {
-      return res.status(401).json({
-        success: false,
-        message: "Login required"
-      });
+      return res.status(401).json({ success: false, message: "Login required" });
     }
 
     const userId = req.user._id || req.user.id;
@@ -229,7 +222,7 @@ export const getSecuredProductContent = async (req, res) => {
     }
 
     if (product.price === 0) {
-      return res.status(200).json({ success: true, data: product });
+      return res.json({ success: true, data: product });
     }
 
     const order = await Order.findOne({
@@ -242,19 +235,13 @@ export const getSecuredProductContent = async (req, res) => {
     });
 
     if (!order && !isAdmin) {
-      return res.status(403).json({
-        success: false,
-        message: "Access Denied"
-      });
+      return res.status(403).json({ success: false, message: "Access Denied" });
     }
 
-    res.status(200).json({ success: true, data: product });
+    res.json({ success: true, data: product });
 
   } catch (error) {
-    console.error("SECURE ROUTE ERROR:", error);
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
+    console.error("SECURE ERROR:", error);
+    res.status(500).json({ success: false, message: error.message });
   }
 };
