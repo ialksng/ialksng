@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
-import { FaDownload, FaEye, FaHeart, FaRegHeart, FaComment } from "react-icons/fa";
+import { FaHeart, FaRegHeart, FaComment } from "react-icons/fa"; // Removed FaDownload and FaEye
 
 import axios from "../../core/utils/axios";
 import { AuthContext } from "../../features/auth/AuthContext";
@@ -43,14 +43,6 @@ function ViewProduct() {
     fetchProductAndAccess();
   }, [id, user]);
 
-  const handleDownload = () => {
-    if (product?.fileUrl) {
-      window.open(product.fileUrl, "_blank");
-    } else {
-      alert("No file available.");
-    }
-  };
-
   const handleLike = () => setIsLiked(!isLiked);
 
   const handleCommentSubmit = (e) => {
@@ -92,18 +84,14 @@ function ViewProduct() {
 
             <div className="viewproduct__actions">
               {hasAccess ? (
-                <>
-                  <button onClick={handleDownload} className="btn-action download">
-                    <FaDownload /> Download
-                  </button>
-
-                  <button
-                    onClick={() => navigate(`/notes/${product._id}`)}
-                    className="btn-action view"
-                  >
-                    <FaEye /> View
-                  </button>
-                </>
+                // THE ONLY BUTTON LEFT: Redirects to Gurukul
+                <button 
+                  onClick={() => window.location.href = "https://gurukul.ialksng.me"} 
+                  className="btn-buy" 
+                  style={{ backgroundColor: "#0ea5e9", borderColor: "#0ea5e9", color: "#fff" }}
+                >
+                  🎓 View Course
+                </button>
               ) : (
                 <button
                   onClick={() => navigate(`/checkout/${id}`)}
