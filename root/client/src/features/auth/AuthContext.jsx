@@ -1,6 +1,8 @@
 import React, { createContext, useState, useEffect } from "react";
 import axios from "../../core/utils/axios";
 
+import Loader from "../../core/components/Loader"; 
+
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -67,7 +69,13 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ user, loading, loginSuccess, logoutUser }}>
-      {children}
+      {loading ? (
+        <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <Loader />
+        </div>
+      ) : (
+        children
+      )}
     </AuthContext.Provider>
   );
 };
