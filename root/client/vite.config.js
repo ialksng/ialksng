@@ -9,4 +9,7 @@ export default defineConfig({
       "/api": "http://localhost:8080",
     },
   },
+  optimizeDeps: {
+    include: ['@tiptap/react', '@tiptap/core', '@tiptap/pm', '@tiptap/starter-kit']
+  }
 })
