@@ -223,16 +223,36 @@ function AccessProduct() {
       <h1 className="access__title">{product.title}</h1>
       <p className="access__desc">{product.description}</p>
 
-      {product.fileUrl && (
+      {/* THE NEW ACTION BRIDGE BUTTONS */}
+      <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", margin: "1.5rem 0" }}>
+        
+        {product.fileUrl && (
+          <button
+            className="access__download-btn"
+            onClick={(e) => handleDownload(e, product.fileUrl, product.title)}
+            style={{ margin: 0, flex: 1, minWidth: "220px" }}
+          >
+            {downloading ? "Downloading..." : "Download Resource"}
+          </button>
+        )}
+
+        {/* Gurukul Bridge Button */}
         <button
           className="access__download-btn"
-          onClick={(e) =>
-            handleDownload(e, product.fileUrl, product.title)
-          }
+          onClick={() => window.location.href = "https://gurukul.ialksng.me/"}
+          style={{ 
+            margin: 0, 
+            flex: 1, 
+            minWidth: "220px", 
+            background: "#0ea5e9", // Custom blue pop for the course button
+            borderColor: "#0ea5e9", 
+            color: "#fff" 
+          }}
         >
-          {downloading ? "Downloading..." : "Download Resource"}
+          Open Course
         </button>
-      )}
+        
+      </div>
 
       <div className="social-container">
         <div className="social-actions-bar">
