@@ -112,8 +112,13 @@ const AdminBlog = () => {
     }
   };
 
-  if (loading && view === "list") return <div className="admin-container"><Loader /></div>;
-  
+  if (loading && view === "list") {
+     return (
+       <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '400px' }}>
+          <Loader />
+       </div>
+     );
+  }
   return (
     <div className="admin-container">
       {view === "list" ? (

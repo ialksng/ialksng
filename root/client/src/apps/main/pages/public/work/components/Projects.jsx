@@ -36,9 +36,9 @@ function Projects() {
 
   if (loading) {
     return (
-      <section className="projects" id="projects">
-        <Loader />
-      </section>
+      <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+         <Loader />
+      </div>
     );
   }
 

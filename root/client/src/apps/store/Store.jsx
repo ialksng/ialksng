@@ -104,7 +104,13 @@ function Shop() {
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
   const displayedProducts = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-  if (loading) return <Loader />;
+  if (loading) {
+    return (
+      <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+         <Loader />
+      </div>
+    );
+  }
 
   return (
     <section className="shop-section">

@@ -31,7 +31,13 @@ function AdminDashboard() {
     fetchDashboardData();
   }, []);
 
-  if (loading) return <div className="admin-container p-6"><Loader /></div>;
+  if (loading) {
+     return (
+       <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '400px' }}>
+          <Loader />
+       </div>
+     );
+  }
 
   return (
     <div className="admin-container">
