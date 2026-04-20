@@ -1,0 +1,29 @@
+.agear-container { padding: 2rem; color: #f8fafc; max-width: 1200px; margin: 0 auto; }
+.agear-header { margin-bottom: 2rem; }
+.agear-header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; }
+.agear-header p { color: #94a3b8; }
+
+.agear-form-card { background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 2rem; margin-bottom: 3rem; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+.agear-form-title { font-size: 1.25rem; color: #6366f1; margin-bottom: 1.5rem; border-bottom: 1px solid #334155; padding-bottom: 1rem; display: flex; align-items: center; gap: 10px; }
+
+.agear-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.agear-input-group { display: flex; flex-direction: column; gap: 0.5rem; }
+.agear-full-width { grid-column: span 2; }
+.agear-input-group input, .agear-input-group textarea { background: #0f172a; border: 1px solid #334155; color: #fff; padding: 0.75rem; border-radius: 8px; outline: none; transition: 0.2s; }
+.agear-input-group input:focus { border-color: #6366f1; }
+
+.agear-btn-submit { background: #6366f1; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 700; cursor: pointer; }
+.agear-btn-submit:hover { background: #4f46e5; }
+.agear-btn-cancel { background: transparent; color: #94a3b8; border: 1px solid #475569; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; }
+
+.agear-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; }
+.agear-card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; overflow: hidden; }
+.agear-card-content { padding: 1.5rem; text-align: center; }
+.agear-icon-box { width: 50px; height: 50px; background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 12px; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.5rem; color: white; }
+.agear-badge { font-size: 0.75rem; color: #818cf8; background: rgba(99,102,241,0.1); padding: 4px 10px; border-radius: 20px; font-weight: 700; }
+
+.agear-card-actions { display: flex; border-top: 1px solid #334155; }
+.agear-btn-edit, .agear-btn-delete { flex: 1; padding: 10px; border: none; font-weight: 600; cursor: pointer; }
+.agear-btn-edit { background: transparent; color: #94a3b8; border-right: 1px solid #334155; }
+.agear-btn-delete { background: transparent; color: #ef4444; }
+.agear-btn-delete:hover { background: rgba(239, 68, 68, 0.1); }
