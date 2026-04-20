@@ -1,27 +1,21 @@
+import mongoose from "mongoose";
 import Product from "./product.model.js";
 import Order from "../orders/order.model.js";
 import User from "../auth/user.model.js"; 
 import Notification from "../notifications/notification.model.js"; 
 
+// Helper to prevent server crashes on invalid IDs
+const isValidId = (id) => mongoose.Types.ObjectId.isValid(id);
+
 export const addProduct = async (req, res) => {
   try {
-    console.log("[Admin] Attempting to add product:", req.body.title);
-    
     const product = await Product.create({
-        title: req.body.title,
-        description: req.body.description,
-        price: req.body.price,
-        category: req.body.category,
-        image: req.body.image,
-        previewImage: req.body.previewImage,
-        previewUrl: req.body.previewUrl,
+        ...req.body,
         fileUrl: req.body.fileUrl || "",
         notionUrl: req.body.notionUrl || ""
     });
 
-    console.log("[Admin] Product added successfully:", product._id);
-
-    // Create notifications
+    // Create notifications for all users
     const users = await User.find({}, "_id");
     const notifications = users.map((user) => ({
       user: user._id,
@@ -37,8 +31,7 @@ export const addProduct = async (req, res) => {
 
     res.status(201).json({ success: true, product });
   } catch (err) {
-    console.error("[Admin Add Product Error]:", err);
-    res.status(500).json({ success: false, message: err.message, error: err.toString() });
+    res.status(500).json({ success: false, message: err.message });
   }
 };
 
@@ -53,6 +46,9 @@ export const getProducts = async (req, res) => {
 
 export const getProduct = async (req, res) => {
   try {
+    if (!isValidId(req.params.id)) {
+        return res.status(400).json({ error: "Invalid Product ID format" });
+    }
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ error: "Product not found" });
     res.json({ success: true, product });
@@ -63,33 +59,30 @@ export const getProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
   try {
-    console.log("[Admin] Attempting to update product:", req.params.id);
+    if (!isValidId(req.params.id)) {
+        return res.status(400).json({ error: "Invalid Product ID format" });
+    }
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ error: "Product not found" });
 
-    product.title = req.body.title ?? product.title;
-    product.description = req.body.description ?? product.description;
-    product.price = req.body.price ?? product.price;
-    product.category = req.body.category ?? product.category;
-    product.image = req.body.image ?? product.image;
-    product.previewImage = req.body.previewImage ?? product.previewImage;
-    product.previewUrl = req.body.previewUrl ?? product.previewUrl;
-    
-    if (req.body.fileUrl !== undefined) product.fileUrl = req.body.fileUrl;
-    if (req.body.notionUrl !== undefined) product.notionUrl = req.body.notionUrl;
+    // Update fields conditionally
+    const fields = ['title', 'description', 'price', 'category', 'image', 'previewImage', 'previewUrl', 'fileUrl', 'notionUrl'];
+    fields.forEach(field => {
+        if (req.body[field] !== undefined) product[field] = req.body[field];
+    });
 
     const updatedProduct = await product.save();
-    console.log("[Admin] Product updated successfully");
-    
     res.json({ success: true, product: updatedProduct });
   } catch (err) {
-    console.error("[Admin Update Product Error]:", err);
-    res.status(500).json({ success: false, message: err.message });
+    res.status(500).json({ error: err.message });
   }
 };
 
 export const deleteProduct = async (req, res) => {
   try {
+    if (!isValidId(req.params.id)) {
+        return res.status(400).json({ error: "Invalid Product ID format" });
+    }
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ error: "Product not found" });
 
@@ -102,6 +95,7 @@ export const deleteProduct = async (req, res) => {
 
 export const likeProduct = async (req, res) => {
   try {
+    if (!isValidId(req.params.id)) return res.status(400).json({ msg: "Invalid ID" });
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ msg: "Product not found" });
 
@@ -125,6 +119,7 @@ export const commentProduct = async (req, res) => {
   try {
     const { text } = req.body;
     if (!text) return res.status(400).json({ msg: "Comment text is required" });
+    if (!isValidId(req.params.id)) return res.status(400).json({ msg: "Invalid ID" });
 
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ msg: "Product not found" });
@@ -163,7 +158,6 @@ export const editComment = async (req, res) => {
 
     comment.text = text;
     await product.save();
-
     res.json(product.comments);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -179,21 +173,14 @@ export const deleteComment = async (req, res) => {
       (c) => c._id.toString() === req.params.commentId
     );
 
-    if (commentIndex === -1) {
-      return res.status(404).json({ msg: "Comment not found" });
-    }
+    if (commentIndex === -1) return res.status(404).json({ msg: "Comment not found" });
 
-    if (
-      product.comments[commentIndex].userId.toString() !==
-        req.user._id.toString() &&
-      req.user.role !== "admin"
-    ) {
+    if (product.comments[commentIndex].userId.toString() !== req.user._id.toString() && req.user.role !== "admin") {
       return res.status(401).json({ msg: "Not authorized" });
     }
 
     product.comments.splice(commentIndex, 1);
     await product.save();
-
     res.json(product.comments);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -205,47 +192,40 @@ export const getSecuredProductContent = async (req, res) => {
   try {
     const productId = req.params.id;
 
-    // Support both .id (string) and ._id (object)
+    // 1. Validation: Prevent crash on bad ID format
+    if (!isValidId(productId)) {
+        return res.status(400).json({ success: false, message: "Invalid Database ID format." });
+    }
+
     const userId = req.user.id || req.user._id;
 
-    console.log(`[LMS Auth Request] User: ${userId} | Product: ${productId}`);
-
-    // 1. Search for ANY matching order that indicates a successful purchase
+    // 2. Search for ANY matching paid order
     const order = await Order.findOne({
       user: userId,
       product: productId,
       $or: [
         { isPaid: true },
-        { status: "Paid" },
-        { status: "Completed" },
-        { status: "Success" }
+        { status: { $in: ["Paid", "Completed", "Success"] } }
       ]
     });
 
     const isAdmin = req.user.role === "admin";
 
-    // 2. Grant access if order exists OR if the user is an admin
+    // 3. Check access rights
     if (!order && !isAdmin) {
-      console.warn(`[LMS Auth Denied] No order found for User ${userId} on Product ${productId}`);
       return res.status(403).json({
         success: false,
         message: "Access Denied. You must purchase this item to view it.",
       });
     }
 
-    // 3. Fetch the full product data
+    // 4. Fetch the full product data
     const product = await Product.findById(productId);
-
     if (!product) {
-      return res.status(404).json({ success: false, message: "Product not found" });
+      return res.status(404).json({ success: false, message: "Product not found in database." });
     }
 
-    console.log(`[LMS Auth Granted] Successfully authorized access to: ${product.title}`);
-
-    res.status(200).json({
-      success: true,
-      data: product,
-    });
+    res.status(200).json({ success: true, data: product });
   } catch (error) {
     console.error("[LMS Auth Error]:", error);
     res.status(500).json({ success: false, message: "Internal server error verifying access" });
