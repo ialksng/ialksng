@@ -6,7 +6,7 @@ import MainLayout from "../../core/layouts/MainLayout.jsx";
 import AdminLayout from "../../apps/admin/Layouts/AdminLayout.jsx";
 import Loader from "../../core/components/Loader.jsx";
 import CookieConsent from "../../core/components/CookieConsent.jsx";
-import Chatbot from "../ai/Chatbot.jsx";
+// import Chatbot from "../ai/Chatbot.jsx";
 import AdminRoute from "../admin/AdminRoute.jsx";
 import GameDetail from '../more/pages/GameDetail';
 
@@ -130,7 +130,7 @@ function MainApp() {
         </AnimatePresence>
       </Suspense>
 
-      <Chatbot />
+{/*      <Chatbot />*/}
       <CookieConsent />
     </>
   );
