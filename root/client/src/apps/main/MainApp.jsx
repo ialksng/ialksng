@@ -64,71 +64,69 @@ function MainApp() {
 
   return (
     <>
-      <Suspense fallback={<Loader />}>
-        <AnimatePresence mode="wait">
-          <Routes location={location} key={location.pathname}>
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
 
-            <Route element={<MainLayout />}>
+          <Route element={<MainLayout />}>
 
-              <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
-              <Route path="/about" element={<PageWrapper><About /></PageWrapper>} />
-              <Route path="/work" element={<PageWrapper><Work /></PageWrapper>} />
-              <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
-              <Route path="/more" element={<PageWrapper><More /></PageWrapper>} />
-              <Route path="/search" element={<PageWrapper><Search /></PageWrapper>} />
+            <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
+            <Route path="/about" element={<PageWrapper><About /></PageWrapper>} />
+            <Route path="/work" element={<PageWrapper><Work /></PageWrapper>} />
+            <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
+            <Route path="/more" element={<PageWrapper><More /></PageWrapper>} />
+            <Route path="/search" element={<PageWrapper><Search /></PageWrapper>} />
 
-              <Route path="/blog" element={<PageWrapper><Blog /></PageWrapper>} />
-              <Route path="/blog/:id" element={<PageWrapper><BlogDetail /></PageWrapper>} />
+            <Route path="/blog" element={<PageWrapper><Blog /></PageWrapper>} />
+            <Route path="/blog/:id" element={<PageWrapper><BlogDetail /></PageWrapper>} />
 
-              <Route path="/store" element={<PageWrapper><Store /></PageWrapper>} />
-              <Route path="/cart" element={<PageWrapper><Cart /></PageWrapper>} />
-              <Route path="/checkout/:id" element={<PageWrapper><Checkout /></PageWrapper>} />
-              <Route path="/my-purchases" element={<PageWrapper><MyPurchases /></PageWrapper>} />
-              <Route path="/content/:id" element={<PageWrapper><ProductContent /></PageWrapper>} />
-              <Route path="/access/:id" element={<PageWrapper><ViewProduct /></PageWrapper>} />
-              <Route path="/notes/:id" element={<PageWrapper><NotesViewer /></PageWrapper>} />
+            <Route path="/store" element={<PageWrapper><Store /></PageWrapper>} />
+            <Route path="/cart" element={<PageWrapper><Cart /></PageWrapper>} />
+            <Route path="/checkout/:id" element={<PageWrapper><Checkout /></PageWrapper>} />
+            <Route path="/my-purchases" element={<PageWrapper><MyPurchases /></PageWrapper>} />
+            <Route path="/content/:id" element={<PageWrapper><ProductContent /></PageWrapper>} />
+            <Route path="/access/:id" element={<PageWrapper><ViewProduct /></PageWrapper>} />
+            <Route path="/notes/:id" element={<PageWrapper><NotesViewer /></PageWrapper>} />
 
-              <Route path="/login" element={<PageWrapper><Login /></PageWrapper>} />
-              <Route path="/signup" element={<PageWrapper><Signup /></PageWrapper>} />
-              <Route path="/forgot-password" element={<PageWrapper><ForgotPassword /></PageWrapper>} />
+            <Route path="/login" element={<PageWrapper><Login /></PageWrapper>} />
+            <Route path="/signup" element={<PageWrapper><Signup /></PageWrapper>} />
+            <Route path="/forgot-password" element={<PageWrapper><ForgotPassword /></PageWrapper>} />
 
-              <Route path="/profile" element={<PageWrapper><Profile /></PageWrapper>} />
+            <Route path="/profile" element={<PageWrapper><Profile /></PageWrapper>} />
 
-              <Route path="/more/live" element={<PageWrapper><Live /></PageWrapper>} />
-              <Route path="/more/products" element={<PageWrapper><Products /></PageWrapper>} />
-              <Route path="/more/gamezone" element={<PageWrapper><GameZone /></PageWrapper>} />
-              <Route path="/more/life" element={<PageWrapper><Life /></PageWrapper>} />
-              <Route path="/more/gamezone/:id" element={<PageWrapper><GameDetail /></PageWrapper>} />
+            <Route path="/more/live" element={<PageWrapper><Live /></PageWrapper>} />
+            <Route path="/more/products" element={<PageWrapper><Products /></PageWrapper>} />
+            <Route path="/more/gamezone" element={<PageWrapper><GameZone /></PageWrapper>} />
+            <Route path="/more/life" element={<PageWrapper><Life /></PageWrapper>} />
+            <Route path="/more/gamezone/:id" element={<PageWrapper><GameDetail /></PageWrapper>} />
 
-              <Route path="/privacy-policy" element={<PageWrapper><PrivacyPolicy /></PageWrapper>} />
-              <Route path="/terms-and-conditions" element={<PageWrapper><TermsConditions /></PageWrapper>} />
-              <Route path="/refund-policy" element={<PageWrapper><RefundPolicy /></PageWrapper>} />
-              <Route path="/cookie-policy" element={<PageWrapper><CookiesPolicy /></PageWrapper>} />
+            <Route path="/privacy-policy" element={<PageWrapper><PrivacyPolicy /></PageWrapper>} />
+            <Route path="/terms-and-conditions" element={<PageWrapper><TermsConditions /></PageWrapper>} />
+            <Route path="/refund-policy" element={<PageWrapper><RefundPolicy /></PageWrapper>} />
+            <Route path="/cookie-policy" element={<PageWrapper><CookiesPolicy /></PageWrapper>} />
 
-              <Route element={<AdminRoute><AdminLayout /></AdminRoute>}>
+            <Route element={<AdminRoute><AdminLayout /></AdminRoute>}>
 
-                <Route path="/admin" element={<PageWrapper><AdminDashboard /></PageWrapper>} />
-                <Route path="/admin/home" element={<PageWrapper><AdminHome /></PageWrapper>} />
-                <Route path="/admin/products" element={<PageWrapper><AdminProducts /></PageWrapper>} />
-                <Route path="/admin/blog" element={<PageWrapper><AdminBlog /></PageWrapper>} />
-                <Route path="/admin/about" element={<PageWrapper><AdminAbout /></PageWrapper>} />
-                <Route path="/admin/projects" element={<PageWrapper><AdminProjects /></PageWrapper>} />
-                <Route path="/admin/certifications" element={<PageWrapper><AdminCertifications /></PageWrapper>} />
-                <Route path="/admin/newsletter" element={<PageWrapper><AdminNewsletter /></PageWrapper>} />
-                <Route path="/admin/testimonials" element={<PageWrapper><AdminTestimonials /></PageWrapper>} />
+              <Route path="/admin" element={<PageWrapper><AdminDashboard /></PageWrapper>} />
+              <Route path="/admin/home" element={<PageWrapper><AdminHome /></PageWrapper>} />
+              <Route path="/admin/products" element={<PageWrapper><AdminProducts /></PageWrapper>} />
+              <Route path="/admin/blog" element={<PageWrapper><AdminBlog /></PageWrapper>} />
+              <Route path="/admin/about" element={<PageWrapper><AdminAbout /></PageWrapper>} />
+              <Route path="/admin/projects" element={<PageWrapper><AdminProjects /></PageWrapper>} />
+              <Route path="/admin/certifications" element={<PageWrapper><AdminCertifications /></PageWrapper>} />
+              <Route path="/admin/newsletter" element={<PageWrapper><AdminNewsletter /></PageWrapper>} />
+              <Route path="/admin/testimonials" element={<PageWrapper><AdminTestimonials /></PageWrapper>} />
 
-                <Route path="/admin/streams" element={<PageWrapper><AdminStreams /></PageWrapper>} />
-                <Route path="/admin/gamezone" element={<PageWrapper><AdminGameZone /></PageWrapper>} />
-                <Route path="/admin/gear" element={<PageWrapper><AdminGear /></PageWrapper>} />
-                <Route path="/admin/life" element={<PageWrapper><AdminLife /></PageWrapper>} />
-
-              </Route>
+              <Route path="/admin/streams" element={<PageWrapper><AdminStreams /></PageWrapper>} />
+              <Route path="/admin/gamezone" element={<PageWrapper><AdminGameZone /></PageWrapper>} />
+              <Route path="/admin/gear" element={<PageWrapper><AdminGear /></PageWrapper>} />
+              <Route path="/admin/life" element={<PageWrapper><AdminLife /></PageWrapper>} />
 
             </Route>
 
-          </Routes>
-        </AnimatePresence>
-      </Suspense>
+          </Route>
+
+        </Routes>
+      </AnimatePresence>
 
       <Chatbot />
       <CookieConsent />
@@ -143,7 +141,9 @@ const PageWrapper = ({ children }) => (
     exit={{ opacity: 0, y: -20 }}
     transition={{ duration: 0.4 }}
   >
-    {children}
+    <Suspense fallback={<Loader />}>
+      {children}
+    </Suspense>
   </motion.div>
 );
 
