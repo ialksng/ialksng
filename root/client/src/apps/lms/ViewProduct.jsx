@@ -194,11 +194,14 @@ function ViewProduct() {
             <div className="vp-card-actions">
               {hasAccess ? (
                 <button 
-                  className="vp-btn-course"
-                  onClick={() => window.location.href = `https://gurukul.ialksng.me/learn/${product._id}`}
-                >
-                  View
-                </button>
+                    className="vp-btn-course"
+                    onClick={() => {
+                      console.log("Opening Gurukul with ID:", product._id);
+                      window.location.href = `https://gurukul.ialksng.me/learn/${product._id}`;
+                    }}
+                  >
+                    View
+                  </button>
               ) : (
                 <button 
                   className="vp-btn-buy"

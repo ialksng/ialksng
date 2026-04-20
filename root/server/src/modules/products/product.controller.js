@@ -6,6 +6,11 @@ import Notification from "../notifications/notification.model.js";
 
 const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
 
+const safeFindProduct = async (id) => {
+  if (!isValidObjectId(id)) return null;
+  return await Product.findById(id);
+};
+
 export const addProduct = async (req, res) => {
   try {
     const product = await Product.create({
@@ -24,9 +29,7 @@ export const addProduct = async (req, res) => {
       type: "update",
     }));
 
-    if (notifications.length > 0) {
-      await Notification.insertMany(notifications);
-    }
+    if (notifications.length) await Notification.insertMany(notifications);
 
     res.status(201).json({ success: true, product });
   } catch (err) {
@@ -45,13 +48,7 @@ export const getProducts = async (req, res) => {
 
 export const getProduct = async (req, res) => {
   try {
-    const { id } = req.params;
-
-    if (!isValidObjectId(id)) {
-      return res.status(400).json({ error: "Invalid Product ID" });
-    }
-
-    const product = await Product.findById(id);
+    const product = await safeFindProduct(req.params.id);
 
     if (!product) {
       return res.status(404).json({ error: "Product not found" });
@@ -65,22 +62,13 @@ export const getProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
   try {
-    const { id } = req.params;
-
-    if (!isValidObjectId(id)) {
-      return res.status(400).json({ error: "Invalid Product ID" });
-    }
-
-    const product = await Product.findById(id);
+    const product = await safeFindProduct(req.params.id);
 
     if (!product) {
       return res.status(404).json({ error: "Product not found" });
     }
 
-    Object.keys(req.body).forEach((key) => {
-      product[key] = req.body[key];
-    });
-
+    Object.assign(product, req.body);
     await product.save();
 
     res.json({ success: true, product });
@@ -91,13 +79,7 @@ export const updateProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
   try {
-    const { id } = req.params;
-
-    if (!isValidObjectId(id)) {
-      return res.status(400).json({ error: "Invalid Product ID" });
-    }
-
-    const product = await Product.findById(id);
+    const product = await safeFindProduct(req.params.id);
 
     if (!product) {
       return res.status(404).json({ error: "Product not found" });
@@ -115,20 +97,19 @@ export const likeProduct = async (req, res) => {
   try {
     if (!req.user) return res.status(401).json({ msg: "Unauthorized" });
 
-    const product = await Product.findById(req.params.id);
+    const product = await safeFindProduct(req.params.id);
 
     if (!product) return res.status(404).json({ msg: "Product not found" });
 
     const userId = req.user._id.toString();
 
     if (product.likes.includes(userId)) {
-      product.likes = product.likes.filter((id) => id !== userId);
+      product.likes = product.likes.filter(id => id !== userId);
     } else {
       product.likes.push(userId);
     }
 
     await product.save();
-
     res.json(product.likes);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -142,18 +123,17 @@ export const commentProduct = async (req, res) => {
     const { text } = req.body;
     if (!text) return res.status(400).json({ msg: "Comment text required" });
 
-    const product = await Product.findById(req.params.id);
+    const product = await safeFindProduct(req.params.id);
 
     if (!product) return res.status(404).json({ msg: "Product not found" });
 
-    const newComment = {
+    product.comments.push({
       user: req.user.name || "User",
       userId: req.user._id.toString(),
       text,
       date: new Date(),
-    };
+    });
 
-    product.comments.push(newComment);
     await product.save();
 
     res.json(product.comments);
@@ -166,22 +146,17 @@ export const editComment = async (req, res) => {
   try {
     if (!req.user) return res.status(401).json({ msg: "Unauthorized" });
 
-    const { text } = req.body;
-    if (!text) return res.status(400).json({ msg: "Text required" });
-
-    const product = await Product.findById(req.params.id);
-
+    const product = await safeFindProduct(req.params.id);
     if (!product) return res.status(404).json({ msg: "Product not found" });
 
     const comment = product.comments.id(req.params.commentId);
-
     if (!comment) return res.status(404).json({ msg: "Comment not found" });
 
     if (comment.userId !== req.user._id.toString()) {
       return res.status(401).json({ msg: "Not authorized" });
     }
 
-    comment.text = text;
+    comment.text = req.body.text;
     await product.save();
 
     res.json(product.comments);
@@ -192,25 +167,13 @@ export const editComment = async (req, res) => {
 
 export const deleteComment = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
-
+    const product = await safeFindProduct(req.params.id);
     if (!product) return res.status(404).json({ msg: "Product not found" });
 
-    const index = product.comments.findIndex(
-      (c) => c._id.toString() === req.params.commentId
+    product.comments = product.comments.filter(
+      c => c._id.toString() !== req.params.commentId
     );
 
-    if (index === -1) return res.status(404).json({ msg: "Comment not found" });
-
-    if (
-      !req.user ||
-      (product.comments[index].userId !== req.user._id.toString() &&
-        req.user.role !== "admin")
-    ) {
-      return res.status(401).json({ msg: "Not authorized" });
-    }
-
-    product.comments.splice(index, 1);
     await product.save();
 
     res.json(product.comments);
@@ -221,12 +184,12 @@ export const deleteComment = async (req, res) => {
 
 export const getSecuredProductContent = async (req, res) => {
   try {
-    const productId = req.params.id;
+    const product = await safeFindProduct(req.params.id);
 
-    if (!isValidObjectId(productId)) {
-      return res.status(400).json({
+    if (!product) {
+      return res.status(404).json({
         success: false,
-        message: "Invalid Product ID"
+        message: "Product not found"
       });
     }
 
@@ -237,32 +200,20 @@ export const getSecuredProductContent = async (req, res) => {
       });
     }
 
-    const userId = req.user._id || req.user.id;
-    const isAdmin = req.user.role === "admin";
-
-    const product = await Product.findById(productId);
-
-    if (!product) {
-      return res.status(404).json({
-        success: false,
-        message: "Product not found"
-      });
-    }
-
     if (product.price === 0) {
       return res.json({ success: true, data: product });
     }
 
     const order = await Order.findOne({
-      user: userId,
-      product: productId,
+      user: req.user._id,
+      product: product._id,
       $or: [
         { isPaid: true },
         { status: { $in: ["Paid", "Completed", "Success"] } }
       ]
     });
 
-    if (!order && !isAdmin) {
+    if (!order && req.user.role !== "admin") {
       return res.status(403).json({
         success: false,
         message: "Access Denied"
