@@ -1,43 +1,43 @@
-.gear-container {
+.ecosystem-container {
   min-height: 100vh;
   background-color: #0f172a;
   padding-bottom: 8rem;
   color: #f8fafc;
 }
 
-.gear-hero {
+.ecosystem-hero {
   position: relative;
   overflow: hidden;
   padding: 5rem 2rem 4rem;
   text-align: center;
 }
 
-.gear-glow {
+.ecosystem-glow {
   position: absolute;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
   width: 60%;
   height: 10rem;
-  background-color: rgba(14, 165, 233, 0.2); /* Sky Blue */
+  background-color: rgba(99, 102, 241, 0.2); /* Indigo */
   filter: blur(120px);
   border-radius: 50%;
   pointer-events: none;
 }
 
-.gear-title {
+.ecosystem-title {
   font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: 900;
   margin-bottom: 1rem;
   letter-spacing: -1px;
 }
 
-.gear-title-highlight {
-  color: #38bdf8;
-  text-shadow: 0 0 30px rgba(56, 189, 248, 0.4);
+.ecosystem-title-highlight {
+  color: #818cf8; /* Indigo-400 */
+  text-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
 }
 
-.gear-subtitle {
+.ecosystem-subtitle {
   color: #94a3b8;
   max-width: 600px;
   margin: 0 auto;
@@ -46,66 +46,69 @@
 }
 
 /* Grid Layout */
-.gear-content {
+.ecosystem-content {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1.5rem;
 }
 
-.gear-grid {
+.ecosystem-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
 }
 
-.gear-card {
+.ecosystem-card {
   display: flex;
   flex-direction: column;
   background: rgba(30, 41, 59, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 20px;
-  padding: 1.8rem;
-  text-decoration: none;
+  border-radius: 24px;
+  padding: 2rem;
   backdrop-filter: blur(10px);
   transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
   position: relative;
   overflow: hidden;
 }
 
-/* The Flashlight/Glow Hover Effect */
-.gear-card::before {
+/* Hover Effect: Abstract glowing aura inside the card */
+.ecosystem-card::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.15), transparent 60%);
+  top: -50%; left: -50%; right: -50%; bottom: -50%;
+  background: radial-gradient(circle at center, rgba(99, 102, 241, 0.1), transparent 60%);
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.4s ease;
   pointer-events: none;
+  z-index: 0;
 }
 
-.gear-card:hover {
-  transform: translateY(-6px);
-  border-color: rgba(56, 189, 248, 0.4);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3), 0 0 20px rgba(56, 189, 248, 0.1);
+.ecosystem-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(99, 102, 241, 0.1);
 }
 
-.gear-card:hover::before {
+.ecosystem-card:hover::before {
   opacity: 1;
 }
 
-.gear-card-header {
+.ecosystem-card-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 1.5rem;
+  align-items: center;
+  margin-bottom: 2rem;
   position: relative;
   z-index: 2;
 }
 
-.gear-badge {
-  background: rgba(15, 23, 42, 0.8);
-  border: 1px solid rgba(56, 189, 248, 0.3);
-  color: #7dd3fc;
+.ecosystem-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  color: #34d399; /* Emerald */
   padding: 6px 14px;
   border-radius: 20px;
   font-size: 0.75rem;
@@ -114,71 +117,126 @@
   letter-spacing: 1px;
 }
 
-.gear-link-icon {
-  color: #64748b;
-  font-size: 1rem;
-  transition: color 0.3s, transform 0.3s;
+.live-dot {
+  width: 6px;
+  height: 6px;
+  background-color: #34d399;
+  border-radius: 50%;
+  animation: pulse-emerald 2s infinite;
 }
 
-.gear-card:hover .gear-link-icon {
-  color: #38bdf8;
+.launch-icon {
+  color: #64748b;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  background: rgba(15, 23, 42, 0.5);
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.ecosystem-card:hover .launch-icon {
+  color: #818cf8;
+  background: rgba(99, 102, 241, 0.1);
   transform: translate(2px, -2px);
 }
 
-.gear-card-body {
+.ecosystem-card-body {
   flex-grow: 1;
   position: relative;
   z-index: 2;
 }
 
-.gear-item-title {
-  font-size: 1.4rem;
-  font-weight: 800;
+.app-icon-placeholder {
+  width: 54px;
+  height: 54px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  font-weight: 900;
   color: #fff;
-  margin: 0 0 0.8rem 0;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
 }
 
-.gear-item-desc {
+.ecosystem-item-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 1rem 0;
+}
+
+.ecosystem-item-desc {
   color: #94a3b8;
-  font-size: 0.95rem;
+  font-size: 1rem;
   line-height: 1.6;
   margin: 0;
 }
 
-.gear-card-footer {
-  margin-top: 1.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  padding-top: 1.2rem;
+.ecosystem-card-footer {
+  margin-top: 2rem;
   position: relative;
   z-index: 2;
 }
 
-.gear-action-text {
-  color: #64748b;
-  font-weight: 600;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  transition: color 0.3s;
+.ecosystem-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  color: #818cf8;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.3s ease;
 }
 
-.gear-card:hover .gear-action-text {
-  color: #38bdf8;
+.ecosystem-card:hover .ecosystem-action-btn {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
 }
 
-/* Skeleton Loading */
-.gear-skeleton-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-}
-
-.gear-skeleton-card {
-  height: 250px;
+/* Empty & Loading States */
+.ecosystem-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: rgba(30, 41, 59, 0.3);
   border-radius: 20px;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.empty-icon {
+  font-size: 3rem;
+  color: #475569;
+  margin-bottom: 1rem;
+}
+
+.ecosystem-skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.ecosystem-skeleton-card {
+  height: 300px;
+  border-radius: 24px;
   background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
   background-size: 200% 100%;
   animation: loading 1.5s infinite;
+}
+
+@keyframes pulse-emerald {
+  0% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.4); }
+  70% { box-shadow: 0 0 0 6px rgba(52, 211, 153, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
 }
 
 @keyframes loading {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../../../core/utils/axios';
-import { FaExternalLinkAlt } from 'react-icons/fa';
+import { FaRocket, FaExternalLinkAlt, FaCode } from 'react-icons/fa';
 import './Products.css';
 
 const Products = () => {
@@ -22,48 +22,67 @@ const Products = () => {
   }, []);
 
   return (
-    <div className="gear-container animated-fade-in">
-      <div className="gear-hero">
-        <div className="gear-glow"></div>
-        <h1 className="gear-title">
-          My <span className="gear-title-highlight">Setup</span> & Gear
+    <div className="ecosystem-container animated-fade-in">
+      <div className="ecosystem-hero">
+        <div className="ecosystem-glow"></div>
+        <h1 className="ecosystem-title">
+          My <span className="ecosystem-title-highlight">Ecosystem</span>
         </h1>
-        <p className="gear-subtitle">
-          A curated list of the hardware, software, and everyday carry items I use to build, design, and live.
+        <p className="ecosystem-subtitle">
+          A collection of platforms, applications, and digital experiences I've designed and engineered from the ground up.
         </p>
       </div>
 
-      <div className="gear-content">
+      <div className="ecosystem-content">
         {loading ? (
-          <div className="gear-skeleton-grid">
-            {[1, 2, 3, 4].map(n => <div key={n} className="gear-skeleton-card"></div>)}
+          <div className="ecosystem-skeleton-grid">
+            {[1, 2, 3].map(n => <div key={n} className="ecosystem-skeleton-card"></div>)}
           </div>
         ) : products.length === 0 ? (
-          <div className="gear-empty">No gear listed yet.</div>
+          <div className="ecosystem-empty">
+            <FaCode className="empty-icon" />
+            <p>No projects listed yet. Currently building something awesome!</p>
+          </div>
         ) : (
-          <div className="gear-grid">
+          <div className="ecosystem-grid">
             {products.map((product) => (
-              <a 
-                key={product._id} 
-                href={product.externalLink} 
-                target="_blank" 
-                rel="noreferrer" 
-                className="gear-card"
-              >
-                <div className="gear-card-header">
-                  <span className="gear-badge">{product.category || 'Tech'}</span>
-                  <div className="gear-link-icon"><FaExternalLinkAlt /></div>
+              <div key={product._id} className="ecosystem-card">
+                <div className="ecosystem-card-header">
+                  <span className="ecosystem-badge">
+                    <span className="live-dot"></span> 
+                    {product.category || 'Live Platform'}
+                  </span>
+                  <a 
+                    href={product.externalLink} 
+                    target="_blank" 
+                    rel="noreferrer"
+                    className="launch-icon"
+                    title="Launch App"
+                  >
+                    <FaExternalLinkAlt />
+                  </a>
                 </div>
                 
-                <div className="gear-card-body">
-                  <h3 className="gear-item-title">{product.name}</h3>
-                  <p className="gear-item-desc">{product.description}</p>
+                <div className="ecosystem-card-body">
+                  <div className="app-icon-placeholder">
+                    {/* Extracts the first letter of the product name to act as an app icon */}
+                    {product.name ? product.name.charAt(0).toUpperCase() : <FaRocket />}
+                  </div>
+                  <h3 className="ecosystem-item-title">{product.name}</h3>
+                  <p className="ecosystem-item-desc">{product.description}</p>
                 </div>
                 
-                <div className="gear-card-footer">
-                  <span className="gear-action-text">View Product</span>
+                <div className="ecosystem-card-footer">
+                  <a 
+                    href={product.externalLink} 
+                    target="_blank" 
+                    rel="noreferrer" 
+                    className="ecosystem-action-btn"
+                  >
+                    <FaRocket /> Launch App
+                  </a>
                 </div>
-              </a>
+              </div>
             ))}
           </div>
         )}
