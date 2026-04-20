@@ -273,6 +273,29 @@ export const createStream = async (req, res) => {
   }
 };
 
+// === ADDED THIS NEW FUNCTION ===
+export const updateStream = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const updatedStream = await Stream.findByIdAndUpdate(
+      id,
+      req.body,
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedStream) {
+      return res.status(404).json({ message: "Stream not found" });
+    }
+
+    res.status(200).json(updatedStream);
+  } catch (error) {
+    console.error("UPDATE STREAM ERROR:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+// ===============================
+
 export const deleteStream = async (req, res) => {
   try {
     await Stream.findByIdAndDelete(req.params.id);

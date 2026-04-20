@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { FaPlus, FaTimes, FaTrash, FaEdit, FaImage, FaVideo, FaMusic, FaHeart, FaComment, FaLink } from "react-icons/fa";
+import { FaPlus, FaTrash, FaEdit, FaImage, FaVideo, FaMusic, FaLink, FaLeaf } from "react-icons/fa";
 import toast from "react-hot-toast";
 import axios from '../../../core/utils/axios';
 import Loader from '../../../core/components/Loader';
-import './admin.css';
+import './AdminLife.css';
 
 const AdminLife = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [view, setView] = useState("list");
-  const [saving, setSaving] = useState(false);
-  const [currentId, setCurrentId] = useState(null);
+  const [editingId, setEditingId] = useState(null);
 
   const [formData, setFormData] = useState({ 
     title: '', 
@@ -19,7 +17,6 @@ const AdminLife = () => {
     mediaType: 'none', 
     mediaUrl: ''
   });
-  
   const [mediaFile, setMediaFile] = useState(null); 
 
   useEffect(() => { 
@@ -38,22 +35,28 @@ const AdminLife = () => {
     }
   };
 
-  const handleOpenForm = (post = null) => {
-    if (post) {
-      setFormData({
-        title: post.title || '',
-        content: post.content || '',
-        category: post.category || 'Life updates',
-        mediaType: post.mediaType || 'none',
-        mediaUrl: post.mediaUrl || ''
-      });
-      setCurrentId(post._id);
-    } else {
-      setFormData({ title: '', content: '', category: 'Life updates', mediaType: 'none', mediaUrl: '' });
-      setCurrentId(null);
-    }
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleEdit = (post) => {
+    setEditingId(post._id);
+    setFormData({
+      title: post.title || '',
+      content: post.content || '',
+      category: post.category || 'Life updates',
+      mediaType: post.mediaType || 'none',
+      mediaUrl: post.mediaUrl || ''
+    });
     setMediaFile(null);
-    setView("form");
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setFormData({ title: '', content: '', category: 'Life updates', mediaType: 'none', mediaUrl: '' });
+    setMediaFile(null);
   };
 
   const handleUrlPaste = (e) => {
@@ -61,28 +64,13 @@ const AdminLife = () => {
     let type = formData.mediaType;
 
     if (formData.mediaType === "none") {
-      if (/\.(jpeg|jpg|gif|png|webp|svg)(\?.*)?$/i.test(url)) {
-        type = 'image';
-      } 
-      else if (
-        /\.(mp4|webm|ogg)(\?.*)?$/i.test(url) ||
-        /(youtube\.com|youtu\.be)/i.test(url)
-      ) {
-        type = 'video';
-      } 
-      else if (/\.(mp3|wav|m4a)(\?.*)?$/i.test(url)) {
-        type = 'audio';
-      } 
-      else if (url) {
-        type = 'link';
-      }
+      if (/\.(jpeg|jpg|gif|png|webp|svg)(\?.*)?$/i.test(url)) type = 'image';
+      else if (/\.(mp4|webm|ogg)(\?.*)?$/i.test(url) || /(youtube\.com|youtu\.be)/i.test(url)) type = 'video';
+      else if (/\.(mp3|wav|m4a)(\?.*)?$/i.test(url)) type = 'audio';
+      else if (url) type = 'link';
     }
 
-    setFormData({ 
-      ...formData, 
-      mediaUrl: url, 
-      mediaType: type 
-    });
+    setFormData({ ...formData, mediaUrl: url, mediaType: type });
   };
 
   const handleSubmit = async (e) => {
@@ -91,7 +79,7 @@ const AdminLife = () => {
     if (formData.mediaType === "link" && !formData.mediaUrl) return toast.error("Please provide a valid link.");
     if (mediaFile && formData.mediaType === "link") return toast.error("Link posts cannot include uploaded files.");
 
-    setSaving(true);
+    const toastId = toast.loading(editingId ? "Updating post..." : "Publishing post...");
 
     const submitData = new FormData();
     submitData.append('title', formData.title);
@@ -102,228 +90,169 @@ const AdminLife = () => {
     if (formData.mediaUrl) submitData.append('mediaUrl', formData.mediaUrl);
     if (mediaFile) submitData.append('image', mediaFile); 
 
-    const requestPromise = currentId 
-      ? axios.put(`/more/life/${currentId}`, submitData)
-      : axios.post('/more/life', submitData);
-
-    toast.promise(requestPromise, {
-      loading: currentId ? 'Updating...' : 'Posting update...',
-      success: () => {
-        fetchPosts();
-        setView("list");
-        return currentId ? "Update saved successfully!" : "Update posted successfully!";
-      },
-      error: "Failed to save update."
-    }).finally(() => setSaving(false));
+    try {
+      if (editingId) {
+        await axios.put(`/more/life/${editingId}`, submitData);
+        toast.success("Update saved successfully!", { id: toastId });
+      } else {
+        await axios.post('/more/life', submitData);
+        toast.success("Update posted successfully!", { id: toastId });
+      }
+      cancelEdit();
+      fetchPosts();
+    } catch (err) {
+      toast.error("Failed to save update.", { id: toastId });
+    }
   };
 
-  const handleDelete = (id) => {
-    toast((t) => (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', padding: '4px' }}>
-        <span style={{ fontSize: '14px', fontWeight: '500', color: 'var(--text-primary)' }}>Delete this update?</span>
-        <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
-          <button 
-            onClick={async () => {
-              toast.dismiss(t.id);
-              const deletePromise = axios.delete(`/more/life/${id}`);
-              
-              toast.promise(deletePromise, {
-                loading: 'Deleting...',
-                success: () => {
-                  setPosts(posts.filter(p => p._id !== id));
-                  return "Update deleted.";
-                },
-                error: "Failed to delete update."
-              });
-            }} 
-            style={{ flex: 1, padding: '6px 12px', background: 'var(--danger-color)', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
-          >
-            Delete
-          </button>
-          <button 
-            onClick={() => toast.dismiss(t.id)} 
-            style={{ flex: 1, padding: '6px 12px', background: 'transparent', color: 'var(--text-secondary)', border: '1px solid var(--border-color)', borderRadius: '6px', cursor: 'pointer' }}
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
-    ), { duration: Infinity });
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this update?")) return;
+    
+    const toastId = toast.loading("Deleting update...");
+    try {
+      await axios.delete(`/more/life/${id}`);
+      toast.success("Update deleted.", { id: toastId });
+      fetchPosts();
+    } catch (err) {
+      toast.error("Failed to delete update.", { id: toastId });
+    }
   };
 
-  if (loading && view === "list") {
-     return (
-       <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '400px' }}>
-          <Loader />
-       </div>
-     );
-  }
+  const getMediaIcon = (type) => {
+    switch(type) {
+      case 'image': return <FaImage title="Image" />;
+      case 'video': return <FaVideo title="Video" />;
+      case 'audio': return <FaMusic title="Audio" />;
+      case 'link': return <FaLink title="Link" />;
+      default: return null;
+    }
+  };
 
   return (
-    <div className="admin-container">
-      {view === "list" ? (
-        <>
-          <div className="admin-header">
-            <h2>Manage Social Feed</h2>
-            <button className="btn primary" onClick={() => handleOpenForm()}>
-              <FaPlus style={{ marginRight: '8px' }}/> Post Update
-            </button>
-          </div>
+    <div className="al-container animated-fade-in">
+      <div className="al-header">
+        <h1>Manage Dev Log & Life</h1>
+        <p>Post updates, share your fitness journey, or log your daily development thoughts.</p>
+      </div>
 
-          <div className="admin-table-container">
-            <table className="admin-table">
-              <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>Category</th>
-                  <th>Media</th>
-                  <th>Stats</th>
-                  <th>Date</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {posts.length === 0 ? (
-                  <tr><td colSpan="6" style={{ textAlign: "center", padding: "2rem", color: "var(--text-muted)" }}>No updates found. Post your first one!</td></tr>
-                ) : (
-                  posts.map(p => (
-                    <tr key={p._id}>
-                      <td style={{ fontWeight: 500, color: "var(--text-primary)" }}>{p.title}</td>
-                      <td>
-                        <span style={{ background: 'color-mix(in srgb, var(--accent-primary) 15%, transparent)', color: 'var(--accent-primary)', padding: '4px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: '600' }}>
-                          {p.category || 'Update'}
-                        </span>
-                      </td>
-                      <td>
-                        {p.mediaType === 'image' && <FaImage title="Image Attached" color="var(--text-secondary)" />}
-                        {p.mediaType === 'video' && <FaVideo title="Video Attached" color="var(--text-secondary)" />}
-                        {p.mediaType === 'audio' && <FaMusic title="Audio Attached" color="var(--text-secondary)" />}
-                        {p.mediaType === 'link' && <FaLink title="Link Attached" color="var(--text-secondary)" />}
-                        {(!p.mediaType || p.mediaType === 'none') && <span style={{color: 'var(--text-muted)', fontSize: '12px'}}>None</span>}
-                      </td>
-                      <td>
-                        <div style={{ display: 'flex', gap: '10px', fontSize: '13px', color: 'var(--text-secondary)' }}>
-                          <span title="Reactions" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><FaHeart color="var(--danger-color)" /> {p.reactions?.length || 0}</span>
-                          <span title="Comments" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><FaComment color="var(--accent-primary)" /> {p.comments?.length || 0}</span>
-                        </div>
-                      </td>
-                      <td>{new Date(p.createdAt || p.date || Date.now()).toLocaleDateString()}</td>
-                      <td>
-                        <div className="table-actions">
-                          <button className="btn-icon edit" onClick={() => handleOpenForm(p)} title="Edit">
-                            <FaEdit />
-                          </button>
-                          <button className="btn-icon delete" onClick={() => handleDelete(p._id)} title="Delete">
-                            <FaTrash />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        </>
-      ) : (
-        <>
-          <div className="admin-header">
-            <h2>{currentId ? "Edit Social Update" : "Create Social Update"}</h2>
-            <button className="btn secondary" onClick={() => setView("list")}>
-              <FaTimes style={{ marginRight: '8px' }}/> Cancel
-            </button>
-          </div>
+      <div className="al-form-card">
+        <h2 className="al-form-title">
+          {editingId ? <><FaEdit /> Edit Update</> : <><FaPlus /> Create New Update</>}
+        </h2>
 
-          <form onSubmit={handleSubmit} className="admin-form">
-            <div className="form-section">
-              <h3>Content</h3>
-              
-              <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1rem' }}>
-                <div className="form-group">
-                  <label>Title or Hook</label>
-                  <input 
-                    type="text" 
-                    required 
-                    placeholder="E.g., Just hit a new PR!"
-                    value={formData.title} 
-                    onChange={e => setFormData({...formData, title: e.target.value})} 
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Category</label>
-                  <select 
-                    value={formData.category} 
-                    onChange={e => setFormData({...formData, category: e.target.value})}
-                    style={{ width: '100%', padding: '12px', borderRadius: '8px', background: 'color-mix(in srgb, var(--bg-primary) 50%, transparent)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', outline: 'none' }}
-                  >
-                    <option value="Life updates">Life updates</option>
-                    <option value="Fitness">Fitness</option>
-                    <option value="Dev Log">Dev Log</option>
-                    <option value="Tips">Tips</option>
-                  </select>
-                </div>
-              </div>
+        <form onSubmit={handleSubmit} className="al-form">
+          <div className="al-form-grid">
+            <div className="al-input-group">
+              <label>Title or Hook *</label>
+              <input 
+                type="text" name="title" required placeholder="E.g., Just hit a new PR!"
+                value={formData.title} onChange={handleInputChange} 
+              />
+            </div>
+            
+            <div className="al-input-group">
+              <label>Category</label>
+              <select name="category" value={formData.category} onChange={handleInputChange}>
+                <option value="Life updates">Life updates</option>
+                <option value="Fitness">Fitness</option>
+                <option value="Dev Log">Dev Log</option>
+                <option value="Tips">Tips</option>
+              </select>
+            </div>
 
-              <div className="form-group">
-                <label>Text Content</label>
-                <textarea 
-                  placeholder="What's on your mind? (Paste a YouTube link here and it will auto-embed!)" 
-                  value={formData.content} 
-                  onChange={e => setFormData({...formData, content: e.target.value})} 
-                  required 
-                  rows="4"
-                  style={{ width: '100%', padding: '12px', borderRadius: '8px', background: 'color-mix(in srgb, var(--bg-primary) 50%, transparent)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', outline: 'none', resize: 'vertical' }}
+            <div className="al-input-group al-full-width">
+              <label>Text Content *</label>
+              <textarea 
+                name="content" required rows="4"
+                placeholder="What's on your mind? (Paste a YouTube link here and it will auto-embed!)" 
+                value={formData.content} onChange={handleInputChange} 
+              />
+            </div>
+
+            <div className="al-input-group">
+              <label>Media Type (Optional)</label>
+              <select name="mediaType" value={formData.mediaType} onChange={handleInputChange}>
+                <option value="none">None</option>
+                <option value="image">Image</option>
+                <option value="video">Video</option>
+                <option value="audio">Audio</option>
+                <option value="link">Link</option>
+              </select>
+            </div>
+
+            <div className="al-input-group">
+              <label>{formData.mediaType === "link" ? "Paste Link URL" : "Upload File OR Paste URL"}</label>
+              <div className="al-media-inputs">
+                <input 
+                  type="file" 
+                  onChange={e => setMediaFile(e.target.files[0])}
+                  disabled={formData.mediaType === "link"}
+                  className="file-input"
+                />
+                <input 
+                  type="url" 
+                  placeholder="Paste URL..."
+                  value={formData.mediaUrl} 
+                  onChange={handleUrlPaste} 
+                  disabled={!!mediaFile} 
                 />
               </div>
             </div>
+          </div>
 
-            <div className="form-section mt-4">
-              <h3>Attach Media (Optional)</h3>
-              
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 3fr', gap: '1rem' }}>
-                <div className="form-group">
-                  <label>Media Type</label>
-                  <select 
-                    value={formData.mediaType} 
-                    onChange={e => setFormData({...formData, mediaType: e.target.value})}
-                    style={{ width: '100%', padding: '12px', borderRadius: '8px', background: 'color-mix(in srgb, var(--bg-primary) 50%, transparent)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', outline: 'none' }}
-                  >
-                    <option value="none">None</option>
-                    <option value="image">Image</option>
-                    <option value="video">Video</option>
-                    <option value="audio">Audio</option>
-                    <option value="link">Link</option>
-                  </select>
+          <div className="al-form-actions">
+            <button type="submit" className="al-btn-submit">
+              {editingId ? 'Save Changes' : 'Post to Feed'}
+            </button>
+            {editingId && (
+              <button type="button" onClick={cancelEdit} className="al-btn-cancel">
+                Cancel
+              </button>
+            )}
+          </div>
+        </form>
+      </div>
+
+      <div className="al-inventory-section">
+        <h2><FaLeaf /> Social Feed History</h2>
+        
+        {loading ? (
+          <div className="al-loader-wrapper"><Loader /></div>
+        ) : posts.length === 0 ? (
+          <div className="al-empty-state">No updates found. Post your first one above!</div>
+        ) : (
+          <div className="al-post-grid">
+            {posts.map(post => (
+              <div key={post._id} className="al-post-card">
+                <div className="al-card-header">
+                  <span className="al-badge-category">{post.category}</span>
+                  <span className="al-date">{new Date(post.createdAt).toLocaleDateString()}</span>
                 </div>
                 
-                <div className="form-group">
-                  <label>{formData.mediaType === "link" ? "Paste Link URL" : "Upload File OR Paste URL"}</label>
-                  <div style={{ display: 'flex', gap: '10px' }}>
-                    <input 
-                      type="file" 
-                      onChange={e => setMediaFile(e.target.files[0])}
-                      disabled={formData.mediaType === "link"}
-                      style={{ flex: 1, padding: '10px', background: 'color-mix(in srgb, var(--bg-primary) 50%, transparent)', border: '1px solid var(--border-color)', borderRadius: '8px', color: 'var(--text-secondary)', opacity: formData.mediaType === "link" ? 0.5 : 1 }}
-                    />
-                    <input 
-                      type="url" 
-                      placeholder="Paste URL..."
-                      value={formData.mediaUrl} 
-                      onChange={handleUrlPaste} 
-                      style={{ flex: 1, padding: '10px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'color-mix(in srgb, var(--bg-primary) 50%, transparent)', color: 'var(--text-primary)' }}
-                      disabled={!!mediaFile} 
-                    />
+                <div className="al-card-content">
+                  <h3 className="al-post-title">{post.title}</h3>
+                  <p className="al-post-desc">{post.content}</p>
+                </div>
+                
+                <div className="al-card-meta">
+                  <div className="al-media-indicator">
+                    {getMediaIcon(post.mediaType) || <span className="no-media">No Media</span>}
+                  </div>
+                  <div className="al-stats">
+                    <span>❤️ {post.reactions?.length || 0}</span>
+                    <span>💬 {post.comments?.length || 0}</span>
                   </div>
                 </div>
-              </div>
-            </div>
 
-            <button type="submit" className="btn primary mt-4" style={{ width: '100%', padding: '14px', fontSize: '1.1rem', justifyContent: 'center' }} disabled={saving}>
-              {saving ? "Saving..." : (currentId ? "Update Post" : "Post to Feed")}
-            </button>
-          </form>
-        </>
-      )}
+                <div className="al-card-actions">
+                  <button onClick={() => handleEdit(post)} className="al-btn-edit">Edit</button>
+                  <button onClick={() => handleDelete(post._id)} className="al-btn-delete">Delete</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

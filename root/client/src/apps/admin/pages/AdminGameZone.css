@@ -1,0 +1,139 @@
+.agz-container {
+  padding: 2rem;
+  color: #f8fafc;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.agz-header { margin-bottom: 2rem; }
+.agz-header h1 { font-size: 2rem; font-weight: 800; margin: 0 0 0.5rem 0; color: #fff; }
+.agz-header p { color: #94a3b8; margin: 0; }
+
+.agz-form-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 3rem;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+.agz-form-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #f59e0b; /* amber-500 */
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #334155;
+  padding-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.agz-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.agz-input-group { display: flex; flex-direction: column; gap: 0.5rem; }
+.agz-full-width { grid-column: span 2; }
+
+.agz-input-group label { font-size: 0.85rem; font-weight: 600; color: #cbd5e1; }
+
+.agz-input-group input, .agz-input-group textarea {
+  background: #0f172a;
+  border: 1px solid #334155;
+  color: #fff;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.agz-input-group input:focus, .agz-input-group textarea:focus {
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+}
+
+.file-input { padding: 0.5rem !important; }
+.agz-help-text { font-size: 0.8rem; color: #64748b; margin-top: 4px; }
+
+.agz-form-actions { display: flex; gap: 1rem; margin-top: 2rem; }
+
+.agz-btn-submit {
+  background: #f59e0b;
+  color: #0f172a;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.agz-btn-submit:hover { background: #d97706; color: #fff; }
+
+.agz-btn-cancel {
+  background: transparent;
+  color: #cbd5e1;
+  border: 1px solid #475569;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.agz-btn-cancel:hover { background: #334155; color: #fff; }
+
+/* Inventory Section */
+.agz-inventory-section h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.agz-loader-wrapper { display: flex; justify-content: center; padding: 3rem; }
+.agz-empty-state { text-align: center; padding: 3rem; background: #1e293b; border-radius: 12px; border: 1px dashed #334155; color: #94a3b8; }
+
+.agz-game-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.agz-game-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.agz-card-image { position: relative; width: 100%; height: 160px; }
+.agz-card-image img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.8); }
+.agz-badge-category {
+  position: absolute; top: 10px; right: 10px;
+  background: rgba(15, 23, 42, 0.8); color: #f59e0b;
+  padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;
+}
+
+.agz-card-content { padding: 1.5rem; flex-grow: 1; }
+.agz-card-content h3 { font-size: 1.2rem; font-weight: 700; margin: 0 0 0.5rem 0; color: #fff; }
+.agz-card-desc { font-size: 0.9rem; color: #94a3b8; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin: 0;}
+
+.agz-card-actions { display: flex; border-top: 1px solid #334155; }
+.agz-btn-edit, .agz-btn-delete { flex: 1; padding: 12px; border: none; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+.agz-btn-edit { background: transparent; color: #94a3b8; border-right: 1px solid #334155; }
+.agz-btn-edit:hover { background: #334155; color: #fff; }
+.agz-btn-delete { background: transparent; color: #ef4444; }
+.agz-btn-delete:hover { background: rgba(239, 68, 68, 0.1); }
+
+@media (max-width: 768px) {
+  .agz-form-grid { grid-template-columns: 1fr; }
+  .agz-full-width { grid-column: span 1; }
+}

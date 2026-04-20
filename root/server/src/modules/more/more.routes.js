@@ -18,6 +18,7 @@ import {
   getGameStreams,
   getAllStreams,
   createStream,
+  updateStream, 
   deleteStream,
   toggleStreamStatus
 } from './more.controller.js';
@@ -51,6 +52,7 @@ router.post('/life/:id/react', protect, reactToLifePost);
 router.post('/life/:id/comment', protect, commentOnLifePost);
 
 router.post('/streams', protect, adminOnly, createStream);
+router.put('/streams/:id', protect, adminOnly, updateStream); // <-- Added update route here
 router.put('/streams/:id/status', protect, adminOnly, toggleStreamStatus);
 router.delete('/streams/:id', protect, adminOnly, deleteStream);
 
