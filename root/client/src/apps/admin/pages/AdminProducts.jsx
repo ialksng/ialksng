@@ -9,7 +9,7 @@ function AdminProducts() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
-  const [editingId, setEditingId] = useState(null); // NEW: Tracks which product is being edited
+  const [editingId, setEditingId] = useState(null);
 
   const [form, setForm] = useState({
     title: "",
@@ -18,7 +18,7 @@ function AdminProducts() {
     category: "notes",
     image: "",
     fileUrl: "",
-    notionUrl: "" // UPDATED: Changed from notionPageId to match backend schema
+    notionUrl: ""
   });
 
   const fetchProducts = async () => {
@@ -44,7 +44,6 @@ function AdminProducts() {
     setForm({ ...form, [name]: value });
   };
 
-  // NEW: Populate form when Edit button is clicked
   const handleEdit = (product) => {
     setEditingId(product._id);
     setForm({
@@ -56,11 +55,9 @@ function AdminProducts() {
       fileUrl: product.fileUrl || "",
       notionUrl: product.notionUrl || ""
     });
-    // Scroll to top so admin can see the form
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // NEW: Cancel editing
   const cancelEdit = () => {
     setEditingId(null);
     setForm({
@@ -74,7 +71,6 @@ function AdminProducts() {
     });
   };
 
-  // UPDATED: Handles both Add and Edit
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -96,17 +92,15 @@ function AdminProducts() {
       };
 
       if (editingId) {
-        // UPDATE Existing Product
         await axios.put(`/products/${editingId}`, payload);
         toast.success("Product updated successfully! ✅", { id: toastId });
       } else {
-        // CREATE New Product
         await axios.post("/products", payload);
         toast.success("Product added successfully! ✅", { id: toastId });
       }
 
-      cancelEdit(); // Reset form
-      fetchProducts(); // Refresh list
+      cancelEdit();
+      fetchProducts();
     } catch (err) {
       console.error(err.response?.data || err.message);
       toast.error(editingId ? "Failed to update product." : "Failed to add product.", { id: toastId });
@@ -267,6 +261,23 @@ function AdminProducts() {
 
                 <div className="ap-card-content">
                   <h3 title={p.title}>{p.title}</h3>
+                  
+                  <div style={{ marginTop: '8px', marginBottom: '8px' }}>
+                    <code style={{ fontSize: '10px', background: '#000', padding: '4px', borderRadius: '4px', color: '#fbbf24', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      ID: {p._id}
+                    </code>
+                    {p.category === 'notes' && (
+                      <a 
+                        href={`https://gurukul.ialksng.me/learn/${p._id}`} 
+                        target="_blank" 
+                        rel="noreferrer"
+                        style={{ fontSize: '11px', color: '#60a5fa', textDecoration: 'underline', marginTop: '5px', display: 'inline-block' }}
+                      >
+                        Open in Gurukul ↗
+                      </a>
+                    )}
+                  </div>
+
                   <div className="ap-card-meta">
                     <span className="ap-price">
                       {p.price === 0 ? "FREE" : `₹${p.price}`}
