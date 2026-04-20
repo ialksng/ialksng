@@ -18,9 +18,31 @@ const AdminStreams = () => {
     status: 'planned'
   });
 
+  // Helper function to extract YouTube ID and generate embed link
+  const getEmbedUrl = (url) => {
+    if (!url) return "";
+    
+    // Regex matches standard (watch?v=), shortened (youtu.be/), and existing embed links
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+
+    if (match && match[2].length === 11) {
+      return `https://www.youtube.com/embed/${match[2]}`;
+    }
+    
+    // Handle Twitch Channel URLs
+    const twitchMatch = url.match(/twitch\.tv\/([a-zA-Z0-9_]+)$/);
+    if (twitchMatch && twitchMatch[1] && !url.includes('/videos/')) {
+      return `https://player.twitch.tv/?channel=${twitchMatch[1]}&parent=${window.location.hostname}`;
+    }
+
+    return url; // Return original if no specific match
+  };
+
   const fetchData = async () => {
     try {
       setLoading(true);
+      // Fetching from /all to match your backend route correctly
       const [streamsRes, gamesRes] = await Promise.all([
         axios.get('/more/streams/all'),
         axios.get('/more/games')
@@ -31,7 +53,7 @@ const AdminStreams = () => {
       
     } catch (error) {
       console.error("Error fetching data:", error);
-      toast.error("Failed to load streams data.");
+      toast.error("Failed to load dashboard data.");
     } finally {
       setLoading(false);
     }
@@ -73,31 +95,24 @@ const AdminStreams = () => {
       toast.success("Stream deleted successfully!", { id: toastId });
       fetchData(); 
     } catch (error) {
-      console.error("Error deleting stream:", error);
       toast.error("Failed to delete stream.", { id: toastId });
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let submitData = { ...formData };
+    
+    // Automatically generate the embed link from the source URL if embedUrl is empty
+    const finalEmbedUrl = formData.embedUrl || getEmbedUrl(formData.url);
+    
+    let submitData = { 
+      ...formData,
+      embedUrl: finalEmbedUrl 
+    };
 
-    // BUG FIX: Prevent Mongoose CastError by removing empty gameId
+    // BUG FIX: Prevent Mongoose CastError by removing empty gameId string
     if (!submitData.gameId) {
       delete submitData.gameId;
-    }
-
-    // Auto-generate Embed URLs
-    if (!submitData.embedUrl && submitData.url) {
-      if (submitData.platform === 'youtube' && submitData.url.includes('v=')) {
-        const videoId = submitData.url.split('v=')[1].substring(0, 11);
-        submitData.embedUrl = `https://www.youtube.com/embed/${videoId}`;
-      } else if (submitData.platform === 'twitch') {
-         const channelMatch = submitData.url.match(/twitch\.tv\/([a-zA-Z0-9_]+)/);
-         if(channelMatch) {
-             submitData.embedUrl = `https://player.twitch.tv/?channel=${channelMatch[1]}&parent=${window.location.hostname}`;
-         }
-      }
     }
 
     const toastId = toast.loading(editingId ? "Updating stream..." : "Adding stream...");
@@ -141,7 +156,7 @@ const AdminStreams = () => {
                 value={formData.title} 
                 onChange={handleInputChange} 
                 required 
-                placeholder="e.g., Grinding Ranked Valorant" 
+                placeholder="e.g., Building a Saas App Live" 
               />
             </div>
             
@@ -166,25 +181,25 @@ const AdminStreams = () => {
             </div>
 
             <div className="form-group">
-              <label>Source URL (Direct link) *</label>
+              <label>Source URL (Paste YouTube/Twitch link here) *</label>
               <input 
                 type="url" 
                 name="url" 
                 value={formData.url} 
                 onChange={handleInputChange} 
                 required 
-                placeholder="e.g. https://twitch.tv/ninja" 
+                placeholder="e.g. https://youtube.com/watch?v=..." 
               />
             </div>
 
             <div className="form-group">
-              <label>Embed URL (For display)</label>
+              <label>Embed URL (Optional)</label>
               <input 
                 type="url" 
                 name="embedUrl" 
                 value={formData.embedUrl} 
                 onChange={handleInputChange} 
-                placeholder="Leave blank to auto-generate" 
+                placeholder="Leave blank to auto-generate from URL" 
               />
             </div>
 
