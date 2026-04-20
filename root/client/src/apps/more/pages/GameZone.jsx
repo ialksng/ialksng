@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "../../../core/utils/axios";
 import GameCard from "../components/GameCard";
-import Pagination from "../../../core/components/Pagination"; // Imported your Pagination component
+import Pagination from "../../../core/components/Pagination"; 
 import "./GameZone.css";
 
 const GameZone = () => {
@@ -10,7 +10,7 @@ const GameZone = () => {
   
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
-  const gamesPerPage = 6; // You can adjust how many games to show per page
+  const gamesPerPage = 6; 
 
   useEffect(() => {
     const fetchGames = async () => {
@@ -34,7 +34,6 @@ const GameZone = () => {
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
-    // Smooth scroll to top when page changes
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -72,7 +71,6 @@ const GameZone = () => {
               ))}
             </div>
             
-            {/* Added your Pagination component here */}
             <Pagination 
               currentPage={currentPage} 
               totalPages={totalPages} 

@@ -7,6 +7,7 @@ import {
   deleteGame,
   getProducts,
   createProduct,
+  updateProduct,
   deleteProduct,
   getLifePosts,
   createLifePost,
@@ -42,6 +43,7 @@ router.put('/games/:id', protect, adminOnly, upload.single('image'), updateGame)
 router.delete('/games/:id', protect, adminOnly, deleteGame);
 
 router.post('/products', protect, adminOnly, upload.single('image'), createProduct);
+router.put('/products/:id', protect, adminOnly, upload.single('image'), updateProduct);
 router.delete('/products/:id', protect, adminOnly, deleteProduct);
 
 router.post('/life', protect, adminOnly, upload.single('image'), createLifePost);
@@ -52,7 +54,7 @@ router.post('/life/:id/react', protect, reactToLifePost);
 router.post('/life/:id/comment', protect, commentOnLifePost);
 
 router.post('/streams', protect, adminOnly, createStream);
-router.put('/streams/:id', protect, adminOnly, updateStream); // <-- Added update route here
+router.put('/streams/:id', protect, adminOnly, updateStream); 
 router.put('/streams/:id/status', protect, adminOnly, toggleStreamStatus);
 router.delete('/streams/:id', protect, adminOnly, deleteStream);
 

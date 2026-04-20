@@ -1,9 +1,26 @@
 import Product from "./product.model.js";
 import Order from "../orders/order.model.js";
+import User from "../auth/user.model.js"; // Added for notifications
+import Notification from "../notifications/notification.model.js"; // Added for notifications
 
 export const addProduct = async (req, res) => {
   try {
     const product = await Product.create(req.body);
+
+    // Create notifications for all users when a store product is added
+    const users = await User.find({}, "_id");
+    const notifications = users.map((user) => ({
+      user: user._id,
+      title: "🛍️ New Product in Store",
+      message: `A new item "${product.title}" has been added to the store!`,
+      link: `/store`,
+      type: "update",
+    }));
+
+    if (notifications.length > 0) {
+      await Notification.insertMany(notifications);
+    }
+
     res.status(201).json({ success: true, product });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -114,7 +131,7 @@ export const editComment = async (req, res) => {
     if (!text) return res.status(400).json({ msg: "Text is required" });
 
     const product = await Product.findById(req.params.id);
-    if (!product) return res.status(404).msg({ msg: "Product not found" });
+    if (!product) return res.status(404).json({ msg: "Product not found" });
 
     const comment = product.comments.id(req.params.commentId);
     if (!comment) return res.status(404).json({ msg: "Comment not found" });
@@ -162,7 +179,7 @@ export const deleteComment = async (req, res) => {
   }
 };
 
-// NEW SECURE ROUTE FOR LMS - FINAL AIRTIGHT VERSION
+// SECURE ROUTE FOR LMS - FINAL AIRTIGHT VERSION
 export const getSecuredProductContent = async (req, res) => {
   try {
     const productId = req.params.id;

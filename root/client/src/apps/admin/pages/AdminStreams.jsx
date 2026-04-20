@@ -10,12 +10,7 @@ const AdminStreams = () => {
   const [editingId, setEditingId] = useState(null);
   
   const [formData, setFormData] = useState({
-    title: '',
-    platform: 'youtube', 
-    url: '',
-    embedUrl: '',
-    gameId: '', 
-    status: 'planned'
+    title: '', platform: 'youtube', url: '', embedUrl: '', gameId: '', status: 'planned'
   });
 
   const getEmbedUrl = (url) => {
@@ -59,10 +54,8 @@ const AdminStreams = () => {
   };
 
   const handleEndStream = async (id) => {
-    // FIND the stream to check if it has a game linked
     const streamToArchive = streams.find(s => s._id === id);
     
-    // CRITICAL: If no gameId, it won't show in GameZone archives
     if (!streamToArchive.gameId) {
       return toast.error("Error: This stream is not linked to a game. Please Edit it and select a game before ending it.");
     }
@@ -80,11 +73,8 @@ const AdminStreams = () => {
   const handleEdit = (stream) => {
     setEditingId(stream._id);
     setFormData({
-      title: stream.title || '',
-      platform: stream.platform || 'youtube',
-      url: stream.url || '',
-      embedUrl: stream.embedUrl || '',
-      gameId: stream.gameId?._id || stream.gameId || '', 
+      title: stream.title || '', platform: stream.platform || 'youtube', url: stream.url || '',
+      embedUrl: stream.embedUrl || '', gameId: stream.gameId?._id || stream.gameId || '', 
       status: stream.status || 'planned'
     });
     window.scrollTo({ top: 0, behavior: 'smooth' });

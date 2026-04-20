@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'; // Added to handle ObjectId casting
+import mongoose from 'mongoose';
 import { Game, Stream, Product, LifePost } from './more.model.js';
 import User from '../auth/user.model.js';
 import Notification from '../notifications/notification.model.js';
@@ -23,6 +23,8 @@ export const createGame = async (req, res) => {
       return res.status(400).json({ message: "Game name is required." });
     }
     const game = await Game.create(gameData);
+    
+    // Notification for new game added
     const users = await User.find({}, '_id');
     const notifications = users.map(user => ({
       user: user._id,
@@ -31,7 +33,10 @@ export const createGame = async (req, res) => {
       link: '/more/gamezone',
       type: 'update'
     }));
-    await Notification.insertMany(notifications);
+    if (notifications.length > 0) {
+      await Notification.insertMany(notifications);
+    }
+    
     res.status(201).json(game);
   } catch (error) {
     console.error("CREATE GAME ERROR:", error);
@@ -93,6 +98,21 @@ export const createProduct = async (req, res) => {
     const productData = { ...req.body };
     if (req.file) productData.image = req.file.path;
     const product = await Product.create(productData);
+
+    // Notification for new ecosystem product
+    const users = await User.find({}, '_id');
+    const notifications = users.map(user => ({
+      user: user._id,
+      title: '🚀 New Platform Launched',
+      message: `I just launched ${product.name}! Check it out in my ecosystem.`,
+      link: '/more/products',
+      type: 'update'
+    }));
+    
+    if (notifications.length > 0) {
+      await Notification.insertMany(notifications);
+    }
+
     res.status(201).json(product);
   } catch (error) {
     console.error("CREATE PRODUCT ERROR:", error);
@@ -100,7 +120,6 @@ export const createProduct = async (req, res) => {
   }
 };
 
-// ADDED UPDATE PRODUCT FOR ADMIN GEAR
 export const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
@@ -141,6 +160,8 @@ export const createLifePost = async (req, res) => {
       if (!postData.mediaType) postData.mediaType = 'image';
     }
     const post = await LifePost.create(postData);
+    
+    // Notification for new life post
     const users = await User.find({}, '_id');
     const notifications = users.map(user => ({
       user: user._id,
@@ -149,7 +170,10 @@ export const createLifePost = async (req, res) => {
       link: '/more/life',
       type: 'update'
     }));
-    await Notification.insertMany(notifications);
+    if (notifications.length > 0) {
+      await Notification.insertMany(notifications);
+    }
+    
     res.status(201).json(post);
   } catch (error) {
     console.error("CREATE LIFE POST ERROR:", error);
@@ -194,7 +218,7 @@ export const getLiveStream = async (req, res) => {
   }
 };
 
-// UPDATED: Robust Game Stream Retrieval
+// Robust Game Stream Retrieval
 export const getGameStreams = async (req, res) => {
   try {
     const { gameId } = req.params;
@@ -225,6 +249,22 @@ export const getAllStreams = async (req, res) => {
 export const createStream = async (req, res) => {
   try {
     const stream = await Stream.create(req.body);
+    
+    // Check if the stream is created as 'live' directly
+    if (stream.status === 'live') {
+        const users = await User.find({}, '_id');
+        const notifications = users.map(user => ({
+          user: user._id,
+          title: '🔴 LIVE NOW',
+          message: `Alok is live: ${stream.title}`,
+          link: '/more/live',
+          type: 'live'
+        }));
+        if (notifications.length > 0) {
+          await Notification.insertMany(notifications);
+        }
+    }
+
     res.status(201).json(stream);
   } catch (error) {
     console.error("CREATE STREAM ERROR:", error);
@@ -254,6 +294,7 @@ export const deleteStream = async (req, res) => {
   }
 };
 
+// Sends notification when stream status is changed to live
 export const toggleStreamStatus = async (req, res) => {
   try {
     const { id } = req.params;
@@ -274,7 +315,9 @@ export const toggleStreamStatus = async (req, res) => {
         link: '/more/live',
         type: 'live'
       }));
-      await Notification.insertMany(notifications);
+      if (notifications.length > 0) {
+          await Notification.insertMany(notifications);
+      }
     }
 
     res.status(200).json(updatedStream);
