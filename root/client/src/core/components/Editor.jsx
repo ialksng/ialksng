@@ -10,15 +10,8 @@ import TextAlign from "@tiptap/extension-text-align";
 import { Color } from "@tiptap/extension-color";
 import { TextStyle } from "@tiptap/extension-text-style";
 import Highlight from "@tiptap/extension-highlight";
-import Youtube from "@tiptap/extension-youtube";
 import Placeholder from "@tiptap/extension-placeholder";
 import CharacterCount from "@tiptap/extension-character-count";
-
-import Table from "@tiptap/extension-table";
-import TableRow from "@tiptap/extension-table-row";
-import TableCell from "@tiptap/extension-table-cell";
-import TableHeader from "@tiptap/extension-table-header";
-
 import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
 
@@ -39,15 +32,10 @@ function Editor({ content, setContent }) {
       TextStyle,
       Color,
       Highlight,
-      Youtube,
       Placeholder.configure({
         placeholder: "Type '/' for commands…"
       }),
       CharacterCount,
-      Table.configure({ resizable: true }),
-      TableRow,
-      TableHeader,
-      TableCell,
       TaskList,
       TaskItem.configure({ nested: true }),
       SlashCommand
@@ -73,11 +61,6 @@ function Editor({ content, setContent }) {
     if (url) editor.chain().focus().setImage({ src: url }).run();
   };
 
-  const insertYoutube = () => {
-    const url = prompt("YouTube URL");
-    if (url) editor.chain().focus().setYoutubeVideo({ src: url }).run();
-  };
-
   const insertLink = () => {
     const url = prompt("Link URL");
     if (url) editor.chain().focus().setLink({ href: url }).run();
@@ -86,6 +69,7 @@ function Editor({ content, setContent }) {
   const handleDrop = (e) => {
     const file = e.dataTransfer.files?.[0];
     if (!file) return;
+
     const reader = new FileReader();
     reader.onload = () => {
       editor.chain().focus().setImage({ src: reader.result }).run();
@@ -96,6 +80,7 @@ function Editor({ content, setContent }) {
   const handlePaste = (e) => {
     const file = e.clipboardData.files?.[0];
     if (!file) return;
+
     const reader = new FileReader();
     reader.onload = () => {
       editor.chain().focus().setImage({ src: reader.result }).run();
@@ -108,7 +93,9 @@ function Editor({ content, setContent }) {
 
     const res = await fetch("/ai/generate", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({ prompt: text })
     });
 
@@ -117,11 +104,19 @@ function Editor({ content, setContent }) {
   };
 
   return (
-    <div className="premium-editor-container" onDrop={handleDrop} onPaste={handlePaste}>
+    <div
+      className="premium-editor-container"
+      onDrop={handleDrop}
+      onPaste={handlePaste}
+    >
 
       <FloatingMenu editor={editor}>
-        <button onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}>H1</button>
-        <button onClick={() => editor.chain().focus().toggleBulletList().run()}>List</button>
+        <button onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}>
+          H1
+        </button>
+        <button onClick={() => editor.chain().focus().toggleBulletList().run()}>
+          List
+        </button>
         <button onClick={insertImage}>Image</button>
       </FloatingMenu>
 
@@ -136,17 +131,25 @@ function Editor({ content, setContent }) {
         <button onClick={() => editor.chain().focus().undo().run()}>Undo</button>
         <button onClick={() => editor.chain().focus().redo().run()}>Redo</button>
 
-        <button onClick={() => editor.chain().focus().toggleBold().run()}>Bold</button>
-        <button onClick={() => editor.chain().focus().toggleItalic().run()}>Italic</button>
+        <button onClick={() => editor.chain().focus().toggleBold().run()}>
+          Bold
+        </button>
+        <button onClick={() => editor.chain().focus().toggleItalic().run()}>
+          Italic
+        </button>
 
-        <button onClick={() => editor.chain().focus().toggleBulletList().run()}>List</button>
-        <button onClick={() => editor.chain().focus().toggleOrderedList().run()}>Number</button>
+        <button onClick={() => editor.chain().focus().toggleBulletList().run()}>
+          List
+        </button>
+        <button onClick={() => editor.chain().focus().toggleOrderedList().run()}>
+          Number
+        </button>
 
         <button onClick={insertImage}>Image</button>
-        <button onClick={insertYoutube}>Video</button>
 
-        <button onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 3 }).run()}>Table</button>
-        <button onClick={() => editor.chain().focus().toggleCodeBlock().run()}>Code</button>
+        <button onClick={() => editor.chain().focus().toggleCodeBlock().run()}>
+          Code
+        </button>
 
         <button onClick={handleAI}>AI ✨</button>
       </div>
@@ -154,7 +157,8 @@ function Editor({ content, setContent }) {
       <EditorContent editor={editor} className="premium-editor-content" />
 
       <div className="premium-editor-footer">
-        {editor.storage.characterCount.words()} words • {editor.storage.characterCount.characters()} chars
+        {editor.storage.characterCount.words()} words •{" "}
+        {editor.storage.characterCount.characters()} chars
       </div>
     </div>
   );
