@@ -114,7 +114,7 @@ export const editComment = async (req, res) => {
     if (!text) return res.status(400).json({ msg: "Text is required" });
 
     const product = await Product.findById(req.params.id);
-    if (!product) return res.status(404).json({ msg: "Product not found" });
+    if (!product) return res.status(404).msg({ msg: "Product not found" });
 
     const comment = product.comments.id(req.params.commentId);
     if (!comment) return res.status(404).json({ msg: "Comment not found" });
@@ -162,55 +162,54 @@ export const deleteComment = async (req, res) => {
   }
 };
 
-// NEW SECURE ROUTE FOR LMS - WITH DEBUG LOGGING AND FOOLPROOF MATCHING
+// NEW SECURE ROUTE FOR LMS - FINAL AIRTIGHT VERSION
 export const getSecuredProductContent = async (req, res) => {
   try {
     const productId = req.params.id;
 
-    // Grab both string and object versions of the user ID
-    const userIdString = req.user.id || req.user._id?.toString();
-    const userIdObject = req.user._id;
+    // Support both .id (string) and ._id (object)
+    const userId = req.user.id || req.user._id;
 
-    console.log(`[Gurukul Access Check] User: ${userIdString} | Product: ${productId}`);
+    console.log(`[LMS Auth Request] User: ${userId} | Product: ${productId}`);
 
-    // 1. Broad Search: Matches exactly how orders are saved (req.user.id + isPaid)
-    const hasPurchased = await Order.findOne({
-      $or: [{ user: userIdString }, { user: userIdObject }],
+    // 1. Search for ANY matching order that indicates a successful purchase
+    const order = await Order.findOne({
+      user: userId,
       product: productId,
       $or: [
+        { isPaid: true },
         { status: "Paid" },
         { status: "Completed" },
-        { status: "Success" },
-        { isPaid: true },
-      ],
+        { status: "Success" }
+      ]
     });
 
-    // 2. Admin Check
     const isAdmin = req.user.role === "admin";
 
-    if (!hasPurchased && !isAdmin) {
-      console.warn(`[Gurukul Access Denied] User ${userIdString} has no valid order for ${productId}`);
+    // 2. Grant access if order exists OR if the user is an admin
+    if (!order && !isAdmin) {
+      console.warn(`[LMS Auth Denied] No order found for User ${userId} on Product ${productId}`);
       return res.status(403).json({
         success: false,
-        message: "Access Denied. Purchase required to view these notes.",
+        message: "Access Denied. You must purchase this item to view it.",
       });
     }
 
-    console.log(`[Gurukul Access Granted] Mode: ${isAdmin ? 'Admin' : 'Customer'}`);
-
-    // 3. Fetch product WITH secure fields
+    // 3. Fetch the full product data
     const product = await Product.findById(productId);
 
     if (!product) {
       return res.status(404).json({ success: false, message: "Product not found" });
     }
 
+    console.log(`[LMS Auth Granted] Successfully authorized access to: ${product.title}`);
+
     res.status(200).json({
       success: true,
       data: product,
     });
   } catch (error) {
-    console.error("[Gurukul Access Error]:", error);
+    console.error("[LMS Auth Error]:", error);
     res.status(500).json({ success: false, message: "Internal server error verifying access" });
   }
 };
