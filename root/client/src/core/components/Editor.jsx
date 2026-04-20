@@ -1,5 +1,8 @@
 import * as TiptapReact from "@tiptap/react";
-const { useEditor, EditorContent, BubbleMenu, FloatingMenu } = TiptapReact;
+const useEditor = TiptapReact.useEditor || TiptapReact.default?.useEditor;
+const EditorContent = TiptapReact.EditorContent || TiptapReact.default?.EditorContent;
+const BubbleMenu = TiptapReact.BubbleMenu || TiptapReact.default?.BubbleMenu;
+const FloatingMenu = TiptapReact.FloatingMenu || TiptapReact.default?.FloatingMenu;
 
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
