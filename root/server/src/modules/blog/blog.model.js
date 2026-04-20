@@ -15,8 +15,8 @@ const blogSchema = new mongoose.Schema(
     category: { type: String },
     author: { type: String, default: "Admin" },
     excerpt: { type: String },
-    likes: { type: [String], default: [] },
-    comments: { type: [commentSchema], default: [] }
+    likes: { type: [String], default: () => [] },
+    comments: { type: [commentSchema], default: () => [] }
   },
   { timestamps: true }
 );
