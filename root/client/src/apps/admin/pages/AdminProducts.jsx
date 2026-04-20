@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import axios from "../../../core/utils/axios";
 import Loader from "../../../core/components/Loader";
-import { FaPlus, FaTrash, FaBoxOpen } from "react-icons/fa";
+import { FaPlus, FaTrash, FaBoxOpen, FaEdit } from "react-icons/fa";
 import "./AdminProducts.css";
 
 function AdminProducts() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
+  const [editingId, setEditingId] = useState(null); // NEW: Tracks which product is being edited
 
   const [form, setForm] = useState({
     title: "",
@@ -17,7 +18,7 @@ function AdminProducts() {
     category: "notes",
     image: "",
     fileUrl: "",
-    notionPageId: ""  
+    notionUrl: "" // UPDATED: Changed from notionPageId to match backend schema
   });
 
   const fetchProducts = async () => {
@@ -43,44 +44,72 @@ function AdminProducts() {
     setForm({ ...form, [name]: value });
   };
 
-  const handleAdd = async (e) => {
+  // NEW: Populate form when Edit button is clicked
+  const handleEdit = (product) => {
+    setEditingId(product._id);
+    setForm({
+      title: product.title || "",
+      description: product.description || "",
+      price: product.price || "",
+      category: product.category || "notes",
+      image: product.image || "",
+      fileUrl: product.fileUrl || "",
+      notionUrl: product.notionUrl || ""
+    });
+    // Scroll to top so admin can see the form
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // NEW: Cancel editing
+  const cancelEdit = () => {
+    setEditingId(null);
+    setForm({
+      title: "",
+      description: "",
+      price: "",
+      category: "notes",
+      image: "",
+      fileUrl: "",
+      notionUrl: ""
+    });
+  };
+
+  // UPDATED: Handles both Add and Edit
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!form.title || form.price === "" || !form.image || !form.category) {
       return toast.error("Please fill all required fields.");
     }
 
-    if (form.category === "notes" && !form.notionPageId) {
-      return toast.error("Please add a Notion Page ID for notes.");
+    if (form.category === "notes" && !form.notionUrl) {
+      return toast.error("Please add a Notion URL for notes.");
     }
 
     setLoading(true);
-    const toastId = toast.loading("Adding product to store...");
+    const toastId = toast.loading(editingId ? "Updating product..." : "Adding product to store...");
 
     try {
-      const res = await axios.post("/products", {
+      const payload = {
         ...form,
         price: Number(form.price)
-      });
+      };
 
-      if (res.data) {
+      if (editingId) {
+        // UPDATE Existing Product
+        await axios.put(`/products/${editingId}`, payload);
+        toast.success("Product updated successfully! ✅", { id: toastId });
+      } else {
+        // CREATE New Product
+        await axios.post("/products", payload);
         toast.success("Product added successfully! ✅", { id: toastId });
-
-        setForm({
-          title: "",
-          description: "",
-          price: "",
-          category: "notes",
-          image: "",
-          fileUrl: "",
-          notionPageId: ""
-        });
-
-        fetchProducts();
       }
+
+      cancelEdit(); // Reset form
+      fetchProducts(); // Refresh list
     } catch (err) {
       console.error(err.response?.data || err.message);
-      toast.error("Failed to add product.", { id: toastId });
+      toast.error(editingId ? "Failed to update product." : "Failed to add product.", { id: toastId });
     } finally {
       setLoading(false);
     }
@@ -112,13 +141,16 @@ function AdminProducts() {
     <div className="ap-container animated-fade-in">
       <div className="ap-header">
         <h1>Manage Store Products</h1>
-        <p>Add, review, and remove premium resources from your storefront.</p>
+        <p>Add, review, edit, and remove premium resources from your storefront.</p>
       </div>
 
       <div className="ap-form-card">
-        <h2 className="ap-form-title"><FaPlus /> Add New Product</h2>
+        <h2 className="ap-form-title">
+          {editingId ? <FaEdit /> : <FaPlus />} 
+          {editingId ? " Edit Product" : " Add New Product"}
+        </h2>
 
-        <form className="ap-form" onSubmit={handleAdd}>
+        <form className="ap-form" onSubmit={handleSubmit}>
           <div className="ap-form-grid">
             <div className="ap-input-group">
               <label>Product Title *</label>
@@ -190,20 +222,28 @@ function AdminProducts() {
 
             {form.category === "notes" && (
               <div className="ap-input-group ap-full-width">
-                <label>Notion Page ID *</label>
+                <label>Notion Page URL (For LMS Viewer) *</label>
                 <input 
-                  name="notionPageId" 
-                  placeholder="e.g., 1234567890abcdef1234567890abcdef" 
-                  value={form.notionPageId} 
+                  name="notionUrl" 
+                  placeholder="https://notion.so/..." 
+                  value={form.notionUrl} 
                   onChange={handleChange} 
                 />
+                <small style={{color: '#888', marginTop: '4px', display: 'block'}}>
+                  Paste the full Notion page link here. It will be securely embedded in Gurukul.
+                </small>
               </div>
             )}
           </div>
 
-          <div className="ap-form-actions">
-            <button type="submit" className="ap-btn-submit" disabled={loading}>
-              {loading ? "Adding Product..." : "Launch Product"}
+          <div className="ap-form-actions" style={{ display: 'flex', gap: '10px' }}>
+            {editingId && (
+              <button type="button" className="ap-btn-delete" onClick={cancelEdit} disabled={loading} style={{ padding: '10px 20px', cursor: 'pointer' }}>
+                Cancel Edit
+              </button>
+            )}
+            <button type="submit" className="ap-btn-submit" disabled={loading} style={{ flex: 1 }}>
+              {loading ? (editingId ? "Updating..." : "Adding Product...") : (editingId ? "Update Product" : "Launch Product")}
             </button>
           </div>
         </form>
@@ -234,8 +274,11 @@ function AdminProducts() {
                   </div>
                 </div>
 
-                <div className="ap-card-actions">
-                  <button className="ap-btn-delete" onClick={() => handleDelete(p._id)}>
+                <div className="ap-card-actions" style={{ display: 'flex', gap: '8px' }}>
+                  <button className="ap-btn-submit" onClick={() => handleEdit(p)} style={{ padding: '8px', fontSize: '0.85rem' }}>
+                    <FaEdit /> Edit
+                  </button>
+                  <button className="ap-btn-delete" onClick={() => handleDelete(p._id)} style={{ padding: '8px', fontSize: '0.85rem' }}>
                     <FaTrash /> Delete
                   </button>
                 </div>

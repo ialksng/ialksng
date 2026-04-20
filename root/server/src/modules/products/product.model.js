@@ -11,8 +11,15 @@ const productSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
   price: { type: Number, required: true },
+  category: { type: String, required: true }, // Added missing field
   image: { type: String, required: true },
-  fileUrl: { type: String },
+  previewImage: { type: String }, // Added missing field
+  previewUrl: { type: String }, // Added missing field
+  
+  // Secure Content Links
+  fileUrl: { type: String, default: "" },
+  notionUrl: { type: String, default: "" }, // Added missing field for LMS notes
+  
   likes: { type: [String], default: [] },
   comments: { type: [commentSchema], default: [] }
 }, { timestamps: true });

@@ -1,13 +1,27 @@
 import Product from "./product.model.js";
 import Order from "../orders/order.model.js";
-import User from "../auth/user.model.js"; // Added for notifications
-import Notification from "../notifications/notification.model.js"; // Added for notifications
+import User from "../auth/user.model.js"; 
+import Notification from "../notifications/notification.model.js"; 
 
 export const addProduct = async (req, res) => {
   try {
-    const product = await Product.create(req.body);
+    console.log("[Admin] Attempting to add product:", req.body.title);
+    
+    const product = await Product.create({
+        title: req.body.title,
+        description: req.body.description,
+        price: req.body.price,
+        category: req.body.category,
+        image: req.body.image,
+        previewImage: req.body.previewImage,
+        previewUrl: req.body.previewUrl,
+        fileUrl: req.body.fileUrl || "",
+        notionUrl: req.body.notionUrl || ""
+    });
 
-    // Create notifications for all users when a store product is added
+    console.log("[Admin] Product added successfully:", product._id);
+
+    // Create notifications
     const users = await User.find({}, "_id");
     const notifications = users.map((user) => ({
       user: user._id,
@@ -23,7 +37,8 @@ export const addProduct = async (req, res) => {
 
     res.status(201).json({ success: true, product });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("[Admin Add Product Error]:", err);
+    res.status(500).json({ success: false, message: err.message, error: err.toString() });
   }
 };
 
@@ -48,6 +63,7 @@ export const getProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
   try {
+    console.log("[Admin] Attempting to update product:", req.params.id);
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ error: "Product not found" });
 
@@ -58,12 +74,17 @@ export const updateProduct = async (req, res) => {
     product.image = req.body.image ?? product.image;
     product.previewImage = req.body.previewImage ?? product.previewImage;
     product.previewUrl = req.body.previewUrl ?? product.previewUrl;
-    product.fileUrl = req.body.fileUrl ?? product.fileUrl;
+    
+    if (req.body.fileUrl !== undefined) product.fileUrl = req.body.fileUrl;
+    if (req.body.notionUrl !== undefined) product.notionUrl = req.body.notionUrl;
 
     const updatedProduct = await product.save();
+    console.log("[Admin] Product updated successfully");
+    
     res.json({ success: true, product: updatedProduct });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("[Admin Update Product Error]:", err);
+    res.status(500).json({ success: false, message: err.message });
   }
 };
 
