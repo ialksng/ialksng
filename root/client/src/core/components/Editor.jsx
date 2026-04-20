@@ -24,10 +24,12 @@ function Editor({ content, setContent }) {
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        link: false
+      }),
+      Link.configure({ openOnClick: false }),
       Underline,
       Image.configure({ allowBase64: true }),
-      Link.configure({ openOnClick: false }),
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       TextStyle,
       Color,
@@ -43,7 +45,8 @@ function Editor({ content, setContent }) {
     content: content || "",
     onUpdate: ({ editor }) => {
       setContent(editor.getHTML());
-    }
+    },
+    immediatelyRender: false
   });
 
   useEffect(() => {
@@ -54,7 +57,9 @@ function Editor({ content, setContent }) {
     }
   }, [content, editor]);
 
-  if (!editor) return null;
+  if (!editor) {
+    return <div style={{ padding: 20 }}>Loading editor...</div>;
+  }
 
   const insertImage = () => {
     const url = prompt("Image URL");
