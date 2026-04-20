@@ -25,6 +25,7 @@ function AccessProduct() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
+        // ADMIN BYPASS LOGIC
         if (user && user.role === "admin") {
           const res = await axios.get(`/products/${id}`);
           setProduct(res.data.product || res.data);
@@ -74,7 +75,7 @@ function AccessProduct() {
       );
 
       setProduct((prev) => ({ ...prev, likes: res.data }));
-    } catch {
+    } catch (err) {
       toast.error("Failed to like product");
     }
   };
@@ -94,7 +95,7 @@ function AccessProduct() {
     );
 
     toast.promise(commentPromise, {
-      loading: "Posting...",
+      loading: 'Posting...',
       success: (res) => {
         updateComments(res.data);
         setCommentText("");
@@ -106,52 +107,36 @@ function AccessProduct() {
 
   const handleDeleteComment = (commentId) => {
     toast((t) => (
-      <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-        <span>Delete this comment?</span>
-        <div style={{ display: "flex", gap: "10px" }}>
-          <button
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', padding: '4px' }}>
+        <span style={{ fontSize: '14px', fontWeight: '500', color: 'var(--text-primary)' }}>Delete this comment?</span>
+        <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
+          <button 
             onClick={async () => {
               toast.dismiss(t.id);
               const loadingToast = toast.loading("Deleting...");
               try {
-                const res = await axios.delete(
-                  `/products/${id}/comment/${commentId}`,
-                  {
-                    headers: {
-                      Authorization: `Bearer ${localStorage.getItem("token")}`,
-                    },
-                  }
-                );
+                const res = await axios.delete(`/products/${id}/comment/${commentId}`, {
+                  headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+                });
                 updateComments(res.data);
-                toast.success("Deleted", { id: loadingToast });
-              } catch {
-                toast.error("Failed", { id: loadingToast });
+                toast.success("Comment deleted", { id: loadingToast });
+              } catch (err) {
+                toast.error("Failed to delete", { id: loadingToast });
               }
-            }}
-            style={{
-              flex: 1,
-              padding: "6px",
-              background: "red",
-              color: "#fff",
-              border: "none",
-              borderRadius: "6px",
-            }}
+            }} 
+            style={{ flex: 1, padding: '6px 12px', background: 'var(--danger-color)', color: '#fff', border: 'none', borderRadius: '6px', fontSize: '13px', cursor: 'pointer' }}
           >
             Delete
           </button>
-          <button
-            onClick={() => toast.dismiss(t.id)}
-            style={{
-              flex: 1,
-              padding: "6px",
-              borderRadius: "6px",
-            }}
+          <button 
+            onClick={() => toast.dismiss(t.id)} 
+            style={{ flex: 1, padding: '6px 12px', background: 'transparent', color: 'var(--text-secondary)', border: '1px solid var(--border-color)', borderRadius: '6px', fontSize: '13px', cursor: 'pointer' }}
           >
             Cancel
           </button>
         </div>
       </div>
-    ));
+    ), { duration: Infinity });
   };
 
   const handleEditCommentSubmit = async (e, commentId) => {
@@ -169,14 +154,14 @@ function AccessProduct() {
     );
 
     toast.promise(editPromise, {
-      loading: "Saving...",
+      loading: 'Saving edit...',
       success: (res) => {
         updateComments(res.data);
         setEditingCommentId(null);
         setEditText("");
-        return "Updated!";
+        return "Comment updated!";
       },
-      error: "Failed",
+      error: "Failed to update comment",
     });
   };
 
@@ -186,7 +171,10 @@ function AccessProduct() {
     return (
       <div className="access__denied">
         <h2>Access Denied 🔒</h2>
-        <button onClick={() => navigate("/store")} className="btn-primary">
+        <button
+          onClick={() => navigate("/store")}
+          className="btn-primary"
+        >
           Browse Store
         </button>
       </div>
@@ -199,7 +187,7 @@ function AccessProduct() {
     <div className="access__wrapper">
       <button
         className="access__back-btn"
-        onClick={() => navigate("/store")}
+        onClick={() => navigate("/my-purchases")}
       >
         ⬅ Back
       </button>
@@ -207,18 +195,24 @@ function AccessProduct() {
       <h1 className="access__title">{product.title}</h1>
       <p className="access__desc">{product.description}</p>
 
+      {/* THE ONLY BUTTON LEFT: Redirects to Gurukul */}
       <button
-        className="btn-primary"
-        onClick={() => window.open("https://gurukul.ialksng.me", "_self")}
-        style={{
+        className="access__download-btn"
+        onClick={() => window.location.href = "https://gurukul.ialksng.me"}
+        style={{ 
+          display: "block",
           width: "100%",
-          padding: "14px",
-          margin: "20px 0",
-          fontSize: "16px",
+          maxWidth: "400px",
+          margin: "30px auto",
+          textAlign: "center",
+          backgroundColor: "#0ea5e9", 
+          borderColor: "#0ea5e9", 
+          color: "#fff",
           fontWeight: "bold",
+          fontSize: "16px"
         }}
       >
-        🎓 Open Course
+        🎓 View Course
       </button>
 
       <div className="social-container">
@@ -229,15 +223,15 @@ function AccessProduct() {
             }`}
             onClick={handleLike}
           >
-            {product.likes?.includes(user?._id) ? "❤️" : "🤍"}{" "}
-            {product.likes?.length || 0}
+            {product.likes?.includes(user?._id) ? "❤️" : "🤍"}
+            <span>{product.likes?.length || 0} Likes</span>
           </button>
 
           <button
             className="like-btn"
             onClick={() => {
               navigator.clipboard.writeText(window.location.href);
-              toast.success("Link copied!");
+              toast.success("Link copied to clipboard!");
             }}
           >
             🔗 Share
@@ -245,74 +239,158 @@ function AccessProduct() {
         </div>
 
         <div className="comments-wrapper">
-          <h2>Discussion ({product.comments?.length || 0})</h2>
+          <h2 className="comments-header">
+            Discussion ({product.comments?.length || 0})
+          </h2>
 
           {user ? (
-            <form onSubmit={handleComment}>
+            <form
+              onSubmit={handleComment}
+              className="comment-input-area"
+            >
               <textarea
+                className="comment-textarea"
+                placeholder="Share your thoughts..."
                 value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
-                placeholder="Write something..."
+                onChange={(e) =>
+                  setCommentText(e.target.value)
+                }
                 required
+                rows="3"
               />
-              <button type="submit" className="btn-primary">
-                Post
+              <button
+                type="submit"
+                disabled={!commentText.trim()}
+                className="btn-primary"
+                style={{ alignSelf: "flex-end" }}
+              >
+                Post Comment
               </button>
             </form>
           ) : (
-            <p onClick={() => navigate("/login")}>Login to comment</p>
+            <div className="access__login-prompt">
+              <p style={{ margin: 0 }}>
+                Please{" "}
+                <span
+                  className="access__login-link"
+                  onClick={() => navigate("/login")}
+                >
+                  log in
+                </span>{" "}
+                to join the conversation.
+              </p>
+            </div>
           )}
 
-          {!product.comments?.length ? (
-            <p>No comments yet</p>
-          ) : (
-            product.comments
-              .slice()
-              .reverse()
-              .map((c) => (
-                <div key={c._id}>
-                  <b>{c.user}</b>
+          <div>
+            {!product.comments || product.comments.length === 0 ? (
+              <p className="access__empty-comments">
+                Be the first to leave a comment!
+              </p>
+            ) : (
+              product.comments
+                .slice()
+                .reverse()
+                .map((c) => (
+                  <div key={c._id} className="comment-card">
+                    <div className="comment-avatar">
+                      {c.user.charAt(0).toUpperCase()}
+                    </div>
 
-                  {editingCommentId === c._id ? (
-                    <form
-                      onSubmit={(e) =>
-                        handleEditCommentSubmit(e, c._id)
-                      }
-                    >
-                      <textarea
-                        value={editText}
-                        onChange={(e) => setEditText(e.target.value)}
-                      />
-                      <button type="submit">Save</button>
-                      <button onClick={() => setEditingCommentId(null)}>
-                        Cancel
-                      </button>
-                    </form>
-                  ) : (
-                    <>
-                      <p>{c.text}</p>
-                      {user && user._id === c.userId && (
-                        <>
-                          <button
-                            onClick={() => {
-                              setEditingCommentId(c._id);
-                              setEditText(c.text);
+                    <div style={{ flex: 1 }}>
+                      <div className="comment-meta">
+                        <div>
+                          <span className="comment-author">
+                            {c.user}
+                          </span>
+                          <span className="comment-date">
+                            {new Date(c.date).toLocaleDateString()}
+                          </span>
+                        </div>
+
+                        {user &&
+                          user._id === c.userId && (
+                            <div className="comment-actions">
+                              <button
+                                onClick={() => {
+                                  setEditingCommentId(
+                                    c._id
+                                  );
+                                  setEditText(c.text);
+                                }}
+                                className="comment-action-btn edit"
+                              >
+                                Edit
+                              </button>
+                              <button
+                                onClick={() =>
+                                  handleDeleteComment(c._id)
+                                }
+                                className="comment-action-btn delete"
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          )}
+                      </div>
+
+                      {editingCommentId === c._id ? (
+                        <form
+                          onSubmit={(e) =>
+                            handleEditCommentSubmit(
+                              e,
+                              c._id
+                            )
+                          }
+                          className="comment-edit-form"
+                        >
+                          <textarea
+                            value={editText}
+                            onChange={(e) =>
+                              setEditText(e.target.value)
+                            }
+                            className="comment-textarea"
+                            rows="2"
+                            style={{
+                              marginBottom: "10px",
                             }}
-                          >
-                            Edit
-                          </button>
-                          <button
-                            onClick={() => handleDeleteComment(c._id)}
-                          >
-                            Delete
-                          </button>
-                        </>
+                          />
+                          <div className="comment-edit-actions">
+                            <button
+                              type="submit"
+                              className="btn-primary"
+                              style={{
+                                padding: "8px 16px",
+                                fontSize: "13px",
+                              }}
+                            >
+                              Save
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setEditingCommentId(null)
+                              }
+                              className="btn-secondary"
+                              style={{
+                                padding: "8px 16px",
+                                fontSize: "13px",
+                              }}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </form>
+                      ) : (
+                        <p className="comment-text">
+                          {c.text}
+                        </p>
                       )}
-                    </>
-                  )}
-                </div>
-              ))
-          )}
+                    </div>
+                  </div>
+                ))
+            )}
+          </div>
         </div>
       </div>
     </div>
