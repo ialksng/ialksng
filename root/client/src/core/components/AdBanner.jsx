@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react';
 
 const AdBanner = ({
-  dataAdSlot = "4143392198", // Added default fallback
+  dataAdSlot = "4143392198", 
   dataAdFormat = "auto",
   fullWidthResponsive = "true"
 }) => {
 
   useEffect(() => {
     try {
-      // Small timeout helps ensure the ins tag is mounted before pushing
       const timeout = setTimeout(() => {
         if (window.adsbygoogle && typeof window.adsbygoogle.push === "function") {
           window.adsbygoogle.push({});
@@ -48,14 +47,13 @@ const AdBanner = ({
       }}>
         Advertisement
       </span>
-
         <ins 
           className="adsbygoogle"
-          style={{ display: 'block' }}
+          style={{ display: 'block', zIndex: 1, position: 'relative', width: '100%' }}
           data-ad-client="ca-pub-4303485576958542"
-          data-ad-slot="4143392198"
-          data-ad-format="auto"
-          data-full-width-responsive="true"
+          data-ad-slot={dataAdSlot} 
+          data-ad-format={dataAdFormat} 
+          data-full-width-responsive={fullWidthResponsive} 
         ></ins>
     </div>
   );
