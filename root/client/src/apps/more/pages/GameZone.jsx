@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
 import axios from "../../../core/utils/axios";
 import GameCard from "../components/GameCard";
+import Pagination from "../../../core/components/Pagination"; // Imported your Pagination component
 import "./GameZone.css";
 
 const GameZone = () => {
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
+  
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const gamesPerPage = 6; // You can adjust how many games to show per page
 
   useEffect(() => {
     const fetchGames = async () => {
@@ -20,6 +25,18 @@ const GameZone = () => {
     };
     fetchGames();
   }, []);
+
+  // Pagination Calculation Logic
+  const indexOfLastGame = currentPage * gamesPerPage;
+  const indexOfFirstGame = indexOfLastGame - gamesPerPage;
+  const currentGames = games.slice(indexOfFirstGame, indexOfLastGame);
+  const totalPages = Math.ceil(games.length / gamesPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    // Smooth scroll to top when page changes
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <div className="gamezone-container">
@@ -48,11 +65,20 @@ const GameZone = () => {
             <p>Check back later for new additions!</p>
           </div>
         ) : (
-          <div className="gamezone-grid">
-            {games.map((game) => (
-              <GameCard key={game._id} game={game} />
-            ))}
-          </div>
+          <>
+            <div className="gamezone-grid">
+              {currentGames.map((game) => (
+                <GameCard key={game._id} game={game} />
+              ))}
+            </div>
+            
+            {/* Added your Pagination component here */}
+            <Pagination 
+              currentPage={currentPage} 
+              totalPages={totalPages} 
+              onPageChange={handlePageChange} 
+            />
+          </>
         )}
       </div>
     </div>
