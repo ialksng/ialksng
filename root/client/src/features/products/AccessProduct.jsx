@@ -26,6 +26,15 @@ function AccessProduct() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
+        // ADMIN BYPASS LOGIC
+        if (user && user.role === "admin") {
+          const res = await axios.get(`/products/${id}`);
+          setProduct(res.data.product || res.data);
+          setLoading(false);
+          return;
+        }
+
+        // Regular User Paid Access Check
         const res = await fetch(`${API}/api/products/access/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -47,7 +56,7 @@ function AccessProduct() {
     };
 
     fetchProduct();
-  }, [id, API]);
+  }, [id, API, user]);
 
   const updateComments = (comments) => {
     setProduct((prev) => ({ ...prev, comments }));

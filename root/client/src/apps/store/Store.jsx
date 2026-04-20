@@ -189,9 +189,11 @@ function Shop() {
           {Array.isArray(displayedProducts) && displayedProducts.length > 0 ? (
             <div className="store-grid">
               {displayedProducts.map(product => {
+                // ADMIN BYPASS LOGIC HERE
+                const isAdmin = user && user.role === "admin";
                 const isOwned = ownedProducts.includes(product._id);
                 const isFree = product.price === 0;
-                const hasAccess = isOwned || isFree;
+                const hasAccess = isAdmin || isOwned || isFree;
 
                 return (
                   <div className="store-card" key={product._id}>
