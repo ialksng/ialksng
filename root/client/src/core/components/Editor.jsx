@@ -13,6 +13,15 @@ import CharacterCount from "@tiptap/extension-character-count";
 import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
 
+// --- NEW FEATURES IMPORTED HERE ---
+import Underline from "@tiptap/extension-underline";
+import Subscript from "@tiptap/extension-subscript";
+import Superscript from "@tiptap/extension-superscript";
+import Table from "@tiptap/extension-table";
+import TableRow from "@tiptap/extension-table-row";
+import TableCell from "@tiptap/extension-table-cell";
+import TableHeader from "@tiptap/extension-table-header";
+
 import "./Editor.css";
 
 // 1. Safely extract components (handles Vite/Rolldown quirks)
@@ -38,7 +47,15 @@ function Editor({ content, setContent }) {
       Placeholder.configure({ placeholder: "Start writing something powerful..." }),
       CharacterCount,
       TaskList,
-      TaskItem.configure({ nested: true })
+      TaskItem.configure({ nested: true }),
+      // --- NEW EXTENSIONS REGISTERED ---
+      Underline,
+      Subscript,
+      Superscript,
+      Table.configure({ resizable: true }),
+      TableRow,
+      TableHeader,
+      TableCell,
     ],
     content: content || "",
     onUpdate: ({ editor }) => {
@@ -87,37 +104,68 @@ function Editor({ content, setContent }) {
     <div className="premium-editor-container" onDrop={handleDrop} onPaste={handlePaste}>
       
       {/* 3. Render using the Safe Wrappers */}
-      <SafeFloatingMenu editor={editor}>
+      <SafeFloatingMenu editor={editor} className="tiptap-floating-menu">
         <button onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}>H1</button>
         <button onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}>H2</button>
         <button onClick={() => editor.chain().focus().toggleBulletList().run()}>List</button>
+        <button onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()}>Table</button>
       </SafeFloatingMenu>
 
-      <SafeBubbleMenu editor={editor}>
+      <SafeBubbleMenu editor={editor} className="tiptap-bubble-menu">
         <button onClick={() => editor.chain().focus().toggleBold().run()}>B</button>
         <button onClick={() => editor.chain().focus().toggleItalic().run()}>I</button>
+        <button onClick={() => editor.chain().focus().toggleUnderline().run()}>U</button>
         <button onClick={insertLink}>Link</button>
       </SafeBubbleMenu>
 
       <div className="premium-toolbar">
         <button onClick={() => editor.chain().focus().undo().run()}>Undo</button>
         <button onClick={() => editor.chain().focus().redo().run()}>Redo</button>
-        <button onClick={() => editor.chain().focus().toggleBold().run()}>Bold</button>
-        <button onClick={() => editor.chain().focus().toggleItalic().run()}>Italic</button>
-        <button onClick={() => editor.chain().focus().toggleStrike().run()}>Strike</button>
-        <button onClick={() => editor.chain().focus().toggleCode().run()}>Inline Code</button>
-        <button onClick={() => editor.chain().focus().toggleCodeBlock().run()}>Code Block</button>
-        <button onClick={() => editor.chain().focus().toggleBlockquote().run()}>Quote</button>
-        <button onClick={() => editor.chain().focus().toggleBulletList().run()}>Bullet</button>
-        <button onClick={() => editor.chain().focus().toggleOrderedList().run()}>Numbered</button>
+        
+        {/* Basic Text Formatting */}
+        <button onClick={() => editor.chain().focus().toggleBold().run()} className={editor.isActive('bold') ? 'is-active' : ''}>Bold</button>
+        <button onClick={() => editor.chain().focus().toggleItalic().run()} className={editor.isActive('italic') ? 'is-active' : ''}>Italic</button>
+        <button onClick={() => editor.chain().focus().toggleUnderline().run()} className={editor.isActive('underline') ? 'is-active' : ''}>Underline</button>
+        <button onClick={() => editor.chain().focus().toggleStrike().run()} className={editor.isActive('strike') ? 'is-active' : ''}>Strike</button>
+        
+        {/* Scripts */}
+        <button onClick={() => editor.chain().focus().toggleSubscript().run()} className={editor.isActive('subscript') ? 'is-active' : ''}>Sub</button>
+        <button onClick={() => editor.chain().focus().toggleSuperscript().run()} className={editor.isActive('superscript') ? 'is-active' : ''}>Super</button>
+
+        {/* Blocks & Lists */}
+        <button onClick={() => editor.chain().focus().toggleCode().run()} className={editor.isActive('code') ? 'is-active' : ''}>Inline Code</button>
+        <button onClick={() => editor.chain().focus().toggleCodeBlock().run()} className={editor.isActive('codeBlock') ? 'is-active' : ''}>Code Block</button>
+        <button onClick={() => editor.chain().focus().toggleBlockquote().run()} className={editor.isActive('blockquote') ? 'is-active' : ''}>Quote</button>
+        <button onClick={() => editor.chain().focus().toggleBulletList().run()} className={editor.isActive('bulletList') ? 'is-active' : ''}>Bullet</button>
+        <button onClick={() => editor.chain().focus().toggleOrderedList().run()} className={editor.isActive('orderedList') ? 'is-active' : ''}>Numbered</button>
+        <button onClick={() => editor.chain().focus().toggleTaskList().run()} className={editor.isActive('taskList') ? 'is-active' : ''}>Task List</button>
+        
+        {/* Alignment */}
+        <button onClick={() => editor.chain().focus().setTextAlign("left").run()} className={editor.isActive({ textAlign: 'left' }) ? 'is-active' : ''}>Left</button>
+        <button onClick={() => editor.chain().focus().setTextAlign("center").run()} className={editor.isActive({ textAlign: 'center' }) ? 'is-active' : ''}>Center</button>
+        <button onClick={() => editor.chain().focus().setTextAlign("right").run()} className={editor.isActive({ textAlign: 'right' }) ? 'is-active' : ''}>Right</button>
+        
         <button onClick={() => editor.chain().focus().setHorizontalRule().run()}>Divider</button>
-        <button onClick={() => editor.chain().focus().setTextAlign("left").run()}>Left</button>
-        <button onClick={() => editor.chain().focus().setTextAlign("center").run()}>Center</button>
-        <button onClick={() => editor.chain().focus().setTextAlign("right").run()}>Right</button>
         <button onClick={insertImage}>Image</button>
-        <button onClick={() => editor.chain().focus().toggleTaskList().run()}>Task List</button>
+
+        {/* Colors */}
         <label>🎨<input type="color" onInput={(e) => editor.chain().focus().setColor(e.target.value).run()} /></label>
-        <button onClick={() => editor.chain().focus().toggleHighlight().run()}>Highlight</button>
+        <button onClick={() => editor.chain().focus().toggleHighlight().run()} className={editor.isActive('highlight') ? 'is-active' : ''}>Highlight</button>
+        
+        {/* Clear Formatting */}
+        <button onClick={() => editor.chain().focus().unsetAllMarks().clearNodes().run()}>Clear Format</button>
+
+        {/* Dynamic Table Controls (Only appear when a table is active) */}
+        {editor.isActive('table') && (
+          <div style={{ display: 'flex', gap: '4px', paddingLeft: '8px', borderLeft: '2px solid var(--border-color)' }}>
+            <button onClick={() => editor.chain().focus().addColumnAfter().run()}>+Col</button>
+            <button onClick={() => editor.chain().focus().addRowAfter().run()}>+Row</button>
+            <button onClick={() => editor.chain().focus().deleteColumn().run()}>-Col</button>
+            <button onClick={() => editor.chain().focus().deleteRow().run()}>-Row</button>
+            <button onClick={() => editor.chain().focus().deleteTable().run()} style={{ color: 'var(--danger-color)' }}>Del Table</button>
+          </div>
+        )}
+
       </div>
 
       <EditorContent editor={editor} className="premium-editor-content" />
