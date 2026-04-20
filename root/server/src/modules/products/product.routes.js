@@ -9,7 +9,8 @@ import {
   likeProduct,
   commentProduct,
   editComment,
-  deleteComment
+  deleteComment,
+  getSecuredProductContent 
 } from "./product.controller.js";
 
 import { protect } from "../../core/middlewares/auth.middleware.js";
@@ -53,6 +54,8 @@ router.get("/access/:id", protect, async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+router.get("/access/secure/:id", protect, getSecuredProductContent);
 
 router.get("/:id", getProduct);
 

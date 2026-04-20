@@ -147,8 +147,14 @@ function Checkout() {
 
             if (orderData.success) {
               toast.success("Payment successful 🎉 Redirecting...");
-              // Exact redirection point
-              window.location.href = "https://gurukul.ialksng.com";
+              
+              // HYBRID REDIRECT LOGIC
+              const category = (product.category || "").toLowerCase();
+              if (category === "course" || category === "roadmap" || category === "notes") {
+                 window.location.href = `https://gurukul.ialksng.me/auth-bridge?token=${token}&productId=${product._id}`;
+              } else {
+                 navigate(`/access/${product._id}`);
+              }
             } else {
               toast.error("Order saving failed ❌");
             }
@@ -162,7 +168,7 @@ function Checkout() {
             toast("Payment cancelled", { icon: "ℹ️" });
           },
         },
-        theme: { color: "#38bdf8" }, // Matches var(--accent-primary)
+        theme: { color: "#38bdf8" }, 
       };
 
       const rzp = new window.Razorpay(options);

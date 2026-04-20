@@ -1,5 +1,5 @@
-const Order = require('../orders/order.model');
-const Product = require('./product.model');
+import Product from "./product.model.js";
+import Order from "../orders/order.model.js"; // Needed for checking ownership
 
 export const addProduct = async (req, res) => {
   try {
@@ -161,28 +161,38 @@ export const deleteComment = async (req, res) => {
   }
 };
 
-exports.getSecuredProductContent = async (req, res) => {
-    try {
-        const productId = req.params.id;
-        const userId = req.user._id;
-        const hasPurchased = await Order.findOne({
-            user: userId,
-            product: productId,
-            status: 'Completed'
-        });
-        if (!hasPurchased && req.user.role !== 'admin') {
-            return res.status(403).json({ 
-                success: false, 
-                message: "Purchase required to access this content." 
-            });
-        }
+// NEW SECURE ROUTE FOR LMS
+export const getSecuredProductContent = async (req, res) => {
+  try {
+      const productId = req.params.id;
+      const userId = req.user._id;
 
-        const product = await Product.findById(productId)
-            .select('+notionUrl +videoLinks +downloadLinks'); 
+      // 1. Check if user purchased this product
+      const hasPurchased = await Order.findOne({
+          user: userId,
+          product: productId,
+          $or: [{ status: "Paid" }, { status: "Completed" }, { isPaid: true }] 
+      });
 
-        res.status(200).json({ success: true, data: product });
+      // 2. Deny if not purchased and not admin
+      if (!hasPurchased && req.user.role !== 'admin') {
+          return res.status(403).json({ 
+              success: false, 
+              message: "Access Denied. Purchase required." 
+          });
+      }
 
-    } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
-    }
+      // 3. Fetch product WITH secure fields (Add any hidden fields your LMS needs here)
+      const product = await Product.findById(productId);
+          // .select('+notionUrl +videoLinks'); // Uncomment if you use hidden fields in Mongoose schema
+
+      if (!product) {
+          return res.status(404).json({ success: false, message: "Product not found" });
+      }
+
+      res.status(200).json({ success: true, data: product });
+
+  } catch (error) {
+      res.status(500).json({ success: false, message: error.message });
+  }
 };

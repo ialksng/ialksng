@@ -7,7 +7,7 @@ import { AuthContext } from "../../features/auth/AuthContext";
 import Loader from "../../core/components/Loader";
 import Pagination from "../../core/components/Pagination";
 
-import "./Store.css"; // Using your custom CSS
+import "./Store.css"; 
 
 function Shop() {
   const [products, setProducts] = useState([]);
@@ -21,7 +21,6 @@ function Shop() {
   const [search, setSearch] = useState("");
   const [sortOrder, setSortOrder] = useState("default");
   
-  // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8; 
 
@@ -115,15 +114,18 @@ function Shop() {
     navigate(`/checkout/${product._id}`);
   };
 
-  // HYBRID APPROACH LOGIC
+  // UPDATED ACCESS LOGIC TO THROW SECURE TOKEN TO GURUKUL
   const handleAccess = (product) => {
     const category = (product.category || "").toLowerCase();
     
-    if (category === "course" || category === "roadmap") {
-       // External LMS for heavy interactive learning
-       window.location.href = "https://gurukul.ialksng.com";
+    if (category === "course" || category === "roadmap" || category === "notes") {
+       const token = localStorage.getItem("token");
+       if (token) {
+           window.location.href = `https://gurukul.ialksng.me/auth-bridge?token=${token}&productId=${product._id}`;
+       } else {
+           navigate('/login', { state: { from: "/store" } });
+       }
     } else {
-       // Local Bridge page for code/notes downloads & comments
        navigate(`/access/${product._id}`);
     }
   };
@@ -199,7 +201,6 @@ function Shop() {
             <div className="store-grid">
               {displayedProducts.map(product => {
                 
-                // ADMIN BYPASS LOGIC
                 const isAdmin = user && user.role === "admin";
                 const isOwned = ownedProducts.includes(product._id);
                 const isFree = product.price === 0;
