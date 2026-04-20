@@ -44,8 +44,13 @@ export const getProducts = async (req, res) => {
 
 export const getProduct = async (req, res) => {
   try {
+    if (!isValidId(req.params.id)) {
+      return res.status(400).json({ error: "Invalid Product ID" });
+    }
+
     const product = await Product.findOne({ _id: req.params.id });
     if (!product) return res.status(404).json({ error: "Product not found" });
+
     res.json({ success: true, product });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -54,6 +59,10 @@ export const getProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
   try {
+    if (!isValidId(req.params.id)) {
+      return res.status(400).json({ error: "Invalid Product ID" });
+    }
+
     const product = await Product.findOne({ _id: req.params.id });
     if (!product) return res.status(404).json({ error: "Product not found" });
 
@@ -71,6 +80,10 @@ export const updateProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
   try {
+    if (!isValidId(req.params.id)) {
+      return res.status(400).json({ error: "Invalid Product ID" });
+    }
+
     const product = await Product.findOne({ _id: req.params.id });
     if (!product) return res.status(404).json({ error: "Product not found" });
 
@@ -83,8 +96,16 @@ export const deleteProduct = async (req, res) => {
 
 export const likeProduct = async (req, res) => {
   try {
+    if (!isValidId(req.params.id)) {
+      return res.status(400).json({ msg: "Invalid Product ID" });
+    }
+
     const product = await Product.findOne({ _id: req.params.id });
     if (!product) return res.status(404).json({ msg: "Product not found" });
+
+    if (!req.user) {
+      return res.status(401).json({ msg: "Unauthorized" });
+    }
 
     const userId = req.user._id.toString();
     product.likes = product.likes || [];
@@ -104,11 +125,19 @@ export const likeProduct = async (req, res) => {
 
 export const commentProduct = async (req, res) => {
   try {
+    if (!isValidId(req.params.id)) {
+      return res.status(400).json({ msg: "Invalid Product ID" });
+    }
+
     const { text } = req.body;
     if (!text) return res.status(400).json({ msg: "Comment text is required" });
 
     const product = await Product.findOne({ _id: req.params.id });
     if (!product) return res.status(404).json({ msg: "Product not found" });
+
+    if (!req.user) {
+      return res.status(401).json({ msg: "Unauthorized" });
+    }
 
     const newComment = {
       user: req.user.name || "User",
@@ -138,7 +167,7 @@ export const editComment = async (req, res) => {
     const comment = product.comments.id(req.params.commentId);
     if (!comment) return res.status(404).json({ msg: "Comment not found" });
 
-    if (comment.userId.toString() !== req.user._id.toString()) {
+    if (!req.user || comment.userId.toString() !== req.user._id.toString()) {
       return res.status(401).json({ msg: "Not authorized" });
     }
 
@@ -161,7 +190,7 @@ export const deleteComment = async (req, res) => {
 
     if (commentIndex === -1) return res.status(404).json({ msg: "Comment not found" });
 
-    if (product.comments[commentIndex].userId.toString() !== req.user._id.toString() && req.user.role !== "admin") {
+    if (!req.user || (product.comments[commentIndex].userId.toString() !== req.user._id.toString() && req.user.role !== "admin")) {
       return res.status(401).json({ msg: "Not authorized" });
     }
 
@@ -181,7 +210,28 @@ export const getSecuredProductContent = async (req, res) => {
       return res.status(400).json({ success: false, message: "Invalid Product ID." });
     }
 
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: "You must be logged in to access this content."
+      });
+    }
+
     const userId = req.user.id || req.user._id;
+    const isAdmin = req.user.role === "admin";
+
+    const product = await Product.findOne({ _id: productId });
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found in database."
+      });
+    }
+
+    if (product.price === 0) {
+      return res.status(200).json({ success: true, data: product });
+    }
 
     const order = await Order.findOne({
       user: userId,
@@ -192,24 +242,20 @@ export const getSecuredProductContent = async (req, res) => {
       ]
     });
 
-    const isAdmin = req.user.role === "admin";
-
     if (!order && !isAdmin) {
       return res.status(403).json({
         success: false,
-        message: "Access Denied. You must purchase this item to view it.",
+        message: "Access Denied. You must purchase this item to view it."
       });
     }
 
-    const product = await Product.findOne({ _id: productId });
-
-    if (!product) {
-      return res.status(404).json({ success: false, message: "Product not found in database." });
-    }
-
     res.status(200).json({ success: true, data: product });
+
   } catch (error) {
-    console.error("[LMS Auth Error]:", error);
-    res.status(500).json({ success: false, message: "Internal server error verifying access" });
+    console.error("FULL ERROR:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "Internal server error verifying access"
+    });
   }
 };
