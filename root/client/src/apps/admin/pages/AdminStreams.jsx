@@ -22,7 +22,7 @@ const AdminStreams = () => {
     try {
       setLoading(true);
       const [streamsRes, gamesRes] = await Promise.all([
-        axios.get('/more/streams'),
+        axios.get('/more/streams/all'),
         axios.get('/more/games')
       ]);
       
