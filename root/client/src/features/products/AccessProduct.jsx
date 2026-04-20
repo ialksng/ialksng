@@ -4,7 +4,7 @@ import { AuthContext } from "../auth/AuthContext";
 import Loader from "../../core/components/Loader";
 import axios from "../../core/utils/axios";
 import toast from "react-hot-toast";
-import "./AccessProduct.css";
+import "./AccessProduct.css"; // Using your custom CSS
 
 function AccessProduct() {
   const { id } = useParams();
@@ -19,9 +19,7 @@ function AccessProduct() {
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editText, setEditText] = useState("");
 
-  const API =
-    import.meta.env.VITE_API_URL ||
-    "https://ialksng-backend.onrender.com";
+  const API = import.meta.env.VITE_API_URL || "https://ialksng-backend.onrender.com";
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -34,7 +32,7 @@ function AccessProduct() {
           return;
         }
 
-        // Regular User Paid Access Check
+        // Regular User Order Validation
         const res = await fetch(`${API}/api/products/access/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -225,36 +223,16 @@ function AccessProduct() {
       <h1 className="access__title">{product.title}</h1>
       <p className="access__desc">{product.description}</p>
 
-      {/* THE NEW ACTION BRIDGE BUTTONS */}
-      <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", margin: "1.5rem 0" }}>
-        
-        {product.fileUrl && (
-          <button
-            className="access__download-btn"
-            onClick={(e) => handleDownload(e, product.fileUrl, product.title)}
-            style={{ margin: 0, flex: 1, minWidth: "220px" }}
-          >
-            {downloading ? "Downloading..." : "⬇ Download Resource Files"}
-          </button>
-        )}
-
-        {/* Gurukul Bridge Button */}
+      {product.fileUrl && (
         <button
           className="access__download-btn"
-          onClick={() => window.location.href = "https://gurukul.ialksng.com"}
-          style={{ 
-            margin: 0, 
-            flex: 1, 
-            minWidth: "220px", 
-            background: "#0ea5e9", // A bright call-to-action color mapping to your theme
-            borderColor: "#0ea5e9", 
-            color: "#fff" 
-          }}
+          onClick={(e) =>
+            handleDownload(e, product.fileUrl, product.title)
+          }
         >
-          🎓 Open Course in Gurukul
+          {downloading ? "Downloading..." : "Download Resource"}
         </button>
-        
-      </div>
+      )}
 
       <div className="social-container">
         <div className="social-actions-bar">
