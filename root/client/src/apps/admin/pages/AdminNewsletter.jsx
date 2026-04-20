@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-
 import axios from "../../../core/utils/axios";
 import Loader from "../../../core/components/Loader";
-
 import "./admin.css";
 
 const AdminNewsletter = () => {
@@ -36,11 +34,18 @@ const AdminNewsletter = () => {
     if (window.confirm(`Are you sure you want to send this to ${subscribers.length} subscribers?`)) {
       setSending(true);
       try {
-        alert("Newsletter sent successfully! (Requires Backend Mailer Integration)");
+        const res = await axios.post(
+          "/newsletter/send",
+          { subject, content },
+          { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+        );
+        
+        alert(res.data.msg || "Newsletter sent successfully!");
         setSubject("");
         setContent("");
       } catch (err) {
-        alert("Failed to send.");
+        console.error(err);
+        alert(err.response?.data?.msg || "Failed to send.");
       } finally {
         setSending(false);
       }
