@@ -1,4 +1,5 @@
-import Product from "./product.model.js";
+const Order = require('../orders/order.model');
+const Product = require('./product.model');
 
 export const addProduct = async (req, res) => {
   try {
@@ -158,4 +159,30 @@ export const deleteComment = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
+};
+
+exports.getSecuredProductContent = async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const userId = req.user._id;
+        const hasPurchased = await Order.findOne({
+            user: userId,
+            product: productId,
+            status: 'Completed'
+        });
+        if (!hasPurchased && req.user.role !== 'admin') {
+            return res.status(403).json({ 
+                success: false, 
+                message: "Purchase required to access this content." 
+            });
+        }
+
+        const product = await Product.findById(productId)
+            .select('+notionUrl +videoLinks +downloadLinks'); 
+
+        res.status(200).json({ success: true, data: product });
+
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
 };

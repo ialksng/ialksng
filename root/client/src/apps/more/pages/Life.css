@@ -1,0 +1,166 @@
+.life-container {
+  min-height: 100vh;
+  background-color: #0f172a;
+  padding-bottom: 8rem;
+  color: #f8fafc;
+}
+
+.life-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 5rem 2rem 4rem;
+  text-align: center;
+}
+
+.life-glow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 10rem;
+  background-color: rgba(16, 185, 129, 0.2); /* Emerald */
+  filter: blur(120px);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.life-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 900;
+  margin-bottom: 1rem;
+  letter-spacing: -1px;
+}
+
+.life-title-highlight {
+  color: #10b981;
+  text-shadow: 0 0 30px rgba(16, 185, 129, 0.4);
+}
+
+.life-subtitle {
+  color: #94a3b8;
+  max-width: 550px;
+  margin: 0 auto;
+  font-size: 1.15rem;
+  line-height: 1.6;
+}
+
+/* Timeline Feed */
+.life-feed {
+  max-width: 700px;
+  margin: 0 auto;
+  position: relative;
+  padding: 0 1.5rem;
+}
+
+.timeline-line {
+  position: absolute;
+  left: 3rem;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, rgba(16, 185, 129, 0.5), transparent);
+}
+
+.life-card-wrapper {
+  position: relative;
+  padding-left: 4rem;
+  margin-bottom: 2.5rem;
+  opacity: 0;
+  animation: slideInRight 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: 1.1rem;
+  top: 1.5rem;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #0f172a;
+  border: 3px solid #10b981;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+  z-index: 2;
+}
+
+.life-card {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 1.8rem;
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.life-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 4px;
+  background: #10b981;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.life-card:hover {
+  transform: translateY(-4px);
+  background: rgba(30, 41, 59, 0.8);
+  border-color: rgba(16, 185, 129, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.life-card:hover::before {
+  opacity: 1;
+}
+
+.life-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.life-category {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.life-date {
+  color: #64748b;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.life-card-title {
+  font-size: 1.4rem;
+  color: #fff;
+  margin: 0 0 0.8rem 0;
+  font-weight: 700;
+}
+
+.life-card-content {
+  color: #cbd5e1;
+  line-height: 1.7;
+  margin: 0;
+  font-size: 0.95rem;
+  white-space: pre-wrap;
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@media (max-width: 600px) {
+  .timeline-line { left: 1.5rem; }
+  .timeline-dot { left: -0.4rem; }
+  .life-card-wrapper { padding-left: 2rem; }
+}

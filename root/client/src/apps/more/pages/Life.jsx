@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../../../core/utils/axios';
-import '../More.css';
+import './Life.css';
 
 const Life = () => {
   const [posts, setPosts] = useState([]);
@@ -20,34 +20,44 @@ const Life = () => {
     fetchPosts();
   }, []);
 
-  if (loading) return <div className="more-layout container"><p>Loading updates...</p></div>;
-
   return (
-    <div className="more-layout container animated-fade-in">
-      <div className="sub-page-header">
-        <h1>Life & Fitness</h1>
-        <p className="subtitle">Personal updates, gym progress, and quick thoughts.</p>
+    <div className="life-container animated-fade-in">
+      <div className="life-hero">
+        <div className="life-glow"></div>
+        <h1 className="life-title">
+          <span className="life-title-highlight">Dev Log</span> & Life
+        </h1>
+        <p className="life-subtitle">
+          A personal journal. Gym progress, daily thoughts, bugs smashed, and everything in between.
+        </p>
       </div>
 
-      <div className="life-feed" style={{ maxWidth: '700px', margin: '0 auto' }}>
-        {posts.map((post) => (
-          <div key={post._id} style={{ 
-            background: 'rgba(255,255,255,0.02)', 
-            border: '1px solid rgba(255,255,255,0.05)', 
-            padding: '1.5rem', 
-            borderRadius: '12px', 
-            marginBottom: '1.5rem' 
-          }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
-              <span className="tag" style={{ background: 'rgba(255,255,255,0.1)' }}>{post.category}</span>
-              <span style={{ color: '#6b7280', fontSize: '0.85rem' }}>
-                {new Date(post.date).toLocaleDateString()}
-              </span>
+      <div className="life-feed">
+        <div className="timeline-line"></div>
+        
+        {loading ? (
+          <div className="life-skeleton">Loading updates...</div>
+        ) : posts.length === 0 ? (
+          <div className="life-empty">No updates found.</div>
+        ) : (
+          posts.map((post, index) => (
+            <div key={post._id} className="life-card-wrapper" style={{ animationDelay: `${index * 0.1}s` }}>
+              <div className="timeline-dot"></div>
+              <div className="life-card">
+                <div className="life-card-header">
+                  <span className="life-category">{post.category || 'Update'}</span>
+                  <span className="life-date">
+                    {new Date(post.date).toLocaleDateString(undefined, {
+                      weekday: 'short', month: 'short', day: 'numeric'
+                    })}
+                  </span>
+                </div>
+                <h3 className="life-card-title">{post.title}</h3>
+                <p className="life-card-content">{post.content}</p>
+              </div>
             </div>
-            <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.25rem' }}>{post.title}</h3>
-            <p style={{ margin: 0, color: '#a8b2d1', lineHeight: '1.6' }}>{post.content}</p>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );
