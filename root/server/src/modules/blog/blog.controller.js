@@ -5,19 +5,23 @@ export const likeBlog = async (req, res) => {
     const blog = await Blog.findById(req.params.id);
     if (!blog) return res.status(404).json({ msg: "Blog not found" });
 
-    const userId = req.user._id.toString();
+    const userId = req.user._id ? req.user._id.toString() : req.user.id.toString();
 
-    blog.likes = blog.likes || [];
+    let likes = Array.isArray(blog.likes) ? [...blog.likes] : [];
 
-    if (blog.likes.includes(userId)) {
-      blog.likes = blog.likes.filter(id => id !== userId);
+    if (likes.includes(userId)) {
+      likes = likes.filter(id => id !== userId);
     } else {
-      blog.likes.push(userId);
+      likes.push(userId); 
     }
+
+    blog.likes = likes;
+    blog.markModified('likes');
 
     await blog.save();
     res.json(blog.likes);
   } catch (err) {
+    console.error("Like Error:", err);
     res.status(500).json({ message: err.message });
   }
 };
@@ -32,18 +36,26 @@ export const commentBlog = async (req, res) => {
     const blog = await Blog.findById(req.params.id);
     if (!blog) return res.status(404).json({ msg: "Blog not found" });
 
+    const userId = req.user._id ? req.user._id.toString() : req.user.id.toString();
+    const userName = req.user.name || req.user.username || "User";
+
     const newComment = {
-      user: req.user.name || "User",
-      userId: req.user._id.toString(),
-      text,
+      user: userName,
+      userId: userId,
+      text: text.trim(),
       date: new Date()
     };
 
-    blog.comments.push(newComment);
-    await blog.save();
+    const comments = Array.isArray(blog.comments) ? [...blog.comments] : [];
+    comments.push(newComment);
 
+    blog.comments = comments;
+    blog.markModified('comments');
+    
+    await blog.save();
     res.json(blog.comments);
   } catch (err) {
+    console.error("Comment Error:", err);
     res.status(500).json({ message: err.message });
   }
 };
@@ -53,23 +65,29 @@ export const deleteBlogComment = async (req, res) => {
     const blog = await Blog.findById(req.params.id);
     if (!blog) return res.status(404).json({ msg: "Blog not found" });
 
-    const index = blog.comments.findIndex(
-      c => c._id.toString() === req.params.commentId
-    );
+    const userId = req.user._id ? req.user._id.toString() : req.user.id.toString();
+    
+    let comments = Array.isArray(blog.comments) ? [...blog.comments] : [];
+
+    const index = comments.findIndex(c => c._id.toString() === req.params.commentId);
 
     if (index === -1) {
       return res.status(404).json({ msg: "Comment not found" });
     }
 
-    if (blog.comments[index].userId !== req.user._id.toString()) {
-      return res.status(401).json({ msg: "Not authorized" });
+    if (comments[index].userId !== userId) {
+      return res.status(401).json({ msg: "Not authorized to delete this comment" });
     }
 
-    blog.comments.splice(index, 1);
-    await blog.save();
+    comments.splice(index, 1);
 
+    blog.comments = comments;
+    blog.markModified('comments');
+
+    await blog.save();
     res.json(blog.comments);
   } catch (err) {
+    console.error("Delete Comment Error:", err);
     res.status(500).json({ message: err.message });
   }
 };
@@ -82,18 +100,27 @@ export const editBlogComment = async (req, res) => {
     const blog = await Blog.findById(req.params.id);
     if (!blog) return res.status(404).json({ msg: "Blog not found" });
 
-    const comment = blog.comments.id(req.params.commentId);
-    if (!comment) return res.status(404).json({ msg: "Comment not found" });
+    const userId = req.user._id ? req.user._id.toString() : req.user.id.toString();
+    
+    let comments = Array.isArray(blog.comments) ? [...blog.comments] : [];
+    const index = comments.findIndex(c => c._id.toString() === req.params.commentId);
 
-    if (comment.userId !== req.user._id.toString()) {
-      return res.status(401).json({ msg: "Not authorized" });
+    if (index === -1) {
+      return res.status(404).json({ msg: "Comment not found" });
     }
 
-    comment.text = text;
-    await blog.save();
+    if (comments[index].userId !== userId) {
+      return res.status(401).json({ msg: "Not authorized to edit this comment" });
+    }
+    comments[index].text = text.trim();
 
+    blog.comments = comments;
+    blog.markModified('comments');
+
+    await blog.save();
     res.json(blog.comments);
   } catch (err) {
+    console.error("Edit Comment Error:", err);
     res.status(500).json({ message: err.message });
   }
 };
