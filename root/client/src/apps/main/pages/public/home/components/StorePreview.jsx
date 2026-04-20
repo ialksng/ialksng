@@ -1,63 +1,50 @@
-import React, { useEffect, useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import React, { useState, useEffect, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { FaArrowRight } from 'react-icons/fa';
+import toast from 'react-hot-toast';
+import axios from '../../../../../../core/utils/axios';
 
-import { CartContext } from "../../features/cart/CartContext";
-import { AuthContext } from "../../features/auth/AuthContext";
-import Loader from "../../core/components/Loader";
-import Pagination from "../../core/components/Pagination";
+import { CartContext } from '../../../../../../features/cart/CartContext';
+import { AuthContext } from '../../../../../../features/auth/AuthContext';
+import Pagination from '../../../../../../core/components/Pagination';
 
-import "./Store.css";
+import '../../../../../store/Store.css'; // Ensuring the new store card styles are applied
+import './StorePreview.css';
 
-function Shop() {
+export default function StorePreview() {
   const [products, setProducts] = useState([]);
-  const [filtered, setFiltered] = useState([]);
   const [ownedProducts, setOwnedProducts] = useState([]);
-  const [previewProduct, setPreviewProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [addedId, setAddedId] = useState(null);
-
-  const [activeCategory, setActiveCategory] = useState("all");
-  const [search, setSearch] = useState("");
-  const [sortOrder, setSortOrder] = useState("default");
-
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
-
+  const itemsPerPage = 3;
+  
+  const navigate = useNavigate();
   const { addToCart, cart } = useContext(CartContext);
   const { user } = useContext(AuthContext);
-  const navigate = useNavigate();
 
-  const API = import.meta.env.VITE_API_URL;
-
+  // Fetch Products
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch(`${API}/api/products`);
-        const data = await res.json();
+        const { data } = await axios.get('/products');
         const list = Array.isArray(data.products) ? data.products : Array.isArray(data) ? data : [];
         setProducts(list);
-        setFiltered(list);
       } catch (err) {
-        console.log("Product fetch error:", err);
-        setProducts([]);
-        setFiltered([]);
+        console.error("Failed to fetch products", err);
       } finally {
         setLoading(false);
       }
     };
-
     fetchProducts();
-  }, [API]);
+  }, []);
 
+  // Fetch Owned Products (Access Logic)
   useEffect(() => {
     if (!user) return;
     const fetchOrders = async () => {
       try {
-        const res = await fetch(`${API}/api/orders/my-orders`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-        });
-        const data = await res.json();
+        const { data } = await axios.get('/orders/my-orders');
         const ids = Array.isArray(data.orders) ? data.orders.map(o => o.product?._id).filter(Boolean) : [];
         setOwnedProducts(ids);
       } catch (err) {
@@ -65,44 +52,24 @@ function Shop() {
       }
     };
     fetchOrders();
-  }, [user, API]);
-
-  useEffect(() => {
-    let temp = Array.isArray(products) ? [...products] : [];
-
-    if (activeCategory !== "all") {
-      temp = temp.filter(p => (p.category || "").toLowerCase() === activeCategory);
-    }
-
-    if (search.trim() !== "") {
-      temp = temp.filter(p => (p.title || "").toLowerCase().includes(search.toLowerCase()));
-    }
-
-    if (sortOrder === "low-high") {
-      temp.sort((a, b) => (a.price || 0) - (b.price || 0));
-    } else if (sortOrder === "high-low") {
-      temp.sort((a, b) => (b.price || 0) - (a.price || 0));
-    }
-
-    setFiltered(temp);
-    setCurrentPage(1);
-  }, [search, activeCategory, sortOrder, products]);
+  }, [user]);
 
   const handleAddToCart = (product) => {
     if (!user) {
-      navigate("/login", { state: { from: "/store" } });
+      navigate("/login", { state: { from: "/" } });
       return;
     }
 
     const alreadyInCart = cart.some(item => item._id === product._id);
     if (alreadyInCart) {
-      toast("Item is already in your cart ⚠️");
+      toast("Already in cart ⚠️");
       return;
     }
 
     addToCart(product);
     setAddedId(product._id);
     toast.success("Added to cart 🛒");
+
     setTimeout(() => setAddedId(null), 1500);
   };
 
@@ -114,77 +81,37 @@ function Shop() {
     navigate(`/checkout/${product._id}`);
   };
 
-  const handleAccess = (product) => {
-    navigate(`/access/${product._id}`);
+  const handleAccess = () => {
+    window.location.href = "https://gurukul.ialksng.me/";
   };
 
-  const totalPages = Math.ceil(filtered.length / itemsPerPage);
-  const displayedProducts = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-
-  if (loading) {
-    return (
-      <div className="store-loader">
-        <Loader />
-      </div>
-    );
-  }
+  // Pagination Logic
+  const totalPages = Math.ceil(products.length / itemsPerPage);
+  const displayedProducts = products.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
-    <section className="store-section container">
-      <div className="store-topbar">
-        <div className="store-topbar-left">
-          <h2>Resource Store</h2>
-          <p>Premium code, tools, and design templates.</p>
-        </div>
-        <div className="store-topbar-right">
-          <input
-            type="text"
-            placeholder="Search for products, codes, templates..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="store-search"
-          />
-        </div>
-      </div>
-
-      <div className="store-layout">
-        <aside className="store-sidebar">
-          <h3>Filters</h3>
-
-          <div className="filter-group">
-            <h4>Categories</h4>
-            <ul className="filter-list">
-              {["all", "notes", "roadmap", "project", "code"].map(cat => (
-                <li key={cat}>
-                  <button
-                    className={activeCategory === cat ? "active" : ""}
-                    onClick={() => setActiveCategory(cat)}
-                  >
-                    {cat}
-                  </button>
-                </li>
-              ))}
-            </ul>
+    <section className="home__section" style={{ backgroundColor: "var(--bg-secondary)" }}>
+      <div className="container">
+        
+        <div className="section__header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+          <div>
+            <h2>Digital Store</h2>
+            <p>Premium developer resources, boilerplates, and study materials.</p>
           </div>
+          <Link to="/store" className="view__all-btn" style={{ color: 'var(--success-color)' }}>
+            Visit Store <FaArrowRight />
+          </Link>
+        </div>
 
-          <div className="filter-group">
-            <h4>Sort By Price</h4>
-            <select
-              value={sortOrder}
-              onChange={(e) => setSortOrder(e.target.value)}
-              className="store-select"
-            >
-              <option value="default">Featured</option>
-              <option value="low-high">Price: Low to High</option>
-              <option value="high-low">Price: High to Low</option>
-            </select>
-          </div>
-        </aside>
-
-        <main className="store-main">
-          {Array.isArray(displayedProducts) && displayedProducts.length > 0 ? (
-            <div className="store-grid">
+        {loading ? (
+          <div style={{ textAlign: 'center', padding: '2rem' }}>Loading Products...</div>
+        ) : products.length === 0 ? (
+           <div style={{ textAlign: 'center', padding: '2rem' }}>No products available currently.</div>
+        ) : (
+          <>
+            <div className="store-grid" style={{ marginTop: '2rem' }}>
               {displayedProducts.map(product => {
+                // ADMIN BYPASS LOGIC HERE
                 const isAdmin = user && user.role === "admin";
                 const isOwned = ownedProducts.includes(product._id);
                 const isFree = product.price === 0;
@@ -192,16 +119,16 @@ function Shop() {
 
                 return (
                   <div className="store-card" key={product._id}>
-                    <div className="card-image-wrapper" onClick={() => setPreviewProduct(product)}>
-                      <img src={product.image || "/default-product.png"} alt={product.title} />
-                      <div className="card-quickview"><span>Quick View</span></div>
+                    <div className="card-image-wrapper" onClick={() => navigate('/store')}>
+                      <img src={product.image || "/default-product.png"} alt={product.title || "product"} />
+                      <div className="card-quickview"><span>View in Store</span></div>
                       {isFree && <span className="badge-free">FREE</span>}
                     </div>
 
                     <div className="card-content">
                       <span className="card-category">{product.category || "General"}</span>
                       <h3 className="card-title" title={product.title}>{product.title || "Untitled"}</h3>
-
+                      
                       <div className="card-rating">
                         ★★★★☆ <span>({Math.floor(Math.random() * 500) + 50})</span>
                       </div>
@@ -216,7 +143,7 @@ function Shop() {
 
                         <div className="card-actions-col">
                           {hasAccess ? (
-                            <button className="btn-access" onClick={() => handleAccess(product)}>
+                            <button className="btn-access" onClick={handleAccess}>
                               Access Now
                             </button>
                           ) : (
@@ -240,55 +167,18 @@ function Shop() {
                 );
               })}
             </div>
-          ) : (
-            <div className="store-empty">
-              <p>No products found matching your criteria.</p>
-              <button onClick={() => { setSearch(""); setActiveCategory("all"); }}>
-                Clear filters
-              </button>
-            </div>
-          )}
 
-          {totalPages > 1 && (
-            <div className="store-pagination">
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={setCurrentPage}
+            <div style={{ marginTop: '2rem' }}>
+              <Pagination 
+                currentPage={currentPage} 
+                totalPages={totalPages} 
+                onPageChange={setCurrentPage} 
               />
             </div>
-          )}
-        </main>
+          </>
+        )}
+
       </div>
-
-      {previewProduct && (
-        <div className="preview-modal" onClick={() => setPreviewProduct(null)}>
-          <div className="preview-box" onClick={(e) => e.stopPropagation()}>
-            <button className="close-btn" onClick={() => setPreviewProduct(null)}>✕</button>
-            <div className="preview-layout">
-              <div className="preview-image-side">
-                <img src={previewProduct.previewImage || previewProduct.image || "/default-product.png"} alt={previewProduct.title} />
-              </div>
-              <div className="preview-info-side">
-                <span className="preview-cat">{previewProduct.category}</span>
-                <h3>{previewProduct.title}</h3>
-                <p className="preview-desc">{previewProduct.description || "No description available."}</p>
-
-                <div className="preview-footer">
-                  <span className="preview-price">₹{previewProduct.price}</span>
-                  {previewProduct.previewUrl && (
-                    <a href={previewProduct.previewUrl} target="_blank" rel="noreferrer" className="preview-link">
-                      Live Preview <span>→</span>
-                    </a>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </section>
   );
 }
-
-export default Shop;
