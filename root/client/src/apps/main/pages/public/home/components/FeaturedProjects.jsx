@@ -1,28 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaGithub, FaExternalLinkAlt, FaArrowRight } from 'react-icons/fa';
+import axios from '../../../../../../core/utils/axios';
 
 import './FeaturedProjects.css';
 
 export default function FeaturedProjects() {
-  const projects = [
-    {
-      title: "Smartsphere",
-      description: "A comprehensive smart cloud aggregator dashboard designed to centralize, manage, and monitor cloud resources efficiently across multiple providers.",
-      techStack: ["React.js", "Node.js", "Express", "MongoDB", "Docker"],
-      githubLink: "https://github.com/ialksng/smartsphere",
-      liveLink: "https://www.ialksng.me/projects/smartsphere", 
-      imagePlaceholder: "Cloud Architecture Dashboard"
-    },
-    {
-      title: "BuddyBot",
-      description: "A highly interactive, MERN-based chatbot featuring real-time AI streaming, robust conversation history, and local open-source LLM integration.",
-      techStack: ["MERN Stack", "Ollama", "Mistral/Llama", "Tailwind CSS"],
-      githubLink: "https://github.com/ialksng/buddybot",
-      liveLink: "https://www.ialksng.me/projects/buddybot",
-      imagePlaceholder: "AI Chat Interface"
-    }
-  ];
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const { data } = await axios.get('/projects');
+        // If your DB has a featured flag, use: data.filter(p => p.isFeatured).slice(0, 2)
+        // Otherwise, this just grabs the 2 most recent projects:
+        setProjects(data.slice(0, 2)); 
+      } catch (err) {
+        console.error("Failed to fetch projects", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, []);
 
   return (
     <section className="home__section" style={{ backgroundColor: "var(--bg-secondary)" }}>
@@ -38,38 +40,53 @@ export default function FeaturedProjects() {
           </Link>
         </div>
 
-        <div className="featured__projects-grid">
-          {projects.map((project, index) => (
-            <div className="project__card" key={index}>
-              <div className="project__image-container">
-                <div className="project__image-placeholder">
-                  <span>[ {project.imagePlaceholder} Image ]</span>
+        {loading ? (
+          <div style={{ textAlign: 'center', padding: '2rem' }}>Loading Projects...</div>
+        ) : projects.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '2rem' }}>No projects found.</div>
+        ) : (
+          <div className="featured__projects-grid">
+            {projects.map((project) => (
+              <div className="project__card" key={project._id || project.id}>
+                <div className="project__image-container">
+                  {project.imageUrl || project.image ? (
+                     <img src={project.imageUrl || project.image} alt={project.title} style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+                  ) : (
+                    <div className="project__image-placeholder">
+                      <span>[ {project.title} Image ]</span>
+                    </div>
+                  )}
                 </div>
+
+                <div className="project__content">
+                  <h3>{project.title}</h3>
+                  <p>{project.description}</p>
+                  
+                  <div className="project__tech">
+                    {/* Add fallback to empty array if techStack is undefined */}
+                    {(project.techStack || []).map((tech, idx) => (
+                      <span key={idx}>{typeof tech === 'object' ? tech.name : tech}</span>
+                    ))}
+                  </div>
+
+                  <div className="project__links">
+                    {project.githubLink && (
+                      <a href={project.githubLink} target="_blank" rel="noreferrer" className="btn btn__outline btn__small">
+                        <FaGithub /> Source Code
+                      </a>
+                    )}
+                    {project.liveLink && (
+                      <a href={project.liveLink} target="_blank" rel="noreferrer" className="btn btn__primary btn__small">
+                        <FaExternalLinkAlt /> Live Demo
+                      </a>
+                    )}
+                  </div>
+                </div>
+
               </div>
-
-              <div className="project__content">
-                <h3>{project.title}</h3>
-                <p>{project.description}</p>
-                
-                <div className="project__tech">
-                  {project.techStack.map((tech, idx) => (
-                    <span key={idx}>{tech}</span>
-                  ))}
-                </div>
-
-                <div className="project__links">
-                  <a href={project.githubLink} target="_blank" rel="noreferrer" className="btn btn__outline btn__small">
-                    <FaGithub /> Source Code
-                  </a>
-                  <a href={project.liveLink} target="_blank" rel="noreferrer" className="btn btn__primary btn__small">
-                    <FaExternalLinkAlt /> Live Demo
-                  </a>
-                </div>
-              </div>
-
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
       </div>
     </section>
