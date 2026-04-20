@@ -1,9 +1,10 @@
+import mongoose from "mongoose";
 import Product from "./product.model.js";
 import Order from "../orders/order.model.js";
 import User from "../auth/user.model.js";
 import Notification from "../notifications/notification.model.js";
 
-const isValidId = (id) => typeof id === "string" && id.length >= 10;
+const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
 
 export const addProduct = async (req, res) => {
   try {
@@ -44,11 +45,11 @@ export const getProducts = async (req, res) => {
 
 export const getProduct = async (req, res) => {
   try {
-    if (!isValidId(req.params.id)) {
+    if (!isValidObjectId(req.params.id)) {
       return res.status(400).json({ error: "Invalid Product ID" });
     }
 
-    const product = await Product.findOne({ publicId: req.params.id });
+    const product = await Product.findById(req.params.id);
 
     if (!product) {
       return res.status(404).json({ error: "Product not found" });
@@ -62,7 +63,11 @@ export const getProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
   try {
-    const product = await Product.findOne({ publicId: req.params.id });
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: "Invalid Product ID" });
+    }
+
+    const product = await Product.findById(req.params.id);
 
     if (!product) {
       return res.status(404).json({ error: "Product not found" });
@@ -86,7 +91,11 @@ export const updateProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
   try {
-    const product = await Product.findOne({ publicId: req.params.id });
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: "Invalid Product ID" });
+    }
+
+    const product = await Product.findById(req.params.id);
 
     if (!product) {
       return res.status(404).json({ error: "Product not found" });
@@ -104,7 +113,7 @@ export const likeProduct = async (req, res) => {
   try {
     if (!req.user) return res.status(401).json({ msg: "Unauthorized" });
 
-    const product = await Product.findOne({ publicId: req.params.id });
+    const product = await Product.findById(req.params.id);
 
     if (!product) return res.status(404).json({ msg: "Product not found" });
 
@@ -131,7 +140,7 @@ export const commentProduct = async (req, res) => {
     const { text } = req.body;
     if (!text) return res.status(400).json({ msg: "Comment text required" });
 
-    const product = await Product.findOne({ publicId: req.params.id });
+    const product = await Product.findById(req.params.id);
 
     if (!product) return res.status(404).json({ msg: "Product not found" });
 
@@ -158,7 +167,7 @@ export const editComment = async (req, res) => {
     const { text } = req.body;
     if (!text) return res.status(400).json({ msg: "Text required" });
 
-    const product = await Product.findOne({ publicId: req.params.id });
+    const product = await Product.findById(req.params.id);
 
     if (!product) return res.status(404).json({ msg: "Product not found" });
 
@@ -181,7 +190,7 @@ export const editComment = async (req, res) => {
 
 export const deleteComment = async (req, res) => {
   try {
-    const product = await Product.findOne({ publicId: req.params.id });
+    const product = await Product.findById(req.params.id);
 
     if (!product) return res.status(404).json({ msg: "Product not found" });
 
@@ -208,6 +217,10 @@ export const getSecuredProductContent = async (req, res) => {
   try {
     const productId = req.params.id;
 
+    if (!isValidObjectId(productId)) {
+      return res.status(400).json({ success: false, message: "Invalid Product ID" });
+    }
+
     if (!req.user) {
       return res.status(401).json({ success: false, message: "Login required" });
     }
@@ -215,7 +228,7 @@ export const getSecuredProductContent = async (req, res) => {
     const userId = req.user._id || req.user.id;
     const isAdmin = req.user.role === "admin";
 
-    const product = await Product.findOne({ publicId: productId });
+    const product = await Product.findById(productId);
 
     if (!product) {
       return res.status(404).json({ success: false, message: "Product not found" });
