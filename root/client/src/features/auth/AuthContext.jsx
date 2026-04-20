@@ -67,15 +67,9 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
-  return (
+return (
     <AuthContext.Provider value={{ user, loading, loginSuccess, logoutUser }}>
-      {loading ? (
-        <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <Loader />
-        </div>
-      ) : (
-        children
-      )}
+      {loading ? <Loader /> : children}
     </AuthContext.Provider>
   );
 };
