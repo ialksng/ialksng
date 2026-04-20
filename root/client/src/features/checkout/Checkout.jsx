@@ -148,12 +148,15 @@ function Checkout() {
             if (orderData.success) {
               toast.success("Payment successful 🎉 Redirecting...");
               
-              // HYBRID REDIRECT LOGIC
+              // SECURE REDIRECT LOGIC FOR GURUKUL
               const category = (product.category || "").toLowerCase();
               if (category === "course" || category === "roadmap" || category === "notes") {
-                 window.location.href = `https://gurukul.ialksng.me/auth-bridge?token=${token}&productId=${product._id}`;
+                  const redirectUrl = `https://gurukul.ialksng.me/auth-bridge?token=${token}&productId=${product._id}`;
+                  console.log("Redirecting to Gurukul:", redirectUrl);
+                  window.location.href = redirectUrl;
               } else {
-                 navigate(`/access/${product._id}`);
+                  // Fallback for physical items or other apps
+                  navigate(`/access/${product._id}`);
               }
             } else {
               toast.error("Order saving failed ❌");
@@ -196,7 +199,6 @@ function Checkout() {
       </div>
 
       <div className="checkout-layout">
-        {/* Left Column */}
         <div className="checkout-left">
           
           <div className="checkout-section">
@@ -229,10 +231,8 @@ function Checkout() {
               </div>
             </div>
           </div>
-
         </div>
 
-        {/* Right Column (Summary) */}
         <div className="checkout-right">
           <div className="summary-box">
             <h3>Order Summary</h3>

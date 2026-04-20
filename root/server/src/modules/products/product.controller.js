@@ -1,5 +1,5 @@
 import Product from "./product.model.js";
-import Order from "../orders/order.model.js"; 
+import Order from "../orders/order.model.js";
 
 export const addProduct = async (req, res) => {
   try {
@@ -71,7 +71,7 @@ export const likeProduct = async (req, res) => {
     product.likes = product.likes || [];
 
     if (product.likes.includes(userId)) {
-      product.likes = product.likes.filter(id => id !== userId);
+      product.likes = product.likes.filter((id) => id !== userId);
     } else {
       product.likes.push(userId);
     }
@@ -95,7 +95,7 @@ export const commentProduct = async (req, res) => {
       user: req.user.name || "User",
       userId: req.user._id.toString(),
       text,
-      date: new Date()
+      date: new Date(),
     };
 
     product.comments = product.comments || [];
@@ -138,7 +138,7 @@ export const deleteComment = async (req, res) => {
     if (!product) return res.status(404).json({ msg: "Product not found" });
 
     const commentIndex = product.comments.findIndex(
-      c => c._id.toString() === req.params.commentId
+      (c) => c._id.toString() === req.params.commentId
     );
 
     if (commentIndex === -1) {
@@ -146,7 +146,8 @@ export const deleteComment = async (req, res) => {
     }
 
     if (
-      product.comments[commentIndex].userId.toString() !== req.user._id.toString() &&
+      product.comments[commentIndex].userId.toString() !==
+        req.user._id.toString() &&
       req.user.role !== "admin"
     ) {
       return res.status(401).json({ msg: "Not authorized" });
@@ -161,49 +162,55 @@ export const deleteComment = async (req, res) => {
   }
 };
 
-// NEW SECURE ROUTE FOR LMS - WITH FOOLPROOF MATCHING
+// NEW SECURE ROUTE FOR LMS - WITH DEBUG LOGGING AND FOOLPROOF MATCHING
 export const getSecuredProductContent = async (req, res) => {
   try {
-      const productId = req.params.id;
-      
-      // Grab both string and object versions of the user ID just in case
-      const userIdString = req.user.id || req.user._id?.toString();
-      const userIdObject = req.user._id;
+    const productId = req.params.id;
 
-      // 1. Broad Search: Check for ANY successful order matching this user and product
-      const hasPurchased = await Order.findOne({
-          $or: [{ user: userIdString }, { user: userIdObject }],
-          product: productId,
-          $or: [
-              { status: "Paid" }, 
-              { status: "Completed" }, 
-              { status: "Success" },
-              { isPaid: true }
-          ] 
+    // Grab both string and object versions of the user ID
+    const userIdString = req.user.id || req.user._id?.toString();
+    const userIdObject = req.user._id;
+
+    console.log(`[Gurukul Access Check] User: ${userIdString} | Product: ${productId}`);
+
+    // 1. Broad Search: Matches exactly how orders are saved (req.user.id + isPaid)
+    const hasPurchased = await Order.findOne({
+      $or: [{ user: userIdString }, { user: userIdObject }],
+      product: productId,
+      $or: [
+        { status: "Paid" },
+        { status: "Completed" },
+        { status: "Success" },
+        { isPaid: true },
+      ],
+    });
+
+    // 2. Admin Check
+    const isAdmin = req.user.role === "admin";
+
+    if (!hasPurchased && !isAdmin) {
+      console.warn(`[Gurukul Access Denied] User ${userIdString} has no valid order for ${productId}`);
+      return res.status(403).json({
+        success: false,
+        message: "Access Denied. Purchase required to view these notes.",
       });
+    }
 
-      // 2. Admin Check
-      const isAdmin = req.user.role === 'admin';
+    console.log(`[Gurukul Access Granted] Mode: ${isAdmin ? 'Admin' : 'Customer'}`);
 
-      if (!hasPurchased && !isAdmin) {
-          return res.status(403).json({ 
-              success: false, 
-              message: "Access Denied. Purchase required." 
-          });
-      }
+    // 3. Fetch product WITH secure fields
+    const product = await Product.findById(productId);
 
-      // 3. Fetch product WITH secure fields
-      const product = await Product.findById(productId);
-          // .select('+notionUrl +fileUrl'); // Uncomment if you hid these in your schema
+    if (!product) {
+      return res.status(404).json({ success: false, message: "Product not found" });
+    }
 
-      if (!product) {
-          return res.status(404).json({ success: false, message: "Product not found" });
-      }
-
-      res.status(200).json({ success: true, data: product });
-
+    res.status(200).json({
+      success: true,
+      data: product,
+    });
   } catch (error) {
-      console.error("[LMS Auth] Server Error:", error);
-      res.status(500).json({ success: false, message: error.message });
+    console.error("[Gurukul Access Error]:", error);
+    res.status(500).json({ success: false, message: "Internal server error verifying access" });
   }
 };
