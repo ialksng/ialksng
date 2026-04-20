@@ -5,8 +5,6 @@ import Loader from "../../../core/components/Loader";
 import { FaPlus, FaTrash, FaBoxOpen, FaEdit } from "react-icons/fa";
 import "./AdminProducts.css";
 
-const isValidMongoId = (id) => typeof id === "string" && id.length === 24;
-
 function AdminProducts() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -27,17 +25,7 @@ function AdminProducts() {
     setFetching(true);
     try {
       const res = await axios.get("/products");
-
-      // 🔥 ONLY FIX ADDED HERE
-      const cleanProducts = (res.data.products || res.data || []).filter(p => {
-        if (!isValidMongoId(p._id)) {
-          console.warn("Removed invalid product:", p._id);
-          return false;
-        }
-        return true;
-      });
-
-      setProducts(cleanProducts);
+      setProducts(res.data.products || res.data || []);
     } catch (err) {
       console.error("Fetch products error:", err);
       toast.error("Failed to load existing products.");
@@ -162,6 +150,7 @@ function AdminProducts() {
               <label>Product Title *</label>
               <input 
                 name="title" 
+                placeholder="e.g., Complete React Course" 
                 value={form.title} 
                 onChange={handleChange} 
                 required 
@@ -184,6 +173,7 @@ function AdminProducts() {
               <input 
                 name="price" 
                 type="number" 
+                placeholder="e.g., 499 (Use 0 for Free)" 
                 value={form.price} 
                 onChange={handleChange} 
                 required 
@@ -194,6 +184,7 @@ function AdminProducts() {
               <label>Thumbnail Image URL *</label>
               <input 
                 name="image" 
+                placeholder="https://..." 
                 value={form.image} 
                 onChange={handleChange} 
                 required 
@@ -204,54 +195,108 @@ function AdminProducts() {
               <label>Description</label>
               <textarea 
                 name="description" 
+                placeholder="Briefly describe the product..." 
                 value={form.description} 
                 onChange={handleChange} 
+                rows="3"
               />
             </div>
 
-            {form.category === "notes" && (
+            {form.category !== "notes" && (
               <div className="ap-input-group ap-full-width">
-                <label>Notion URL *</label>
+                <label>File URL (Download Link)</label>
                 <input 
-                  name="notionUrl" 
-                  value={form.notionUrl} 
+                  name="fileUrl" 
+                  placeholder="Link to GitHub Repo / Drive / Zip File" 
+                  value={form.fileUrl} 
                   onChange={handleChange} 
                 />
               </div>
             )}
+
+            {form.category === "notes" && (
+              <div className="ap-input-group ap-full-width">
+                <label>Notion Page URL (For LMS Viewer) *</label>
+                <input 
+                  name="notionUrl" 
+                  placeholder="https://notion.so/..." 
+                  value={form.notionUrl} 
+                  onChange={handleChange} 
+                />
+                <small style={{color: '#888', marginTop: '4px', display: 'block'}}>
+                  Paste the full Notion page link here. It will be securely embedded in Gurukul.
+                </small>
+              </div>
+            )}
           </div>
 
-          <button type="submit" className="ap-btn-submit">
-            {editingId ? "Update Product" : "Add Product"}
-          </button>
+          <div className="ap-form-actions" style={{ display: 'flex', gap: '10px' }}>
+            {editingId && (
+              <button type="button" className="ap-btn-delete" onClick={cancelEdit} disabled={loading} style={{ padding: '10px 20px', cursor: 'pointer' }}>
+                Cancel Edit
+              </button>
+            )}
+            <button type="submit" className="ap-btn-submit" disabled={loading} style={{ flex: 1 }}>
+              {loading ? (editingId ? "Updating..." : "Adding Product...") : (editingId ? "Update Product" : "Launch Product")}
+            </button>
+          </div>
         </form>
       </div>
 
       <div className="ap-inventory-section">
         <h2><FaBoxOpen /> Current Inventory</h2>
+        
+        {products.length === 0 ? (
+          <div className="ap-empty-state">
+            <p>Your store is currently empty. Start adding products above!</p>
+          </div>
+        ) : (
+          <div className="ap-product-grid">
+            {products.map((p) => (
+              <div key={p._id} className="ap-product-card">
+                <div className="ap-card-image">
+                  <img src={p.image || "/default-product.png"} alt={p.title} />
+                  <span className="ap-badge-category">{p.category}</span>
+                </div>
 
-        <div className="ap-product-grid">
-          {products.map((p) => (
-            <div key={p._id} className="ap-product-card">
-              <img src={p.image} alt={p.title} />
+                <div className="ap-card-content">
+                  <h3 title={p.title}>{p.title}</h3>
+                  
+                  <div style={{ marginTop: '8px', marginBottom: '8px' }}>
+                    <code style={{ fontSize: '10px', background: '#000', padding: '4px', borderRadius: '4px', color: '#fbbf24', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      ID: {p._id}
+                    </code>
+                    {p.category === 'notes' && (
+                      <a 
+                        href={`https://gurukul.ialksng.me/learn/${p._id}`} 
+                        target="_blank" 
+                        rel="noreferrer"
+                        style={{ fontSize: '11px', color: '#60a5fa', textDecoration: 'underline', marginTop: '5px', display: 'inline-block' }}
+                      >
+                        Open in Gurukul ↗
+                      </a>
+                    )}
+                  </div>
 
-              <h3>{p.title}</h3>
+                  <div className="ap-card-meta">
+                    <span className="ap-price">
+                      {p.price === 0 ? "FREE" : `₹${p.price}`}
+                    </span>
+                  </div>
+                </div>
 
-              <code>ID: {p._id}</code>
-
-              {p.category === "notes" && (
-                <a href={`https://gurukul.ialksng.me/learn/${p._id}`} target="_blank" rel="noreferrer">
-                  Open in Gurukul ↗
-                </a>
-              )}
-
-              <p>{p.price === 0 ? "FREE" : `₹${p.price}`}</p>
-
-              <button onClick={() => handleEdit(p)}><FaEdit /></button>
-              <button onClick={() => handleDelete(p._id)}><FaTrash /></button>
-            </div>
-          ))}
-        </div>
+                <div className="ap-card-actions" style={{ display: 'flex', gap: '8px' }}>
+                  <button className="ap-btn-submit" onClick={() => handleEdit(p)} style={{ padding: '8px', fontSize: '0.85rem' }}>
+                    <FaEdit /> Edit
+                  </button>
+                  <button className="ap-btn-delete" onClick={() => handleDelete(p._id)} style={{ padding: '8px', fontSize: '0.85rem' }}>
+                    <FaTrash /> Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
