@@ -165,13 +165,12 @@ export const deleteComment = async (req, res) => {
 export const getSecuredProductContent = async (req, res) => {
   try {
       const productId = req.params.id;
-      const userId = req.user._id;
 
-      // 1. Check if user purchased this product
+      // 1. Check if user purchased this product (matches order.controller.js logic exactly)
       const hasPurchased = await Order.findOne({
-          user: userId,
+          user: req.user.id,
           product: productId,
-          $or: [{ status: "Paid" }, { status: "Completed" }, { isPaid: true }] 
+          isPaid: true
       });
 
       // 2. Deny if not purchased and not admin
@@ -193,6 +192,7 @@ export const getSecuredProductContent = async (req, res) => {
       res.status(200).json({ success: true, data: product });
 
   } catch (error) {
+      console.error("Secure Content Error:", error);
       res.status(500).json({ success: false, message: error.message });
   }
 };
