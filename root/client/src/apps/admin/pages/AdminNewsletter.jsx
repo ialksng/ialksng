@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "../../../core/utils/axios";
 import Loader from "../../../core/components/Loader";
-import toast from "react-hot-toast";
-import Editor from "../../../core/components/Editor";
 import "./admin.css";
 
 const AdminNewsletter = () => {
@@ -19,55 +17,47 @@ const AdminNewsletter = () => {
         const res = await axios.get("/newsletter/subscribers", {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
         });
-        setSubscribers(res.data);
+        
+        // Bulletproof array check
+        const subList = Array.isArray(res.data) ? res.data : (res.data?.subscribers || []);
+        setSubscribers(subList);
       } catch (err) {
-        toast.error("Failed to load subscribers");
+        console.error(err);
+        setSubscribers([]);
       } finally {
         setLoading(false);
       }
     };
-
     fetchSubscribers();
   }, []);
 
   const handleSendEmail = async (e) => {
     e.preventDefault();
+    if (!subject || !content) return alert("Please fill out subject and content.");
 
-    if (!subject || !content) {
-      toast.error("Fill subject and content");
-      return;
+    if (window.confirm(`Are you sure you want to send this to ${subscribers.length} subscribers?`)) {
+      setSending(true);
+      try {
+        // ACTUAL BACKEND CALL (Replaced the fake alert)
+        const res = await axios.post(
+          "/newsletter/send",
+          { subject, content },
+          { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+        );
+        
+        alert(res.data?.msg || "Newsletter sent successfully!");
+        setSubject("");
+        setContent("");
+      } catch (err) {
+        console.error(err);
+        alert(err.response?.data?.msg || "Failed to send.");
+      } finally {
+        setSending(false);
+      }
     }
-
-    if (!window.confirm(`Send to ${subscribers.length} users?`)) return;
-
-    setSending(true);
-    const id = toast.loading("Sending...");
-
-    try {
-      const res = await axios.post(
-        "/newsletter/send",
-        { subject, content },
-        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
-      );
-
-      toast.success(res.data.msg || "Sent", { id });
-      setSubject("");
-      setContent("");
-
-    } catch (err) {
-      toast.error(err.response?.data?.msg || "Failed", { id });
-    }
-
-    setSending(false);
   };
 
-  if (loading) {
-    return (
-      <div className="admin-container">
-        <Loader />
-      </div>
-    );
-  }
+  if (loading) return <div className="admin-container"><Loader /></div>;
 
   return (
     <div className="admin-container p-6">
@@ -77,21 +67,31 @@ const AdminNewsletter = () => {
         <div className="admin-form" style={{ margin: 0 }}>
           <div className="form-section">
             <h3>Compose Broadcast</h3>
+            <p className="text-sm text-gray-500">
+              This will be sent to all {subscribers.length} active subscribers.
+            </p>
 
             <form onSubmit={handleSendEmail}>
               <div className="form-group">
-                <label>Subject</label>
+                <label>Email Subject</label>
                 <input
                   type="text"
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
-                  placeholder="Write subject..."
+                  placeholder="New Blog Post: How to Master React..."
+                  required
                 />
               </div>
 
               <div className="form-group">
-                <label>Content</label>
-                <Editor content={content} setContent={setContent} />
+                <label>Email Content (HTML allowed)</label>
+                <textarea
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                  placeholder="Write your newsletter here..."
+                  rows="8"
+                  required
+                />
               </div>
 
               <button
@@ -99,7 +99,9 @@ const AdminNewsletter = () => {
                 className="btn primary w-full"
                 disabled={sending || subscribers.length === 0}
               >
-                {sending ? "Sending..." : `Send to ${subscribers.length}`}
+                {sending
+                  ? "Sending Broadcast..."
+                  : `Send to ${subscribers.length} Subscribers`}
               </button>
             </form>
           </div>
@@ -107,25 +109,39 @@ const AdminNewsletter = () => {
 
         <div className="admin-form" style={{ margin: 0 }}>
           <div className="form-section">
-            <h3>Subscribers ({subscribers.length})</h3>
+            <h3>Subscriber List ({subscribers.length})</h3>
 
             <div style={{ maxHeight: "400px", overflowY: "auto", marginTop: "15px" }}>
-              {subscribers.map((sub, idx) => (
-                <div
-                  key={sub._id}
-                  style={{
-                    padding: "12px",
-                    borderBottom: "1px solid var(--border-color)",
-                    display: "flex",
-                    justifyContent: "space-between"
-                  }}
-                >
-                  <span>{idx + 1}. {sub.email}</span>
-                  <span style={{ fontSize: "11px" }}>
-                    {new Date(sub.createdAt).toLocaleDateString()}
-                  </span>
-                </div>
-              ))}
+              {subscribers.map((sub, idx) => {
+                // Bulletproof date formatting
+                let displayDate = "N/A";
+                try {
+                  if (sub.createdAt) displayDate = new Date(sub.createdAt).toLocaleDateString();
+                } catch(e) {}
+
+                return (
+                  <div
+                    key={sub._id || idx}
+                    style={{
+                      padding: "12px",
+                      borderBottom: "1px solid var(--border-color)",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center"
+                    }}
+                  >
+                    <span style={{ fontSize: "14px" }}>
+                      {idx + 1}. {sub.email}
+                    </span>
+
+                    <span style={{ fontSize: "11px", color: "var(--text-muted)" }}>
+                      {displayDate}
+                    </span>
+                  </div>
+                );
+              })}
+
+              {subscribers.length === 0 && <p>No subscribers yet.</p>}
             </div>
           </div>
         </div>

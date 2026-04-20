@@ -21,11 +21,20 @@ const Blog = () => {
       setLoading(true);
       try {
         const res = await axios.get(`/blogs?page=${currentPage}&limit=6`);
-        setBlogs(res.data?.blogs || []);
+        
+        // Bulletproof array check
+        const blogList = Array.isArray(res.data?.blogs) 
+          ? res.data.blogs 
+          : Array.isArray(res.data) 
+            ? res.data 
+            : [];
+            
+        setBlogs(blogList);
         setTotalPages(res.data?.totalPages || 1);
       } catch (err) {
         console.error("Error fetching blogs", err);
         toast.error("Failed to load blog posts.");
+        setBlogs([]);
       } finally {
         setLoading(false);
       }
@@ -92,15 +101,25 @@ const Blog = () => {
                 if (!blog) return null;
 
                 const safeTitle = blog?.title || "Untitled Post";
-                const safeDate = blog?.createdAt
-                  ? new Date(blog.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
-                  : "Recent";
+                
+                // Bulletproof date parsing
+                let safeDate = "Recent";
+                try {
+                  if (blog?.createdAt) {
+                    safeDate = new Date(blog.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+                  }
+                } catch(e) {}
+
                 const safeImage = blog?.coverImage || blog?.image || null;
-                const safeExcerpt =
-                  blog?.excerpt ||
-                  (blog?.content
-                    ? blog.content.substring(0, 100) + "..."
-                    : "No preview available.");
+                
+                // Bulletproof substring to prevent Rich Text crash
+                let safeExcerpt = "No preview available.";
+                if (blog?.excerpt) {
+                  safeExcerpt = blog.excerpt;
+                } else if (typeof blog?.content === 'string') {
+                  safeExcerpt = blog.content.substring(0, 100) + "...";
+                }
+
                 const category = blog?.category || "General";
 
                 return (
