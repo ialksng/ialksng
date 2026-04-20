@@ -76,7 +76,7 @@ const Chatbot = () => {
             <div className="chat-header-left">
               <img src={BOT_GIF} alt="bot" className="bot-avatar-large" />
               <div className="chat-header-text">
-                <h3>BuddyBot</h3>
+                <h3>Indra</h3>
                 <span className="chat-status">
                   <span className="chat-status-dot"></span>
                   Online
@@ -85,7 +85,7 @@ const Chatbot = () => {
             </div>
 
             <a
-              href="https://www.ialksng.me/projects/buddybot"
+              href="https://indra.ialksng.me"
               target="_blank"
               rel="noopener noreferrer"
               className="chat-header-btn"
