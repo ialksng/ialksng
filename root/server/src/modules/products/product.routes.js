@@ -40,7 +40,7 @@ router.get("/access/:id", protect, async (req, res) => {
       });
     }
 
-    const product = await Product.findById(productId);
+    const product = await Product.findOne({ publicId: productId });
 
     if (!product) {
       return res.status(404).json({
@@ -50,6 +50,7 @@ router.get("/access/:id", protect, async (req, res) => {
     }
 
     res.json({ success: true, product });
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
