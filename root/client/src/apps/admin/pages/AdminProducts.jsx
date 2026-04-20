@@ -28,9 +28,10 @@ function AdminProducts() {
     try {
       const res = await axios.get("/products");
 
+      // 🔥 ONLY FIX ADDED HERE
       const cleanProducts = (res.data.products || res.data || []).filter(p => {
         if (!isValidMongoId(p._id)) {
-          console.warn("Invalid product ID removed:", p._id);
+          console.warn("Removed invalid product:", p._id);
           return false;
         }
         return true;
@@ -66,7 +67,7 @@ function AdminProducts() {
       fileUrl: product.fileUrl || "",
       notionUrl: product.notionUrl || ""
     });
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const cancelEdit = () => {
@@ -94,7 +95,7 @@ function AdminProducts() {
     }
 
     setLoading(true);
-    const toastId = toast.loading(editingId ? "Updating..." : "Adding...");
+    const toastId = toast.loading(editingId ? "Updating product..." : "Adding product to store...");
 
     try {
       const payload = {
@@ -104,33 +105,33 @@ function AdminProducts() {
 
       if (editingId) {
         await axios.put(`/products/${editingId}`, payload);
-        toast.success("Updated ✅", { id: toastId });
+        toast.success("Product updated successfully! ✅", { id: toastId });
       } else {
         await axios.post("/products", payload);
-        toast.success("Added ✅", { id: toastId });
+        toast.success("Product added successfully! ✅", { id: toastId });
       }
 
       cancelEdit();
       fetchProducts();
     } catch (err) {
-      console.error(err);
-      toast.error("Operation failed ❌", { id: toastId });
+      console.error(err.response?.data || err.message);
+      toast.error(editingId ? "Failed to update product." : "Failed to add product.", { id: toastId });
     } finally {
       setLoading(false);
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Delete this product?")) return;
+    if (!window.confirm("Are you sure you want to delete this product?")) return;
 
-    const toastId = toast.loading("Deleting...");
+    const toastId = toast.loading("Deleting product...");
     try {
       await axios.delete(`/products/${id}`);
-      toast.success("Deleted ✅", { id: toastId });
+      toast.success("Product removed from store.", { id: toastId });
       fetchProducts();
     } catch (err) {
       console.error(err);
-      toast.error("Delete failed ❌", { id: toastId });
+      toast.error("Failed to delete product.", { id: toastId });
     }
   };
 
@@ -146,61 +147,111 @@ function AdminProducts() {
     <div className="ap-container animated-fade-in">
       <div className="ap-header">
         <h1>Manage Store Products</h1>
+        <p>Add, review, edit, and remove premium resources from your storefront.</p>
       </div>
 
       <div className="ap-form-card">
-        <h2>
-          {editingId ? <FaEdit /> : <FaPlus />}
-          {editingId ? " Edit Product" : " Add Product"}
+        <h2 className="ap-form-title">
+          {editingId ? <FaEdit /> : <FaPlus />} 
+          {editingId ? " Edit Product" : " Add New Product"}
         </h2>
 
-        <form onSubmit={handleSubmit}>
-          <input name="title" value={form.title} onChange={handleChange} placeholder="Title" />
-          <input name="price" value={form.price} onChange={handleChange} placeholder="Price" />
-          <input name="image" value={form.image} onChange={handleChange} placeholder="Image URL" />
+        <form className="ap-form" onSubmit={handleSubmit}>
+          <div className="ap-form-grid">
+            <div className="ap-input-group">
+              <label>Product Title *</label>
+              <input 
+                name="title" 
+                value={form.title} 
+                onChange={handleChange} 
+                required 
+              />
+            </div>
 
-          {form.category === "notes" && (
-            <input
-              name="notionUrl"
-              value={form.notionUrl}
-              onChange={handleChange}
-              placeholder="Notion URL"
-            />
-          )}
+            <div className="ap-input-group">
+              <label>Category *</label>
+              <select name="category" value={form.category} onChange={handleChange}>
+                <option value="notes">Notes</option>
+                <option value="course">Course</option>
+                <option value="roadmap">Roadmap</option>
+                <option value="project">Project</option>
+                <option value="code">Code</option>
+              </select>
+            </div>
 
-          <button type="submit">
-            {loading ? "Saving..." : editingId ? "Update" : "Add"}
+            <div className="ap-input-group">
+              <label>Price (₹) *</label>
+              <input 
+                name="price" 
+                type="number" 
+                value={form.price} 
+                onChange={handleChange} 
+                required 
+              />
+            </div>
+
+            <div className="ap-input-group">
+              <label>Thumbnail Image URL *</label>
+              <input 
+                name="image" 
+                value={form.image} 
+                onChange={handleChange} 
+                required 
+              />
+            </div>
+
+            <div className="ap-input-group ap-full-width">
+              <label>Description</label>
+              <textarea 
+                name="description" 
+                value={form.description} 
+                onChange={handleChange} 
+              />
+            </div>
+
+            {form.category === "notes" && (
+              <div className="ap-input-group ap-full-width">
+                <label>Notion URL *</label>
+                <input 
+                  name="notionUrl" 
+                  value={form.notionUrl} 
+                  onChange={handleChange} 
+                />
+              </div>
+            )}
+          </div>
+
+          <button type="submit" className="ap-btn-submit">
+            {editingId ? "Update Product" : "Add Product"}
           </button>
         </form>
       </div>
 
-      <div className="ap-product-grid">
-        {products.map((p) => (
-          <div key={p._id} className="ap-product-card">
-            <img src={p.image} alt={p.title} />
+      <div className="ap-inventory-section">
+        <h2><FaBoxOpen /> Current Inventory</h2>
 
-            <h3>{p.title}</h3>
+        <div className="ap-product-grid">
+          {products.map((p) => (
+            <div key={p._id} className="ap-product-card">
+              <img src={p.image} alt={p.title} />
 
-            <code>ID: {p._id}</code>
+              <h3>{p.title}</h3>
 
-            {p.category === "notes" && (
-              <a
-                href={`https://gurukul.ialksng.me/learn/${p._id}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Open in Gurukul ↗
-              </a>
-            )}
+              <code>ID: {p._id}</code>
 
-            <div>
-              {p.price === 0 ? "FREE" : `₹${p.price}`}
+              {p.category === "notes" && (
+                <a href={`https://gurukul.ialksng.me/learn/${p._id}`} target="_blank" rel="noreferrer">
+                  Open in Gurukul ↗
+                </a>
+              )}
+
+              <p>{p.price === 0 ? "FREE" : `₹${p.price}`}</p>
+
+              <button onClick={() => handleEdit(p)}><FaEdit /></button>
+              <button onClick={() => handleDelete(p._id)}><FaTrash /></button>
             </div>
-
-            <button onClick={() => handleEdit(p)}>Edit</button>
-            <button onClick={() => handleDelete(p._id)}>Delete</button>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
