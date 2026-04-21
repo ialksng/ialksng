@@ -144,17 +144,8 @@ function MyPurchases() {
   };
 
   const handleAccessProduct = (product) => {
-    const category = (product.category || "").toLowerCase();
-    if (category === "course" || category === "roadmap" || category === "notes") {
-       const token = localStorage.getItem("token");
-       if (token) {
-           window.location.href = `https://gurukul.ialksng.me/auth-bridge?token=${token}&productId=${product._id}`;
-       } else {
-           window.location.href = "https://gurukul.ialksng.me/login";
-       }
-    } else {
-       navigate(`/access/${product._id}`);
-    }
+    // ⬇️ UPDATED: Simply navigate to the product view page first!
+    navigate(`/product/${product._id}`);
   };
 
   const indexOfLastItem = currentPage * itemsPerPage;

@@ -193,14 +193,26 @@ function ViewProduct() {
 
             <div className="vp-card-actions">
               {hasAccess ? (
+                // ⬇️ UPDATED: Authentication Bridge logic moved here
                 <button 
                     className="vp-btn-course"
+                    style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}
                     onClick={() => {
-                      console.log("Opening Gurukul with ID:", product._id);
-                      window.location.href = `https://gurukul.ialksng.me/learn/${product._id}`;
+                      const category = (product.category || "").toLowerCase();
+                      if (category === "course" || category === "roadmap" || category === "notes") {
+                        const token = localStorage.getItem("token");
+                        if (token) {
+                            window.location.href = `https://gurukul.ialksng.me/auth-bridge?token=${token}&productId=${product._id}`;
+                        } else {
+                            window.location.href = "https://gurukul.ialksng.me/login";
+                        }
+                      } else {
+                         // Fallback for files/assets that aren't viewed in Gurukul
+                         navigate(`/access/${product._id}`);
+                      }
                     }}
                   >
-                    View
+                    <FaGraduationCap size={18} /> Start Learning in Gurukul
                   </button>
               ) : (
                 <button 
