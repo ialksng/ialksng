@@ -144,7 +144,7 @@ function MyPurchases() {
   };
 
   const handleAccessProduct = (product) => {
-    // ⬇️ UPDATED: Simply navigate to the product view page first!
+    // ⬇️ FIXED: Absolutely NO Gurukul links here. Just navigates to View Product page!
     navigate(`/product/${product._id}`);
   };
 

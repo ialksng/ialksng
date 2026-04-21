@@ -193,12 +193,12 @@ function ViewProduct() {
 
             <div className="vp-card-actions">
               {hasAccess ? (
-                // ⬇️ UPDATED: Authentication Bridge logic moved here
-                <button 
+                 <button 
                     className="vp-btn-course"
-                    style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}
+                    style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", width: "100%" }}
                     onClick={() => {
                       const category = (product.category || "").toLowerCase();
+                      // ⬇️ Redirect to Gurukul ONLY if it's LMS content
                       if (category === "course" || category === "roadmap" || category === "notes") {
                         const token = localStorage.getItem("token");
                         if (token) {
@@ -207,7 +207,7 @@ function ViewProduct() {
                             window.location.href = "https://gurukul.ialksng.me/login";
                         }
                       } else {
-                         // Fallback for files/assets that aren't viewed in Gurukul
+                         // Fallback for standalone files
                          navigate(`/access/${product._id}`);
                       }
                     }}
