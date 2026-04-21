@@ -197,11 +197,11 @@ function ViewProduct() {
                     className="vp-btn-course"
                     style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", width: "100%" }}
                     onClick={() => {
-                      const category = (product.category || "").toLowerCase();
+                      const category = (product.category || "course").toLowerCase();
                       if (category === "course" || category === "roadmap" || category === "notes") {
                         const token = localStorage.getItem("token");
                         if (token) {
-                            window.location.href = `https://gurukul.ialksng.me/auth-bridge?token=${token}&productId=${product._id}`;
+                            window.location.href = `https://gurukul.ialksng.me/auth-bridge?token=${token}&productId=${product._id}&category=${category}`;
                         } else {
                             window.location.href = "https://gurukul.ialksng.me/login";
                         }
