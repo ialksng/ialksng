@@ -85,7 +85,11 @@ function MainApp() {
               <Route path="/checkout/:id" element={<PageWrapper><Checkout /></PageWrapper>} />
               <Route path="/my-purchases" element={<PageWrapper><MyPurchases /></PageWrapper>} />
               <Route path="/content/:id" element={<PageWrapper><ProductContent /></PageWrapper>} />
+              
+              {/* ⬇️ THIS IS THE NEW SAFE ROUTE FOR VIEW PRODUCT */}
+              <Route path="/view-course/:id" element={<PageWrapper><ViewProduct /></PageWrapper>} />
               <Route path="/access/:id" element={<PageWrapper><ViewProduct /></PageWrapper>} />
+              
               <Route path="/notes/:id" element={<PageWrapper><NotesViewer /></PageWrapper>} />
 
               <Route path="/login" element={<PageWrapper><Login /></PageWrapper>} />
@@ -130,7 +134,7 @@ function MainApp() {
         </AnimatePresence>
       </Suspense>
 
-{/*      <Chatbot />*/}
+{/* <Chatbot />*/}
       <CookieConsent />
     </>
   );

@@ -144,8 +144,8 @@ function MyPurchases() {
   };
 
   const handleAccessProduct = (product) => {
-    // ⬇️ THIS IS THE FIX: Only route to the product page. No Gurukul links here.
-    navigate(`/product/${product._id}`);
+    // ⬇️ THIS IS THE FIX: This now maps directly to the safe route we created above!
+    navigate(`/view-course/${product._id}`);
   };
 
   const indexOfLastItem = currentPage * itemsPerPage;
