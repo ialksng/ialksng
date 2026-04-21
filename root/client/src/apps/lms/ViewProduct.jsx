@@ -198,7 +198,7 @@ function ViewProduct() {
                     style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", width: "100%" }}
                     onClick={() => {
                       const category = (product.category || "").toLowerCase();
-                      // ⬇️ Redirect to Gurukul ONLY if it's LMS content
+                      // ⬇️ THIS IS THE FIX: The redirect logic has been moved entirely here
                       if (category === "course" || category === "roadmap" || category === "notes") {
                         const token = localStorage.getItem("token");
                         if (token) {
@@ -212,7 +212,7 @@ function ViewProduct() {
                       }
                     }}
                   >
-                    <FaGraduationCap size={18} /> Start Learning in Gurukul
+                    <FaGraduationCap size={18} /> View
                   </button>
               ) : (
                 <button 

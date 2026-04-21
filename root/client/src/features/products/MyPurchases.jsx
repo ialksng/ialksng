@@ -144,7 +144,7 @@ function MyPurchases() {
   };
 
   const handleAccessProduct = (product) => {
-    // ⬇️ FIXED: Absolutely NO Gurukul links here. Just navigates to View Product page!
+    // ⬇️ THIS IS THE FIX: Only route to the product page. No Gurukul links here.
     navigate(`/product/${product._id}`);
   };
 
@@ -221,7 +221,7 @@ function MyPurchases() {
                         className="btn-access"
                         onClick={() => handleAccessProduct(order.product)}
                       >
-                        Access
+                        Access Now
                       </button>
                     )}
 
