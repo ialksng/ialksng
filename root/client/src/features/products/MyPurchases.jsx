@@ -144,7 +144,6 @@ function MyPurchases() {
   };
 
   const handleAccessProduct = (product) => {
-    // ⬇️ THIS IS THE FIX: This now maps directly to the safe route we created above!
     navigate(`/view-course/${product._id}`);
   };
 
