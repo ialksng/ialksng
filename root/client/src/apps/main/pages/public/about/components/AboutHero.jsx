@@ -5,8 +5,8 @@ import { FaDownload, FaEnvelope } from 'react-icons/fa';
 import "./AboutHero.css";
 
 export default function AboutHero() {
-
-  const protonLink = "https://drive.proton.me/urls/MNE7XG9H88#QZ0eoSrMF3uP";
+  const driveFileId = "1RncZCzY-fZBqLkT_UtHpZw1RdW2ajCEv"; 
+  const driveDownloadLink = `https://drive.google.com/uc?export=download&id=${driveFileId}`;
 
   return (
     <section className="about__hero">
@@ -29,12 +29,12 @@ export default function AboutHero() {
 
           <div className="hero__cta-group">
             <a
-              href={protonLink}
+              href={driveDownloadLink}
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn__primary btn-flex"
             >
-              <FaDownload /> View Resume
+              <FaDownload /> Download Resume
             </a>
 
             <Link
@@ -48,7 +48,7 @@ export default function AboutHero() {
 
         <div className="about__hero-image-wrapper">
           <img 
-            src="/profile.jpg"  
+            src="https://lh3.googleusercontent.com/d/1pzQPbHLgL_0F5OiEokPi0mmgEhrTyTdX"
             alt="Alok Singh"
             className="about__profile-img"
           />
