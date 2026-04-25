@@ -114,20 +114,9 @@ function Shop() {
     navigate(`/checkout/${product._id}`);
   };
 
-  // UPDATED ACCESS LOGIC TO THROW SECURE TOKEN TO GURUKUL
+  // UPDATED: Now redirects to ViewProduct page instead of Gurukul directly
   const handleAccess = (product) => {
-    const category = (product.category || "").toLowerCase();
-    
-    if (category === "course" || category === "roadmap" || category === "notes") {
-       const token = localStorage.getItem("token");
-       if (token) {
-           window.location.href = `https://gurukul.ialksng.me/auth-bridge?token=${token}&productId=${product._id}`;
-       } else {
-           navigate('/login', { state: { from: "/store" } });
-       }
-    } else {
-       navigate(`/access/${product._id}`);
-    }
+    navigate(`/view-course/${product._id}`); 
   };
 
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
