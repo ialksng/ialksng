@@ -18,7 +18,7 @@ function AdminProducts() {
     category: "notes",
     image: "",
     fileUrl: "",
-    notionUrl: ""
+    secureHtmlContent: ""
   });
 
   const fetchProducts = async () => {
@@ -53,7 +53,7 @@ function AdminProducts() {
       category: product.category || "notes",
       image: product.image || "",
       fileUrl: product.fileUrl || "",
-      notionUrl: product.notionUrl || ""
+      secureHtmlContent: "" 
     });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -67,7 +67,7 @@ function AdminProducts() {
       category: "notes",
       image: "",
       fileUrl: "",
-      notionUrl: ""
+      secureHtmlContent: ""
     });
   };
 
@@ -78,8 +78,8 @@ function AdminProducts() {
       return toast.error("Please fill all required fields.");
     }
 
-    if (form.category === "notes" && !form.notionUrl) {
-      return toast.error("Please add a Notion URL for notes.");
+    if (form.category === "notes" && !editingId && !form.secureHtmlContent) {
+      return toast.error("Please paste the HTML content for notes.");
     }
 
     setLoading(true);
@@ -90,6 +90,10 @@ function AdminProducts() {
         ...form,
         price: Number(form.price)
       };
+
+      if (editingId && !form.secureHtmlContent) {
+        delete payload.secureHtmlContent;
+      }
 
       if (editingId) {
         await axios.put(`/products/${editingId}`, payload);
@@ -216,15 +220,17 @@ function AdminProducts() {
 
             {form.category === "notes" && (
               <div className="ap-input-group ap-full-width">
-                <label>Notion Page URL (For LMS Viewer) *</label>
-                <input 
-                  name="notionUrl" 
-                  placeholder="https://notion.so/..." 
-                  value={form.notionUrl} 
+                <label>Secure HTML Content (Proton Docs Export) *</label>
+                <textarea 
+                  name="secureHtmlContent" 
+                  placeholder="Paste the raw exported HTML code here..." 
+                  value={form.secureHtmlContent} 
                   onChange={handleChange} 
+                  rows="6"
+                  style={{ fontFamily: 'monospace', fontSize: '12px' }}
                 />
                 <small style={{color: '#888', marginTop: '4px', display: 'block'}}>
-                  Paste the full Notion page link here. It will be securely embedded in Gurukul.
+                  {editingId ? "Leave blank to keep the existing HTML notes intact." : "Paste your exported HTML here. It will be securely stored in the database."}
                 </small>
               </div>
             )}

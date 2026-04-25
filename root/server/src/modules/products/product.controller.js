@@ -16,7 +16,7 @@ export const addProduct = async (req, res) => {
     const product = await Product.create({
       ...req.body,
       fileUrl: req.body.fileUrl || "",
-      notionUrl: req.body.notionUrl || ""
+      secureHtmlContent: req.body.secureHtmlContent || "" 
     });
 
     const users = await User.find({}, "_id");

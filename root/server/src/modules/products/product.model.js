@@ -24,7 +24,12 @@ const productSchema = new mongoose.Schema({
   previewUrl: { type: String },
 
   fileUrl: { type: String, default: "" },
-  notionUrl: { type: String, default: "" },
+  
+  secureHtmlContent: {
+    type: String,
+    default: "",
+    select: false
+  },
 
   likes: { type: [String], default: [] },
   comments: { type: [commentSchema], default: [] }
