@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../utils/axios';
-import './NotificationBanner.css';
 
 const NotificationBanner = () => {
   const [announcements, setAnnouncements] = useState([]);
@@ -17,31 +16,24 @@ const NotificationBanner = () => {
     fetchPublicAnnouncements();
   }, []);
 
-  // Hide banner completely if there's nothing to show
   if (announcements.length === 0) return null;
 
-  // Pre-render the items so they can be duplicated for the seamless CSS loop
   const bannerItems = announcements.map((item, index) => (
-    <span key={item._id || index} className="banner-item">
-      <span className="banner-badge">
+    <span key={item._id || index} className="inline-flex items-center gap-2 text-sm font-medium tracking-wide">
+      <span className="text-xs">
         {item.type === 'live' ? '🔴' : item.type === 'update' ? '🌱' : '⚡'}
       </span>
-      <span className="banner-title">{item.title}</span>
-      {item.message && <span className="banner-message">- {item.message}</span>}
-      <span className="separator">•</span>
+      <strong className="text-[var(--text-primary)] font-bold">{item.title}</strong>
+      {item.message && <span className="text-[var(--text-secondary)]">- {item.message}</span>}
+      <span className="mx-10 text-[var(--accent-primary)] opacity-80 font-bold">•</span>
     </span>
   ));
 
   return (
-    <div className="notification-banner-container">
-      <div className="notification-banner-track">
-        {/* Render the items TWICE to create a seamless infinite loop */}
-        <div className="notification-banner-content">
-          {bannerItems}
-        </div>
-        <div className="notification-banner-content" aria-hidden="true">
-          {bannerItems}
-        </div>
+    <div className="w-full bg-gradient-to-r from-[var(--bg-primary)] via-[var(--bg-secondary)] to-[var(--bg-primary)] overflow-hidden py-2.5 relative z-10 flex border-b border-[var(--border-color)] shadow-sm group">
+      <div className="flex whitespace-nowrap animate-marquee group-hover:animate-marquee-paused">
+        <div className="flex items-center">{bannerItems}</div>
+        <div className="flex items-center" aria-hidden="true">{bannerItems}</div>
       </div>
     </div>
   );

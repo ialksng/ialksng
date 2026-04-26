@@ -31,10 +31,20 @@ export const markAllAsRead = async (req, res) => {
 
 export const getPublicNotifications = async (req, res) => {
   try {
-    // Pass an empty object to fetch ALL recent announcements, preventing duplicates
-    const notifications = await Notification.find({}) 
-      .sort({ createdAt: -1 })
-      .limit(5);
+    // Aggregation pipeline to group by title and filter out duplicates
+    const notifications = await Notification.aggregate([
+      { $sort: { createdAt: -1 } }, 
+      {
+        $group: {
+          _id: "$title", 
+          doc: { $first: "$$ROOT" } 
+        }
+      },
+      { $replaceRoot: { newRoot: "$doc" } }, 
+      { $sort: { createdAt: -1 } }, 
+      { $limit: 5 } 
+    ]);
+    
     res.status(200).json(notifications);
   } catch (error) {
     res.status(500).json({ message: error.message });
