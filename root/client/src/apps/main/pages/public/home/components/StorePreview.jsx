@@ -8,7 +8,7 @@ import { CartContext } from '../../../../../../features/cart/CartContext';
 import { AuthContext } from '../../../../../../features/auth/AuthContext';
 import Pagination from '../../../../../../core/components/Pagination';
 
-import '../../../../../store/Store.css'; // Ensuring the new store card styles are applied
+import '../../../../../store/Store.css'; 
 import './StorePreview.css';
 
 export default function StorePreview() {
@@ -39,12 +39,13 @@ export default function StorePreview() {
     fetchProducts();
   }, []);
 
-  // Fetch Owned Products (Access Logic)
+  // Fetch Owned Products logic consistent with Store.jsx and MyPurchases.jsx
   useEffect(() => {
     if (!user) return;
     const fetchOrders = async () => {
       try {
         const { data } = await axios.get('/orders/my-orders');
+        // Extract product IDs from orders to check ownership
         const ids = Array.isArray(data.orders) ? data.orders.map(o => o.product?._id).filter(Boolean) : [];
         setOwnedProducts(ids);
       } catch (err) {
@@ -59,30 +60,29 @@ export default function StorePreview() {
       navigate("/login", { state: { from: "/" } });
       return;
     }
-
     const alreadyInCart = cart.some(item => item._id === product._id);
     if (alreadyInCart) {
       toast("Already in cart ⚠️");
       return;
     }
-
     addToCart(product);
     setAddedId(product._id);
     toast.success("Added to cart 🛒");
-
     setTimeout(() => setAddedId(null), 1500);
   };
 
   const handleBuyNow = (product) => {
     if (!user) {
+      // Consistent with Store.jsx: redirect to checkout after login if not authenticated
       navigate("/login", { state: { from: `/checkout/${product._id}` } });
       return;
     }
     navigate(`/checkout/${product._id}`);
   };
 
-  const handleAccess = () => {
-    window.location.href = "https://gurukul.ialksng.me/";
+  // Updated: Redirects to the internal course viewer page
+  const handleAccess = (product) => {
+    navigate(`/view-course/${product._id}`);
   };
 
   // Pagination Logic
@@ -92,7 +92,6 @@ export default function StorePreview() {
   return (
     <section className="home__section" style={{ backgroundColor: "var(--bg-secondary)" }}>
       <div className="container">
-        
         <div className="section__header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
           <div>
             <h2>Digital Store</h2>
@@ -111,10 +110,10 @@ export default function StorePreview() {
           <>
             <div className="store-grid" style={{ marginTop: '2rem' }}>
               {displayedProducts.map(product => {
-                // ADMIN BYPASS LOGIC HERE
                 const isAdmin = user && user.role === "admin";
                 const isOwned = ownedProducts.includes(product._id);
                 const isFree = product.price === 0;
+                // Logic to determine if "Access Now" should be shown
                 const hasAccess = isAdmin || isOwned || isFree;
 
                 return (
@@ -143,7 +142,7 @@ export default function StorePreview() {
 
                         <div className="card-actions-col">
                           {hasAccess ? (
-                            <button className="btn-access" onClick={handleAccess}>
+                            <button className="btn-access" onClick={() => handleAccess(product)}>
                               Access Now
                             </button>
                           ) : (
@@ -177,7 +176,6 @@ export default function StorePreview() {
             </div>
           </>
         )}
-
       </div>
     </section>
   );
