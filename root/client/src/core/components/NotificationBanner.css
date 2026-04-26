@@ -1,28 +1,23 @@
-/* root/client/src/core/components/NotificationBanner.css */
 .notification-banner-container {
   width: 100%;
-  background-color: var(--primary-color, #ff9800); /* Use your app's accent color */
-  color: #ffffff;
+  background-color: var(--primary-color, #ff9800);
+  color: #fff;
   overflow: hidden;
   white-space: nowrap;
-  padding: 8px 0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 10px 0;
   display: flex;
   align-items: center;
   position: relative;
-  z-index: 99; /* Keeps it below your fixed navbar but above content */
+  z-index: 10;
 }
 
 .notification-banner-content {
   display: inline-block;
-  padding-left: 100%; /* Start the text off-screen to the right */
-  animation: marquee 25s linear infinite; /* Adjust '25s' to change speed */
+  padding-left: 100%;
+  animation: marquee 20s linear infinite;
   font-size: 0.9rem;
-  font-weight: 500;
-  letter-spacing: 0.5px;
 }
 
-/* Pause the animation so users can read it if they hover over */
 .notification-banner-container:hover .notification-banner-content {
   animation-play-state: paused;
 }
@@ -30,18 +25,19 @@
 .banner-item {
   display: inline-flex;
   align-items: center;
+  gap: 6px;
+}
+
+.banner-badge {
+  font-size: 0.8rem;
 }
 
 .separator {
-  margin: 0 25px;
+  margin: 0 30px;
   opacity: 0.6;
 }
 
 @keyframes marquee {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
 }

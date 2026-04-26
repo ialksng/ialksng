@@ -1,5 +1,8 @@
 import React from 'react';
 
+// Import the new banner
+import NotificationBanner from '../../../../../core/components/NotificationBanner'; 
+
 import Hero from './components/Hero';
 import OfferCards from './components/OfferCards';
 import FeaturedProjects from './components/FeaturedProjects';
@@ -15,6 +18,9 @@ import './Home.css';
 function Home() {
   return (
     <div className="home__wrapper">
+      {/* Banner goes right here, so it only shows on the Home route */}
+      <NotificationBanner />
+      
       <Hero />
       <OfferCards />
       <AboutPreview />

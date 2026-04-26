@@ -1,45 +1,33 @@
-// root/client/src/core/components/NotificationBanner.jsx
 import React, { useState, useEffect } from 'react';
-import axiosInstance from '../utils/axios'; // Make sure this path matches your setup
+import axios from '../utils/axios';
 import './NotificationBanner.css';
 
 const NotificationBanner = () => {
-  const [notifications, setNotifications] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [announcements, setAnnouncements] = useState([]);
 
   useEffect(() => {
-    const fetchNotifications = async () => {
+    const fetchPublicAnnouncements = async () => {
       try {
-        // Adjust this endpoint to match the one used by NotificationBell.jsx
-        const response = await axiosInstance.get('/api/notifications'); 
-        
-        // Filter for unread notifications, or however you define "active" announcements
-        // Adjust response.data mapping based on your actual API response structure
-        const unread = response.data?.data?.filter(n => !n.isRead) || [];
-        setNotifications(unread);
-      } catch (error) {
-        console.error("Failed to load banner notifications:", error);
-      } finally {
-        setLoading(false);
+        const { data } = await axios.get('/notifications/public');
+        setAnnouncements(data);
+      } catch (err) {
+        console.error("Failed to load banner announcements", err);
       }
     };
-
-    fetchNotifications();
+    fetchPublicAnnouncements();
   }, []);
 
-  // Don't render the banner if there's nothing to show
-  if (loading || notifications.length === 0) return null;
+  // Hide banner completely if there's nothing to show
+  if (announcements.length === 0) return null;
 
   return (
     <div className="notification-banner-container">
       <div className="notification-banner-content">
-        {notifications.map((notification, index) => (
-          <span key={notification._id || index} className="banner-item">
-            {/* Adjust .title or .message based on your notification.model.js */}
-            {notification.title || notification.message} 
-            
-            {/* Add a bullet separator between multiple notifications */}
-            {index < notifications.length - 1 && <span className="separator">•</span>}
+        {announcements.map((item, index) => (
+          <span key={item._id || index} className="banner-item">
+            <span className="banner-badge">{item.type === 'live' ? '🔴' : '🌱'}</span>
+            <strong>{item.title}</strong>: {item.message}
+            {index < announcements.length - 1 && <span className="separator">•</span>}
           </span>
         ))}
       </div>
