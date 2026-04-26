@@ -31,9 +31,8 @@ export const markAllAsRead = async (req, res) => {
 
 export const getPublicNotifications = async (req, res) => {
   try {
-    // You can filter this by a specific type if you want, e.g., { type: 'update' } or { isGlobal: true }
-    // For now, we are fetching the 5 most recent global announcements.
-    const notifications = await Notification.find({ type: 'update' }) 
+    // Pass an empty object to fetch ALL recent announcements, preventing duplicates
+    const notifications = await Notification.find({}) 
       .sort({ createdAt: -1 })
       .limit(5);
     res.status(200).json(notifications);
