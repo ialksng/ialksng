@@ -1,4 +1,6 @@
 import Blog from "./blog.model.js";
+import User from "../auth/user.model.js";
+import Notification from "../notifications/notification.model.js";
 
 export const likeBlog = async (req, res) => {
   try {
@@ -145,6 +147,20 @@ export const createBlog = async (req, res) => {
     });
 
     const saved = await blog.save();
+
+    // NOTIFICATION LOGIC: Create notifications for all users
+    const users = await User.find({}, "_id");
+    const notifications = users.map((user) => ({
+      user: user._id,
+      title: "📝 New Blog Post",
+      message: `A new post "${saved.title}" has just been published!`,
+      link: `/blog`, 
+      type: "update", 
+      referenceId: saved._id 
+    }));
+
+    if (notifications.length) await Notification.insertMany(notifications);
+
     res.status(201).json(saved);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -197,6 +213,16 @@ export const updateBlog = async (req, res) => {
       return res.status(404).json({ message: "Blog not found" });
     }
 
+    // NOTIFICATION LOGIC: Sync the notification message if the blog title changes
+    await Notification.updateMany(
+      { referenceId: updated._id },
+      { 
+        $set: { 
+          message: `A new post "${updated.title}" has just been published!` 
+        } 
+      }
+    );
+
     res.json(updated);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -210,6 +236,9 @@ export const deleteBlog = async (req, res) => {
     if (!deleted) {
       return res.status(404).json({ message: "Blog not found" });
     }
+
+    // NOTIFICATION LOGIC: Remove notifications if the blog is deleted
+    await Notification.deleteMany({ referenceId: req.params.id });
 
     res.json({ message: "Blog deleted" });
   } catch (err) {
