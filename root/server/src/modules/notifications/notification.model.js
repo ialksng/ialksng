@@ -6,6 +6,8 @@ const notificationSchema = new mongoose.Schema({
   message: { type: String, required: true },
   link: { type: String, required: true },
   type: { type: String, enum: ['live', 'update', 'product', 'system'], default: 'system' },
+  // ADD THIS LINE: Connects the notification to the specific item (Product, Blog, etc.)
+  referenceId: { type: mongoose.Schema.Types.ObjectId }, 
   isRead: { type: Boolean, default: false }
 }, { timestamps: true });
 

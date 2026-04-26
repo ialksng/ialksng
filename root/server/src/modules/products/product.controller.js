@@ -26,7 +26,8 @@ export const addProduct = async (req, res) => {
       title: "🛍️ New Product in Store",
       message: `A new item "${product.title}" has been added to the store!`,
       link: `/store`,
-      type: "update",
+      type: "product", // Changed to product to match your schema
+      referenceId: product._id // Link the notification to this specific product
     }));
 
     if (notifications.length) await Notification.insertMany(notifications);
@@ -71,6 +72,17 @@ export const updateProduct = async (req, res) => {
     Object.assign(product, req.body);
     await product.save();
 
+    // UPDATE NOTIFICATIONS: Find all notifications tied to this product and update their message
+    // so if you change the product title, the banner/bell updates automatically.
+    await Notification.updateMany(
+      { referenceId: product._id },
+      { 
+        $set: { 
+          message: `A new item "${product.title}" has been added to the store!` 
+        } 
+      }
+    );
+
     res.json({ success: true, product });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -86,6 +98,10 @@ export const deleteProduct = async (req, res) => {
     }
 
     await product.deleteOne();
+
+    // CLEANUP NOTIFICATIONS: Delete all notifications tied to this product so users 
+    // don't see announcements for a product that no longer exists.
+    await Notification.deleteMany({ referenceId: product._id });
 
     res.json({ success: true, message: "Product deleted" });
   } catch (err) {
