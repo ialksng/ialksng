@@ -31,7 +31,8 @@ export const createGame = async (req, res) => {
       title: '🎮 New Game Added',
       message: `I just added ${game.name} to the GameZone!`,
       link: '/more/gamezone',
-      type: 'update'
+      type: 'update',
+      referenceId: game._id // <-- ADDED
     }));
     if (notifications.length > 0) {
       await Notification.insertMany(notifications);
@@ -53,6 +54,13 @@ export const updateGame = async (req, res) => {
     }
     const updatedGame = await Game.findByIdAndUpdate(id, updateData, { new: true });
     if (!updatedGame) return res.status(404).json({ message: "Game not found" });
+
+    // <-- ADDED: Update game notification
+    await Notification.updateMany(
+      { referenceId: updatedGame._id },
+      { $set: { message: `I just added ${updatedGame.name} to the GameZone!` } }
+    );
+
     res.status(200).json(updatedGame);
   } catch (error) {
     console.error("UPDATE GAME ERROR:", error);
@@ -65,6 +73,10 @@ export const deleteGame = async (req, res) => {
     const { id } = req.params;
     const deletedGame = await Game.findByIdAndDelete(id);
     if (!deletedGame) return res.status(404).json({ message: "Game not found" });
+
+    // <-- ADDED: Clean up game notification
+    await Notification.deleteMany({ referenceId: id });
+
     res.status(200).json({ message: "Game deleted successfully" });
   } catch (error) {
     console.error("DELETE GAME ERROR:", error);
@@ -106,7 +118,8 @@ export const createProduct = async (req, res) => {
       title: '🚀 New Platform Launched',
       message: `I just launched ${product.name}! Check it out in my ecosystem.`,
       link: '/more/products',
-      type: 'update'
+      type: 'update',
+      referenceId: product._id // <-- ADDED
     }));
     
     if (notifications.length > 0) {
@@ -126,6 +139,15 @@ export const updateProduct = async (req, res) => {
     const updateData = { ...req.body };
     if (req.file) updateData.image = req.file.path;
     const updated = await Product.findByIdAndUpdate(id, updateData, { new: true });
+
+    // <-- ADDED: Update ecosystem product notification
+    if (updated) {
+      await Notification.updateMany(
+        { referenceId: updated._id },
+        { $set: { message: `I just launched ${updated.name}! Check it out in my ecosystem.` } }
+      );
+    }
+
     res.status(200).json(updated);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -135,6 +157,10 @@ export const updateProduct = async (req, res) => {
 export const deleteProduct = async (req, res) => {
   try {
     await Product.findByIdAndDelete(req.params.id);
+    
+    // <-- ADDED: Clean up ecosystem product notification
+    await Notification.deleteMany({ referenceId: req.params.id });
+
     res.status(200).json({ message: 'Deleted' });
   } catch (error) {
     console.error("DELETE PRODUCT ERROR:", error);
@@ -165,10 +191,11 @@ export const createLifePost = async (req, res) => {
     const users = await User.find({}, '_id');
     const notifications = users.map(user => ({
       user: user._id,
-      title: '🌱 New Update',
+      title: '🌟 New Update',
       message: post.title,
       link: '/more/life',
-      type: 'update'
+      type: 'update',
+      referenceId: post._id // <-- ADDED
     }));
     if (notifications.length > 0) {
       await Notification.insertMany(notifications);
@@ -188,6 +215,13 @@ export const updateLifePost = async (req, res) => {
     if (req.file) updateData.mediaUrl = req.file.path;
     const updatedPost = await LifePost.findByIdAndUpdate(id, updateData, { new: true });
     if (!updatedPost) return res.status(404).json({ message: "Post not found" });
+
+    // <-- ADDED: Update life post notification
+    await Notification.updateMany(
+      { referenceId: updatedPost._id },
+      { $set: { message: updatedPost.title } }
+    );
+
     res.status(200).json(updatedPost);
   } catch (error) {
     console.error("UPDATE LIFE POST ERROR:", error);
@@ -198,6 +232,10 @@ export const updateLifePost = async (req, res) => {
 export const deleteLifePost = async (req, res) => {
   try {
     await LifePost.findByIdAndDelete(req.params.id);
+    
+    // <-- ADDED: Clean up life post notification
+    await Notification.deleteMany({ referenceId: req.params.id });
+
     res.status(200).json({ message: 'Deleted' });
   } catch (error) {
     console.error("DELETE LIFE POST ERROR:", error);
@@ -218,17 +256,13 @@ export const getLiveStream = async (req, res) => {
   }
 };
 
-// Robust Game Stream Retrieval
 export const getGameStreams = async (req, res) => {
   try {
     const { gameId } = req.params;
-    
-    // Explicitly cast gameId to ObjectId to prevent query mismatches
     const streams = await Stream.find({
       gameId: new mongoose.Types.ObjectId(gameId),
       status: 'archived'
     }).sort({ createdAt: -1 });
-
     res.status(200).json(streams);
   } catch (error) {
     console.error("GET GAME STREAMS ERROR:", error);
@@ -250,7 +284,6 @@ export const createStream = async (req, res) => {
   try {
     const stream = await Stream.create(req.body);
     
-    // Check if the stream is created as 'live' directly
     if (stream.status === 'live') {
         const users = await User.find({}, '_id');
         const notifications = users.map(user => ({
@@ -258,7 +291,8 @@ export const createStream = async (req, res) => {
           title: '🔴 LIVE NOW',
           message: `Alok is live: ${stream.title}`,
           link: '/more/live',
-          type: 'live'
+          type: 'live',
+          referenceId: stream._id // <-- ADDED
         }));
         if (notifications.length > 0) {
           await Notification.insertMany(notifications);
@@ -277,6 +311,13 @@ export const updateStream = async (req, res) => {
     const { id } = req.params;
     const updatedStream = await Stream.findByIdAndUpdate(id, req.body, { new: true });
     if (!updatedStream) return res.status(404).json({ message: "Stream not found" });
+
+    // <-- ADDED: Update stream notification
+    await Notification.updateMany(
+      { referenceId: updatedStream._id },
+      { $set: { message: `Alok is live: ${updatedStream.title}` } }
+    );
+
     res.status(200).json(updatedStream);
   } catch (error) {
     console.error("UPDATE STREAM ERROR:", error);
@@ -287,6 +328,10 @@ export const updateStream = async (req, res) => {
 export const deleteStream = async (req, res) => {
   try {
     await Stream.findByIdAndDelete(req.params.id);
+    
+    // <-- ADDED: Clean up stream notification
+    await Notification.deleteMany({ referenceId: req.params.id });
+
     res.status(200).json({ message: 'Deleted' });
   } catch (error) {
     console.error("DELETE STREAM ERROR:", error);
@@ -294,7 +339,6 @@ export const deleteStream = async (req, res) => {
   }
 };
 
-// Sends notification when stream status is changed to live
 export const toggleStreamStatus = async (req, res) => {
   try {
     const { id } = req.params;
@@ -313,7 +357,8 @@ export const toggleStreamStatus = async (req, res) => {
         title: '🔴 LIVE NOW',
         message: `Alok is live: ${updatedStream.title}`,
         link: '/more/live',
-        type: 'live'
+        type: 'live',
+        referenceId: updatedStream._id // <-- ADDED
       }));
       if (notifications.length > 0) {
           await Notification.insertMany(notifications);
