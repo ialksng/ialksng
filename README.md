@@ -1,7 +1,7 @@
 <!-- Banner -->
-<p align="center">
+<!-- <p align="center">
   <img src="https://github.com/ialksng/ialksng/blob/main/Banner.png" alt="Alok Singh Banner" width="100%" />
-</p>
+</p> -->
 
 <!-- Header Wave -->
 <p align="center">
@@ -34,21 +34,9 @@
 </h2>
 
 <p align="center">
-  <img src="https://skillicons.dev/icons?i=c,java,python" /><br>
+  <img src="https://skillicons.dev/icons?i=c,cpp" /><br>
   <img src="https://skillicons.dev/icons?i=mongodb,express,react,nodejs" /><br>
-  <img src="https://skillicons.dev/icons?i=spring" /><br>
-  <img src="https://skillicons.dev/icons?i=mysql,postgresql" /><br>
-  <img src="https://img.shields.io/badge/Power%20BI-F2C811?style=for-the-badge&logo=powerbi&logoColor=black" />
-  <img src="https://img.shields.io/badge/MS%20Excel-217346?style=for-the-badge&logo=microsoftexcel&logoColor=white" /><br>
-  <img src="https://img.shields.io/badge/Pandas-%23150458.svg?style=for-the-badge&logo=pandas&logoColor=white" />
-  <img src="https://img.shields.io/badge/NumPy-%23013243.svg?style=for-the-badge&logo=numpy&logoColor=white" />
-  <img src="https://img.shields.io/badge/Matplotlib-%230076A8.svg?style=for-the-badge&logo=python&logoColor=white" />
-  <img src="https://img.shields.io/badge/Seaborn-%232F4F4F.svg?style=for-the-badge&logo=python&logoColor=white" /><br>
-  <img src="https://img.shields.io/badge/Scikit--learn-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white" />
-  <img src="https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white" />
-  <img src="https://img.shields.io/badge/Keras-D00000?style=for-the-badge&logo=keras&logoColor=white" />
-  <img src="https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white" />
-  <img src="https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white" /><br>
+  <img src="https://skillicons.dev/icons?i=mysql" /><br>
   <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" />
   <img src="https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white" />
   <img src="https://img.shields.io/badge/GitHub%20Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white" /><br>
