@@ -20,7 +20,7 @@
 <h2 align="center">🌍 Connect with Me 🌍</h2>
 
 <p align="center">
-  <a href="https://www.ialksng.me" target="_blank">
+  <a href="https://linktr.ee/ialksng" target="_blank">
     <img src="https://img.shields.io/badge/My%20Website-ff4d4d?style=for-the-badge" />
   </a>
 </p>
