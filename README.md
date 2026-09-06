@@ -42,7 +42,7 @@
 
   <!-- Languages -->
 
-  <img src="https://skillicons.dev/icons?i=c,cpp,java,python" alt="C C++ Java Python" />
+  <img src="https://skillicons.dev/icons?i=c,cpp,java" alt="C C++ Java" />
   <br><br>
 
   <!-- Backend -->
@@ -50,15 +50,14 @@
   <img src="https://skillicons.dev/icons?i=spring" alt="Spring Boot" />
   <br><br>
 
-  <!-- Database -->
+  <!-- Databases -->
 
   <img src="https://skillicons.dev/icons?i=mysql,postgresql" alt="MySQL PostgreSQL" />
   <br><br>
 
   <!-- DevOps -->
 
-  <img src="https://skillicons.dev/icons?i=docker,kubernetes" alt="Docker Kubernetes" />
-  <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white" alt="GitHub Actions" />
+  <img src="https://skillicons.dev/icons?i=docker,kubernetes,jenkins" alt="Docker Kubernetes Jenkins" />
   <br><br>
 
   <!-- Cloud -->
