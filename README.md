@@ -40,24 +40,24 @@
 
 <p align="center">
 
-  <!-- Languages -->
+  <!-- Programming Languages -->
 
-  <img src="https://skillicons.dev/icons?i=c,cpp,java" alt="C C++ Java" />
+  <img src="https://skillicons.dev/icons?i=c,cpp,js,python" alt="C, C++, JavaScript, Python" />
   <br><br>
 
   <!-- Backend -->
 
-  <img src="https://skillicons.dev/icons?i=spring" alt="Spring Boot" />
+  <img src="https://skillicons.dev/icons?i=nodejs" alt="Node.js" />
   <br><br>
 
   <!-- Databases -->
 
-  <img src="https://skillicons.dev/icons?i=mysql,postgresql" alt="MySQL PostgreSQL" />
+  <img src="https://skillicons.dev/icons?i=mysql,postgresql,mongodb" alt="MySQL, PostgreSQL, MongoDB" />
   <br><br>
 
-  <!-- DevOps -->
+  <!-- DevOps & CI/CD -->
 
-  <img src="https://skillicons.dev/icons?i=docker,kubernetes,jenkins" alt="Docker Kubernetes Jenkins" />
+  <img src="https://skillicons.dev/icons?i=docker,kubernetes,githubactions" alt="Docker, Kubernetes, GitHub Actions" />
   <br><br>
 
   <!-- Cloud -->
@@ -65,9 +65,15 @@
   <img src="https://skillicons.dev/icons?i=aws" alt="AWS" />
   <br><br>
 
-  <!-- Tools -->
+  <!-- Development Tools -->
 
-  <img src="https://skillicons.dev/icons?i=linux,git,github" alt="Linux Git GitHub" />
+  <img src="https://skillicons.dev/icons?i=linux,git,github" alt="Linux, Git, GitHub" />
+  <br><br>
+
+  <!-- Data Analytics & Productivity -->
+
+  <img src="https://img.shields.io/badge/Microsoft_Excel-217346?style=for-the-badge&logo=microsoftexcel&logoColor=white" alt="Microsoft Excel" />
+  <img src="https://img.shields.io/badge/Power_BI-F2C811?style=for-the-badge&logo=powerbi&logoColor=black" alt="Microsoft Power BI" />
 
 </p>
 
@@ -79,19 +85,19 @@
 
 <p align="center">
 
-  <a href="https://github.com/ialksng/chatflow">
+  <a href="https://github.com/ialksng/peercode">
     <img
       width="300"
-      src="https://github-readme-stats-sigma-five.vercel.app/api/pin/?username=ialksng&repo=chatflow&theme=tokyonight&hide_border=true"
-      alt="ChatFlow"
+      src="https://github-readme-stats-sigma-five.vercel.app/api/pin/?username=ialksng&repo=peercode&theme=tokyonight&hide_border=true"
+      alt="PeerCode"
     />
   </a>
 
-  <a href="https://github.com/ialksng/smartsphere">
+  <a href="https://github.com/ialksng/filewiz">
     <img
       width="300"
-      src="https://github-readme-stats-sigma-five.vercel.app/api/pin/?username=ialksng&repo=smartsphere&theme=tokyonight&hide_border=true"
-      alt="SmartSphere"
+      src="https://github-readme-stats-sigma-five.vercel.app/api/pin/?username=ialksng&repo=filewiz&theme=tokyonight&hide_border=true"
+      alt="FileWiz"
     />
   </a>
 
@@ -99,11 +105,11 @@
 
 <p align="center">
 
-  <a href="https://github.com/ialksng/truthlens">
+  <a href="https://github.com/ialksng/evostore">
     <img
       width="300"
-      src="https://github-readme-stats-sigma-five.vercel.app/api/pin/?username=ialksng&repo=truthlens&theme=tokyonight&hide_border=true"
-      alt="TruthLens"
+      src="https://github-readme-stats-sigma-five.vercel.app/api/pin/?username=ialksng&repo=evostore&theme=tokyonight&hide_border=true"
+      alt="EvoStore"
     />
   </a>
 
@@ -120,5 +126,5 @@
 <div align="center">
   Made with ♥ by <b>Alok Singh</b>
   <br>
-  Last updated: September 2026
+  Last updated: October 2026
 </div>
