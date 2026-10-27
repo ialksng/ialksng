@@ -23,7 +23,7 @@
 <h2 align="center">🌍 Connect with Me 🌍</h2>
 
 <p align="center">
-  <a href="https://alsna.me/@ialksng" target="_blank">
+  <a href="https://ialksng.me" target="_blank">
     <img src="https://img.shields.io/badge/Connect-ff4d4d?style=for-the-badge" alt="Connect with me" />
   </a>
 </p>
